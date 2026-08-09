@@ -1,0 +1,139 @@
+{
+  "site": {
+    "name": "FreeCertPractice",
+    "url": "https://freecertpractice.com",
+    "defaultState": "fl"
+  },
+
+  "testTypes": {
+    "motorcycle-endorsement": {
+      "name": "Motorcycle Endorsement",
+      "slug": "motorcycle",
+      "stateDependent": true,
+      "questionBankPath": "content/questions/motorcycle.json"
+    }
+  },
+
+  "states": {
+    "fl": {
+      "name": "Florida",
+      "abbreviation": "FL",
+      "slug": "fl",
+      "tests": {
+        "motorcycle-endorsement": {
+          "dateVerified": "2026-05-09",
+          "exam": {
+            "questionCount": null,
+            "timeLimitMinutes": null,
+            "passingScorePercent": null
+          },
+          "criteria": {
+            "dmvCost": null,
+            "classCost": null,
+            "minAge": 16,
+            "transferOutOfStateEndorsement": "non-Alabama",
+            "courseType": "MSFBRC",
+            "requirementType": "50ccUp",
+            "expirationType": "never"
+          },
+          "resources": [
+            {
+              "title": "Official FLHSMV Motorcycle Endorsement Information",
+              "url": "https://www.flhsmv.gov/driver-licenses-id-cards/motorcycle-rider-education-endorsements/"
+            },
+            {
+              "title": "FLHSMV Education & Endorsement FAQs",
+              "url": "https://www.flhsmv.gov/driver-licenses-id-cards/motorcycle-rider-education-endorsements/faqs/"
+            },
+            {
+              "title": "Endorsement-Required Safety Course Locations",
+              "url": "https://www.flhsmv.gov/driver-licenses-id-cards/motorcycle-rider-education-endorsements/safety-course-locations/"
+            },
+            {
+              "title": "Official MSF Basic RiderCourse Handbook ($3, Digital)",
+              "url": "https://msf-usa.org/documents/library/basic-ridercourse-handbook/"
+            }
+          ]
+        }
+      }
+    },
+
+    "ga": {
+      "name": "Georgia",
+      "abbreviation": "GA",
+      "slug": "ga",
+      "tests": {
+        "motorcycle-endorsement": {
+          "dateVerified": null,
+          "exam": {
+            "questionCount": null,
+            "timeLimitMinutes": null,
+            "passingScorePercent": null
+          },
+          "criteria": {
+            "dmvCost": null,
+            "classCost": null,
+            "minAge": null,
+            "transferOutOfStateEndorsement": null,
+            "courseType": null,
+            "requirementType": null,
+            "expirationType": null
+          },
+          "resources": []
+        }
+      }
+    },
+
+    "tx": {
+      "name": "Texas",
+      "abbreviation": "TX",
+      "slug": "tx",
+      "tests": {
+        "motorcycle-endorsement": {
+          "dateVerified": null,
+          "exam": {
+            "questionCount": null,
+            "timeLimitMinutes": null,
+            "passingScorePercent": null
+          },
+          "criteria": {
+            "dmvCost": null,
+            "classCost": null,
+            "minAge": null,
+            "transferOutOfStateEndorsement": null,
+            "courseType": null,
+            "requirementType": null,
+            "expirationType": null
+          },
+          "resources": []
+        }
+      }
+    },
+
+    "ca": {
+      "name": "California",
+      "abbreviation": "CA",
+      "slug": "ca",
+      "tests": {
+        "motorcycle-endorsement": {
+          "dateVerified": null,
+          "exam": {
+            "questionCount": null,
+            "timeLimitMinutes": null,
+            "passingScorePercent": null
+          },
+          "criteria": {
+            "dmvCost": null,
+            "classCost": null,
+            "minAge": null,
+            "transferOutOfStateEndorsement": null,
+            "courseType": null,
+            "requirementType": null,
+            "expirationType": null
+          },
+          "resources": []
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+# Human
+blackbox/
+CLAUDE.md
+src/content/questions/
+
+# Build
+dist/
+builds/
+.astro/
+.vscode/
+node_modules/
+
+# Logs and env
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.env
+.env.production
