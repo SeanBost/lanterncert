@@ -45,8 +45,12 @@ absolute asset paths.
 
 ```
 src/
-  config.json            site + per-state data (exam params, criteria, official resources)
-  content/questions/     the question bank
+  site-config.json       site identity + test type registry
+  content/
+    states.json          state identity, keyed by state code
+    certs/               per-state exam params, criteria and resource refs, one file per cert
+    sources.json         registry of cited documents (metadata only, not the documents)
+    questions/           the question bank
   pages/                 routes
 public/                  static assets, copied verbatim
 scripts/                 build tooling
@@ -63,7 +67,7 @@ scripts/                 build tooling
 | TX    | TBD       | TBD        | TBD           |
 | CA    | TBD       | TBD        | TBD           |
 
-Parameters come from official state DMV sources only. See `src/config.json`.
+Parameters come from official state DMV sources only. See `src/content/certs/motorcycle.json`.
 
 ---
 

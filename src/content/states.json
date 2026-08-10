@@ -1,0 +1,6 @@
+{
+  "fl": { "name": "Florida", "abbreviation": "FL" },
+  "ga": { "name": "Georgia", "abbreviation": "GA" },
+  "tx": { "name": "Texas", "abbreviation": "TX" },
+  "ca": { "name": "California", "abbreviation": "CA" }
+}

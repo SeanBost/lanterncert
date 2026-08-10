@@ -1,0 +1,15 @@
+{
+  "site": {
+    "name": "FreeCertPractice",
+    "url": "https://freecertpractice.com",
+    "defaultState": "fl"
+  },
+
+  "testTypes": {
+    "motorcycle-endorsement": {
+      "name": "Motorcycle Endorsement",
+      "slug": "motorcycle",
+      "stateDependent": true
+    }
+  }
+}
