@@ -8,7 +8,7 @@
   "testTypes": {
     "motorcycle-endorsement": {
       "name": "Motorcycle Endorsement",
-      "slug": "motorcycle",
+      "slug": "motorcycle-endorsement",
       "stateDependent": true
     }
   }

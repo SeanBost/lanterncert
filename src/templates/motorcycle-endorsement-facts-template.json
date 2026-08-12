@@ -1,0 +1,129 @@
+{
+  "_about": {
+    "what": "The shape of one state object in src/content/certs/motorcycle-endorsement-facts.json, with 'what' and 'why' standing in for the 'value' and 'source' of a real fact. Not read by any code.",
+    "why": "One place that says what each field is for, how we prefer to fill it, and every value a constrained field is allowed to take. Zod will enforce the shape later; this explains it, which Zod never will.",
+    "purpose": "These facts feed auto-generated quick-facts content whose job is to give a rider the headline answer and send them to the primary source for the detail. Every value must be honest and traceable to a document we hold. It does not have to carry every edge case — copy hedges and links out, and a fact that tries to be exhaustive stops being quick. Record the headline answer; put a genuinely load-bearing exception in meta.note and leave the rest to the source.",
+    "factContract": "Every fact is a { value, source } pair. 'source' is a key into motorcycle-endorsement-sources.json. A fact is verified if and only if it has a source: source null means not researched, and a source present with value null means checked and there is no single honest answer for this state.",
+    "valueTypes": "number | string | boolean | [min, max]. A range is exactly two numbers, ascending, in the same unit — used where the honest answer varies by county or provider.",
+    "newValues": "A constrained field that needs a value not listed here stays null and becomes an end-of-run question. Never invent a vocabulary entry mid-run."
+  },
+
+  "<state-code>": {
+    "meta": {
+      "dateVerified": {
+        "what": "Date every fact in this state object was last verified, as YYYY-MM-DD.",
+        "why": "The visible trust signal on the state page, and what the 60-day revalidation sweep reads. Bumped only when the whole state was re-checked in one pass — a partial pass leaves it alone, or the date starts vouching for facts nobody looked at."
+      },
+      "dmvCode": {
+        "what": "Short agency abbreviation as it appears in body copy — FLHSMV, GA DDS.",
+        "why": "Lives here rather than in states.json because the agency is cert-family-specific: the same agency serves motorcycle and CDL, but hunter ed would be a different one."
+      },
+      "dmvName": {
+        "what": "The agency's full name, spelled out.",
+        "why": "Used on first mention and in structured data; dmvCode carries every mention after."
+      },
+      "localTerm": {
+        "what": "What this state actually calls the credential — Florida 'motorcycle endorsement', Georgia 'Class M license'.",
+        "why": "The national term is simply wrong in some states. The cert's name is the default and this overrides it, so copy can use the phrase a rider will recognize."
+      },
+      "note": {
+        "what": "Internal only. Bare facts about this state that no field can hold.",
+        "why": "For us, not for readers. Facts only — no caveats, no rationale, no explanation of why a field is null, nothing too minor to matter. If it needs a sentence of justification, it is not a note."
+      },
+      "stateDetails": {
+        "what": "User-facing prose explaining this state's quirks on its own page. Null until written.",
+        "why": "The piece that lets every other field stay cookie-cutter while each state page still earns its own SEO."
+      }
+    },
+
+    "exam": {
+      "questionCount": {
+        "what": "Number of questions on the knowledge exam.",
+        "why": "Where a state administers no test of its own, this describes the knowledge test inside the required course, and meta.note has to say so — otherwise the page implies a DMV exam that does not exist."
+      },
+      "timeLimitMinutes": {
+        "what": "Minutes allowed for the knowledge exam.",
+        "why": "Frequently unpublished. When an agency genuinely states no limit, the honest record is value null with a source attached, not an unresearched null."
+      },
+      "passingScorePercent": {
+        "what": "Percentage of questions that must be correct to pass.",
+        "why": "Cannot express a per-section gate on its own — see isExamSectioned before recording one for a split exam."
+      },
+      "isExamSectioned": {
+        "what": "Whether the knowledge exam is split into separately scored sections.",
+        "why": "A holding field, deliberately. Georgia's exam is two 20-question sections each needing 15 correct, which questionCount 40 plus passingScorePercent 75 flattens into a score that passes a rider who failed. This flags the case so exam mode never scores one wrong; the real section model gets designed once several states' segmentation is known rather than guessed now. When true, meta.note records the segmentation as bare facts.",
+        "values": {
+          "true": "Scored in two or more parts, each with its own gate.",
+          "false": "One undivided test with a single passing score."
+        }
+      }
+    },
+
+    "criteria": {
+      "dmvCost": {
+        "what": "Total the rider pays the agency for the credential, in USD.",
+        "why": "A single number where the state charges one, a [min, max] range where it varies by county or office. The registry note records what the figure is composed of, since a total assembled from three line items is not checkable without it."
+      },
+      "classCost": {
+        "what": "What the rider course costs, in USD.",
+        "why": "Usually a range, because providers set their own tuition. Where the number is a survey of rates published by the providers an agency directory lists — rather than a figure the agency prints — the registry note must say so, or the next revalidation hunts for a line that was never there."
+      },
+      "minAge": {
+        "what": "Youngest age at which the credential itself can be obtained.",
+        "why": "The credential, not the learner permit. A state offering a permit at 16 and the license at 17 records 17; the permit age is a meta.note fact."
+      },
+      "minLicense": {
+        "what": "What a rider must already hold before pursuing this credential.",
+        "why": "Constrained rather than free text so the state page can branch on it.",
+        "values": {
+          "None": "No prior credential required.",
+          "Learners": "A learner or instruction permit is required first.",
+          "Drivers": "A full, already-issued driver license is required first. Deliberately generic — states name the same credential differently (Florida Class E, Georgia Class C), and localTerm is where state naming lives."
+        }
+      },
+      "transferOutOfStateEndorsement": {
+        "what": "Whose existing motorcycle credential this state accepts in place of retesting.",
+        "why": "Constrained so the UI can branch. Note the shape is already strained: a value naming one specific state does not scale, and a third exclusion pattern is the signal that this field wants to become a list rather than a token.",
+        "values": {
+          "all": "Accepts a valid motorcycle credential from every other US jurisdiction.",
+          "non-Alabama": "Accepts every other US jurisdiction outright. An Alabama credential is accepted only when presented with an MSF Basic RiderCourse completion card — the token names the exception, and copy carries the condition."
+        }
+      },
+      "courseType": {
+        "what": "The rider-training curriculum this state's course is built on.",
+        "why": "Load-bearing beyond display: a question's applies_to resolves a course type against this field at build time to reach every state running that curriculum. Verify it rather than assuming — California runs CMSP, and several states run programs that are MSF-derived but distinct, so a wrong value here silently scopes content to the wrong states.",
+        "values": {
+          "MSFBRC": "Motorcycle Safety Foundation Basic RiderCourse."
+        }
+      },
+      "findCourse": {
+        "what": "How a rider finds and books a course.",
+        "why": "Decides which call to action the state page shows. Lives in criteria despite not being a criterion, so all the fact objects stay grouped.",
+        "values": {
+          "stateLocator": "The agency publishes a directory of independent providers and the rider contacts one directly.",
+          "stateProgram": "The agency runs a single booking portal covering all courses."
+        }
+      },
+      "requirementType": {
+        "what": "What kind of machine triggers the requirement for this credential.",
+        "why": "Constrained because it decides who the page is even for — a rider on a 49cc scooter needs a different answer than one on a 650.",
+        "values": {
+          "50ccUp": "Required for any motorcycle above 50cc; 50cc and under is treated as a moped."
+        }
+      },
+      "expirationType": {
+        "what": "How long the credential lasts before it must be renewed.",
+        "why": "A token rather than a number so that 'never' and a fixed term can share one field. New terms follow the same form.",
+        "values": {
+          "never": "Does not expire on its own.",
+          "8year": "Expires on an eight-year term."
+        }
+      }
+    },
+
+    "additionalResources": {
+      "what": "An array of registry keys for user-facing links that no fact already cites.",
+      "why": "The 'Verified against' list is derived from the source fields, so this holds only what would otherwise never appear on the page. Never repeat a key already used as a source — the two render as separate lists and a duplicate shows up twice."
+    }
+  }
+}

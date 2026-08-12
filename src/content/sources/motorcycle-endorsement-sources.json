@@ -1,0 +1,158 @@
+{
+  "fl-hsmv-endorsement-info": {
+    "title": "FLHSMV Motorcycle Endorsement Guide",
+    "publisher": "Florida Highway Safety and Motor Vehicles",
+    "url": "https://www.flhsmv.gov/driver-licenses-id-cards/motorcycle-rider-education-endorsements/",
+    "access": "public"
+  },
+
+  "fl-hsmv-endorsement-faqs": {
+    "title": "FLHSMV Motorcycle Endorsement FAQ",
+    "publisher": "Florida Highway Safety and Motor Vehicles",
+    "url": "https://www.flhsmv.gov/driver-licenses-id-cards/motorcycle-rider-education-endorsements/faqs/",
+    "access": "public"
+  },
+
+  "fl-hsmv-course-locations": {
+    "title": "FLHSMV Motorcycle Course Directory",
+    "publisher": "Florida Highway Safety and Motor Vehicles",
+    "url": "https://www.flhsmv.gov/driver-licenses-id-cards/motorcycle-rider-education-endorsements/safety-course-locations/",
+    "access": "public",
+    "note": "FRTP Sponsors by county; page carries no prices. classCost surveys listed Sponsors' published rates. Some counties list no Sponsors."
+  },
+
+  "fl-hsmv-fees": {
+    "title": "FLHSMV Fee Schedule",
+    "publisher": "Florida Highway Safety and Motor Vehicles",
+    "url": "https://www.flhsmv.gov/fees/",
+    "access": "public",
+    "note": "Statewide fee schedule. dmvCost = $25.00 replacement license + $7.00 endorsement, plus a $6.25 service fee that applies only at a tax collector office — hence the range rather than one figure."
+  },
+
+  "fl-hsmv-frtp-courses": {
+    "title": "FLHSMV Rider Training Course Guide",
+    "publisher": "Florida Highway Safety and Motor Vehicles",
+    "url": "https://www.flhsmv.gov/driver-licenses-id-cards/motorcycle-rider-education-endorsements/florida-rider-training-program-courses/",
+    "access": "public",
+    "note": "Distinguishes BRC/BRCu from 3WBRC and S/TEP. Course required for all riders regardless of age since July 1, 2008."
+  },
+
+  "fl-stat-322-21": {
+    "title": "FL Statute on Driver License Fees",
+    "publisher": "The Florida Senate",
+    "url": "https://www.flsenate.gov/laws/statutes/2025/322.21",
+    "access": "public",
+    "note": "Statutory authority behind the FLHSMV fee schedule. Year in the URL increments annually — recheck each pass."
+  },
+
+  "xx-msf-brcu-faq": {
+    "title": "MSF Basic RiderCourse Curriculum FAQ",
+    "publisher": "Motorcycle Safety Foundation",
+    "url": "https://navalsafetycommand.navy.mil/Portals/100/Documents/c5.1_BRC2013.2014%20Update%20FAQs.pdf",
+    "access": "public",
+    "note": "MSF curriculum doc (v3.13.14), mirrored by the U.S. Navy. Only source for the 25-item knowledge test — no FLHSMV page or FAC rule states a count. States a 25-item test at each of Level I and Level II, so how many a rider sits depends on the delivery option a Sponsor runs; isExamSectioned is null-with-source for that reason. Dated 2014; cite for curriculum structure only."
+  },
+
+  "xx-msf-brc-handbook": {
+    "title": "MSF Basic RiderCourse Rider Handbook",
+    "publisher": "Motorcycle Safety Foundation",
+    "url": "https://msf-usa.org/documents/library/basic-ridercourse-handbook/",
+    "access": "purchase",
+    "note": "$3 purchase. Student handbook, not the instructor-only RiderCoach Guide. Cite only; not redistributable, no verbatim excerpts on-site."
+  },
+
+  "xx-msf-brc-overview": {
+    "title": "MSF Basic RiderCourse Overview",
+    "publisher": "Motorcycle Safety Foundation",
+    "url": "https://msf-usa.org/start-your-ride/basic-ridercourse/",
+    "access": "public",
+    "note": "Rider-facing description of the BRC — format, what's provided, that it ends in a knowledge test and skills evaluation. Does not state the question count."
+  },
+
+  "ga-dds-motorcycle-hub": {
+    "title": "GA DDS Motorcycle License Guide",
+    "publisher": "Georgia Department of Driver Services",
+    "url": "https://dds.georgia.gov/get-your-georgia-motorcycle-license",
+    "access": "public",
+    "note": "Top-level motorcycle explainer. Defines motorcycle as excluding mopeds 50cc or less and groups all 51cc+ machines in one category. Lays out both paths to Class M."
+  },
+
+  "ga-dds-class-m": {
+    "title": "GA DDS Class M License Checklist",
+    "publisher": "Georgia Department of Driver Services",
+    "url": "https://dds.georgia.gov/georgia-licenses-ids-and-permits/new-license-id-or-permit/how-do-i-class-m-motorcycle-license",
+    "access": "public",
+    "note": "Step-by-step Class M page. Age requirement is the first bullet. Lists no prior-license prerequisite."
+  },
+
+  "ga-dds-motorcycle-permit": {
+    "title": "GA DDS Class MP Permit Checklist",
+    "publisher": "Georgia Department of Driver Services",
+    "url": "https://dds.georgia.gov/georgia-licenses-ids-and-permits/new-license-id-or-permit/how-do-i-motorcycle-permit",
+    "access": "public",
+    "note": "MP permit path: age 16, $10, 6-month term, one renewal only. Carries the permit restrictions (daylight only, no passengers, no limited-access roads)."
+  },
+
+  "ga-dds-test-exams": {
+    "title": "GA DDS Testing and Exams Guide",
+    "publisher": "Georgia Department of Driver Services",
+    "url": "https://dds.georgia.gov/testing-and-training/test-and-exams-information",
+    "access": "public",
+    "note": "Knowledge Exam is a Road Rules test plus a Road Signs test, 15 of 20 required on each. Also covers the Rider Skills Test and the one-year expiry on motorcycle knowledge scores."
+  },
+
+  "ga-dds-fees-terms": {
+    "title": "GA DDS Fee and Term Schedule",
+    "publisher": "Georgia Department of Driver Services",
+    "url": "https://dds.georgia.gov/fees-and-terms",
+    "access": "public",
+    "note": "Single table carrying both the Class M license fee/term and the MP permit fee/term. $5 discount for eligible online transactions is not reflected in listed fees."
+  },
+
+  "ga-dds-brc": {
+    "title": "GA DDS Basic Riders Course Guide",
+    "publisher": "Georgia Department of Driver Services",
+    "url": "https://dds.georgia.gov/regulated-programs/motorcycle-safety-program/basic-riders-course",
+    "access": "public",
+    "note": "GMSP course page. Publishes tuition, graduation requirements, and the 90-day test waiver. Never names the Motorcycle Safety Foundation as the curriculum owner, so courseType MSFBRC is inferred from two things it does state: the 5-hour classroom plus 10-hour range structure MSF publishes for the BRC, and that graduates hold an MSF Course Completion Card. Page is marked noindex."
+  },
+
+  "ga-dds-gmsp-registration": {
+    "title": "GA DDS Motorcycle Course Registration Portal",
+    "publisher": "Georgia Department of Driver Services",
+    "url": "https://online.dds.ga.gov/motorcycle/index.aspx",
+    "access": "public",
+    "note": "State-run booking portal for all GMSP courses and locations — the single funnel DDS directs riders to."
+  },
+
+  "ga-dds-transfer": {
+    "title": "GA DDS Out-of-State License Transfer Guide",
+    "publisher": "Georgia Department of Driver Services",
+    "url": "https://dds.georgia.gov/georgia-licenses-ids-and-permits/new-license-id-or-permit/new-georgia-residents-and-out-state/how",
+    "access": "public",
+    "note": "Covers non-commercial classes from all 49 other states, DC and US Territories. Knowledge and road tests are triggered only if the out-of-state license has been expired more than two years. Does not name Class M explicitly. URL is the page's own canonical; dds.georgia.gov/out-state-transfer is a short alias that also resolves here."
+  },
+
+  "ga-dds-motorcycle-manual": {
+    "title": "GA DDS Motorcycle Operator's Manual",
+    "publisher": "Georgia Department of Driver Services",
+    "url": "https://dds.georgia.gov/motorcycle-operators-manual",
+    "access": "public",
+    "note": "Free state-published manual and the stated source material for the Knowledge Exam and Rider Skills Test. Direct PDF is 19MB; DDS also links two different third-party flipbook mirrors on different pages."
+  },
+
+  "ga-dds-mopeds": {
+    "title": "GA DDS Moped and Scooter Rules",
+    "publisher": "Georgia Department of Driver Services",
+    "url": "https://dds.georgia.gov/georgia-licenses-ids-and-permits/new-license-id-or-permit/how-do-i-class-m-motorcycle-license-0",
+    "access": "public"
+  },
+
+  "ga-dds-road-test": {
+    "title": "GA DDS Road Test Appointment Guide",
+    "publisher": "Georgia Department of Driver Services",
+    "url": "https://dds.georgia.gov/testing-and-training/road-test",
+    "access": "public",
+    "note": "Motorcycle skills test scheduling. Reservations require a valid MP permit; rider must furnish and insure their own motorcycle and pass a safety inspection."
+  }
+}

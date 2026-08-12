@@ -48,26 +48,34 @@ src/
   site-config.json       site identity + test type registry
   content/
     states.json          state identity, keyed by state code
-    certs/               per-state exam params, criteria and resource refs, one file per cert
-    sources.json         registry of cited documents (metadata only, not the documents)
+    certs/               per-state meta, exam params and criteria, one file per cert
+    sources/             registry of cited documents (metadata only, not the documents)
     questions/           the question bank
+  templates/             each cert's data shape, annotated — the field and vocabulary reference
   pages/                 routes
 public/                  static assets, copied verbatim
-scripts/                 build tooling
+scripts/                 build and content-research tooling
 ```
 
 ---
 
 ## Moto Endorsement States & Exam Parameters
 
-| State | Questions | Time Limit | Passing Score |
-|-------|-----------|------------|---------------|
-| FL    | TBD       | TBD        | TBD           |
-| GA    | TBD       | TBD        | TBD           |
-| TX    | TBD       | TBD        | TBD           |
-| CA    | TBD       | TBD        | TBD           |
+| State | Questions | Time Limit | Passing Score | Sectioned |
+|-------|-----------|------------|---------------|-----------|
+| FL    | 25 *      | TBD        | TBD           | — *       |
+| GA    | 40 †      | TBD        | 75% †         | yes †     |
+| TX    | TBD       | TBD        | TBD           | TBD       |
+| CA    | TBD       | TBD        | TBD           | TBD       |
 
-Parameters come from official state DMV sources only. See `src/content/certs/motorcycle.json`.
+\* Florida administers no motorcycle-specific test — this is the MSF Basic RiderCourse knowledge
+test, and how many sittings it involves depends on the delivery option a course provider runs.
+† Georgia's exam is two 20-question sections requiring 15 correct on **each**; the flat figures
+above can't express the per-section gate, which is what the sectioned column flags.
+
+Every value is stored with its own citation, and each cited page is re-fetched and re-read on a
+60-day cycle. Parameters come from official state sources only. See
+`src/content/certs/motorcycle-endorsement-facts.json`.
 
 ---
 

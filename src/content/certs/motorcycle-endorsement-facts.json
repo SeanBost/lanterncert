@@ -1,0 +1,127 @@
+{
+  "fl": {
+    "meta": {
+      "dateVerified": "2026-08-12",
+      "dmvCode": "FLHSMV",
+      "dmvName": "Florida Department of Highway Safety and Motor Vehicles",
+      "localTerm": "motorcycle endorsement",
+      "note": "Two paths: the endorsement, which requires an existing Class E license, and a separate 'Motorcycle Only' license for riders without one, which requires the Class E knowledge test. Florida administers no motorcycle-specific knowledge or skills test — both paths test through the required Basic RiderCourse, run by private FLHSMV-authorized Sponsors. Three-wheel and sidecar courses give an 'S' restriction, not a full endorsement. The endorsement must be added within one year of passing the course.",
+      "stateDetails": null
+    },
+    "exam": {
+      "questionCount":       { "value": 25, "source": "xx-msf-brcu-faq" },
+      "timeLimitMinutes":    { "value": null, "source": null },
+      "passingScorePercent": { "value": null, "source": null },
+      "isExamSectioned":     { "value": null, "source": "xx-msf-brcu-faq" }
+    },
+    "criteria": {
+      "dmvCost":    { "value": [31.75, 38.25], "source": "fl-hsmv-fees" },
+      "classCost":  { "value": [196, 395], "source": "fl-hsmv-course-locations" },
+      "minAge":     { "value": 16, "source": "fl-hsmv-endorsement-info" },
+      "minLicense": { "value": "Drivers", "source": "fl-hsmv-endorsement-info" },
+      "transferOutOfStateEndorsement": { "value": "non-Alabama", "source": "fl-hsmv-endorsement-info" },
+      "courseType":      { "value": "MSFBRC", "source": "fl-hsmv-endorsement-info" },
+      "findCourse":      { "value": "stateLocator", "source": "fl-hsmv-course-locations" },
+      "requirementType": { "value": "50ccUp", "source": "fl-hsmv-endorsement-info" },
+      "expirationType":  { "value": "never", "source": "fl-hsmv-endorsement-faqs" }
+    },
+    "additionalResources": [
+      "fl-hsmv-frtp-courses",
+      "fl-stat-322-21",
+      "xx-msf-brc-handbook",
+      "xx-msf-brc-overview"
+    ]
+  },
+
+  "ga": {
+    "meta": {
+      "dateVerified": "2026-08-12",
+      "dmvCode": "GA DDS",
+      "dmvName": "Georgia Department of Driver Services",
+      "localTerm": "Class M license",
+      "note": "Knowledge exam is two 20-question sections (Road Rules, Road Signs) needing 15 correct on each. Knowledge exam scores expire after one year. GMSP course completion waives both the knowledge and skills tests for 90 days. A Class MP permit is available at 16, allows one renewal, and is required to book a DDS skills test; DDS testers supply and insure their own motorcycle. Course tuition is $250 in-state and $300 out-of-state.",
+      "stateDetails": null
+    },
+    "exam": {
+      "questionCount":       { "value": 40, "source": "ga-dds-test-exams" },
+      "timeLimitMinutes":    { "value": null, "source": null },
+      "passingScorePercent": { "value": 75, "source": "ga-dds-test-exams" },
+      "isExamSectioned":     { "value": true, "source": "ga-dds-test-exams" }
+    },
+    "criteria": {
+      "dmvCost":    { "value": [32, 42], "source": "ga-dds-fees-terms" },
+      "classCost":  { "value": [250, 300], "source": "ga-dds-brc" },
+      "minAge":     { "value": 17, "source": "ga-dds-class-m" },
+      "minLicense": { "value": "None", "source": "ga-dds-class-m" },
+      "transferOutOfStateEndorsement": { "value": "all", "source": "ga-dds-transfer" },
+      "courseType":      { "value": "MSFBRC", "source": "ga-dds-brc" },
+      "findCourse":      { "value": "stateProgram", "source": "ga-dds-gmsp-registration" },
+      "requirementType": { "value": "50ccUp", "source": "ga-dds-motorcycle-hub" },
+      "expirationType":  { "value": "8year", "source": "ga-dds-fees-terms" }
+    },
+    "additionalResources": [
+      "ga-dds-motorcycle-manual",
+      "ga-dds-motorcycle-permit",
+      "ga-dds-mopeds",
+      "ga-dds-road-test"
+    ]
+  },
+
+  "tx": {
+    "meta": {
+      "dateVerified": null,
+      "dmvCode": null,
+      "dmvName": null,
+      "localTerm": null,
+      "note": null,
+      "stateDetails": null
+    },
+    "exam": {
+      "questionCount":       { "value": null, "source": null },
+      "timeLimitMinutes":    { "value": null, "source": null },
+      "passingScorePercent": { "value": null, "source": null },
+      "isExamSectioned":     { "value": null, "source": null }
+    },
+    "criteria": {
+      "dmvCost":    { "value": null, "source": null },
+      "classCost":  { "value": null, "source": null },
+      "minAge":     { "value": null, "source": null },
+      "minLicense": { "value": null, "source": null },
+      "transferOutOfStateEndorsement": { "value": null, "source": null },
+      "courseType":      { "value": null, "source": null },
+      "findCourse":      { "value": null, "source": null },
+      "requirementType": { "value": null, "source": null },
+      "expirationType":  { "value": null, "source": null }
+    },
+    "additionalResources": []
+  },
+
+  "ca": {
+    "meta": {
+      "dateVerified": null,
+      "dmvCode": null,
+      "dmvName": null,
+      "localTerm": null,
+      "note": null,
+      "stateDetails": null
+    },
+    "exam": {
+      "questionCount":       { "value": null, "source": null },
+      "timeLimitMinutes":    { "value": null, "source": null },
+      "passingScorePercent": { "value": null, "source": null },
+      "isExamSectioned":     { "value": null, "source": null }
+    },
+    "criteria": {
+      "dmvCost":    { "value": null, "source": null },
+      "classCost":  { "value": null, "source": null },
+      "minAge":     { "value": null, "source": null },
+      "minLicense": { "value": null, "source": null },
+      "transferOutOfStateEndorsement": { "value": null, "source": null },
+      "courseType":      { "value": null, "source": null },
+      "findCourse":      { "value": null, "source": null },
+      "requirementType": { "value": null, "source": null },
+      "expirationType":  { "value": null, "source": null }
+    },
+    "additionalResources": []
+  }
+}
