@@ -63,15 +63,22 @@ scripts/                 build and content-research tooling
 
 | State | Questions | Time Limit | Passing Score | Sectioned |
 |-------|-----------|------------|---------------|-----------|
-| FL    | 25 *      | TBD        | TBD           | — *       |
-| GA    | 40 †      | TBD        | 75% †         | yes †     |
-| TX    | TBD       | TBD        | TBD           | TBD       |
-| CA    | TBD       | TBD        | TBD           | TBD       |
+| FL    | 25 *      | none published | — *       | — *       |
+| GA    | 40 †      | none published | 75% †     | yes †     |
+| TX    | — ‡       | — ‡        | — ‡           | — ‡       |
+| CA    | not published | none published | 80%   | no        |
 
 \* Florida administers no motorcycle-specific test — this is the MSF Basic RiderCourse knowledge
-test, and how many sittings it involves depends on the delivery option a course provider runs.
+test, and how many sittings it involves depends on the delivery option a course provider runs. Its
+passing score sits in MSF instructor materials rather than any public source.
 † Georgia's exam is two 20-question sections requiring 15 correct on **each**; the flat figures
 above can't express the per-section gate, which is what the sectioned column flags.
+‡ Texas requires a safety course of every applicant and waives the state knowledge test on
+completion, so in practice no rider sits a state exam — and the course test varies by school,
+because Texas approves curricula against a federal standard rather than mandating one.
+
+**No agency in any of the four states publishes an exam time limit.** Three of the four publish a
+closing-time cutoff instead ("not within 30 minutes of closing"), which is a different thing.
 
 Every value is stored with its own citation, and each cited page is re-fetched and re-read on a
 60-day cycle. Parameters come from official state sources only. See

@@ -28,6 +28,11 @@ detail**. That fixes the resolution to work at:
 The failure mode to avoid is a report full of technically-true objections that change nothing a
 reader would see. Report what would make a rider wrong, not what makes the model uneasy.
 
+**A null is expensive.** Every field left null is a hole on the state page a reader came for, so
+"not found" is a last resort reached after the techniques below are spent — not a first-pass
+outcome. Runs are judged on how few honest nulls remain, and a null is only honest once you can name
+what you read and why it wasn't there.
+
 ## Invocation
 
 ```
@@ -48,6 +53,9 @@ reader would see. Report what would make a rider wrong, not what makes the model
 `blackbox/project-plan.md`, `blackbox/sessions.md`, or git. Surface anything those need as a
 report item.
 
+**Writes on approval:** `src/templates/<cert>-facts-template.json`, and only to add an approved
+vocabulary value. Never mid-run, never unapproved.
+
 ## Read first
 
 - `src/templates/<cert>-facts-template.json` — what every field is for, and the complete set of
@@ -55,6 +63,10 @@ report item.
 - `CLAUDE.md` ▸ *The rules that must never be missed*, ▸ *How it's wired*, ▸ *Locked decisions* —
   authority on the registry key format, title voice, the `note` / `stateDetails` split and the
   null rule. Do not restate those rules here; read them there.
+- **The most recent report in `blackbox/research/` for this state**, if one exists. It records what
+  was already ruled out, and re-running settled research is the cheapest way to waste a pass.
+- **A completed state's block in the facts file**, if this state is not the first. It is the
+  worked example for how each field is filled, ranged and noted.
 
 ## Phases
 
@@ -70,29 +82,99 @@ canonical drift and pages whose text changed since last time. **Never fetch a pa
 snapshot under 60 days old exists** — read `blackbox/source-snapshots/<key>.json`. Request volume
 is deliberately low; every avoidable request is a bot-rule risk taken for nothing.
 
-**2 · Verify** — every fact that has a source. Read the snapshot text and find the passage that
-supports the stored value. Record the exact quote. A page that loads is not evidence; a passage is.
-Watch for soft 404s: the sweep reports each page's `title`, and "Page not found" renders as a
-perfectly healthy fetch.
+**2 · Verify** — every fact that has a source. Read the snapshot text, find the passage that
+supports the stored value, and record the exact quote. A page that loads is not evidence; a passage
+is. Apply every check in *Verifying properly* below before calling anything verified.
 
-PDFs are snapshotted like any other source — `fetch-page.mjs` saves the file to
-`blackbox/primary-sources/<key>.<ext>` and extracts its text layer. A PDF whose snapshot has no
-text is scanned or image-only; read the saved file directly before calling anything `blocked`.
-
-**3 · Discover** — every fact without a source, **and every fact phase 2 could not settle**.
-`WebSearch` for the agency's own page, fetch the best candidate with
-`node scripts/fetch-page.mjs <url> --key <proposed-key>`, read it, and propose a registry entry plus
-a value. Prefer the agency that issues the credential over any aggregator, and prefer the page that
-states the fact over the page that links to it. A fact whose value is already asserted but unsourced
-(`value` set, `source` null) belongs here too. Anything still unresolved goes through *Resolve
-before escalating* before it may be written up as a question.
+**3 · Discover** — every fact without a source, **and every fact phase 2 could not settle**. Work
+*Finding a source* below in order. A fact whose value is already asserted but unsourced (`value`
+set, `source` null) belongs here too. Anything still unresolved goes through *Resolve before
+escalating* before it may be written up as a question.
 
 **4 · Assemble.** Build the proposed facts block and any proposed registry entries, plus the report.
+Before assembling, run the *Pre-assembly checks*.
 
 **5 · REVIEW GATE. Write nothing.** Present the report and the proposed JSON. Wait.
 
-**6 · Apply** — only after approval. Write the facts file, the registry, and any snapshots. Bump
-`meta.dateVerified` only if every fact in that state was checked this run.
+**6 · Apply** — only after approval. Write the facts file, the registry, any approved template
+vocabulary, and any snapshots. Bump `meta.dateVerified` only if every fact in that state was checked
+this run — a partial pass leaves it alone.
+
+## Verifying properly
+
+A stored value with a stored source is a **claim**, not a fact. Each of these has caught a real
+defect; run all of them.
+
+1. **Quote presence is mechanical, not impressionistic.** Before you accept a citation, confirm the
+   supporting language is literally in that snapshot — search it for the distinctive strings. A page
+   that *points at* the authority is not the authority: a source that says "see the X page for
+   complete details" does not support the fact X states, and citing it is `unsupported`.
+2. **Check the subject of the sentence, not just the number.** A figure matching the stored value
+   may belong to a different exam, credential or fee on the same page. Two exams in one state
+   routinely share a threshold. Confirm what the sentence is *about* before accepting it.
+3. **Re-derive composed values.** Where a value is assembled from line items, redo the arithmetic
+   from the page's own figures. If one end of a range checks out and the other does not, the
+   composition is right and the number is wrong.
+4. **Check both ends of a range.** A range is two claims. Verify the minimum and the maximum
+   separately; a survey that establishes only the low end has not established the range.
+5. **Check the fact is about the right path.** Where a state offers parallel routes to the same
+   credential, or parallel credentials, confirm the stored value describes the one `meta.localTerm`
+   names — not the neighbouring route on the same page.
+6. **Compare against a completed state.** Run the same field in a state already finished. A note
+   that documents a composition in one state and not another, or a range where a sibling uses a
+   single figure, is a defect in one of them.
+7. **Discharge standing instructions in registry notes.** Notes carry directives — a year in a URL
+   that increments, a figure to re-survey. Do them, and say in the report that you did.
+
+## Finding a source
+
+Worked in order. Stop when the fact is settled.
+
+1. **Re-grep everything already held.** Every new question gets searched across *all* snapshots for
+   the cert, not just the ones fetched for that field. Documents acquired for one purpose routinely
+   answer another, and this costs nothing. A large PDF fetched three questions ago is still on disk.
+2. **Check the parent credential.** A specialty credential normally inherits the base credential's
+   rules, so a fact absent from the motorcycle pages often lives on the general licence pages —
+   licence term, minimum age, application process and testing procedure especially. Establish the
+   inheritance ("M1 is a class of driver's licence") and the general rule reaches it.
+3. **Prefer the manual over the summary.** Agencies publish the same topic twice: a short web
+   summary and a handbook or manual section. The manual is more procedurally complete and is where
+   counts, thresholds and rules-in-force actually appear. Look for it before concluding a fact is
+   unpublished.
+4. **Follow every cross-reference the document names.** "As defined by Section X", "see the Y page",
+   "approved under Z standard" — the authority is one hop away and the document just told you where.
+   Follow it rather than searching afresh.
+5. **Search for the phrase, never guess the identifier.** Do not guess statute section numbers, rule
+   chapter numbers or URL slugs; each miss is a wasted request. Search for the sentence you expect
+   the document to contain, or for the fact plus the agency, and let the result name the identifier.
+6. **Read aggregators for direction, never for citation.** Practice-test sites, forums and Q&A pages
+   are not sources and are never cited — but they are useful for learning *where* an agency publishes
+   something. Mine them for the pointer, then take the fact from the agency page. Treat their
+   disagreement with each other as a signal they are inferring, not reporting.
+7. **Follow a delegation to its end.** Where a state delegates to a programme, contractor or external
+   standard, follow the chain through every link before concluding. "No single answer exists" is a
+   finding that carries the same burden of proof as a value: name each authority you followed and
+   what it did and did not specify.
+8. **Only then escalate** — and say what you already ruled out, so the question isn't re-answered
+   with work that's already been done.
+
+### Fetching discipline
+
+- **Verify page identity on every fetch, before reading it for facts.** Check the title and the
+  first lines. Three failures look like success: a **soft 404** (HTTP 200, "Page not found" title), a
+  **metadata page** on a legal or regulatory site that lists a rule's history instead of its text,
+  and a **JS shell** that renders a few hundred characters of chrome and no content. Delete the
+  snapshot of a soft 404 rather than leaving it under a key you want.
+- **Agency outbound links go stale.** A state page may send riders to a programme domain that has
+  lapsed or been redirected. When a linked destination fails, find the programme operator's current
+  site rather than concluding the programme is unreachable — and record the stale link in the
+  referring source's note.
+- **A zero-hit search across a whole authority is evidence.** If a complete statute chapter never
+  mentions a term, that silence is a finding worth reporting, not a failed search.
+- **Provider surveys are legitimate and bounded.** Where an agency publishes no price, survey the
+  rates providers in its directory publish, quote each one from a snapshot, and document the survey
+  in the registry note. Snapshot survey pages under a `<state>-survey-<provider>` key; they are
+  evidence, not registry entries. Never build a range from a search-engine summary.
 
 ## Verdicts
 
@@ -101,7 +183,7 @@ Every fact lands in exactly one:
 | verdict | meaning |
 |---|---|
 | `verified` | a passage in the snapshot supports the stored value |
-| `inferred` | the source supports the value without stating it, **and the registry note says so** — legitimate, no action. Only reachable after *Resolve before escalating* has been worked; an inference is where research ends up, never where it starts. If the note does not document the inference, it is `unsupported`, and the fix is usually to write the note |
+| `inferred` | the source supports the value without stating it, **and the registry note says so** — legitimate, no action. Only reachable after *Finding a source* has been worked; an inference is where research ends up, never where it starts. If the note does not document the inference, it is `unsupported`, and the fix is usually to write the note |
 | `drifted` | the page now says something else — **report both values, change nothing** |
 | `unsupported` | page is fine, but no passage supports the claim |
 | `dead` | link broken, or the page is no longer what was cited |
@@ -109,29 +191,9 @@ Every fact lands in exactly one:
 | `unresearched` | no source found; stays null |
 | `blocked` | could not be fetched by any method |
 
-## Resolve before escalating
-
-**An ambiguity is a research task first and a question second.** Before an inference call or an open
-question goes in the report, spend the effort to make it not a question. Work the ladder in order
-and stop as soon as one rung settles it:
-
-1. **Re-read the whole page.** The supporting sentence is routinely outside the section it should
-   be in — a fee in a sidebar, a prerequisite under a different heading.
-2. **Cross-check the snapshots already held.** Costs nothing. A fact about a third party — a
-   curriculum, a national program, another agency — is often stated plainly on *that party's* page,
-   and the registry may already carry it.
-3. **Look for structural corroboration, not just the phrase.** Hour counts, fee components, issued
-   artifacts, test formats and program names are all evidence. A page that never writes "MSF" but
-   publishes MSF's exact course structure *and* says graduates receive an MSF completion card has
-   said it.
-4. **Search for a new source.** Issuing agency first, then the program owner, then statute. A new
-   registry entry is a normal outcome of this step, not a failure.
-5. **Only then escalate** — and say what you already ruled out, so the question isn't re-answered
-   with work that's already been done.
-
-This is not optional diligence. GA's `courseType` read as `unsupported` on first pass because the
-GMSP page never names the Motorcycle Safety Foundation; rungs 2 and 3 settled it conclusively at
-zero request cost. **Escalating it would have handed over work that research could finish.**
+`blocked` is rare. A PDF is not blocked — `fetch-page.mjs` saves it to `blackbox/primary-sources/`
+and extracts its text layer, and a PDF with no extracted text is scanned, so read the saved file
+directly. A JS shell is not blocked either until you have tried the programme's other domains.
 
 ## Making calls
 
@@ -141,7 +203,8 @@ where one option is obviously right.
 
 **Decide:** which of two agency pages is the better citation · a registry `title` in the house
 voice · whether a `note` fact is load-bearing enough to keep · whether an inference is documented
-well enough to be `inferred` rather than `unsupported` · anything the template already answers.
+well enough to be `inferred` rather than `unsupported` · which of several snapshots best supports a
+fact · anything the template already answers.
 
 **Escalate:** a new value for a constrained field · `access` on a document whose redistribution
 rights are unclear · a fact where two official pages disagree · anything that would overwrite a
@@ -154,21 +217,76 @@ mid-run to ask.
 
 - **Never invent a citation.** A page is not a source until its text is in a snapshot and a
   supporting quote is in the report.
+- **Never carry a constrained value across states.** Neighbouring states running similar programmes
+  routinely differ, and a wrong `courseType` or `requirementType` silently scopes content to the
+  wrong riders. Verify the token against this state's own documents every time, and expect states to
+  need values the vocabulary does not yet have.
+- **A constrained field needing a new value stays null** and becomes an end-of-run question. Do not
+  add a vocabulary entry to the template mid-run. Do not stop to ask — collect it and keep going.
+  Propose the token *and* the evidence for it, so one word can approve both.
 - **Be conservative with anything already true.** A stored, sourced fact is never overwritten. If
   the page now disagrees, the verdict is `drifted` and the report carries the old value, the new
   value, the quote and a recommendation. Sean decides.
-- **A constrained field needing a new value stays null** and becomes an end-of-run question. Do not
-  add a vocabulary entry to the template mid-run. Do not stop to ask — collect it and keep going.
 - **`access` is never guessed.** If redistribution rights are unclear, that is a question, not a
   default.
 - **Never copy source wording into a value, a note or a title.** Facts are free; expression is not.
 - **`value: null` with a source and `value: null` without one mean different things.** Never record
   an unresearched fact as if it were checked and inapplicable.
+- **Every registry entry must be cited by something.** A new entry is either a fact's `source` or an
+  `additionalResources` key. An entry cited by nothing is an orphan the sweep will flag, so decide
+  which it is when you propose it, and never list a key in `additionalResources` that a fact already
+  cites.
+
+## Registry entry shape
+
+Every entry carries these properties, in this order:
+
+```json
+"ca-dmv-instruction-permits": {
+  "state": "CA",
+  "sourceID": "0042",
+  "title": "CA DMV Instruction and Learner's Permit Guide",
+  "publisher": "California Department of Motor Vehicles",
+  "url": "https://...",
+  "access": "public",
+  "note": "..."
+}
+```
+
+- **`state`** is the uppercase state code — `FL`, `GA`, `TX`, `CA` — or **`multi`** for anything
+  scoped `xx-`. Redundant with the key prefix by design: it makes the file filterable and groupable
+  without parsing keys.
+- **`sourceID`** is a zero-padded four-digit string, assigned in ascending order of addition.
+  **Take the next number not yet used in the file, and never reuse one** — a retired entry's number
+  stays retired, so gaps are expected and correct. It is a stable handle that survives a key being
+  renamed or an entry being re-scoped.
+- **`note`** is the only optional property; omit the key entirely when there is nothing to record.
+
+**The file is sorted alphabetically by key.** Insert a new entry at its alphabetical position, not
+at the end and not beside the entry that prompted it. Sort order is by key, which means entries
+group by state prefix as a side effect — that grouping is incidental, so never hand-order within it.
+
+## Pre-assembly checks
+
+Before writing the report, confirm:
+
+- Every fact you are proposing has its supporting quote, and that quote is in the snapshot of the
+  source you are naming.
+- Every new registry key is cited exactly once, as a fact source or an `additionalResources` entry.
+- Every new entry carries `state` and a `sourceID` that is the next unused number in the file, and
+  sits in its alphabetical position. No `sourceID` is reused, including one freed by a removal.
+- Every range is ascending, same unit, both ends quoted.
+- Every remaining null can be justified by naming the authorities read.
+- `meta.dateVerified` is bumped only if the whole state was examined.
+- Any snapshot written for a page you are not registering is named in the report as evidence.
 
 ## Report
 
 Write to `blackbox/research/<cert>-<state>-<YYYY-MM-DD>.md` and give a short summary in the
-terminal. Sections, in order:
+terminal. If a report for that state and date already exists, suffix the filename rather than
+overwriting it — an earlier report may carry the record of what was applied.
+
+Sections, in order:
 
 1. **Header** — cert, state, date, and whether this was a fill, a revalidation or both.
 2. **Counts** — facts by verdict; registry entries added/changed; links checked, cached, failed,
@@ -178,4 +296,7 @@ terminal. Sections, in order:
 5. **Open questions** — new vocabulary values needing a decision, ambiguous `access`, anything left
    null pending a call. Numbered, each answerable yes/no or with one word.
 6. **Detailed notes** — expand every verdict that is not `verified`, plus anything the counts hide.
-7. **Not verified, and why** — the honest residue. Never omit this section, even when empty.
+   Record traps found: a number belonging to a different exam, a stale agency link, a page that
+   looked healthy and was not. These are what stop a later pass repeating the work.
+7. **Not verified, and why** — the honest residue, naming the authorities read for each null. Never
+   omit this section, even when empty.

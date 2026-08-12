@@ -86,6 +86,7 @@
         "why": "Constrained so the UI can branch. Note the shape is already strained: a value naming one specific state does not scale, and a third exclusion pattern is the signal that this field wants to become a list rather than a token.",
         "values": {
           "all": "Accepts a valid motorcycle credential from every other US jurisdiction.",
+          "none": "Accepts no out-of-state credential in place of retesting. Every applicant tests in-state regardless of what they hold elsewhere — California is the case.",
           "non-Alabama": "Accepts every other US jurisdiction outright. An Alabama credential is accepted only when presented with an MSF Basic RiderCourse completion card — the token names the exception, and copy carries the condition."
         }
       },
@@ -93,7 +94,9 @@
         "what": "The rider-training curriculum this state's course is built on.",
         "why": "Load-bearing beyond display: a question's applies_to resolves a course type against this field at build time to reach every state running that curriculum. Verify it rather than assuming — California runs CMSP, and several states run programs that are MSF-derived but distinct, so a wrong value here silently scopes content to the wrong states.",
         "values": {
-          "MSFBRC": "Motorcycle Safety Foundation Basic RiderCourse."
+          "MSFBRC": "Motorcycle Safety Foundation Basic RiderCourse.",
+          "MNS2011": "Any curriculum the state approved against the 2011 Model National Standards for Entry-Level Motorcycle Rider Training (USDOT/NHTSA). Used where the state regulates to a standard instead of naming a curriculum, so several conformant curricula — MSF's among them — may be in use at once. Deliberately not MSFBRC: a rider's school may have taught something else.",
+          "CA": "California's own curriculum, delivered by the CMSP under CHP contract. Naming convention: a curriculum belonging to exactly one state takes that state's code, and only curricula spanning states get a broad name like MSFBRC. Keeps question assignment legible — a broad token means a group worth authoring for, a state code means content that travels nowhere else."
         }
       },
       "findCourse": {
@@ -108,7 +111,8 @@
         "what": "What kind of machine triggers the requirement for this credential.",
         "why": "Constrained because it decides who the page is even for — a rider on a 49cc scooter needs a different answer than one on a 650.",
         "values": {
-          "50ccUp": "Required for any motorcycle above 50cc; 50cc and under is treated as a moped."
+          "50ccUp": "Required for any motorcycle above 50cc; 50cc and under is treated as a moped.",
+          "all": "Required at every engine size, with no moped exemption. California is the case: a moped or motorized bicycle needs a Class M2 and a motorcycle needs an M1, so there is no unlicensed tier at all."
         }
       },
       "expirationType": {
@@ -116,7 +120,8 @@
         "why": "A token rather than a number so that 'never' and a fixed term can share one field. New terms follow the same form.",
         "values": {
           "never": "Does not expire on its own.",
-          "8year": "Expires on an eight-year term."
+          "8year": "Expires on an eight-year term.",
+          "5year": "Expires on a five-year term."
         }
       }
     },

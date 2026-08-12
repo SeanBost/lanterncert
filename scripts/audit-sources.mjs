@@ -17,10 +17,11 @@ function loadJson(path) {
   return JSON.parse(readFileSync(path, "utf8"));
 }
 
-function normalizeUrl(url) {
+// Canonical tags are routinely root-relative, so they resolve against the page's own URL first.
+function normalizeUrl(url, base) {
   if (!url) return null;
   try {
-    const u = new URL(url);
+    const u = new URL(url, base);
     return (u.host + u.pathname).toLowerCase().replace(/\/$/, "");
   } catch {
     return url.toLowerCase();
@@ -83,7 +84,7 @@ for (const key of scope) {
   const { snapshot, fromCache, previousHash } = await getPage({ key, url: entry.url, force });
 
   const canonicalDrift =
-    snapshot.canonical && normalizeUrl(snapshot.canonical) !== normalizeUrl(entry.url)
+    snapshot.canonical && normalizeUrl(snapshot.canonical, entry.url) !== normalizeUrl(entry.url)
       ? snapshot.canonical
       : null;
 

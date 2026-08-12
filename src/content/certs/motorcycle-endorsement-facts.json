@@ -5,7 +5,7 @@
       "dmvCode": "FLHSMV",
       "dmvName": "Florida Department of Highway Safety and Motor Vehicles",
       "localTerm": "motorcycle endorsement",
-      "note": "Two paths: the endorsement, which requires an existing Class E license, and a separate 'Motorcycle Only' license for riders without one, which requires the Class E knowledge test. Florida administers no motorcycle-specific knowledge or skills test — both paths test through the required Basic RiderCourse, run by private FLHSMV-authorized Sponsors. Three-wheel and sidecar courses give an 'S' restriction, not a full endorsement. The endorsement must be added within one year of passing the course.",
+      "note": "Two paths: the endorsement, which requires an existing Class E license, and a separate 'Motorcycle Only' license for riders without one, which requires the Class E knowledge test. BRC enrollment itself requires only a Learner's License. Florida administers no motorcycle-specific knowledge or skills test — both paths test through the required Basic RiderCourse, run by private FLHSMV-authorized Sponsors. Three-wheel and sidecar courses give an 'S' restriction, not a full endorsement. The endorsement must be added within one year of passing the course.",
       "stateDetails": null
     },
     "exam": {
@@ -15,7 +15,7 @@
       "isExamSectioned":     { "value": null, "source": "xx-msf-brcu-faq" }
     },
     "criteria": {
-      "dmvCost":    { "value": [31.75, 38.25], "source": "fl-hsmv-fees" },
+      "dmvCost":    { "value": [32, 38.25], "source": "fl-hsmv-fees" },
       "classCost":  { "value": [196, 395], "source": "fl-hsmv-course-locations" },
       "minAge":     { "value": 16, "source": "fl-hsmv-endorsement-info" },
       "minLicense": { "value": "Drivers", "source": "fl-hsmv-endorsement-info" },
@@ -28,6 +28,7 @@
     "additionalResources": [
       "fl-hsmv-frtp-courses",
       "fl-stat-322-21",
+      "fl-stat-322-0255",
       "xx-msf-brc-handbook",
       "xx-msf-brc-overview"
     ]
@@ -39,7 +40,7 @@
       "dmvCode": "GA DDS",
       "dmvName": "Georgia Department of Driver Services",
       "localTerm": "Class M license",
-      "note": "Knowledge exam is two 20-question sections (Road Rules, Road Signs) needing 15 correct on each. Knowledge exam scores expire after one year. GMSP course completion waives both the knowledge and skills tests for 90 days. A Class MP permit is available at 16, allows one renewal, and is required to book a DDS skills test; DDS testers supply and insure their own motorcycle. Course tuition is $250 in-state and $300 out-of-state.",
+      "note": "Knowledge exam is two 20-question sections (Road Rules, Road Signs) needing 15 correct on each. Knowledge exam scores expire after one year. GMSP course completion waives both the knowledge and skills tests for 90 days; the course grades its own written evaluation at 80%. A Class MP permit is available at 16, allows one renewal, and is required to book a DDS skills test; DDS testers supply and insure their own motorcycle. Course tuition is $250 in-state and $300 out-of-state.",
       "stateDetails": null
     },
     "exam": {
@@ -61,6 +62,7 @@
     },
     "additionalResources": [
       "ga-dds-motorcycle-manual",
+      "ga-dds-drivers-manual-testing",
       "ga-dds-motorcycle-permit",
       "ga-dds-mopeds",
       "ga-dds-road-test"
@@ -69,59 +71,68 @@
 
   "tx": {
     "meta": {
-      "dateVerified": null,
-      "dmvCode": null,
-      "dmvName": null,
-      "localTerm": null,
-      "note": null,
+      "dateVerified": "2026-08-12",
+      "dmvCode": "TX DPS",
+      "dmvName": "Texas Department of Public Safety",
+      "localTerm": "Class M license",
+      "note": "Two agencies: DPS issues the license, TDLR licenses the schools and approves curricula. A TDLR-approved safety course is required of every applicant; its completion certificate (MSB-8 or MSB-8R) is valid for 24 months and waives the DPS knowledge test, so in practice no rider sits a state motorcycle exam — the course test is the exam, and its format varies by school. TDLR approves each school's curriculum against a federal standard rather than mandating one curriculum. Class M is available at 15 with an engine-size restriction to 250cc, removed at 16 after a skills test. Applicants under 18 must pass a DPS skills test and show 32 classroom hours of driver education plus proof of school enrollment. The skills test is waived at 18+ for riders holding an unrestricted Texas Class A, B or C license who completed the course, or transferring an unrestricted motorcycle license from another US state or Canadian province. Adding motorcycle to an existing license does not change its expiration date. Licenses run eight years for ages 18-84 and two years at 85+. A Texas moped, which needs no Class M, must be 50cc or less and capped at 30 mph and under five brake horsepower and free of gears; a 49cc machine failing any of those is a motorcycle.",
       "stateDetails": null
     },
     "exam": {
-      "questionCount":       { "value": null, "source": null },
-      "timeLimitMinutes":    { "value": null, "source": null },
-      "passingScorePercent": { "value": null, "source": null },
-      "isExamSectioned":     { "value": null, "source": null }
+      "questionCount":       { "value": null, "source": "tx-tdlr-curriculum" },
+      "timeLimitMinutes":    { "value": null, "source": "tx-tdlr-curriculum" },
+      "passingScorePercent": { "value": null, "source": "tx-tdlr-curriculum" },
+      "isExamSectioned":     { "value": null, "source": "tx-tdlr-curriculum" }
     },
     "criteria": {
-      "dmvCost":    { "value": null, "source": null },
-      "classCost":  { "value": null, "source": null },
-      "minAge":     { "value": null, "source": null },
-      "minLicense": { "value": null, "source": null },
-      "transferOutOfStateEndorsement": { "value": null, "source": null },
-      "courseType":      { "value": null, "source": null },
-      "findCourse":      { "value": null, "source": null },
-      "requirementType": { "value": null, "source": null },
-      "expirationType":  { "value": null, "source": null }
+      "dmvCost":    { "value": [16, 33], "source": "tx-dps-fees" },
+      "classCost":  { "value": [225, 345], "source": "tx-tdlr-find-schools" },
+      "minAge":     { "value": 15, "source": "tx-dps-motorcycle-license" },
+      "minLicense": { "value": "None", "source": "tx-dps-motorcycle-license" },
+      "transferOutOfStateEndorsement": { "value": "all", "source": "tx-dps-motorcycle-license" },
+      "courseType":      { "value": "MNS2011", "source": "tx-tdlr-curriculum" },
+      "findCourse":      { "value": "stateLocator", "source": "tx-tdlr-find-schools" },
+      "requirementType": { "value": "50ccUp", "source": "tx-stat-541-201" },
+      "expirationType":  { "value": "8year", "source": "tx-dps-fees" }
     },
-    "additionalResources": []
+    "additionalResources": [
+      "tx-stat-521-001",
+      "xx-nhtsa-mns-2011",
+      "tx-dps-license-classes",
+      "tx-tdlr-motorcycle-hub",
+      "tx-tdlr-motorcycle-manual"
+    ]
   },
 
   "ca": {
     "meta": {
-      "dateVerified": null,
-      "dmvCode": null,
-      "dmvName": null,
-      "localTerm": null,
-      "note": null,
+      "dateVerified": "2026-08-12",
+      "dmvCode": "CA DMV",
+      "dmvName": "California Department of Motor Vehicles",
+      "localTerm": "Class M1 license",
+      "note": "Two motorcycle classes: M1 covers any two-wheeled motorcycle and everything M2 covers, M2 covers a motorized bicycle, moped or bicycle with an attached motor. There is no unlicensed tier at any engine size. The CMSP is California's official training program, administered by the CHP through a contractor and delivered as a 15-hour course of 5 classroom hours and 10 riding hours; an extended Premier Program runs 7.5 classroom and 13.5 riding. The course is mandatory under 21 and optional at 21 and older. Riders under 21 must also hold an M1 or M2 instruction permit for six months before the license. Course completion issues a DL 389 certificate that waives the DMV skills test for 12 months. The DMV knowledge test draws on the California Motorcycle Handbook and is not offered after 4:30 p.m. The CMSP course sets its own written evaluation at 80%, the same threshold the DMV test uses but a separate exam.",
       "stateDetails": null
     },
     "exam": {
       "questionCount":       { "value": null, "source": null },
       "timeLimitMinutes":    { "value": null, "source": null },
-      "passingScorePercent": { "value": null, "source": null },
-      "isExamSectioned":     { "value": null, "source": null }
+      "passingScorePercent": { "value": 80, "source": "ca-dmv-instruction-permits" },
+      "isExamSectioned":     { "value": false, "source": "ca-dmv-instruction-permits" }
     },
     "criteria": {
-      "dmvCost":    { "value": null, "source": null },
-      "classCost":  { "value": null, "source": null },
-      "minAge":     { "value": null, "source": null },
-      "minLicense": { "value": null, "source": null },
-      "transferOutOfStateEndorsement": { "value": null, "source": null },
-      "courseType":      { "value": null, "source": null },
-      "findCourse":      { "value": null, "source": null },
-      "requirementType": { "value": null, "source": null },
-      "expirationType":  { "value": null, "source": null }
+      "dmvCost":    { "value": 46, "source": "ca-dmv-licensing-fees" },
+      "classCost":  { "value": [395, 425], "source": "ca-cmsp-new-riders" },
+      "minAge":     { "value": 16, "source": "ca-dmv-handbook-getting-license" },
+      "minLicense": { "value": "None", "source": "ca-dmv-motorcycle-licenses" },
+      "transferOutOfStateEndorsement": { "value": "none", "source": "ca-dmv-motorcycle-handbook" },
+      "courseType":      { "value": "CA", "source": "ca-chp-cmsp" },
+      "findCourse":      { "value": "stateProgram", "source": "ca-cmsp-new-riders" },
+      "requirementType": { "value": "all", "source": "ca-dmv-motorcycle-licenses" },
+      "expirationType":  { "value": "5year", "source": "ca-veh-12816" }
     },
-    "additionalResources": []
+    "additionalResources": [
+      "ca-dmv-motorcyclists-guide",
+      "ca-dmv-driver-licenses"
+    ]
   }
 }
