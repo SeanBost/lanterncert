@@ -1,7 +1,7 @@
 {
   "fl": {
     "meta": {
-      "dateVerified": "2026-08-12",
+      "dateVerified": "2026-08-13",
       "dmvCode": "FLHSMV",
       "dmvName": "Florida Department of Highway Safety and Motor Vehicles",
       "localTerm": "motorcycle endorsement",
@@ -9,10 +9,11 @@
       "stateDetails": null
     },
     "exam": {
-      "questionCount":       { "value": 25, "source": "xx-msf-brcu-faq" },
-      "timeLimitMinutes":    { "value": null, "source": null },
-      "passingScorePercent": { "value": null, "source": null },
-      "isExamSectioned":     { "value": null, "source": "xx-msf-brcu-faq" }
+      "examType":            { "value": "MSFBRC", "source": "fl-hsmv-endorsement-info" },
+      "questionCount":       { "value": 25, "source": "xx-msf-brc-handbook" },
+      "timeLimitMinutes":    { "value": null, "source": "xx-msf-brc-handbook" },
+      "passingScorePercent": { "value": 80, "source": "xx-msf-brc-handbook" },
+      "isExamSectioned":     { "value": false, "source": "xx-msf-brc-handbook" }
     },
     "criteria": {
       "dmvCost":    { "value": [32, 38.25], "source": "fl-hsmv-fees" },
@@ -29,14 +30,16 @@
       "fl-hsmv-frtp-courses",
       "fl-stat-322-21",
       "fl-stat-322-0255",
-      "xx-msf-brc-handbook",
-      "xx-msf-brc-overview"
+      "fl-fmsc-motorcycle-handbook",
+      "xx-msf-operator-manual",
+      "xx-msf-brc-overview",
+      "xx-msf-brcu-faq"
     ]
   },
 
   "ga": {
     "meta": {
-      "dateVerified": "2026-08-12",
+      "dateVerified": "2026-08-13",
       "dmvCode": "GA DDS",
       "dmvName": "Georgia Department of Driver Services",
       "localTerm": "Class M license",
@@ -44,6 +47,7 @@
       "stateDetails": null
     },
     "exam": {
+      "examType":            { "value": "GA", "source": "ga-dds-test-exams" },
       "questionCount":       { "value": 40, "source": "ga-dds-test-exams" },
       "timeLimitMinutes":    { "value": null, "source": null },
       "passingScorePercent": { "value": 75, "source": "ga-dds-test-exams" },
@@ -55,13 +59,12 @@
       "minAge":     { "value": 17, "source": "ga-dds-class-m" },
       "minLicense": { "value": "None", "source": "ga-dds-class-m" },
       "transferOutOfStateEndorsement": { "value": "all", "source": "ga-dds-transfer" },
-      "courseType":      { "value": "MSFBRC", "source": "ga-dds-brc" },
+      "courseType":      { "value": "MSFBRC", "source": "ga-dds-motorcycle-manual" },
       "findCourse":      { "value": "stateProgram", "source": "ga-dds-gmsp-registration" },
       "requirementType": { "value": "50ccUp", "source": "ga-dds-motorcycle-hub" },
       "expirationType":  { "value": "8year", "source": "ga-dds-fees-terms" }
     },
     "additionalResources": [
-      "ga-dds-motorcycle-manual",
       "ga-dds-drivers-manual-testing",
       "ga-dds-motorcycle-permit",
       "ga-dds-mopeds",
@@ -71,7 +74,7 @@
 
   "tx": {
     "meta": {
-      "dateVerified": "2026-08-12",
+      "dateVerified": "2026-08-13",
       "dmvCode": "TX DPS",
       "dmvName": "Texas Department of Public Safety",
       "localTerm": "Class M license",
@@ -79,6 +82,7 @@
       "stateDetails": null
     },
     "exam": {
+      "examType":            { "value": "MNS2011", "source": "tx-tdlr-curriculum" },
       "questionCount":       { "value": null, "source": "tx-tdlr-curriculum" },
       "timeLimitMinutes":    { "value": null, "source": "tx-tdlr-curriculum" },
       "passingScorePercent": { "value": null, "source": "tx-tdlr-curriculum" },
@@ -106,7 +110,7 @@
 
   "ca": {
     "meta": {
-      "dateVerified": "2026-08-12",
+      "dateVerified": "2026-08-13",
       "dmvCode": "CA DMV",
       "dmvName": "California Department of Motor Vehicles",
       "localTerm": "Class M1 license",
@@ -114,6 +118,7 @@
       "stateDetails": null
     },
     "exam": {
+      "examType":            { "value": "CA", "source": "ca-dmv-instruction-permits" },
       "questionCount":       { "value": null, "source": null },
       "timeLimitMinutes":    { "value": null, "source": null },
       "passingScorePercent": { "value": 80, "source": "ca-dmv-instruction-permits" },
@@ -132,7 +137,9 @@
     },
     "additionalResources": [
       "ca-dmv-motorcyclists-guide",
-      "ca-dmv-driver-licenses"
+      "ca-dmv-driver-licenses",
+      "ca-dmv-driver-handbook",
+      "ca-dmv-motorcycle-handbook"
     ]
   }
 }

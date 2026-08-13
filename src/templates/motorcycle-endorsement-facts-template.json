@@ -37,9 +37,20 @@
     },
 
     "exam": {
+      "examType": {
+        "what": "Whose knowledge exam a rider in this state actually sits, and therefore which document the rest of this block describes.",
+        "why": "Deliberately separate from criteria.courseType, because the two diverge: Georgia's course is the MSF Basic RiderCourse but its exam is DDS's own, so a question written from MSF's handbook is not what a Georgian will be tested on. Recording only the course type hid that. This field is also what stops the rest of the exam block being ambiguous — questionCount means nothing until you know whose test is being counted.\n\nTHIS IS THE FIELD applies_to RESOLVES AGAINST, not courseType. A question is scoped by what a rider is tested on, not by what they were taught, because being tested on it is the entire reason the question exists. The two fields share one vocabulary, so a bare token would be ambiguous if both were live — only this one is.",
+        "values": {
+          "MSFBRC": "The Motorcycle Safety Foundation Basic RiderCourse end-of-course knowledge test. The state administers no motorcycle knowledge exam of its own.",
+          "MNS2011": "A knowledge test set by a provider approved against the 2011 Model National Standards. The state mandates that a test exist but not its form, so it varies by school and no single count or score is honest.",
+          "GA": "Georgia DDS's own Knowledge Exam, administered by the agency.",
+          "CA": "California DMV's own motorcycle knowledge test, administered by the agency. Distinct from the CMSP course's written evaluation, which is a different exam that happens to share a passing score.",
+          "_naming": "Same convention as courseType: an exam belonging to exactly one state takes that state's code, and only exams spanning states get a broad name. A state code here means content that travels nowhere else."
+        }
+      },
       "questionCount": {
-        "what": "Number of questions on the knowledge exam.",
-        "why": "Where a state administers no test of its own, this describes the knowledge test inside the required course, and meta.note has to say so — otherwise the page implies a DMV exam that does not exist."
+        "what": "Number of questions on the knowledge exam named by examType.",
+        "why": "Where a state administers no test of its own, this describes the knowledge test inside the required course — examType records which, and meta.note carries the detail. Without examType this field silently implied a DMV exam that does not exist."
       },
       "timeLimitMinutes": {
         "what": "Minutes allowed for the knowledge exam.",
@@ -91,8 +102,8 @@
         }
       },
       "courseType": {
-        "what": "The rider-training curriculum this state's course is built on.",
-        "why": "Load-bearing beyond display: a question's applies_to resolves a course type against this field at build time to reach every state running that curriculum. Verify it rather than assuming — California runs CMSP, and several states run programs that are MSF-derived but distinct, so a wrong value here silently scopes content to the wrong states.",
+        "what": "The rider-training curriculum this state's course is built on. What the rider was TAUGHT — exam.examType is what they are TESTED on, and the two do not always match.",
+        "why": "Descriptive, not load-bearing: it drives display and tells authoring what training a rider actually received, but applies_to resolves against exam.examType instead — scoping follows what a rider is tested on. Verify it rather than assuming: California runs CMSP, several states run programs that are MSF-derived but distinct. Sharing a curriculum is weaker evidence than it looks — two states on the same course type can still teach different figures in their own manuals, so it does not by itself make content portable.",
         "values": {
           "MSFBRC": "Motorcycle Safety Foundation Basic RiderCourse.",
           "MNS2011": "Any curriculum the state approved against the 2011 Model National Standards for Entry-Level Motorcycle Rider Training (USDOT/NHTSA). Used where the state regulates to a standard instead of naming a curriculum, so several conformant curricula — MSF's among them — may be in use at once. Deliberately not MSFBRC: a rider's school may have taught something else.",

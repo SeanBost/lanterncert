@@ -112,7 +112,23 @@ function hash(text) {
   return "sha256:" + createHash("sha256").update(text).digest("hex").slice(0, 32);
 }
 
-// Minimal PDF text layer reader: inflate each content stream and keep the strings fed to the
+/**
+ * Preferred PDF reader. pdf-parse resolves each font's ToUnicode map, which is what subset-encoded
+ * PDFs need — DL 665 R2-2024 extracts as mojibake without it. Falls back to the hand-rolled reader
+ * below when the library is absent or refuses the file; an encrypted PDF defeats both.
+ */
+export async function readPdfText(buf) {
+  try {
+    const { PDFParse } = await import("pdf-parse");
+    const { text } = await new PDFParse({ data: buf }).getText();
+    if (text?.trim()) return text.trim();
+  } catch {
+    // Library missing, or encrypted/malformed input — the fallback reports emptiness honestly.
+  }
+  return extractPdfText(buf);
+}
+
+// Fallback PDF text layer reader: inflate each content stream and keep the strings fed to the
 // text-showing operators. Returns "" for scanned or otherwise text-free PDFs, which is the signal
 // to read the file in primary-sources/ by hand instead.
 export function extractPdfText(buf) {
@@ -179,18 +195,30 @@ function today() {
 // primary-sources/ instead and read from there. The snapshot holds the digest, never the document.
 async function fetchBinaryMeta(url, key) {
   await space();
-  const res = await fetch(url, { headers: { "User-Agent": USER_AGENT } });
+  let res = await fetch(url, { headers: { "User-Agent": USER_AGENT } });
+
+  // Some hosts do the opposite of the usual bot rule and block the browser UA — ridesmartflorida.com
+  // serves a plain request fine and 403s a Chrome one. Retry bare before believing the refusal.
+  if (res.status === 403) {
+    await space();
+    res = await fetch(url);
+  }
+
   const bytes = Buffer.from(await res.arrayBuffer());
+
+  const contentType = res.headers.get("content-type") ?? "";
+  const isPdf = /pdf/i.test(contentType) || bytes.subarray(0, 5).toString("latin1") === "%PDF-";
 
   let localPath = null;
   if (key && res.ok) {
     mkdirSync(PRIMARY_SOURCE_DIR, { recursive: true });
-    const ext = (url.match(/\.([a-z0-9]+)(?:\?|#|$)/i)?.[1] ?? "bin").toLowerCase();
+    // Agencies serve documents from extension-less endpoints, so the body decides the extension.
+    const ext = (url.match(/\.([a-z0-9]+)(?:\?|#|$)/i)?.[1] ?? (isPdf ? "pdf" : "bin")).toLowerCase();
     localPath = join(PRIMARY_SOURCE_DIR, `${key}.${ext}`);
     writeFileSync(localPath, bytes);
   }
 
-  const text = /pdf/i.test(url) ? extractPdfText(bytes) : "";
+  const text = isPdf ? await readPdfText(bytes) : "";
 
   return {
     status: res.status,
@@ -251,7 +279,12 @@ export async function getPage({ key, url, force = false, maxAgeDays = SNAPSHOT_M
     return { snapshot: stored, fromCache: true, previousHash: stored.hash };
   }
 
-  const isBinary = /\.(pdf|zip|docx?|xlsx?)(\?|#|$)/i.test(url);
+  // Agency document endpoints hide the type in the path — /download, or CA DMV's /file/<name>-pdf/.
+  // Chrome would return a viewer shell for these, so route them to the binary path instead.
+  const isBinary =
+    /\.(pdf|zip|docx?|xlsx?)(\?|#|$)/i.test(url) ||
+    /\/download\/?(\?|#|$)/i.test(url) ||
+    /-(pdf|docx?|xlsx?)\/?(\?|#|$)/i.test(url);
   let result;
   try {
     result = isBinary ? await fetchBinaryMeta(url, key) : await fetchRendered(url);

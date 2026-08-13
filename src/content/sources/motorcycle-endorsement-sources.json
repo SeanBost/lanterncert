@@ -6,7 +6,7 @@
     "publisher": "California Highway Patrol",
     "url": "https://www.chp.ca.gov/programs-services/programs/california-motorcyclist-safety/",
     "access": "public",
-    "note": "The program owner's own page, and the authority for courseType CA. CHP is statutorily responsible under Vehicle Code sections 2930-2935 and administers the CMSP through a primary contractor, currently Total Control Training Inc — so the curriculum is California's own, not MSF's and not a federal standard. Gives the 15-hour structure and the Premier Program. Publishes no course price."
+    "note": "The program owner's own page, and the authority for courseType CA. CHP is statutorily responsible under Vehicle Code sections 2930-2935 and administers the CMSP through a primary contractor, currently Total Control Training Inc — so the curriculum is California's own, not MSF's and not a federal standard. Gives the 15-hour structure and the Premier Program. Publishes no course price. Also the citation for California lane splitting: it reproduces Vehicle Code 21658.1 in full and publishes the lane-splitting safety tips the statute authorises CHP to write. Note what the statute does and does not do — it defines lane splitting and empowers CHP to issue guidance, effective 2017-01-01 by AB 51; it contains no express permission, so lawfulness rests on statutory recognition plus the absence of a prohibition. The CA Motorcycle Handbook defines the term and gives cautionary advice but never states the legal position, which is why the fact comes from here."
   },
 
   "ca-cmsp-new-riders": {
@@ -17,6 +17,16 @@
     "url": "https://motorcyclesafetyca.com/new-riders/",
     "access": "public",
     "note": "The CMSP programme's current public site, run by the CHP's contractor rather than on a state domain — the route DMV ultimately sends riders to, and a better findCourse citation than the DMV page because this is where a rider actually searches locations and books. Publishes no price itself: classCost surveys rates its listed providers publish, and those are uniform statewide rather than provider-set, quoted identically by MRE Corp and Central Coast Motorcycle Training as $425 at 21 and over and $395 at 20 and under. Supersedes ca-msp.org, which DMV still links and which no longer resolves."
+  },
+
+  "ca-dmv-driver-handbook": {
+    "state": "CA",
+    "sourceID": "0043",
+    "title": "CA DMV California Driver's Handbook",
+    "publisher": "California Department of Motor Vehicles",
+    "url": "https://www.dmv.ca.gov/portal/handbook/california-driver-handbook/",
+    "access": "public",
+    "note": "DL 600, the general driver handbook. Load-bearing for California because M1/M2 applicants sit the driver knowledge test as well as the motorcycle one, so it is the source for CA's general rules-of-the-road content — it carries no motorcycle-specific material at all, which was checked rather than assumed. Its testing section states three attempts before reapplying, a seven-day wait for minors retaking, and no testing aids, but publishes no question count for either test. Cited as the HTML edition deliberately: the PDF DMV offers under this name is DL 600 X, an abridged quick reference and a different document, and it is AES-encrypted so no tool here can read it — a copy is held at blackbox/primary-sources/ca-dmv-driver-handbook-quickref.pdf and is reference only, never a citation."
   },
 
   "ca-dmv-driver-licenses": {
@@ -64,9 +74,9 @@
     "sourceID": "0040",
     "title": "CA DMV Motorcycle Handbook",
     "publisher": "California Department of Motor Vehicles",
-    "url": "https://www.dmv.ca.gov/portal/uploads/2020/03/dl665.pdf",
+    "url": "https://www.dmv.ca.gov/portal/file/motorcycle-driver-handbook-pdf/",
     "access": "public",
-    "note": "Form DL 665, free from DMV, 7MB PDF saved to primary-sources. The authority for transferOutOfStateEndorsement none: DMV will not waive the motorcycle skills test on an out-of-state training programme or any in-state or out-of-state course completion card, and the only waiver is a DL 389 from the CMSP course. Read with the DMV's out-of-state applicant path, which requires passing the knowledge tests, nothing a rider holds elsewhere removes a California test. States that knowledge test questions are drawn from this handbook and the California Driver Handbook, but gives no question count, no passing score and no time limit — which is why CA's exam fields stay null."
+    "note": "Form DL 665, free from DMV. Edition R2-2024, 52 pages. Cited at DMV's canonical current-handbook endpoint rather than a dated /uploads/ path, so the citation follows revisions instead of pinning to one. Retargeted 2026-08-13 from /uploads/2020/03/dl665.pdf, which was R4-2016 scanned and OCRd in 2019 — two revisions and about eight years stale, and the source of a $750-versus-$1,000 contradiction that R2-2024 resolves to $1,000. The authority for transferOutOfStateEndorsement none: DMV will not waive the motorcycle skills test on an out-of-state training programme or any course completion card, and the only waiver is a DL 389 from the CMSP course. Still gives no question count, no passing score and no time limit, so CA's exam fields stay null. Also still declines to state whether lane splitting is legal — it defines the term and warns about it, and its 'each need a full lane' phrasing reads as discouragement; the legal position comes from ca-chp-cmsp. Text layer uses subset font encodings that the zlib extractor renders as mojibake; readable with a real PDF library."
   },
 
   "ca-dmv-motorcycle-licenses": {
@@ -97,6 +107,16 @@
     "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=12816.",
     "access": "public",
     "note": "Vehicle Code 12816(a): every original driver's license expires on the applicant's fifth birthday following the application. It says driver's license, not motorcycle license, because in California M1 and M2 are classes of driver's license rather than a separate credential — DMV's own class table on ca-dmv-driver-licenses lists Motorcycle (Class M1 or M2) alongside the car classes. expirationType 5year rests on those two together."
+  },
+
+  "fl-fmsc-motorcycle-handbook": {
+    "state": "FL",
+    "sourceID": "0045",
+    "title": "Florida Motorcycle Operator Handbook",
+    "publisher": "Florida Motorcycle Safety Coalition",
+    "url": "https://ridesmartflorida.com/wp-content/uploads/2026/07/Motorcycle_Operators_Handbook_Final_WTweb.pdf",
+    "access": "public",
+    "note": "Florida's own rider manual, produced by the Florida Motorcycle Safety Coalition (Ride Smart Florida, CUTR at USF) and the document FLHSMV's Handbooks & Manuals page links to as the Florida Motorcycle Operator Handbook. Last revision 2026-04-29, so it is the most current handbook we hold for any state. An edited derivative of the MSF Motorcycle Operator Manual — same TEST YOURSELF items, same 70%-or-more front brake figure. Corroborates courseType and examType MSFBRC: it states new riders must pass the MSF-developed BRC through an FRTP Sponsor before the endorsement is added, citing s. 322.0255 F.S. CAUTION, it contradicts itself on following distance — the main passage says four seconds while the RiderRadar paragraph says two, an unfinished edit of the MOM's two-second baseline, so it cannot settle that number for Florida on its own. Its line that Florida 'requires you to pass a knowledge test' means the BRC's own test administered by the Sponsor, not an FLHSMV exam. Host blocks a browser user-agent and serves a plain request fine — fetch with no UA."
   },
 
   "fl-hsmv-course-locations": {
@@ -174,7 +194,7 @@
     "publisher": "Georgia Department of Driver Services",
     "url": "https://dds.georgia.gov/regulated-programs/motorcycle-safety-program/basic-riders-course",
     "access": "public",
-    "note": "GMSP course page. Publishes tuition, graduation requirements, and the 90-day test waiver. Never names the Motorcycle Safety Foundation as the curriculum owner, so courseType MSFBRC is inferred from two things it does state: the 5-hour classroom plus 10-hour range structure MSF publishes for the BRC, and that graduates hold an MSF Course Completion Card. Page is marked noindex."
+    "note": "GMSP course page. Publishes tuition, graduation requirements, and the 90-day test waiver, and backs classCost. Does not name the Motorcycle Safety Foundation as the curriculum owner — it corroborates courseType through the 5-hour classroom plus 10-hour range structure MSF publishes for the BRC and the MSF Course Completion Card graduates hold, but the fact is now sourced to ga-dds-motorcycle-manual, which names MSF outright. Page is marked noindex."
   },
 
   "ga-dds-class-m": {
@@ -241,9 +261,9 @@
     "sourceID": "0018",
     "title": "GA DDS Motorcycle Operator's Manual",
     "publisher": "Georgia Department of Driver Services",
-    "url": "https://dds.georgia.gov/motorcycle-operators-manual",
+    "url": "https://dds.georgia.gov/document/document/motorcycle-operators-manual/download",
     "access": "public",
-    "note": "Free state-published manual and the stated source material for the Knowledge Exam and Rider Skills Test. Direct PDF is 19MB; DDS also links two different third-party flipbook mirrors on different pages."
+    "note": "Free state-published manual and the stated source material for the Knowledge Exam and Rider Skills Test. Names the Motorcycle Safety Foundation and its Basic RiderCourse outright, which is what upgrades courseType MSFBRC from inferred to stated. Retargeted from the dds.georgia.gov/motorcycle-operators-manual HTML edition, whose navigation omits Section 2 entirely — the impaired-driving section carrying Georgia's BAC limits and penalties — so the PDF is the only complete edition. Served filename says Updated Sep 2025 while both the HTML edition and the PDF's own page headers still say 2023-2024; treat Sep 2025 as the edition and the headers as working-file residue. 19MB, and DDS also links two different third-party flipbook mirrors on other pages."
   },
 
   "ga-dds-motorcycle-permit": {
@@ -383,7 +403,7 @@
     "publisher": "Motorcycle Safety Foundation",
     "url": "https://msf-usa.org/documents/library/basic-ridercourse-handbook/",
     "access": "purchase",
-    "note": "$3 purchase. Student handbook, not the instructor-only RiderCoach Guide. Cite only; not redistributable, no verbatim excerpts on-site."
+    "note": "$3 purchase, held as xx-msf-brc-handbook.pdf. Edition 1.0, first printing March 2014, product code MSCU4401; running title 'MSF 2013 Basic RiderCourse Update Rider Handbook', so it documents the BRC 2013 rather than the BRC (updated) that xx-msf-brcu-faq describes. Student handbook, not the instructor-only RiderCoach Guide. Section 14 states the end-of-course knowledge test is 25 questions needing 80 percent to pass; it sets no time limit and delegates timing to the RiderCoach. Section 12 leaves licensing and all state-law topics to the local program, so the document carries no jurisdictional facts. Cite only; not redistributable, no verbatim excerpts on-site."
   },
 
   "xx-msf-brc-overview": {
@@ -403,7 +423,17 @@
     "publisher": "Motorcycle Safety Foundation",
     "url": "https://navalsafetycommand.navy.mil/Portals/100/Documents/c5.1_BRC2013.2014%20Update%20FAQs.pdf",
     "access": "public",
-    "note": "MSF curriculum doc (v3.13.14), mirrored by the U.S. Navy. Only source for the 25-item knowledge test — no FLHSMV page or FAC rule states a count. States a 25-item test at each of Level I and Level II, so how many a rider sits depends on the delivery option a Sponsor runs; isExamSectioned is null-with-source for that reason. Dated 2014; cite for curriculum structure only."
+    "note": "MSF curriculum doc (v3.13.14), mirrored by the U.S. Navy. Describes the BRC (updated), a different variant from the BRC 2013 that xx-msf-brc-handbook documents, and says a site may offer either. In the BRC (updated) knowledge testing is any combination of the Basic eCourse's per-section tests and a 25-item Level I test over Rider Handbook content; it states no passing score and never describes a 25-item test at Level II. Superseded by the handbook as the source for FL's exam facts; kept as a resource for the variant it describes. Dated 2014; cite for curriculum structure only."
+  },
+
+  "xx-msf-operator-manual": {
+    "state": "multi",
+    "sourceID": "0044",
+    "title": "MSF Motorcycle Operator Manual",
+    "publisher": "Motorcycle Safety Foundation",
+    "url": "https://msf-usa.org/wp-content/uploads/2023/02/motorcycle-operator-manual.pdf",
+    "access": "public",
+    "note": "18th edition. Free and freely downloadable, unlike the $3 BRC Rider Handbook — a different MSF publication, written for novices and 'designed for use in licensing programs'. The common ancestor of every state manual we hold: Texas's TDLR manual reproduces it near-verbatim down to the TEST YOURSELF items, and Florida's, Georgia's and California's are edited derivatives. Baseline figures: front brake 70% or more of stopping power, 2-second following distance, 2/4/12-second lead times. Where a state manual disagrees, the state made an edit and the state wins for that state — which makes this the document to diff each state manual against. Cited as a national baseline, never for a jurisdictional fact; Section 12 equivalents leave all state law to the local program. Offered by ridesmartflorida.com as a general resource, which is NOT the same as Florida's own handbook — see fl-fmsc-motorcycle-handbook."
   },
 
   "xx-nhtsa-mns-2011": {

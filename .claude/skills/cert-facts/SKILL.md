@@ -84,7 +84,9 @@ is deliberately low; every avoidable request is a bot-rule risk taken for nothin
 
 **2 · Verify** — every fact that has a source. Read the snapshot text, find the passage that
 supports the stored value, and record the exact quote. A page that loads is not evidence; a passage
-is. Apply every check in *Verifying properly* below before calling anything verified.
+is. Apply every check in *Verifying properly* below before calling anything verified — including
+check 8, which asks whether a supportable citation is still the *best available* one. Verification
+is two questions, not one: does this source back the value, and is it still the right source.
 
 **3 · Discover** — every fact without a source, **and every fact phase 2 could not settle**. Work
 *Finding a source* below in order. A fact whose value is already asserted but unsourced (`value`
@@ -97,8 +99,10 @@ Before assembling, run the *Pre-assembly checks*.
 **5 · REVIEW GATE. Write nothing.** Present the report and the proposed JSON. Wait.
 
 **6 · Apply** — only after approval. Write the facts file, the registry, any approved template
-vocabulary, and any snapshots. Bump `meta.dateVerified` only if every fact in that state was checked
-this run — a partial pass leaves it alone.
+vocabulary, and any snapshots. Bump `meta.dateVerified` to the run date if every sourced fact in
+that state was confirmed still accurate to its source this run — reading a snapshot under 60 days
+old counts, so a clean sweep over an untouched state qualifies. A partial pass, or any page that
+changed and was not re-read against the fact it backs, leaves the date alone.
 
 ## Verifying properly
 
@@ -125,6 +129,26 @@ defect; run all of them.
    single figure, is a defect in one of them.
 7. **Discharge standing instructions in registry notes.** Notes carry directives — a year in a URL
    that increments, a figure to re-survey. Do them, and say in the report that you did.
+8. **Ask whether the cited source is still the *best* one, not just a working one.** Supporting the
+   value is the floor, not the finish. For every fact you verify, weigh the stored citation against
+   (a) the other documents already in the registry, (b) anything in `blackbox/primary-sources/`, and
+   (c) what a short search suggests the agency now publishes. Rank with *Choosing between sources*.
+   Propose the swap when a better one exists, with the reasoning in the report and the superseded
+   source's role recorded in its own registry `note` — a demoted source usually still corroborates
+   and should say so rather than being silently orphaned.
+   Four things that make a working citation the wrong one, each of which has caught a real defect:
+   - **It infers where another document states.** A course page implying a curriculum loses to the
+     state manual naming it outright.
+   - **Its URL pins an edition.** A dated path like `/uploads/2020/03/` is a citation frozen to one
+     print, and agencies publish over them without redirecting. Prefer a canonical current-document
+     endpoint; check for a newer revision whenever a document carries a revision code.
+   - **It is a landing page, a mirror, or an abridgement rather than the document.** Confirm what you
+     are citing actually *is* the thing — an HTML edition can omit a whole section the PDF carries,
+     and a quick-reference form number is not the full handbook.
+   - **A more specific document now exists.** Cert-level or national sources are placeholders for
+     state ones; re-check for a state-published equivalent rather than assuming none appeared.
+   **This runs on every verify pass, including `--verify-only`.** A citation that was right two runs
+   ago quietly stops being right, and nothing else in this workflow looks for that.
 
 ## Finding a source
 
@@ -157,6 +181,35 @@ Worked in order. Stop when the fact is settled.
    what it did and did not specify.
 8. **Only then escalate** — and say what you already ruled out, so the question isn't re-answered
    with work that's already been done.
+
+### Choosing between sources
+
+The ladder above finds candidates; this ranks them. A `source` is a promise the reader can go check
+it, so **accessibility and clarity rank alongside authority, not below it**. Most to least preferred
+— `CLAUDE.md` ▸ *Locked decisions* is authoritative if this list and that one ever drift:
+
+1. openly accessible government source, readable and clear
+2. openly accessible source from a body the government granted authority — MSF, a state's program
+   contractor — readable and clear
+3. openly accessible government source, dense or legalese but unambiguous
+4. openly accessible authorized-third-party source, dense or legalese but unambiguous
+5. primary source from either that is paywalled, purchase-only or otherwise not freely accessible
+6. primary source where the fact must be pieced together or assumed from context
+
+**A rule of thumb, not a tiebreak algorithm.** It orders the usual case. When several sources cover
+one value, make the call and say why in the registry `note` — that is a *Decide*, not an *Escalate*.
+
+Working notes:
+- **A lower tier is not disqualified.** Tiers 5 and 6 back real facts today. The tier is a reason to
+  look for something better *first*, not a reason to reject what you have.
+- **Prefer the higher tier only when it says the same thing as well.** A tier-1 page that states the
+  fact loosely loses to a tier-3 statute that states it exactly. Clarity is inside each tier.
+- **Rank 6 is last because inference rots.** It's the only tier a later revalidation cannot re-check
+  by reading one sentence, which is why `inferred` requires the note to spell out the reasoning.
+- **Tier 5 needs its access recorded.** A purchase-only or restricted document is citable and never
+  hostable — set `access` accordingly and never quote it verbatim on-site.
+- **Non-primary sources are never any tier.** Attorney pages, journalism, practice-test sites and
+  forums do not appear on this ladder at all; see step 6 above for the only use they have.
 
 ### Fetching discipline
 
@@ -201,7 +254,8 @@ Decide it yourself when there is a defensible basis in the sources or in an exis
 Escalate only what is genuinely split *after the ladder above is exhausted*. Do not present a menu
 where one option is obviously right.
 
-**Decide:** which of two agency pages is the better citation · a registry `title` in the house
+**Decide:** which of two agency pages is the better citation (*Choosing between sources*) · which of
+two tiers a source sits in · a registry `title` in the house
 voice · whether a `note` fact is load-bearing enough to keep · whether an inference is documented
 well enough to be `inferred` rather than `unsupported` · which of several snapshots best supports a
 fact · anything the template already answers.
@@ -277,7 +331,8 @@ Before writing the report, confirm:
   sits in its alphabetical position. No `sourceID` is reused, including one freed by a removal.
 - Every range is ascending, same unit, both ends quoted.
 - Every remaining null can be justified by naming the authorities read.
-- `meta.dateVerified` is bumped only if the whole state was examined.
+- `meta.dateVerified` is bumped only if every sourced fact in the state was confirmed against its
+  source this run — cached snapshots count, changed pages must have been re-read.
 - Any snapshot written for a page you are not registering is named in the report as evidence.
 
 ## Report
