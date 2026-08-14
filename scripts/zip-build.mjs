@@ -19,7 +19,7 @@ mkdirSync("builds", { recursive: true });
 
 const now = new Date();
 const stamp = `${now.getMonth() + 1}-${now.getDate()}-${now.getFullYear()}`;
-const dest = `builds/freecertpractice-build-${stamp}.zip`;
+const dest = `builds/lanterncert-build-${stamp}.zip`;
 
 // Zip the CONTENTS of dist, so files sit at the zip root with no dist/ wrapper.
 // -Force refreshes a same-day archive rather than erroring.

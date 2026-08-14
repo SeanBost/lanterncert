@@ -36,7 +36,7 @@ const CHROME_CANDIDATES = [
 ].filter(Boolean);
 
 // Reusing one profile keeps cookies between runs, which bot filters read as a returning visitor.
-const CHROME_PROFILE = join(tmpdir(), "freecertpractice-chrome-profile");
+const CHROME_PROFILE = join(tmpdir(), "lanterncert-chrome-profile");
 
 let lastRequestAt = 0;
 

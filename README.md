@@ -1,4 +1,4 @@
-# FreeCertPractice
+# LanternCert
 
 Free, no-signup motorcycle endorsement test prep — architected to scale to additional states and
 test types.
