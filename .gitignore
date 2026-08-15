@@ -1,6 +1,5 @@
-# Human and AI
+# Working files, research, and source content
 blackbox/
-blackbox/source-snapshots/
 CLAUDE.md
 .claude/*
 !.claude/skills/

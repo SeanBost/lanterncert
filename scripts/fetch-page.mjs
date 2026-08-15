@@ -12,8 +12,9 @@ import { inflateSync } from "node:zlib";
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
 export const SNAPSHOT_DIR = join(ROOT, "blackbox", "source-snapshots");
+export const SNAPSHOT_HISTORY_DIR = join(ROOT, "blackbox", "source-snapshots-history");
 export const PRIMARY_SOURCE_DIR = join(ROOT, "blackbox", "primary-sources");
-export const SNAPSHOT_MAX_AGE_DAYS = 60;
+export const SNAPSHOT_MAX_AGE_DAYS = 21;
 
 // Every request is a chance to trip a bot rule, so they are spaced and never made in parallel.
 const REQUEST_SPACING_MS = 2000;
@@ -172,14 +173,32 @@ export function extractPdfText(buf) {
   return lines.join(" ").replace(/￾|þÿ/g, " ").replace(/\s+/g, " ").trim();
 }
 
-export function snapshotPath(key) {
-  return join(SNAPSHOT_DIR, `${key}.json`);
+// Both stores are partitioned by cert slug, so one cert's snapshots stay a browsable set as the
+// registry grows past a few dozen documents.
+export function snapshotPath(cert, key) {
+  return join(SNAPSHOT_DIR, cert, `${key}.json`);
 }
 
-export function readSnapshot(key) {
-  const path = snapshotPath(key);
+export function readSnapshot(cert, key) {
+  const path = snapshotPath(cert, key);
   if (!existsSync(path)) return null;
   return JSON.parse(readFileSync(path, "utf8"));
+}
+
+export function historyPath(cert, key, stamp) {
+  return join(SNAPSHOT_HISTORY_DIR, cert, key, `${stamp}.json`);
+}
+
+// Files the superseded snapshot under the last date its content was confirmed live, keeping both of
+// its dates untouched so the pair still brackets the window that content was actually up.
+export function archiveSnapshot(cert, stored) {
+  const stamp = stored.mostRecentValidation ?? stored.originallyFetched ?? today();
+  mkdirSync(join(SNAPSHOT_HISTORY_DIR, cert, stored.key), { recursive: true });
+  let path = historyPath(cert, stored.key, stamp);
+  for (let n = 2; existsSync(path); n++) path = historyPath(cert, stored.key, `${stamp}-${n}`);
+  // HISTORICAL leads the object so an archived copy is never mistaken for a live one at a glance.
+  writeFileSync(path, JSON.stringify({ HISTORICAL: true, ...stored }, null, 2) + "\n", "utf8");
+  return path;
 }
 
 export function ageInDays(iso) {
@@ -265,18 +284,39 @@ async function fetchRendered(url) {
 }
 
 /**
- * Returns { snapshot, fromCache, previousHash }. Never touches the network when a stored
- * snapshot is younger than SNAPSHOT_MAX_AGE_DAYS and `force` is not set.
+ * Returns { snapshot, fromCache, previousHash, changed, written, archivedTo, mismatch }.
+ *
+ * Never touches the network when a stored snapshot is younger than SNAPSHOT_MAX_AGE_DAYS and
+ * `force` is not set. A detected content change is NEVER written — the candidate comes back
+ * unwritten for a human to review. `apply` commits an approved outcome: "cosmetic" keeps the
+ * content window open and refreshes the text, "meaningful" archives the old snapshot first and
+ * starts a new window. See CLAUDE.md ▸ The snapshot store.
  */
-export async function getPage({ key, url, force = false, maxAgeDays = SNAPSHOT_MAX_AGE_DAYS }) {
-  const stored = key ? readSnapshot(key) : null;
+export async function getPage({
+  cert,
+  key,
+  url,
+  force = false,
+  maxAgeDays = SNAPSHOT_MAX_AGE_DAYS,
+  apply = null,
+  expectHash = null,
+}) {
+  if (key && !cert) throw new Error("getPage: a key needs a cert — snapshots are stored per cert");
+  const stored = key ? readSnapshot(cert, key) : null;
 
   // A retargeted citation invalidates its snapshot no matter how fresh — the key is the same but
   // the document is not.
   const sameUrl = stored?.url === url;
 
-  if (stored && sameUrl && !force && ageInDays(stored.fetchedAt) < maxAgeDays) {
-    return { snapshot: stored, fromCache: true, previousHash: stored.hash };
+  if (stored && sameUrl && !force && ageInDays(stored.mostRecentValidation) < maxAgeDays) {
+    return {
+      snapshot: stored,
+      fromCache: true,
+      previousHash: stored.hash,
+      changed: false,
+      written: false,
+      archivedTo: null,
+    };
   }
 
   // Agency document endpoints hide the type in the path — /download, or CA DMV's /file/<name>-pdf/.
@@ -302,14 +342,54 @@ export async function getPage({ key, url, force = false, maxAgeDays = SNAPSHOT_M
     };
   }
 
-  const snapshot = { key: key ?? null, url, fetchedAt: today(), ...result };
+  const changed = Boolean(stored && sameUrl && stored.hash && result.hash && stored.hash !== result.hash);
 
-  if (key && snapshot.status > 0) {
-    mkdirSync(SNAPSHOT_DIR, { recursive: true });
-    writeFileSync(snapshotPath(key), JSON.stringify(snapshot, null, 2) + "\n", "utf8");
+  const candidate = {
+    cert: cert ?? null,
+    key: key ?? null,
+    url,
+    originallyFetched: stored?.originallyFetched ?? null,
+    mostRecentValidation: stored?.mostRecentValidation ?? null,
+    ...result,
+  };
+
+  // Nothing unreviewed reaches the store. Re-running costs one request; a record written from a
+  // change nobody looked at would outlive the mistake that made it.
+  if (changed && !apply) {
+    return { snapshot: candidate, fromCache: false, previousHash: stored.hash, changed: true, written: false, archivedTo: null };
   }
 
-  return { snapshot, fromCache: false, previousHash: stored?.hash ?? null };
+  // Guards the window between a change being reported and being approved: if the page moved again
+  // in between, the approval was given for content that is no longer there.
+  if (expectHash && result.hash !== expectHash) {
+    return { snapshot: candidate, fromCache: false, previousHash: stored?.hash ?? null, changed, written: false, archivedTo: null, mismatch: true };
+  }
+
+  // A retarget is a deliberate registry edit, so it needs no review gate — but the superseded
+  // document is still history, and overwriting it here is the data loss this store exists to stop.
+  const retargeted = Boolean(stored && !sameUrl);
+  let archivedTo = null;
+  // Only ever supersede a snapshot with something real — a failed fetch would otherwise retire the
+  // old copy into history and leave nothing live to replace it.
+  if (stored && result.status > 0 && (retargeted || (changed && apply === "meaningful"))) {
+    archivedTo = archiveSnapshot(cert, stored);
+  }
+
+  const snapshot = {
+    ...candidate,
+    // Sticky: set only when there is no window to continue — a new record, or one whose
+    // predecessor was just archived.
+    originallyFetched: stored?.originallyFetched && !archivedTo ? stored.originallyFetched : today(),
+    mostRecentValidation: today(),
+  };
+
+  const written = Boolean(key && snapshot.status > 0);
+  if (written) {
+    mkdirSync(join(SNAPSHOT_DIR, cert), { recursive: true });
+    writeFileSync(snapshotPath(cert, key), JSON.stringify(snapshot, null, 2) + "\n", "utf8");
+  }
+
+  return { snapshot, fromCache: false, previousHash: stored?.hash ?? null, changed, written, archivedTo };
 }
 
 const invokedDirectly =
@@ -320,18 +400,41 @@ if (invokedDirectly) {
   const url = args.find((a) => !a.startsWith("--"));
   const keyArg = args.indexOf("--key");
   const key = keyArg !== -1 ? args[keyArg + 1] : null;
+  const certArg = args.indexOf("--cert");
+  const cert = certArg !== -1 ? args[certArg + 1] : null;
+  const applyArg = args.indexOf("--apply");
+  const apply = applyArg !== -1 ? args[applyArg + 1] : null;
+  const expectArg = args.indexOf("--expect-hash");
+  const expectHash = expectArg !== -1 ? args[expectArg + 1] : null;
   const force = args.includes("--force");
 
-  if (!url) {
-    console.error("fetch-page: usage — node scripts/fetch-page.mjs <url> [--key <source-key>] [--force]");
+  if (!url || (key && !cert) || (apply && !["cosmetic", "meaningful"].includes(apply))) {
+    console.error(
+      "fetch-page: usage — node scripts/fetch-page.mjs <url> [--cert <slug> --key <source-key>]\n" +
+        "                    [--force] [--apply cosmetic|meaningful] [--expect-hash <hash>]\n" +
+        "                    --key requires --cert: snapshots are stored per cert."
+    );
     process.exit(1);
   }
 
-  const { snapshot, fromCache } = await getPage({ key, url, force });
-  const age = ageInDays(snapshot.fetchedAt);
+  const { snapshot, fromCache, changed, written, archivedTo, mismatch } = await getPage({
+    cert,
+    key,
+    url,
+    force,
+    apply,
+    expectHash,
+  });
+  const age = ageInDays(snapshot.mostRecentValidation);
   console.error(
     `fetch-page: ${fromCache ? `cache (${age}d old)` : snapshot.method} — status ${snapshot.status}, ${snapshot.textLength} chars`
   );
+  if (mismatch) console.error(`fetch-page: MISMATCH — page is ${snapshot.hash}, expected ${expectHash}. Nothing written.`);
+  else if (changed && !written) console.error(`fetch-page: CHANGED — candidate ${snapshot.hash}. Nothing written; review, then --apply.`);
+  if (archivedTo) {
+    console.error(`fetch-page: archived previous snapshot to ${archivedTo}`);
+    console.error(`fetch-page: REDATE — new content window, so re-review published and verifiedCurrentIn.`);
+  }
   if (snapshot.error) console.error(`fetch-page: ${snapshot.error}`);
   if (snapshot.text) console.log(snapshot.text);
 }

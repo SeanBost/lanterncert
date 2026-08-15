@@ -1,6 +1,6 @@
 {
   "_about": {
-    "what": "The shape of one state object in src/content/certs/motorcycle-endorsement-facts.json, with 'what' and 'why' standing in for the 'value' and 'source' of a real fact. Not read by any code.",
+    "what": "The shape of one state object in src/content/facts/motorcycle-endorsement-facts.json, with 'what' and 'why' standing in for the 'value' and 'source' of a real fact. Not read by any code.",
     "why": "One place that says what each field is for, how we prefer to fill it, and every value a constrained field is allowed to take. Zod will enforce the shape later; this explains it, which Zod never will.",
     "purpose": "These facts feed auto-generated quick-facts content whose job is to give a rider the headline answer and send them to the primary source for the detail. Every value must be honest and traceable to a document we hold. It does not have to carry every edge case — copy hedges and links out, and a fact that tries to be exhaustive stops being quick. Record the headline answer; put a genuinely load-bearing exception in meta.note and leave the rest to the source.",
     "factContract": "Every fact is a { value, source } pair. 'source' is a key into motorcycle-endorsement-sources.json. A fact is verified if and only if it has a source: source null means not researched, and a source present with value null means checked and there is no single honest answer for this state.",
@@ -12,15 +12,15 @@
     "meta": {
       "dateVerified": {
         "what": "Date every fact in this state object was last verified, as YYYY-MM-DD.",
-        "why": "The visible trust signal on the state page, and what the 60-day revalidation sweep reads. Bumped only when the whole state was re-checked in one pass — a partial pass leaves it alone, or the date starts vouching for facts nobody looked at."
+        "why": "The visible trust signal on the state page, and what the 21-day revalidation sweep reads. Bumped only when the whole state was re-checked in one pass — a partial pass leaves it alone, or the date starts vouching for facts nobody looked at."
       },
-      "dmvCode": {
+      "agencyCode": {
         "what": "Short agency abbreviation as it appears in body copy — FLHSMV, GA DDS.",
         "why": "Lives here rather than in states.json because the agency is cert-family-specific: the same agency serves motorcycle and CDL, but hunter ed would be a different one."
       },
-      "dmvName": {
+      "agencyName": {
         "what": "The agency's full name, spelled out.",
-        "why": "Used on first mention and in structured data; dmvCode carries every mention after."
+        "why": "Used on first mention and in structured data; agencyCode carries every mention after."
       },
       "localTerm": {
         "what": "What this state actually calls the credential — Florida 'motorcycle endorsement', Georgia 'Class M license'.",

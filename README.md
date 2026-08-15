@@ -48,7 +48,7 @@ src/
   site-config.json       site identity + test type registry
   content/
     states.json          state identity, keyed by state code
-    certs/               per-state meta, exam params and criteria, one file per cert
+    facts/               per-state meta, exam params and criteria, one file per cert
     sources/             registry of cited documents (metadata only, not the documents)
     questions/           the question bank
   templates/             each cert's data shape, annotated — the field and vocabulary reference
@@ -81,8 +81,8 @@ because Texas approves curricula against a federal standard rather than mandatin
 closing-time cutoff instead ("not within 30 minutes of closing"), which is a different thing.
 
 Every value is stored with its own citation, and each cited page is re-fetched and re-read on a
-60-day cycle. Parameters come from official state sources only. See
-`src/content/certs/motorcycle-endorsement-facts.json`.
+21-day cycle. Parameters come from official state sources only. See
+`src/content/facts/motorcycle-endorsement-facts.json`.
 
 ---
 

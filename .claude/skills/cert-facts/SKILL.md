@@ -1,6 +1,6 @@
 ---
 name: cert-facts
-description: Research, verify and fill per-state jurisdictional facts for a cert — the { value, source } pairs in src/content/certs/<cert>-facts.json and the registry entries in src/content/sources/<cert>-sources.json. Use when adding a new state, revalidating an existing one, or checking that cited pages still say what we claim. Invoked as /cert-facts <cert-slug> <state|all>.
+description: Research, verify and fill per-state jurisdictional facts for a cert — the { value, source } pairs in src/content/facts/<cert>-facts.json and the registry entries in src/content/sources/<cert>-sources.json. Use when adding a new state, revalidating an existing one, or checking that cited pages still say what we claim. Invoked as /cert-facts <cert-slug> <state|all>.
 ---
 
 # cert-facts
@@ -46,8 +46,8 @@ what you read and why it wasn't there.
 
 ## Owns / never touches
 
-**Owns:** `src/content/certs/<cert>-facts.json`, `src/content/sources/<cert>-sources.json`,
-`blackbox/source-snapshots/`, `blackbox/research/`.
+**Owns:** `src/content/facts/<cert>-facts.json`, `src/content/sources/<cert>-sources.json`,
+`blackbox/source-snapshots/<cert>/`, `blackbox/research/`.
 
 **Never touches:** the question bank, any UI or route, `CLAUDE.md`, `blackbox/todo.md`,
 `blackbox/project-plan.md`, `blackbox/sessions.md`, or git. Surface anything those need as a
@@ -77,10 +77,50 @@ template. Resolve the target. If the two owned JSON files have uncommitted chang
 report — do not refuse.
 
 **1 · Sweep.** `node scripts/audit-sources.mjs <cert> --state <code>` (omit `--state` for `all` or
-`--links`). This refreshes any snapshot older than 60 days and reports dangling refs, orphans,
+`--links`). This refreshes any snapshot older than 21 days and reports dangling refs, orphans,
 canonical drift and pages whose text changed since last time. **Never fetch a page yourself when a
-snapshot under 60 days old exists** — read `blackbox/source-snapshots/<key>.json`. Request volume
-is deliberately low; every avoidable request is a bot-rule risk taken for nothing.
+snapshot under 21 days old exists** — read `blackbox/source-snapshots/<cert>/<key>.json`. Both
+snapshot stores are partitioned by cert slug; a new cert gets its directory in
+`source-snapshots/` **and** in `source-snapshots-history/`, even though the history one starts
+empty. Request volume is deliberately low; every avoidable request is a bot-rule risk taken for
+nothing.
+
+The sweep raises two re-dating flags, and both are work items for this run, not noise — see
+*Dating a source*:
+
+- **`REDATE`** — the snapshot's `originallyFetched` moved, so this is a new content window: a new
+  record, an applied meaningful change, or a retarget. The document moved, so **neither** year
+  carries forward. This is the one case where `published` is not immutable.
+- **`CURRENCY-STALE`** — the source was re-read this run and its `verifiedCurrentIn` is behind the
+  current year. Establish currency properly and set the year; never just bump it.
+
+A one-line tally of everything below the current year prints on every run, including fully cached
+ones. **Some entries will sit in that tally indefinitely**, because their currency genuinely cannot
+be established from what we hold — a purchase-only document whose seller publishes no edition is the
+usual shape. Re-confirm the null against the registry `note`, which records what settling it would
+take, and move on. Re-deciding a known null costs a minute; **never invent a year to clear one, and
+never suppress a key to silence it** — a suppression list is where a real problem goes to die.
+
+**A changed page is reported, never written** — the sweep prints `CHANGED — awaiting review` and an
+`AWAITING REVIEW` block, and leaves the snapshot untouched. That is deliberate: the superseded text
+is the change history, and the history is the asset. So a change is a **second review gate, before
+the one at step 5**, and it has to be worked rather than noted:
+
+1. Read the stored snapshot and the reported candidate hash. The stored file is still the *old*
+   content — that's the point — so re-fetch is not needed to see what we had.
+2. Diff them yourself and say in the report **what changed and whether it touches a fact we cite.**
+   "The page changed" is not a finding; "the fee table moved from $32 to $34, which backs
+   `ga.criteria.dmvCost`" is.
+3. Recommend `cosmetic` or `meaningful`, and say why. Cosmetic means the diff carries no
+   information — a rotating banner, a build timestamp. Anything touching a cited value, or any
+   change you cannot fully account for, is meaningful.
+4. **Sean decides.** On approval, apply with
+   `--apply-cosmetic <keys>` or `--apply-meaningful <keys>`, comma-separated, and pass
+   `--expect-hash <candidate>` so a page that moved again refuses to write. **A `meaningful` apply
+   also re-derives `published` and `verifiedCurrentIn` from scratch** — the document moved, so
+   neither year carries over. Say in the report what each became and on what evidence.
+5. **A page that changed and was not re-read against the fact it backs blocks `dateVerified`.**
+   That rule already existed; the sweep now makes it visible instead of trusting memory.
 
 **2 · Verify** — every fact that has a source. Read the snapshot text, find the passage that
 supports the stored value, and record the exact quote. A page that loads is not evidence; a passage
@@ -100,7 +140,7 @@ Before assembling, run the *Pre-assembly checks*.
 
 **6 · Apply** — only after approval. Write the facts file, the registry, any approved template
 vocabulary, and any snapshots. Bump `meta.dateVerified` to the run date if every sourced fact in
-that state was confirmed still accurate to its source this run — reading a snapshot under 60 days
+that state was confirmed still accurate to its source this run — reading a snapshot under 21 days
 old counts, so a clean sweep over an untouched state qualifies. A partial pass, or any page that
 changed and was not re-read against the fact it backs, leaves the date alone.
 
@@ -149,6 +189,10 @@ defect; run all of them.
      state ones; re-check for a state-published equivalent rather than assuming none appeared.
    **This runs on every verify pass, including `--verify-only`.** A citation that was right two runs
    ago quietly stops being right, and nothing else in this workflow looks for that.
+9. **Re-date every source you touch.** Confirming the passage is still there does not confirm the
+   document is still the current one — work *Dating a source* and update `verifiedCurrentIn`, or
+   leave it and say in the report why it could not be established. An entry the sweep flags
+   `CURRENCY-STALE` is asking for exactly this.
 
 ## Finding a source
 
@@ -303,6 +347,8 @@ Every entry carries these properties, in this order:
   "publisher": "California Department of Motor Vehicles",
   "url": "https://...",
   "access": "public",
+  "published": null,
+  "verifiedCurrentIn": 2026,
   "note": "..."
 }
 ```
@@ -314,7 +360,56 @@ Every entry carries these properties, in this order:
   **Take the next number not yet used in the file, and never reuse one** — a retired entry's number
   stays retired, so gaps are expected and correct. It is a stable handle that survives a key being
   renamed or an entry being re-scoped.
+- **`published`** and **`verifiedCurrentIn`** are the two year fields — see *Dating a source* below,
+  which is not optional work.
 - **`note`** is the only optional property; omit the key entirely when there is nothing to record.
+
+### Dating a source
+
+Two years, because vintage and currency are different questions. A 2020 manual still operative in
+2026 is ordinary, and one number cannot say both. **Neither year is a formality — dig for each, and
+record what you dug through.** `CLAUDE.md` ▸ *How it's wired* is authoritative if these drift.
+
+**`published` — the year the content itself was last published**, as a number, or `null` for a
+living page that states none.
+
+- Take it from the document's own dating: a revision code in a form footer, a revision-history table,
+  an edition statement, a "does not reflect changes after…" line, a statute's amendment note, a
+  compilation year in the title, a served filename carrying an update month.
+- **A site-wide copyright footer is never a publication date.** It appears on every page of the site
+  and says nothing about when that page's content was written. This is the single most tempting
+  wrong answer; `null` is correct and honest instead.
+- Where a document gives a range, take the first year.
+- For a statute, date the operative text, not the page — the amendment that produced the current
+  wording, which can be decades before the page you read it on.
+- Corroborate where you can. A revision table agreeing with a PDF's embedded creation date beats
+  either alone, and both beat the date in an upload path, which records when a file was posted
+  rather than when it was written.
+
+**`verifiedCurrentIn` — the most recent year you established this is still the operative version**,
+or `null` if you genuinely could not.
+
+- **This is not "the fetch succeeded."** An unchanged file at a pinned URL proves the file is
+  unchanged, never that the publisher still calls it current. Do not derive this year from the
+  snapshot date.
+- What actually establishes it, strongest first:
+  1. a regulator or agency naming the document, by name and year, in something read this year
+  2. an agency's canonical current-document endpoint serving exactly this file
+  3. a generic, non-edition-stamped filename — the one a publisher overwrites on a new edition —
+     returning identical bytes
+  4. the publisher's own index or library still listing it as current
+- A dated `/uploads/YYYY/MM/` path establishes nothing by itself. Neither does a third-party mirror.
+- **`null` is a real answer and often the right one.** If the only evidence is that a product page
+  sells *a* document of that name, you have not established the edition. Write `null`, and put in
+  the note what settling it would take.
+- Where a document is older than the current year, say in the note what carried it forward. That
+  sentence is what a later pass re-checks instead of redoing the search.
+
+**Both years are re-derived, never carried, whenever a source's content changes.** Approving a
+`meaningful` snapshot change means the document moved — re-read both, and say in the report what
+each became. Re-checking `published` alone is the trap: a document can keep its publication year and
+quietly stop being current. The sweep flags any entry whose `verifiedCurrentIn` is below the current
+year as `CURRENCY-STALE`; clearing one means doing the work above, not bumping the number.
 
 **The file is sorted alphabetically by key.** Insert a new entry at its alphabetical position, not
 at the end and not beside the entry that prompted it. Sort order is by key, which means entries
@@ -329,6 +424,8 @@ Before writing the report, confirm:
 - Every new registry key is cited exactly once, as a fact source or an `additionalResources` entry.
 - Every new entry carries `state` and a `sourceID` that is the next unused number in the file, and
   sits in its alphabetical position. No `sourceID` is reused, including one freed by a removal.
+- Every new or re-dated entry carries both year fields, each derived per *Dating a source* — not a
+  copyright footer, and not the snapshot date. A `null` on either is explained in the note.
 - Every range is ascending, same unit, both ends quoted.
 - Every remaining null can be justified by naming the authorities read.
 - `meta.dateVerified` is bumped only if every sourced fact in the state was confirmed against its
@@ -347,7 +444,8 @@ Sections, in order:
 2. **Counts** — facts by verdict; registry entries added/changed; links checked, cached, failed,
    changed; snapshots written/refreshed.
 3. **Facts table** — field · value · source key · verdict · supporting quote.
-4. **Registry changes** — each added or modified entry with its `access` and why it was chosen.
+4. **Registry changes** — each added or modified entry with its `access`, both year fields and the
+   evidence behind each, and why the source was chosen.
 5. **Open questions** — new vocabulary values needing a decision, ambiguous `access`, anything left
    null pending a call. Numbered, each answerable yes/no or with one word.
 6. **Detailed notes** — expand every verdict that is not `verified`, plus anything the counts hide.
