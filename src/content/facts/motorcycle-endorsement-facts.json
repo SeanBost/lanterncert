@@ -138,8 +138,7 @@
     "additionalResources": [
       "ca-dmv-motorcyclists-guide",
       "ca-dmv-driver-licenses",
-      "ca-dmv-driver-handbook",
-      "ca-dmv-motorcycle-handbook"
+      "ca-dmv-driver-handbook"
     ]
   }
 }

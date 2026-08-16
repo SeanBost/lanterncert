@@ -1,3 +1,3 @@
-# Pre-launch blanket noindex. Removed at launch; the route ledger tracks what else must change with it.
+# Pre-launch blanket noindex. Deleted at launch; /q/[id] keeps its own permanent per-page noindex.
 /*
   X-Robots-Tag: noindex

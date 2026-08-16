@@ -47,7 +47,8 @@ what you read and why it wasn't there.
 ## Owns / never touches
 
 **Owns:** `src/content/facts/<cert>-facts.json`, `src/content/sources/<cert>-sources.json`,
-`blackbox/source-notes.json`, `blackbox/source-snapshots/<cert>/`, `blackbox/research/`.
+`blackbox/source-notes/<cert>-source-notes.json`, `blackbox/source-snapshots/<cert>/`,
+`blackbox/research/`.
 
 **The registry is public; the notes are not.** A proposed entry and its note are written together at
 the review gate but land in two files — the registry ships in the repo and renders on the site, the
@@ -248,7 +249,8 @@ Before writing the report, confirm:
 - Every fact you are proposing has its supporting quote, and that quote is in the snapshot of the
   source you are naming.
 - Every new registry key is cited exactly once, as a fact source or an `additionalResources` entry,
-  and its note (if any) is proposed into `blackbox/source-notes.json`, not into the entry.
+  and its note (if any) is proposed into `blackbox/source-notes/<cert>-source-notes.json`, not into
+  the entry.
 - Every new entry carries `state` and a `sourceID` that is the next unused number in the file, and
   sits in its alphabetical position. No `sourceID` is reused, including one freed by a removal.
 - Every new or re-dated entry carries both year fields, each derived per `data-handling.md` ▸

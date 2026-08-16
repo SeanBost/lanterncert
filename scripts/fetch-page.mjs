@@ -173,10 +173,14 @@ export function extractPdfText(buf) {
   return lines.join(" ").replace(/￾|þÿ/g, " ").replace(/\s+/g, " ").trim();
 }
 
-// Both stores are partitioned by cert slug, so one cert's snapshots stay a browsable set as the
-// registry grows past a few dozen documents.
+// All three stores are partitioned by cert slug, so one cert's material stays a browsable set as the
+// registry grows — and so two certs holding the same key never overwrite each other's document.
 export function snapshotPath(cert, key) {
   return join(SNAPSHOT_DIR, cert, `${key}.json`);
+}
+
+export function primarySourcePath(cert, key, ext) {
+  return join(PRIMARY_SOURCE_DIR, cert, `${key}.${ext}`);
 }
 
 export function readSnapshot(cert, key) {
@@ -212,7 +216,7 @@ function today() {
 
 // Chrome renders a PDF into its viewer shell, not into text, so binaries are saved to
 // primary-sources/ instead and read from there. The snapshot holds the digest, never the document.
-async function fetchBinaryMeta(url, key) {
+async function fetchBinaryMeta(url, cert, key) {
   await space();
   let res = await fetch(url, { headers: { "User-Agent": USER_AGENT } });
 
@@ -230,10 +234,10 @@ async function fetchBinaryMeta(url, key) {
 
   let localPath = null;
   if (key && res.ok) {
-    mkdirSync(PRIMARY_SOURCE_DIR, { recursive: true });
+    mkdirSync(join(PRIMARY_SOURCE_DIR, cert), { recursive: true });
     // Agencies serve documents from extension-less endpoints, so the body decides the extension.
     const ext = (url.match(/\.([a-z0-9]+)(?:\?|#|$)/i)?.[1] ?? (isPdf ? "pdf" : "bin")).toLowerCase();
-    localPath = join(PRIMARY_SOURCE_DIR, `${key}.${ext}`);
+    localPath = primarySourcePath(cert, key, ext);
     writeFileSync(localPath, bytes);
   }
 
@@ -327,7 +331,7 @@ export async function getPage({
     /-(pdf|docx?|xlsx?)\/?(\?|#|$)/i.test(url);
   let result;
   try {
-    result = isBinary ? await fetchBinaryMeta(url, key) : await fetchRendered(url);
+    result = isBinary ? await fetchBinaryMeta(url, cert, key) : await fetchRendered(url);
   } catch (err) {
     result = {
       status: -1,
