@@ -1,0 +1,36 @@
+---
+import Layout from "../../../../layouts/Layout.astro";
+import Button from "../../../../components/Button.astro";
+import { certStatePaths, stateInfo, loadState } from "../../../../lib/cert-data.js";
+import { placeholderTopics, findTopic } from "../../../../lib/placeholder-topics.js";
+
+export async function getStaticPaths() {
+	const statePaths = await certStatePaths();
+	return statePaths.flatMap(({ params }) =>
+		placeholderTopics.map((topic) => ({ params: { ...params, topic: topic.slug } })),
+	);
+}
+
+const { cert, state, topic } = Astro.params;
+const info = stateInfo(state);
+const facts = await loadState(cert, state);
+const term = facts.meta.localTerm;
+const current = findTopic(topic);
+---
+
+<Layout
+	title={`${current.name} for the ${info.name} ${term}`}
+	description={`${current.name} for the ${info.name} ${term} test, explained in plain language and cited to ${facts.meta.agencyCode}.`}
+>
+	<div class="stack prose">
+		<h1 class="page-title">{current.name}</h1>
+		<p class="lede">{info.name} {term}</p>
+		<p>
+			Guide copy is authored in Sprint 3. This page exists so the topic route shape is settled
+			against real multiples.
+		</p>
+		<p>
+			<Button href={`/${cert}/${state}/guide`} variant="secondary">All topics</Button>
+		</p>
+	</div>
+</Layout>

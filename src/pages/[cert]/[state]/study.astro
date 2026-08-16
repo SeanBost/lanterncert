@@ -1,0 +1,26 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import Button from "../../../components/Button.astro";
+import { certStatePaths, stateInfo, loadState } from "../../../lib/cert-data.js";
+
+export async function getStaticPaths() {
+	return await certStatePaths();
+}
+
+const { cert, state } = Astro.params;
+const info = stateInfo(state);
+const facts = await loadState(cert, state);
+const term = facts.meta.localTerm;
+---
+
+<Layout
+	title={`${info.name} ${term} flashcards`}
+	description={`Work through ${info.name} ${term} material one card at a time, free and without an account.`}
+>
+	<div class="stack prose">
+		<h1 class="page-title">Study</h1>
+		<p class="lede">{info.name} {term}</p>
+		<p>Flashcards land in Sprint 4. This route exists so the URL structure is settled.</p>
+		<p><Button href={`/${cert}/${state}`} variant="secondary">Back to {info.name}</Button></p>
+	</div>
+</Layout>

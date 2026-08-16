@@ -1,0 +1,40 @@
+---
+import Layout from "../../../../layouts/Layout.astro";
+import Card from "../../../../components/Card.astro";
+import { certStatePaths, stateInfo, loadState } from "../../../../lib/cert-data.js";
+import { placeholderTopics } from "../../../../lib/placeholder-topics.js";
+
+export async function getStaticPaths() {
+	return await certStatePaths();
+}
+
+const { cert, state } = Astro.params;
+const info = stateInfo(state);
+const facts = await loadState(cert, state);
+const term = facts.meta.localTerm;
+---
+
+<Layout
+	title={`${info.name} ${term} study guide`}
+	description={`A plain-language ${info.name} ${term} study guide, broken into topics and written from ${facts.meta.agencyCode}'s own material.`}
+>
+	<div class="stack-lg">
+		<div class="stack">
+			<h1 class="page-title">Study guide</h1>
+			<p class="lede">{info.name} {term}</p>
+		</div>
+
+		<section class="stack" aria-labelledby="topics-heading">
+			<h2 class="section-title" id="topics-heading">Topics</h2>
+			<ul class="card-grid">
+				{
+					placeholderTopics.map((topic) => (
+						<li>
+							<Card title={topic.name} href={`/${cert}/${state}/guide/${topic.slug}`} />
+						</li>
+					))
+				}
+			</ul>
+		</section>
+	</div>
+</Layout>

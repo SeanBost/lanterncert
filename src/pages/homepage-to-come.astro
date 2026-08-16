@@ -1,0 +1,52 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Card from "../components/Card.astro";
+import { certs } from "../lib/cert-data.js";
+
+const list = Object.values(certs);
+---
+
+{/*
+  WORKING PAGE - not the real homepage. Parked here so the live site keeps serving its placeholder
+  while this gets built out.
+
+  TO PROMOTE IT AT LAUNCH:
+    1. Copy everything from the frontmatter fence down into src/pages/index.astro, replacing the
+       placeholder markup there entirely.
+    2. Delete this file. Nothing links to it, so nothing else needs changing.
+    3. Rebuild and confirm / renders this and /homepage-to-come is gone.
+
+  Keep bareTitle on the Layout below - the homepage is the one page exempt from the
+  "[title] - LanternCert" standard.
+*/}
+
+<Layout
+	title="LanternCert - free certification test prep"
+	bareTitle
+	description="Free, no-signup practice tests and study guides for certification exams, with every fact cited to the agency that publishes it."
+>
+	<div class="stack-lg">
+		<div class="stack">
+			<h1 class="page-title">Everything you need to pass, free</h1>
+			<p class="lede">
+				Practice tests, study guides and quick facts for certification exams. No ads, no signups,
+				and every fact traced to the agency that publishes it.
+			</p>
+		</div>
+
+		<section class="stack" aria-labelledby="certs-heading">
+			<h2 class="section-title" id="certs-heading">Pick your certification</h2>
+			<ul class="card-grid">
+				{
+					list.map((cert) => (
+						<li>
+							<Card title={cert.name} href={`/${cert.slug}`}>
+								<p class="muted">Requirements, study material and practice tests by state.</p>
+							</Card>
+						</li>
+					))
+				}
+			</ul>
+		</section>
+	</div>
+</Layout>

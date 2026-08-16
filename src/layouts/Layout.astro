@@ -1,0 +1,50 @@
+---
+import "../styles/global.css";
+import SiteHeader from "../components/SiteHeader.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import { site } from "../lib/cert-data.js";
+
+const { title, description, bareTitle = false, noindex = false } = Astro.props;
+
+// Title standard: "[brief self-describing title] - LanternCert", homepage excepted.
+const pageTitle = bareTitle ? title : `${title} - ${site.name}`;
+
+// Astro.site is undefined without an astro.config.mjs, which we deliberately don't have, so the
+// canonical origin comes from site-config.json instead. CLAUDE.md ▸ Locked decisions.
+const path = Astro.url.pathname.replace(/\/+$/, "") || "/";
+const canonical = new URL(path, site.url).href;
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="generator" content={Astro.generator} />
+		<link rel="icon" href="/favicon.ico" />
+
+		<title>{pageTitle}</title>
+		<meta name="description" content={description} />
+		<link rel="canonical" href={canonical} />
+		{noindex && <meta name="robots" content="noindex" />}
+
+		<meta property="og:type" content="website" />
+		<meta property="og:title" content={pageTitle} />
+		<meta property="og:description" content={description} />
+		<meta property="og:url" content={canonical} />
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap"
+			rel="stylesheet"
+		/>
+	</head>
+	<body>
+		<a class="skip-link" href="#main">Skip to content</a>
+		<SiteHeader />
+		<main id="main" class="page">
+			<slot />
+		</main>
+		<SiteFooter />
+	</body>
+</html>

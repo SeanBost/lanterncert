@@ -1,0 +1,22 @@
+---
+import { certs } from "../lib/cert-data.js";
+
+const entries = Object.values(certs);
+---
+
+<header class="site-header">
+	<div class="site-header__inner">
+		<a class="site-header__brand" href="/">LanternCert</a>
+		<nav class="site-nav" aria-label="Certifications">
+			<ul class="site-nav__list">
+				{
+					entries.map((cert) => (
+						<li>
+							<a href={`/${cert.slug}`}>{cert.name}</a>
+						</li>
+					))
+				}
+			</ul>
+		</nav>
+	</div>
+</header>

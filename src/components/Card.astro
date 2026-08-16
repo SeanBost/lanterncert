@@ -1,0 +1,15 @@
+---
+// `as` sets the heading level so a card never forces a level skip on the page that hosts it.
+const { title, href, as: Heading = "h3" } = Astro.props;
+---
+
+<article class="card">
+	{
+		title && (
+			<Heading class="card__title">
+				{href ? <a href={href}>{title}</a> : title}
+			</Heading>
+		)
+	}
+	<slot />
+</article>

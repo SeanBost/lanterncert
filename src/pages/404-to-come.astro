@@ -1,0 +1,29 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+{/*
+  WORKING PAGE - not the real 404. Parked here so the live site keeps serving its placeholder while
+  this gets built out.
+
+  TO PROMOTE IT AT LAUNCH:
+    1. Copy everything from the frontmatter fence down into src/pages/404.astro, replacing the
+       placeholder markup there entirely.
+    2. Delete this file. Nothing links to it, so nothing else needs changing.
+    3. Rebuild and confirm dist/404.html is the full version, then verify a live unknown path still
+       returns HTTP 404 rather than a soft 200.
+
+  Do NOT delete src/pages/404.astro itself at any point - Cloudflare Pages falls back to the root
+  index.html when a build ships no 404.html, which silently restores the soft 404.
+*/}
+
+<Layout
+	title="Page not found"
+	description="That page doesn't exist. Head back to LanternCert to find free practice tests and study guides for your certification."
+>
+	<div class="stack prose">
+		<h1 class="page-title">Page not found</h1>
+		<p>That page doesn't exist, or it has moved.</p>
+		<p><a href="/">Back to LanternCert</a></p>
+	</div>
+</Layout>

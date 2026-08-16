@@ -18,10 +18,9 @@ These facts feed **auto-generated quick-facts content that sends readers to the 
 detail**. That fixes the resolution to work at:
 
 - **Honest and traceable is non-negotiable.** Every value ties to a document we hold.
-- **Exhaustive is not the goal.** Copy hedges and links out. A fact that tries to capture every
-  edge case stops being a quick fact.
-- **Record the headline answer.** A genuinely load-bearing exception goes in `meta.note` as a bare
-  fact; everything below that threshold is the source's job, not ours.
+- **Record the headline answer; exhaustive is not the goal.** Copy hedges and links out. A genuinely
+  load-bearing exception goes in `meta.note` as a bare fact; everything below that threshold is the
+  source's job, not ours.
 - **Do not open a schema debate over a detail copy can absorb.** "$250 in-state, $300 out-of-state"
   renders fine as "$250–$300" — that is a note, not a redesign.
 
@@ -94,21 +93,15 @@ snapshot stores are partitioned by cert slug; a new cert gets its directory in
 empty. Request volume is deliberately low; every avoidable request is a bot-rule risk taken for
 nothing.
 
-The sweep raises two re-dating flags, and both are work items for this run, not noise — see
-`data-handling.md` ▸ *Sources — registry* ▸ *Dating a source*:
-
-- **`REDATE`** — the snapshot's `originallyFetched` moved, so this is a new content window: a new
-  record, an applied meaningful change, or a retarget. The document moved, so **neither** year
-  carries forward. This is the one case where `published` is not immutable.
-- **`CURRENCY-STALE`** — the source was re-read this run and its `verifiedCurrentIn` is behind the
-  current year. Establish currency properly and set the year; never just bump it.
+The sweep raises two re-dating flags, `REDATE` and `CURRENCY-STALE`. **Both are work items for this
+run, not noise** — resolve them per `data-handling.md` ▸ *Sources — registry* ▸ *Dating a source*,
+which defines each and what clears it.
 
 A one-line tally of everything below the current year prints on every run, including fully cached
 ones. **Some entries will sit in that tally indefinitely**, because their currency genuinely cannot
 be established from what we hold — a purchase-only document whose seller publishes no edition is the
-usual shape. Re-confirm the null against its source note, which records what settling it would
-take, and move on. Re-deciding a known null costs a minute; **never invent a year to clear one, and
-never suppress a key to silence it** — a suppression list is where a real problem goes to die.
+usual shape. Re-confirm the null against its source note, which records what settling it would take,
+and move on.
 
 **A changed page is reported, never written** — the sweep prints `CHANGED — awaiting review` and an
 `AWAITING REVIEW` block, and leaves the snapshot untouched. That is deliberate: the superseded text
@@ -125,17 +118,14 @@ the one at step 5**, and it has to be worked rather than noted:
    change you cannot fully account for, is meaningful.
 4. **Sean decides.** On approval, apply with
    `--apply-cosmetic <keys>` or `--apply-meaningful <keys>`, comma-separated, and pass
-   `--expect-hash <candidate>` so a page that moved again refuses to write. **A `meaningful` apply
-   also re-derives `published` and `verifiedCurrentIn` from scratch** — the document moved, so
-   neither year carries over. Say in the report what each became and on what evidence.
+   `--expect-hash <candidate>` so a page that moved again refuses to write. A `meaningful` apply
+   raises `REDATE`; say in the report what each year became and on what evidence.
 5. **A page that changed and was not re-read against the fact it backs blocks `dateVerified`.**
    That rule already existed; the sweep now makes it visible instead of trusting memory.
 
 **2 · Verify** — every fact that has a source. Read the snapshot text, find the passage that
 supports the stored value, and record the exact quote. A page that loads is not evidence; a passage
-is. Apply every check in *Verifying properly* below before calling anything verified — including
-check 8, which asks whether a supportable citation is still the *best available* one. Verification
-is two questions, not one: does this source back the value, and is it still the right source.
+is. Apply every check in *Verifying properly* below before calling anything verified.
 
 **3 · Discover** — every fact without a source, **and every fact phase 2 could not settle**. Work
 *Finding a source* below in order. A fact whose value is already asserted but unsourced (`value`
@@ -215,9 +205,7 @@ mid-run to ask.
 
 ## Guardrails
 
-**The standing rules are `data-handling.md` ▸ *Universal*** — never invent a citation, never carry a
-constrained value across states, never copy source wording, never overwrite a stored sourced value,
-never guess `access`. They bind every run; read them there.
+**The standing rules are `data-handling.md` ▸ *Universal*.** They bind every run; read them there.
 
 Three that govern how a *run* behaves:
 
@@ -235,12 +223,8 @@ Three that govern how a *run* behaves:
 **Shape, key format, `sourceID` assignment, sort order, `title` voice, `access` and both year fields
 are in `data-handling.md` ▸ *Sources — registry*.** Build every proposed entry against that section.
 
-Two things that are run behaviour rather than shape:
-
-- **Dating is not optional work on any entry you add or re-read.** Dig for both years and say in the
-  report what each became and on what evidence. A `null` on either is explained in the note.
-- **Clearing a `CURRENCY-STALE` flag means doing the dating work, not bumping the number.** If it
-  cannot be settled, re-confirm the null against its source note and move on.
+One thing that is run behaviour rather than shape: **dating is not optional work on any entry you add
+or re-read.** Dig for both years and say in the report what each became and on what evidence.
 
 ## Pre-assembly checks
 
@@ -254,8 +238,7 @@ Before writing the report, confirm:
 - Every new entry carries `state` and a `sourceID` that is the next unused number in the file, and
   sits in its alphabetical position. No `sourceID` is reused, including one freed by a removal.
 - Every new or re-dated entry carries both year fields, each derived per `data-handling.md` ▸
-  *Dating a source* — not a
-  copyright footer, and not the snapshot date. A `null` on either is explained in the note.
+  *Dating a source*. A `null` on either is explained in the note.
 - Every range is ascending, same unit, both ends quoted.
 - Every remaining null can be justified by naming the authorities read.
 - `meta.dateVerified` is bumped only if every sourced fact in the state was confirmed against its

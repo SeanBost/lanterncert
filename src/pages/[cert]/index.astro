@@ -1,0 +1,32 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import StateSelector from "../../components/StateSelector.astro";
+import { certs, certConfig } from "../../lib/cert-data.js";
+import { getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+	return Object.keys(certs).map((cert) => ({ params: { cert } }));
+}
+
+const { cert } = Astro.params;
+const config = certConfig(cert);
+const facts = config.stateDependent ? await getCollection(`${cert}-facts`) : [];
+const stateSlugs = facts.map((entry) => entry.id);
+---
+
+<Layout
+	title={config.name}
+	description={`Free ${config.name.toLowerCase()} practice tests and study guides, with requirements broken down state by state and every fact cited to its agency.`}
+>
+	<div class="stack-lg">
+		<div class="stack">
+			<h1 class="page-title">{config.name}</h1>
+			<p class="lede">
+				Requirements, costs and test details for every state we cover, plus practice questions
+				written from each state's own manual.
+			</p>
+		</div>
+
+		{stateSlugs.length > 0 && <StateSelector cert={cert} states={stateSlugs} />}
+	</div>
+</Layout>
