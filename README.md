@@ -1,18 +1,19 @@
 # LanternCert
 
-A free, no-signup certification test-prep site, coming to [lanterncert.com](https://lanterncert.com).
+A free, no-signup certification test-prep site at [lanterncert.com](https://lanterncert.com).
 
 A static Astro build: no backend, no database, no accounts. Pages are generated at build time from
 JSON content files, and what deploys is HTML, CSS, and a small amount of client JS for the study
 modes.
 
-**Status: pre-alpha.** Scaffold and content pipeline are in place; no site yet, nothing deployed.
+**Status: pre-alpha.** Scaffold and content pipeline are in place, and the deploy pipeline is live —
+what's published is a placeholder page, not the product.
 
 ## Stack
 - **Astro** — static site generator, builds to `/dist`
 - JSON content + `.astro` components, mobile-first
 - Google Fonts, 1–2 faces *(not yet chosen)*
-- Free Cloudflare Pages hosting *(planned)*
+- Free Cloudflare Pages hosting, Git-connected
 - GA4 with custom events *(planned)*
 
 ## Commands
@@ -76,7 +77,7 @@ readers rather than buried in a repo.
 
 ## Deploy
 Push to `main`. Cloudflare Pages watches the repo, runs `npm run build` on its own builders, and
-publishes `/dist`. `.nvmrc` pins Node 24 so their build matches local. *(Wiring pending.)*
+publishes `/dist`. `.nvmrc` pins Node 24 so their build matches local.
 
 ## Legal
 Test-preparation material assembled from publicly available sources. Not official agency material.

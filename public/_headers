@@ -1,0 +1,3 @@
+# Pre-launch blanket noindex. Removed at launch; the route ledger tracks what else must change with it.
+/*
+  X-Robots-Tag: noindex
