@@ -1,100 +1,86 @@
 # LanternCert
 
-Free, no-signup motorcycle endorsement test prep — architected to scale to additional states and
-test types.
+A free, no-signup certification test-prep site, coming to [lanterncert.com](https://lanterncert.com).
 
-**Status: pre-alpha.** The scaffold is in place; no site yet, no domain, nothing deployed.
+A static Astro build: no backend, no database, no accounts. Pages are generated at build time from
+JSON content files, and what deploys is HTML, CSS, and a small amount of client JS for the study
+modes.
 
----
+**Status: pre-alpha.** Scaffold and content pipeline are in place; no site yet, nothing deployed.
 
-## Tech Stack
+## Stack
+- **Astro** — static site generator, builds to `/dist`
+- JSON content + `.astro` components, mobile-first
+- Google Fonts, 1–2 faces *(not yet chosen)*
+- Free Cloudflare Pages hosting *(planned)*
+- GA4 with custom events *(planned)*
 
-- **Framework:** [Astro](https://astro.build) — static, mobile-first, minimal client JS
-- **Hosting:** [Cloudflare Pages](https://pages.cloudflare.com) *(planned)*
-- **Content:** JSON, validated at build time *(schema approach being finalized)*
-- **Progress storage:** localStorage, versioned schema, no accounts *(planned)*
-- **Analytics:** GA4 with custom events *(planned)*
-
-No backend. No database. No auth.
-
----
-
-## Getting Started
-
-Requires Node 24 (see `.nvmrc`).
-
+## Commands
 ```bash
-npm install
-npm run dev        # dev server at localhost:4321
+npm install      # first time only; requires Node 24 (see .nvmrc)
+npm run dev      # dev server at http://localhost:4321
+npm run build    # static build into /dist
+npm run preview  # serve the built /dist locally
 ```
 
-```bash
-npm run build      # production build into /dist
-npm run preview    # serve the built /dist locally
-```
+Check builds with `npm run preview` rather than opening `/dist/index.html` directly, since absolute
+asset paths break over `file://`.
 
-`npm run build` also drops a dated zip of `/dist` into `/builds` as a local version record.
-That's local-only — `/builds` is gitignored and the script no-ops on CI.
-
-Check builds with `npm run preview`, not by opening `/dist/index.html` directly — `file://` breaks
-absolute asset paths.
-
----
+`npm run build` also archives a dated zip of `/dist` into `/builds` via the `postbuild` hook. It's a
+local version record, gitignored, and the script no-ops on CI.
 
 ## Structure
-
 ```
 src/
-  site-config.json       site identity + test type registry
+  site-config.json   site identity + the registry of certifications
   content/
-    states.json          state identity, keyed by state code
-    facts/               per-state meta, exam params and criteria, one file per cert
-    sources/             registry of cited documents (metadata only, not the documents)
-    questions/           the question bank
-  templates/             each cert's data shape, annotated — the field and vocabulary reference
-  pages/                 routes
-public/                  static assets, copied verbatim
-scripts/                 build and content-research tooling
+    states.json      state identity, keyed by slug — cert-independent
+    facts/           per-state jurisdictional facts, one file per cert
+    sources/         registry of cited documents (metadata, not the documents)
+    questions/       the question bank
+  templates/         each cert's data shape, annotated — the vocabulary reference
+  pages/             routes
+public/              static assets, copied verbatim
+scripts/             content-research tooling
 ```
 
----
+## How it's put together
 
-## Moto Endorsement States & Exam Parameters
+A certification is a slug — `motorcycle-endorsement` — and that slug is the registry key, the URL
+segment, and the stem of every file belonging to that cert. Adding a certification means adding
+files, not rewriting routes. Anything true of a state regardless of cert lives once, in
+`states.json`, and joins on the key.
 
-| State | Questions | Time Limit | Passing Score | Sectioned |
-|-------|-----------|------------|---------------|-----------|
-| FL    | 25 *      | none published | — *       | — *       |
-| GA    | 40 †      | none published | 75% †     | yes †     |
-| TX    | — ‡       | — ‡        | — ‡           | — ‡       |
-| CA    | not published | none published | 80%   | no        |
+Every jurisdictional fact is stored as a `{ value, source }` pair rather than a bare value, so
+provenance is per fact instead of per page: a changed agency page is a one-line diff, and each fact
+can be hyperlinked to the document that backs it. Sources are registered as documents, and a
+citation naming a document that isn't in the registry is intended to fail the build rather than ship.
 
-\* Florida administers no motorcycle-specific test — this is the MSF Basic RiderCourse knowledge
-test, and how many sittings it involves depends on the delivery option a course provider runs. Its
-passing score sits in MSF instructor materials rather than any public source.
-† Georgia's exam is two 20-question sections requiring 15 correct on **each**; the flat figures
-above can't express the per-section gate, which is what the sectioned column flags.
-‡ Texas requires a safety course of every applicant and waives the state knowledge test on
-completion, so in practice no rider sits a state exam — and the course test varies by school,
-because Texas approves curricula against a federal standard rather than mandating one.
+Exam parameters are recorded as each agency actually publishes them, including when that's *not at
+all*. A missing value stays null instead of being filled with a plausible one, and a structure that
+doesn't flatten cleanly — an exam scored per section rather than overall — keeps its structure.
 
-**No agency in any of the four states publishes an exam time limit.** Three of the four publish a
-closing-time cutoff instead ("not within 30 minutes of closing"), which is a different thing.
+## Sourcing
 
-Every value is stored with its own citation, and each cited page is re-fetched and re-read on a
-21-day cycle. Parameters come from official state sources only. See
-`src/content/facts/motorcycle-endorsement-facts.json`.
+Facts come from official agency documents and nothing else — no attorney pages, no journalism, no
+competing practice-test sites. Questions and explanations are written fresh rather than paraphrased
+from a manual.
 
----
+`scripts/` holds the research tooling: a fetcher that renders through local headless Chrome and
+extracts text from PDFs, and an auditor that re-fetches every cited page on a 21-day cycle and
+reports what changed. Snapshots are stored locally and gitignored — the registry publishes metadata
+about documents, never the documents.
 
-## Study Modes *(planned)*
+Each state's facts carry the date they were last verified, and that date is meant to be visible to
+readers rather than buried in a repo.
 
-- **Flashcards** — topic-based, shuffle, mark known
-- **Practice** — untimed, instant feedback and explanation
-- **Mock Exam** — timed, state-specific configuration, end-of-test scoring with wrong-answer review
-
----
+## Deploy
+Push to `main`. Cloudflare Pages watches the repo, runs `npm run build` on its own builders, and
+publishes `/dist`. `.nvmrc` pins Node 24 so their build matches local. *(Wiring pending.)*
 
 ## Legal
+Test-preparation material assembled from publicly available sources. Not official agency material.
+Verify current requirements with your state's licensing agency before testing.
 
-Content is intended for test preparation only and originates from publicly available sources. Not
-official DMV material. Verify current requirements and answers with your state DMV before testing.
+## You are currently reading this
+That's really awesome. Please tell me about it: seantbost@gmail.com

@@ -7,10 +7,8 @@
     "url": "https://www.chp.ca.gov/programs-services/programs/california-motorcyclist-safety/",
     "access": "public",
     "published": null,
-    "verifiedCurrentIn": 2026,
-    "note": "The program owner's own page, and the authority for courseType CA. CHP is statutorily responsible under Vehicle Code sections 2930-2935 and administers the CMSP through a primary contractor, currently Total Control Training Inc — so the curriculum is California's own, not MSF's and not a federal standard. Gives the 15-hour structure and the Premier Program. Publishes no course price. Also the citation for California lane splitting: it reproduces Vehicle Code 21658.1 in full and publishes the lane-splitting safety tips the statute authorises CHP to write. Note what the statute does and does not do — it defines lane splitting and empowers CHP to issue guidance, effective 2017-01-01 by AB 51; it contains no express permission, so lawfulness rests on statutory recognition plus the absence of a prohibition. The CA Motorcycle Handbook defines the term and gives cautionary advice but never states the legal position, which is why the fact comes from here."
+    "verifiedCurrentIn": 2026
   },
-
   "ca-cmsp-new-riders": {
     "state": "CA",
     "sourceID": "0041",
@@ -19,10 +17,8 @@
     "url": "https://motorcyclesafetyca.com/new-riders/",
     "access": "public",
     "published": null,
-    "verifiedCurrentIn": 2026,
-    "note": "The CMSP programme's current public site, run by the CHP's contractor rather than on a state domain — the route DMV ultimately sends riders to, and a better findCourse citation than the DMV page because this is where a rider actually searches locations and books. Publishes no price itself: classCost surveys rates its listed providers publish, and those are uniform statewide rather than provider-set, quoted identically by MRE Corp and Central Coast Motorcycle Training as $425 at 21 and over and $395 at 20 and under. Supersedes ca-msp.org, which DMV still links and which no longer resolves."
+    "verifiedCurrentIn": 2026
   },
-
   "ca-dmv-driver-handbook": {
     "state": "CA",
     "sourceID": "0043",
@@ -31,10 +27,8 @@
     "url": "https://www.dmv.ca.gov/portal/handbook/california-driver-handbook/",
     "access": "public",
     "published": null,
-    "verifiedCurrentIn": 2026,
-    "note": "DL 600, the general driver handbook. Load-bearing for California because M1/M2 applicants sit the driver knowledge test as well as the motorcycle one, so it is the source for CA's general rules-of-the-road content — it carries no motorcycle-specific material at all, which was checked rather than assumed. Its testing section states three attempts before reapplying, a seven-day wait for minors retaking, and no testing aids, but publishes no question count for either test. Cited as the HTML edition deliberately: the PDF DMV offers under this name is DL 600 X, an abridged quick reference and a different document, and it is AES-encrypted so no tool here can read it — a copy is held at blackbox/primary-sources/ca-dmv-driver-handbook-quickref.pdf and is reference only, never a citation."
+    "verifiedCurrentIn": 2026
   },
-
   "ca-dmv-driver-licenses": {
     "state": "CA",
     "sourceID": "0038",
@@ -43,10 +37,8 @@
     "url": "https://www.dmv.ca.gov/portal/driver-licenses-identification-cards/driver-licenses-dl/",
     "access": "public",
     "published": null,
-    "verifiedCurrentIn": 2026,
-    "note": "Carries the DMV class table that lists Motorcycle (Class M1 or M2) as a driver's licence class, which is what links the general five-year term to motorcycles. Also sets out the out-of-state applicant path: a holder of another state's licence must still pass the knowledge test(s), with no reciprocity waiver offered anywhere on it."
+    "verifiedCurrentIn": 2026
   },
-
   "ca-dmv-handbook-getting-license": {
     "state": "CA",
     "sourceID": "0039",
@@ -55,10 +47,8 @@
     "url": "https://www.dmv.ca.gov/portal/handbook/california-driver-handbook/getting-an-instruction-permit-and-drivers-license/",
     "access": "public",
     "published": null,
-    "verifiedCurrentIn": 2026,
-    "note": "Section 2 of the Driver Handbook, and the source for minAge 16 — it requires an applicant under 18 to be at least 16 years old. That is the general driver's licence floor rather than a motorcycle-specific rule; it reaches M1 and M2 because they are driver's licence classes. California's motorcycle-specific age rule is the separate under-21 requirement to hold a permit six months, which is recorded in meta.note."
+    "verifiedCurrentIn": 2026
   },
-
   "ca-dmv-instruction-permits": {
     "state": "CA",
     "sourceID": "0042",
@@ -67,10 +57,8 @@
     "url": "https://www.dmv.ca.gov/portal/driver-licenses-identification-cards/instruction-permits/",
     "access": "public",
     "published": null,
-    "verifiedCurrentIn": 2026,
-    "note": "The only DMV page found that publishes a motorcycle passing score. It runs the car and motorcycle permits as separate sections, and the motorcycle one states its questions come from the California Motorcycle Handbook and a passing score is 80% — so the figure is motorcycle-specific, not the car test's. The same motorcycle knowledge test serves the permit and the licence. Gives no question count and no time limit; its only timing statement is that tests stop at 4:30 p.m., a closing cutoff rather than a per-exam clock. Do not confuse this 80% with the CMSP course's own 80% written-evaluation threshold, which is a different exam."
+    "verifiedCurrentIn": 2026
   },
-
   "ca-dmv-licensing-fees": {
     "state": "CA",
     "sourceID": "0034",
@@ -79,10 +67,8 @@
     "url": "https://www.dmv.ca.gov/portal/driver-licenses-identification-cards/licensing-fees/",
     "access": "public",
     "published": null,
-    "verifiedCurrentIn": 2026,
-    "note": "dmvCost is a single $46 rather than a range: the same fee covers an original or renewed Class M1/M2 and adding M1/M2 to a Class C. The $59 figure on this page is the commercial-licence equivalent and is out of scope. Carries no licence term."
+    "verifiedCurrentIn": 2026
   },
-
   "ca-dmv-motorcycle-handbook": {
     "state": "CA",
     "sourceID": "0040",
@@ -91,10 +77,8 @@
     "url": "https://www.dmv.ca.gov/portal/file/motorcycle-driver-handbook-pdf/",
     "access": "public",
     "published": 2024,
-    "verifiedCurrentIn": 2026,
-    "note": "Form DL 665, free from DMV. Edition R2-2024, 52 pages. Cited at DMV's canonical current-handbook endpoint rather than a dated /uploads/ path, so the citation follows revisions instead of pinning to one. Retargeted 2026-08-13 from /uploads/2020/03/dl665.pdf, which was R4-2016 scanned and OCRd in 2019 — two revisions and about eight years stale, and the source of a $750-versus-$1,000 contradiction that R2-2024 resolves to $1,000. The authority for transferOutOfStateEndorsement none: DMV will not waive the motorcycle skills test on an out-of-state training programme or any course completion card, and the only waiver is a DL 389 from the CMSP course. Still gives no question count, no passing score and no time limit, so CA's exam fields stay null. Also still declines to state whether lane splitting is legal — it defines the term and warns about it, and its 'each need a full lane' phrasing reads as discouragement; the legal position comes from ca-chp-cmsp. Text layer uses subset font encodings that the zlib extractor renders as mojibake; readable with a real PDF library. published 2024 from the document's own 'DL 665 ENGLISH (REV. 2/2024)' footer and its 2024 copyright line, which agree. verifiedCurrentIn 2026 because the canonical current-handbook endpoint served exactly this file in August 2026 — that endpoint is by construction whatever DMV currently publishes, so it establishes currency as well as identity."
+    "verifiedCurrentIn": 2026
   },
-
   "ca-dmv-motorcycle-licenses": {
     "state": "CA",
     "sourceID": "0033",
@@ -103,10 +87,8 @@
     "url": "https://www.dmv.ca.gov/portal/driver-licenses-identification-cards/motorcycle-licenses/",
     "access": "public",
     "published": null,
-    "verifiedCurrentIn": 2026,
-    "note": "The main DMV page for M1 and M2, and the authority for requirementType all: it states a motorcycle license covers a motorized bicycle, moped or bicycle with an attached motor, so unlike FL, GA and TX there is no engine-size exemption. Also carries the under-21 and over-21 paths, the six-month permit rule and the DL 389 skills-test waiver. minLicense reads None from the over-21 path, which asks for a California DL only 'if you have one'. States no minimum age and no knowledge-test detail."
+    "verifiedCurrentIn": 2026
   },
-
   "ca-dmv-motorcyclists-guide": {
     "state": "CA",
     "sourceID": "0036",
@@ -115,10 +97,8 @@
     "url": "https://www.dmv.ca.gov/portal/driver-education-and-safety/special-interest-driver-guides/motorcyclists-guide/",
     "access": "public",
     "published": null,
-    "verifiedCurrentIn": 2026,
-    "note": "Rider-facing hub linking licensing, registration, the Motorcycle Handbook and sample tests. Corroborates the CMSP structure and the DL 389 waiver without being the primary source for either. Carries a stale link: it tells riders to visit ca-msp.org to sign up, and that domain now times out and redirects to a Motorcycle Safety Foundation marketing page. Do not treat ca-msp.org as the CMSP booking route."
+    "verifiedCurrentIn": 2026
   },
-
   "ca-veh-12816": {
     "state": "CA",
     "sourceID": "0037",
@@ -127,10 +107,8 @@
     "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=12816.",
     "access": "public",
     "published": 1996,
-    "verifiedCurrentIn": 2026,
-    "note": "Vehicle Code 12816(a): every original driver's license expires on the applicant's fifth birthday following the application. It says driver's license, not motorcycle license, because in California M1 and M2 are classes of driver's license rather than a separate credential — DMV's own class table on ca-dmv-driver-licenses lists Motorcycle (Class M1 or M2) alongside the car classes. expirationType 5year rests on those two together. published 1996 is the vintage of the operative text — '(Amended by Stats. 1996, Ch. 1043, Sec. 6. Effective January 1, 1997.)' — not of the page. verifiedCurrentIn 2026 because leginfo serves operative California law and carried no later amendment when read in August 2026."
+    "verifiedCurrentIn": 2026
   },
-
   "fl-fmsc-motorcycle-handbook": {
     "state": "FL",
     "sourceID": "0045",
@@ -139,10 +117,8 @@
     "url": "https://ridesmartflorida.com/wp-content/uploads/2026/07/Motorcycle_Operators_Handbook_Final_WTweb.pdf",
     "access": "public",
     "published": 2026,
-    "verifiedCurrentIn": 2026,
-    "note": "Florida's own rider manual, produced by the Florida Motorcycle Safety Coalition (Ride Smart Florida, CUTR at USF) and the document FLHSMV's Handbooks & Manuals page links to as the Florida Motorcycle Operator Handbook. Last revision 2026-04-29, so it is the most current handbook we hold for any state. An edited derivative of the MSF Motorcycle Operator Manual — same TEST YOURSELF items, same 70%-or-more front brake figure. Corroborates courseType and examType MSFBRC: it states new riders must pass the MSF-developed BRC through an FRTP Sponsor before the endorsement is added, citing s. 322.0255 F.S. CAUTION, it contradicts itself on following distance — the main passage says four seconds while the RiderRadar paragraph says two, an unfinished edit of the MOM's two-second baseline, so it cannot settle that number for Florida on its own. Its line that Florida 'requires you to pass a knowledge test' means the BRC's own test administered by the Sponsor, not an FLHSMV exam. Host blocks a browser user-agent and serves a plain request fine — fetch with no UA. published 2026 from the document's own statement that it does not reflect legislative changes after its last revision date, April 29, 2026."
+    "verifiedCurrentIn": 2026
   },
-
   "fl-hsmv-course-locations": {
     "state": "FL",
     "sourceID": "0003",
@@ -151,10 +127,8 @@
     "url": "https://www.flhsmv.gov/driver-licenses-id-cards/motorcycle-rider-education-endorsements/safety-course-locations/",
     "access": "public",
     "published": null,
-    "verifiedCurrentIn": 2026,
-    "note": "FRTP Sponsors by county; page carries no prices. classCost surveys listed Sponsors' published rates. Some counties list no Sponsors."
+    "verifiedCurrentIn": 2026
   },
-
   "fl-hsmv-endorsement-faqs": {
     "state": "FL",
     "sourceID": "0002",
@@ -165,7 +139,6 @@
     "published": null,
     "verifiedCurrentIn": 2026
   },
-
   "fl-hsmv-endorsement-info": {
     "state": "FL",
     "sourceID": "0001",
@@ -176,7 +149,6 @@
     "published": null,
     "verifiedCurrentIn": 2026
   },
-
   "fl-hsmv-fees": {
     "state": "FL",
     "sourceID": "0004",
@@ -185,10 +157,8 @@
     "url": "https://www.flhsmv.gov/fees/",
     "access": "public",
     "published": null,
-    "verifiedCurrentIn": 2026,
-    "note": "Statewide fee schedule. dmvCost = $25.00 replacement license + $7.00 endorsement, plus a $6.25 service fee that applies only at a tax collector office — hence the range rather than one figure."
+    "verifiedCurrentIn": 2026
   },
-
   "fl-hsmv-frtp-courses": {
     "state": "FL",
     "sourceID": "0005",
@@ -197,10 +167,8 @@
     "url": "https://www.flhsmv.gov/driver-licenses-id-cards/motorcycle-rider-education-endorsements/florida-rider-training-program-courses/",
     "access": "public",
     "published": null,
-    "verifiedCurrentIn": 2026,
-    "note": "Distinguishes BRC/BRCu from 3WBRC and S/TEP. Course required for all riders regardless of age since July 1, 2008."
+    "verifiedCurrentIn": 2026
   },
-
   "fl-stat-322-0255": {
     "state": "FL",
     "sourceID": "0021",
@@ -209,10 +177,8 @@
     "url": "https://www.flsenate.gov/laws/statutes/2025/322.0255",
     "access": "public",
     "published": 2025,
-    "verifiedCurrentIn": 2026,
-    "note": "Statutory basis for the FRTP: requires a minimum 12 hours of instruction with at least 6 on a motorcycle, and authorizes FLHSMV to adopt Motorcycle Safety Foundation curricula — statutory corroboration for courseType. Caps a Sponsor's registration fee at $20, refundable on completion. States no passing score and no time limit. Year in the URL increments annually — recheck each pass. published 2025 is the compilation year the page states. Standing instruction discharged 2026-08-15: requesting the 2026 path still returns the 2025 Florida Statutes and the site's own Find Statutes list stops at 2025, so no 2026 compilation exists yet and the URL stays — which is also why verifiedCurrentIn is 2026 against a 2025 publication."
+    "verifiedCurrentIn": 2026
   },
-
   "fl-stat-322-21": {
     "state": "FL",
     "sourceID": "0006",
@@ -221,10 +187,8 @@
     "url": "https://www.flsenate.gov/laws/statutes/2025/322.21",
     "access": "public",
     "published": 2025,
-    "verifiedCurrentIn": 2026,
-    "note": "Statutory authority behind the FLHSMV fee schedule. Year in the URL increments annually — recheck each pass. published 2025 is the compilation year the page states. Standing instruction discharged 2026-08-15: requesting the 2026 path still returns the 2025 Florida Statutes and the site's own Find Statutes list stops at 2025, so no 2026 compilation exists yet and the URL stays."
+    "verifiedCurrentIn": 2026
   },
-
   "ga-dds-brc": {
     "state": "GA",
     "sourceID": "0015",
@@ -233,10 +197,8 @@
     "url": "https://dds.georgia.gov/regulated-programs/motorcycle-safety-program/basic-riders-course",
     "access": "public",
     "published": null,
-    "verifiedCurrentIn": 2026,
-    "note": "GMSP course page. Publishes tuition, graduation requirements, and the 90-day test waiver, and backs classCost. Does not name the Motorcycle Safety Foundation as the curriculum owner — it corroborates courseType through the 5-hour classroom plus 10-hour range structure MSF publishes for the BRC and the MSF Course Completion Card graduates hold, but the fact is now sourced to ga-dds-motorcycle-manual, which names MSF outright. Page is marked noindex."
+    "verifiedCurrentIn": 2026
   },
-
   "ga-dds-class-m": {
     "state": "GA",
     "sourceID": "0011",
@@ -245,10 +207,8 @@
     "url": "https://dds.georgia.gov/georgia-licenses-ids-and-permits/new-license-id-or-permit/how-do-i-class-m-motorcycle-license",
     "access": "public",
     "published": null,
-    "verifiedCurrentIn": 2026,
-    "note": "Step-by-step Class M page. Age requirement is the first bullet. Lists no prior-license prerequisite."
+    "verifiedCurrentIn": 2026
   },
-
   "ga-dds-drivers-manual-testing": {
     "state": "GA",
     "sourceID": "0022",
@@ -257,10 +217,8 @@
     "url": "https://dds.georgia.gov/section-3-testing-information",
     "access": "public",
     "published": 2023,
-    "verifiedCurrentIn": 2026,
-    "note": "Section 3 of the 2023-2024 Driver's Manual, and the most procedurally complete account DDS publishes of a knowledge exam session: walk-in only, the full list of rules in force during the test, and 15 of 20 to pass on each of Road Signs and Road Rules. States no time limit — checked, and deliberately left unresolved rather than recorded as none. Distinct from ga-dds-motorcycle-manual, which is the Motorcycle Operator's Manual. published 2023 is the first year of the manual's own '2023-2024' label. verifiedCurrentIn 2026 because DDS was still serving this as its live Driver's Manual, under that same label, when read in August 2026 — an unrevised manual, not a superseded one."
+    "verifiedCurrentIn": 2026
   },
-
   "ga-dds-fees-terms": {
     "state": "GA",
     "sourceID": "0014",
@@ -269,10 +227,8 @@
     "url": "https://dds.georgia.gov/fees-and-terms",
     "access": "public",
     "published": null,
-    "verifiedCurrentIn": 2026,
-    "note": "Single table carrying both the Class M license fee/term and the MP permit fee/term. dmvCost = $32 Class M license, rising to $42 for riders taking the DDS skills-test route, which requires the $10 Class MP permit; the course route needs no permit. $5 discount for eligible online transactions is not reflected in listed fees."
+    "verifiedCurrentIn": 2026
   },
-
   "ga-dds-gmsp-registration": {
     "state": "GA",
     "sourceID": "0016",
@@ -281,10 +237,8 @@
     "url": "https://online.dds.ga.gov/motorcycle/index.aspx",
     "access": "public",
     "published": null,
-    "verifiedCurrentIn": 2026,
-    "note": "State-run booking portal for all GMSP courses and locations — the single funnel DDS directs riders to."
+    "verifiedCurrentIn": 2026
   },
-
   "ga-dds-mopeds": {
     "state": "GA",
     "sourceID": "0019",
@@ -295,7 +249,6 @@
     "published": null,
     "verifiedCurrentIn": 2026
   },
-
   "ga-dds-motorcycle-hub": {
     "state": "GA",
     "sourceID": "0010",
@@ -304,10 +257,8 @@
     "url": "https://dds.georgia.gov/get-your-georgia-motorcycle-license",
     "access": "public",
     "published": null,
-    "verifiedCurrentIn": 2026,
-    "note": "Top-level motorcycle explainer. Defines motorcycle as excluding mopeds 50cc or less and groups all 51cc+ machines in one category. Lays out both paths to Class M."
+    "verifiedCurrentIn": 2026
   },
-
   "ga-dds-motorcycle-manual": {
     "state": "GA",
     "sourceID": "0018",
@@ -316,10 +267,8 @@
     "url": "https://dds.georgia.gov/document/document/motorcycle-operators-manual/download",
     "access": "public",
     "published": 2025,
-    "verifiedCurrentIn": 2026,
-    "note": "Free state-published manual and the stated source material for the Knowledge Exam and Rider Skills Test. Names the Motorcycle Safety Foundation and its Basic RiderCourse outright, which is what upgrades courseType MSFBRC from inferred to stated. Retargeted from the dds.georgia.gov/motorcycle-operators-manual HTML edition, whose navigation omits Section 2 entirely — the impaired-driving section carrying Georgia's BAC limits and penalties — so the PDF is the only complete edition. Served filename says Updated Sep 2025 while both the HTML edition and the PDF's own page headers still say 2023-2024; treat Sep 2025 as the edition and the headers as working-file residue. 19MB, and DDS also links two different third-party flipbook mirrors on other pages. published 2025 from the served filename's 'Updated Sep 2025'; the 2023-2024 page headers are working-file residue. verifiedCurrentIn 2026 because DDS's canonical download endpoint served this file in August 2026."
+    "verifiedCurrentIn": 2026
   },
-
   "ga-dds-motorcycle-permit": {
     "state": "GA",
     "sourceID": "0012",
@@ -328,10 +277,8 @@
     "url": "https://dds.georgia.gov/georgia-licenses-ids-and-permits/new-license-id-or-permit/how-do-i-motorcycle-permit",
     "access": "public",
     "published": null,
-    "verifiedCurrentIn": 2026,
-    "note": "MP permit path: age 16, $10, 6-month term, one renewal only. Carries the permit restrictions (daylight only, no passengers, no limited-access roads)."
+    "verifiedCurrentIn": 2026
   },
-
   "ga-dds-road-test": {
     "state": "GA",
     "sourceID": "0020",
@@ -340,10 +287,8 @@
     "url": "https://dds.georgia.gov/testing-and-training/road-test",
     "access": "public",
     "published": null,
-    "verifiedCurrentIn": 2026,
-    "note": "Motorcycle skills test scheduling. Reservations require a valid MP permit; rider must furnish and insure their own motorcycle and pass a safety inspection."
+    "verifiedCurrentIn": 2026
   },
-
   "ga-dds-test-exams": {
     "state": "GA",
     "sourceID": "0013",
@@ -352,10 +297,8 @@
     "url": "https://dds.georgia.gov/testing-and-training/test-and-exams-information",
     "access": "public",
     "published": null,
-    "verifiedCurrentIn": 2026,
-    "note": "Knowledge Exam is a Road Rules test plus a Road Signs test, 15 of 20 required on each. Also covers the Rider Skills Test and the one-year expiry on motorcycle knowledge scores."
+    "verifiedCurrentIn": 2026
   },
-
   "ga-dds-transfer": {
     "state": "GA",
     "sourceID": "0017",
@@ -364,10 +307,8 @@
     "url": "https://dds.georgia.gov/georgia-licenses-ids-and-permits/new-license-id-or-permit/new-georgia-residents-and-out-state/how",
     "access": "public",
     "published": null,
-    "verifiedCurrentIn": 2026,
-    "note": "Covers non-commercial classes from all 49 other states, DC and US Territories. Knowledge and road tests are triggered only if the out-of-state license has been expired more than two years. Does not name Class M explicitly. URL is the page's own canonical; dds.georgia.gov/out-state-transfer is a short alias that also resolves here."
+    "verifiedCurrentIn": 2026
   },
-
   "tx-dps-fees": {
     "state": "TX",
     "sourceID": "0024",
@@ -376,10 +317,8 @@
     "url": "https://www.dps.texas.gov/section/driver-license/driver-license-fees",
     "access": "public",
     "published": null,
-    "verifiedCurrentIn": 2026,
-    "note": "dmvCost spans the two motorcycle paths listed here: $16 to add motorcycle to an existing Texas license, $33 for a Class M-only license. The $48 'new license and motorcycle' line bundles the car license and is deliberately outside the range. Also the authority for expirationType — eight years at 18-84, two years at 85+."
+    "verifiedCurrentIn": 2026
   },
-
   "tx-dps-license-classes": {
     "state": "TX",
     "sourceID": "0025",
@@ -388,10 +327,8 @@
     "url": "https://www.dps.texas.gov/section/driver-license/classes-driver-licenses",
     "access": "public",
     "published": null,
-    "verifiedCurrentIn": 2026,
-    "note": "Defines Class M as authorizing an individual to drive a motorcycle, and records that other classes do not cover motorcycles. States no engine-size floor."
+    "verifiedCurrentIn": 2026
   },
-
   "tx-dps-motorcycle-license": {
     "state": "TX",
     "sourceID": "0023",
@@ -400,10 +337,8 @@
     "url": "https://www.dps.texas.gov/section/driver-license/motorcycle-license",
     "access": "public",
     "published": null,
-    "verifiedCurrentIn": 2026,
-    "note": "The single DPS page covering the Class M path: course requirement, minor requirements, skills test and its waivers, and the J and I restrictions. minLicense reads None from it — an unrestricted Texas A, B or C license waives the skills test rather than gating the credential. Does not state the engine-size boundary that requirementType needs."
+    "verifiedCurrentIn": 2026
   },
-
   "tx-stat-521-001": {
     "state": "TX",
     "sourceID": "0029",
@@ -412,10 +347,8 @@
     "url": "https://statutes.capitol.texas.gov/Docs/TN/htm/TN.521.htm",
     "access": "public",
     "published": 2025,
-    "verifiedCurrentIn": 2026,
-    "note": "Transportation Code chapter 521, the driver licensing chapter. Sec. 521.084 is the operative link for requirementType: a Class M license authorizes operating a motorcycle as defined by Sec. 541.201, which is where the moped carve-out lives. The chapter itself never mentions mopeds. published 2025 from the site's own currency statement, 'current through the 89th 2nd Called Legislative Session, 2025'. verifiedCurrentIn 2026 follows from the Texas legislature being biennial — there is no 2026 regular session, so a compilation current through 2025 is the current law in 2026."
+    "verifiedCurrentIn": 2026
   },
-
   "tx-stat-541-201": {
     "state": "TX",
     "sourceID": "0030",
@@ -424,10 +357,8 @@
     "url": "https://statutes.capitol.texas.gov/Docs/TN/htm/TN.541.htm",
     "access": "public",
     "published": 2025,
-    "verifiedCurrentIn": 2026,
-    "note": "Transportation Code chapter 541. Sec. 541.201(9) defines a motorcycle as excluding a moped, and 541.201(8) defines a moped compoundly: 50cc or less, no more than 30 mph, under five brake horsepower, and no gear shifting. requirementType 50ccUp records the headline; unlike FL and GA the Texas test is not displacement alone, so a geared or fast 49cc machine needs Class M. published 2025 from the site's own currency statement, 'current through the 89th 2nd Called Legislative Session, 2025', which matches this chapter's latest amendment, Acts 2025, 89th Leg., R.S., Ch. 207. verifiedCurrentIn 2026 follows from the Texas legislature being biennial — no 2026 regular session, so current through 2025 is current in 2026."
+    "verifiedCurrentIn": 2026
   },
-
   "tx-tdlr-curriculum": {
     "state": "TX",
     "sourceID": "0032",
@@ -436,10 +367,8 @@
     "url": "https://www.tdlr.texas.gov/mot/school-curriculum.htm",
     "access": "public",
     "published": null,
-    "verifiedCurrentIn": 2026,
-    "note": "The authority for courseType. Texas mandates a standard, not a curriculum: an entry-level course must meet the 2011 Model National Standards for Entry-Level Motorcycle Rider Training issued by USDOT/NHTSA, and TDLR approves each school's own materials against it. MSF BRC is one approved option, never a requirement — which is why courseType is MNS2011 and not MSFBRC. Also the reason the exam fields are null: the rule requires a curriculum to include a knowledge examination but specifies no item count, passing score or time limit, delegating all of it to the approved curriculum."
+    "verifiedCurrentIn": 2026
   },
-
   "tx-tdlr-find-schools": {
     "state": "TX",
     "sourceID": "0027",
@@ -448,10 +377,8 @@
     "url": "https://www.tdlr.texas.gov/mot/find-schools.htm",
     "access": "public",
     "published": null,
-    "verifiedCurrentIn": 2026,
-    "note": "State-published map and CSV of licensed independent schools, which riders contact directly — the basis for findCourse stateLocator. Carries no prices and no course rosters; TDLR directs riders to each school for both. TDLR publishes no tuition, so classCost surveys rates the listed schools publish themselves: $225-$275 Houston, $290 Waco, $345 Mount Pleasant. Some schools quote only inside a booking flow."
+    "verifiedCurrentIn": 2026
   },
-
   "tx-tdlr-motorcycle-hub": {
     "state": "TX",
     "sourceID": "0026",
@@ -460,10 +387,8 @@
     "url": "https://www.tdlr.texas.gov/mot/",
     "access": "public",
     "published": null,
-    "verifiedCurrentIn": 2026,
-    "note": "Program home for the agency that licenses Texas motorcycle schools and instructors and approves their curricula. DPS issues the license; TDLR regulates the training."
+    "verifiedCurrentIn": 2026
   },
-
   "tx-tdlr-motorcycle-manual": {
     "state": "TX",
     "sourceID": "0028",
@@ -472,10 +397,8 @@
     "url": "https://www.tdlr.texas.gov/mot/pdf/TDLR%20Motorcycle%20Operators%20Manual.pdf",
     "access": "public",
     "published": 2020,
-    "verifiedCurrentIn": 2026,
-    "note": "Texas rider manual, 2020-2021 edition, 8.2MB PDF saved to primary-sources. Riding technique and traffic law only — carries no exam metadata, no question count and no passing score. published 2020 is the first year of the cover's '2020-2021'. verifiedCurrentIn 2026 because TDLR served this file from its own undated /mot/pdf/ path in August 2026; that path carries no edition, so a newer manual published elsewhere would not be caught by the fetch alone."
+    "verifiedCurrentIn": 2026
   },
-
   "xx-msf-brc-handbook": {
     "state": "multi",
     "sourceID": "0008",
@@ -484,10 +407,8 @@
     "url": "https://msf-usa.org/documents/library/basic-ridercourse-handbook/",
     "access": "purchase",
     "published": 2014,
-    "verifiedCurrentIn": null,
-    "note": "$3 purchase, held as xx-msf-brc-handbook.pdf. Edition 1.0, first printing March 2014, product code MSCU4401; running title 'MSF 2013 Basic RiderCourse Update Rider Handbook', so it documents the BRC 2013 rather than the BRC (updated) that xx-msf-brcu-faq describes. Student handbook, not the instructor-only RiderCoach Guide. Section 14 states the end-of-course knowledge test is 25 questions needing 80 percent to pass; it sets no time limit and delegates timing to the RiderCoach. Section 12 leaves licensing and all state-law topics to the local program, so the document carries no jurisdictional facts. Cite only; not redistributable, no verbatim excerpts on-site. verifiedCurrentIn is null, and deliberately: the product page names no edition and only links to Amazon, so nothing we hold establishes that the printing MSF sells today is the 2014 edition 1.0 we bought. Settling it means re-purchasing and comparing, which is the work the null is asking for."
+    "verifiedCurrentIn": null
   },
-
   "xx-msf-brc-overview": {
     "state": "multi",
     "sourceID": "0009",
@@ -496,10 +417,8 @@
     "url": "https://msf-usa.org/start-your-ride/basic-ridercourse/",
     "access": "public",
     "published": null,
-    "verifiedCurrentIn": 2026,
-    "note": "Rider-facing description of the BRC — format, what's provided, that it ends in a knowledge test and skills evaluation. Does not state the question count."
+    "verifiedCurrentIn": 2026
   },
-
   "xx-msf-brcu-faq": {
     "state": "multi",
     "sourceID": "0007",
@@ -508,10 +427,8 @@
     "url": "https://navalsafetycommand.navy.mil/Portals/100/Documents/c5.1_BRC2013.2014%20Update%20FAQs.pdf",
     "access": "public",
     "published": 2014,
-    "verifiedCurrentIn": null,
-    "note": "MSF curriculum doc (v3.13.14), mirrored by the U.S. Navy. Describes the BRC (updated), a different variant from the BRC 2013 that xx-msf-brc-handbook documents, and says a site may offer either. In the BRC (updated) knowledge testing is any combination of the Basic eCourse's per-section tests and a 25-item Level I test over Rider Handbook content; it states no passing score and never describes a 25-item test at Level II. Superseded by the handbook as the source for FL's exam facts; kept as a resource for the variant it describes. Dated 2014; cite for curriculum structure only. verifiedCurrentIn is null: a U.S. Navy mirror cannot establish that MSF still treats this FAQ as current, and MSF does not host it. Treat the 2014 version stamp as the only date we can stand behind."
+    "verifiedCurrentIn": null
   },
-
   "xx-msf-operator-manual": {
     "state": "multi",
     "sourceID": "0044",
@@ -520,10 +437,8 @@
     "url": "https://msf-usa.org/wp-content/uploads/2023/02/motorcycle-operator-manual.pdf",
     "access": "public",
     "published": 2020,
-    "verifiedCurrentIn": 2026,
-    "note": "18th edition, June 2020 — the document's own revision-history table says 'Eighteenth Revision … June 2020' and the PDF's embedded CreationDate is 2020-06-30, which agree exactly. NOT 2023: the /uploads/2023/02/ path is when MSF uploaded the file, and search results repeat that as the publication year. Free and freely downloadable, unlike the $3 BRC Rider Handbook — a different MSF publication, written for novices and 'designed for use in licensing programs'. The common ancestor of every state manual we hold: Texas's TDLR manual reproduces it near-verbatim down to the TEST YOURSELF items, and Florida's, Georgia's and California's are edited derivatives. Baseline figures: front brake 70% or more of stopping power, 2-second following distance, 2/4/12-second lead times. Where a state manual disagrees, the state made an edit and the state wins for that state — which makes this the document to diff each state manual against. Cited as a national baseline, never for a jurisdictional fact; Section 12 equivalents leave all state law to the local program. Offered by ridesmartflorida.com as a general resource, which is NOT the same as Florida's own handbook — see fl-fmsc-motorcycle-handbook. verifiedCurrentIn 2026 rests on two things checked in August 2026 — MSF's rider-resources library still lists the Motorcycle Operator Manual as a current resource, and the file at this generic, non-edition-stamped filename is byte-identical to what we hold, which is the filename MSF would overwrite on a new edition. The limit: the library page names no edition, so a 19th edition would need the file itself to change to be caught here."
+    "verifiedCurrentIn": 2026
   },
-
   "xx-nhtsa-mns-2011": {
     "state": "multi",
     "sourceID": "0031",
@@ -532,7 +447,6 @@
     "url": "https://www.nhtsa.gov/sites/nhtsa.gov/files/documents/811503.pdf",
     "access": "public",
     "published": 2011,
-    "verifiedCurrentIn": 2026,
-    "note": "Report HS 811 503, August 2011 — the federal standard a Texas entry-level curriculum must meet, and the document behind the MNS2011 courseType token. A competency framework listing what a rider must know and be able to do; it carries no knowledge-test specification at all, which is why TX's exam fields are null with a source rather than a number. Saved to primary-sources. Scoped xx- because any state regulating to this standard cites the same document. verifiedCurrentIn 2026 is unusually strong for a 2011 document: TDLR's live curriculum rule, read August 2026, still requires an entry-level course to meet the 2011 Model National Standards by name. A regulator mandating it this year is better evidence of currency than an unchanged file."
+    "verifiedCurrentIn": 2026
   }
 }
