@@ -38,10 +38,12 @@ img, svg {
 
 :root {
   /* Type */
-  --font-body: "Open Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-body: "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Newsreader", Georgia, "Times New Roman", serif;
   --weight-normal: 400;
   --weight-semi: 600;
   --weight-bold: 700;
+  --weight-extrabold: 800;
 
   --text-sm: 0.875rem;
   --text-base: 1rem;
@@ -68,6 +70,13 @@ img, svg {
   --radius-md: 0.5rem;
   --radius-lg: 0.75rem;
   --radius-pill: 999px;
+
+  /* Brand palette — the real colors. Both accents fail AA as ink; they are surfaces, not text. */
+  --color-ink: #1c1a1f;
+  --color-lantern-yellow: #f2b230;
+  --color-lantern-orange: #f47030;
+  --color-lantern-yellow-offwhite: #fcf0d6;
+  --color-lantern-orange-offwhite: #fde2d6;
 
   /* Color — placeholder neutrals, deliberately distinguishable per surface */
   --color-page: #ffffff;
@@ -113,18 +122,40 @@ body {
   flex-direction: column;
 }
 
+/* Bare selectors on purpose: the display face is the identity of every h1 and h2, class or not. */
+h1 {
+  font-family: var(--font-display);
+  font-weight: var(--weight-semi);
+  font-size: var(--text-xl);
+}
+
+h2 {
+  font-family: var(--font-display);
+  font-weight: var(--weight-bold);
+}
+
 :focus-visible {
   outline: var(--focus-ring);
   outline-offset: var(--focus-offset);
   border-radius: var(--radius-sm);
 }
 
+/* Hard-coded browser defaults, deliberately outside the token system: no colour signals "this is a
+   real link to a real source" more reliably than the two every user already knows. */
 a {
-  color: var(--color-accent);
+  color: #0000ca;
+}
+
+a:visited {
+  color: #481676;
 }
 
 a:hover {
-  color: var(--color-accent-hover);
+  color: #2626f1;
+}
+
+a:visited:hover {
+  color: #6e3c9c;
 }
 
 /* 4. Layout --------------------------------------------------------------- */
@@ -147,7 +178,7 @@ a:hover {
 
 /* 5. Components ----------------------------------------------------------- */
 
-.skip-link {
+.skip-link, .skip-link:visited {
   position: absolute;
   left: var(--space-2);
   top: var(--space-2);
@@ -178,11 +209,15 @@ a:hover {
   gap: var(--space-3) var(--space-5);
 }
 
+/* The wordmark is artwork now; the link is only its frame. */
 .site-header__brand {
-  font-size: var(--text-lg);
-  font-weight: var(--weight-bold);
-  color: var(--color-text);
+  display: inline-flex;
   text-decoration: none;
+}
+
+.site-header__logo {
+  height: 1.75rem;
+  width: auto;
 }
 
 .site-nav__list {
@@ -205,6 +240,13 @@ a:hover {
   padding: var(--space-5) var(--gutter);
 }
 
+/* Chrome links opt out of the default blue — navigation is not a citation — and out of the hover
+   shift, which this rule suppresses by outranking `a:hover` on source order. Keep it below that. */
+.site-nav__list a, .site-nav__list a:visited, .site-footer a, .site-footer a:visited {
+  color: var(--color-ink);
+  text-decoration: none;
+}
+
 .card {
   background-color: var(--color-surface-raised);
   border: 1px solid var(--color-border);
@@ -225,7 +267,7 @@ a:hover {
   grid-template-columns: 1fr;
 }
 
-.btn {
+.btn, .btn:visited {
   display: inline-block;
   padding: var(--space-3) var(--space-5);
   min-height: 44px;
@@ -245,7 +287,7 @@ a:hover {
   color: var(--color-accent-ink);
 }
 
-.btn--secondary {
+.btn--secondary, .btn--secondary:visited {
   background-color: var(--color-surface);
   border-color: var(--color-border);
   color: var(--color-text);
