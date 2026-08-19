@@ -1,6 +1,5 @@
-// Everything specific to the motorcycle-endorsement cert: its vocabularies, its exam hierarchy and
-// its three collections. Universal machinery is passed in from content.config.ts as `kit` rather
-// than imported, which keeps this file free of a back-import and the config free of cert detail.
+// Everything specific to the motorcycle-endorsement cert. `kit` is PASSED IN from content.config.ts;
+// importing it back would catch the Zod consts in their TDZ. CLAUDE.md ▸ Current state.
 import { defineCollection, z } from "astro:content";
 import { file } from "astro/loaders";
 
@@ -27,6 +26,11 @@ export function collections(kit: any) {
           .string()
           .regex(/^\d{4}$/, { error: "sourceID must be a zero-padded four-digit string" }),
         title: z.string().min(1),
+        // Renders inline under the link on state pages. data-handling.md ▸ Sources — registry.
+        description: z
+          .string()
+          .min(60, { error: "description is under 60 characters" })
+          .max(100, { error: "description is over 100 characters" }),
         publisher: z.string().min(1),
         url: z.url(),
         access: z.enum(["public", "purchase", "restricted"]),
@@ -42,9 +46,7 @@ export function collections(kit: any) {
       ),
   });
 
-  // A conformance edge is a factual claim about one curriculum meeting another's standard, so it
-  // carries a citation like any other fact. Content inherits DOWNWARD: a question scoped to the
-  // broader standard reaches every conformant exam, never the reverse.
+  // A conformance edge is a factual claim, so it carries a citation like any other fact.
   const examsCollection = defineCollection({
     loader: file(`src/content/exams/${slug}-exams.json`),
     schema: z

@@ -1,17 +1,9 @@
-// Resolves a question's applies_to against a state. Cert-agnostic: every input is passed in, so
-// this works unchanged for CDL or ham radio.
-//
-// A question is scoped by what a rider is TESTED on, never what they were taught — the token
-// resolves against exam.examType, and courseType is descriptive only.
+// Resolves a question's applies_to against a state, via exam.examType and never courseType.
 // CLAUDE.md ▸ Locked decisions; data-handling.md ▸ Questions §3.
 
 /**
- * Exam tokens a state's own exam satisfies, walking `conformsTo` upward.
- *
- * Content inherits DOWNWARD only. MSF's BRC conforms to the 2011 Model National Standards, so a
- * Florida rider sitting the BRC is covered by anything true of the standard — but a Texan, whose
- * school may have taught a different conformant curriculum, is NOT covered by BRC specifics.
- * Walking up from the state's own exam is what encodes that asymmetry.
+ * Exam tokens a state's own exam satisfies, walking `conformsTo` UPWARD.
+ * Content inherits downward only, and walking up from the state's own exam is what encodes that.
  */
 function satisfiedBy(examType, exams) {
   const seen = new Set();
@@ -34,8 +26,7 @@ export function scopeTokens(stateSlug, { states, facts, exams }) {
 
   const tokens = new Set(["ALL", state.abbreviation]);
 
-  // Null where a state's exam is unresearched — it then matches only ALL and its own code, which is
-  // the honest fallback: no exam-derived content reaches a rider whose exam we can't name.
+  // Null where the exam is unresearched: no exam-derived content reaches a rider we can't scope.
   const examType = stateFacts.exam?.examType?.value;
   if (examType) for (const t of satisfiedBy(examType, exams)) tokens.add(t);
 

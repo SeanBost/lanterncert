@@ -169,9 +169,9 @@ Choosing between two candidates is a **Decide**, not an *Escalate*. Say why in t
 Identity checks, binary handling, snapshot rules and survey keys are in `data-handling.md` ▸
 *Sources — fetching and snapshots*. Two things that are judgment rather than rule:
 
-- **Agency outbound links go stale.** A state page may send riders to a programme domain that has
-  lapsed or been redirected. When a linked destination fails, find the programme operator's current
-  site rather than concluding the programme is unreachable — and record the stale link in the
+- **Agency outbound links go stale.** A state page may send riders to a program domain that has
+  lapsed or been redirected. When a linked destination fails, find the program operator's current
+  site rather than concluding the program is unreachable — and record the stale link in the
   referring source's note.
 - **A zero-hit search across a whole authority is evidence.** If a complete statute chapter never
   mentions a term, that silence is a finding worth reporting, not a failed search.
@@ -183,7 +183,7 @@ Every fact lands in exactly one of the eight verdicts in `data-handling.md` ▸ 
 
 `blocked` is rare and usually wrong. A PDF is not blocked — `fetch-page.mjs` saves it and extracts
 its text layer, and a PDF with no extracted text is scanned, so read the saved file directly. A JS
-shell is not blocked either until you have tried the programme's other domains.
+shell is not blocked either until you have tried the program's other domains.
 
 ## Making calls
 
@@ -220,11 +220,17 @@ Three that govern how a *run* behaves:
 
 ## Registry entries
 
-**Shape, key format, `sourceID` assignment, sort order, `title` voice, `access` and both year fields
-are in `data-handling.md` ▸ *Sources — registry*.** Build every proposed entry against that section.
+**Shape, key format, `sourceID` assignment, sort order, `title` voice, `description`, `access` and
+both year fields are in `data-handling.md` ▸ *Sources — registry*.** Build every proposed entry
+against that section.
 
-One thing that is run behaviour rather than shape: **dating is not optional work on any entry you add
-or re-read.** Dig for both years and say in the report what each became and on what evidence.
+Two things that are run behavior rather than shape:
+
+- **Dating is not optional work on any entry you add or re-read.** Dig for both years and say in the
+  report what each became and on what evidence.
+- **`description` is written from the document, not from its title.** You have just read the source
+  to verify a fact, which is the only moment you actually know what a reader would find in it —
+  write it then. A re-read that changes what the document covers updates the description too.
 
 ## Pre-assembly checks
 
@@ -237,6 +243,8 @@ Before writing the report, confirm:
   the entry.
 - Every new entry carries `state` and a `sourceID` that is the next unused number in the file, and
   sits in its alphabetical position. No `sourceID` is reused, including one freed by a removal.
+- Every new entry carries a `description` inside 60–100 characters, and every entry you re-read
+  still describes what that document actually holds. A `purchase` or `restricted` entry says so.
 - Every new or re-dated entry carries both year fields, each derived per `data-handling.md` ▸
   *Dating a source*. A `null` on either is explained in the note.
 - Every range is ascending, same unit, both ends quoted.

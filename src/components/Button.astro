@@ -1,6 +1,5 @@
 ---
-// Renders an <a> when given an href and a <button> otherwise — a control is never a heading, and a
-// link is never a button. CLAUDE.md ▸ Conventions.
+// An <a> when given an href, a <button> otherwise. CLAUDE.md ▸ Conventions.
 const { href, variant = "primary", type = "button", ...rest } = Astro.props;
 
 const classes = ["btn", variant === "secondary" && "btn--secondary"].filter(Boolean).join(" ");

@@ -1,8 +1,4 @@
-// PLACEHOLDER — delete in Sprint 3.
-//
-// Three of the ten topics proposed in blackbox/research/, used only to give the guide routes real
-// multiples to render. The taxonomy is locked in Sprint 3 against real questions, and `topic` stays
-// an unconstrained string in the schema until then.
+// PLACEHOLDER — delete in Sprint 3, when the taxonomy is locked. CLAUDE.md ▸ Open decisions.
 
 export const placeholderTopics = [
   { slug: "licensing-and-the-law", name: "Licensing & the law" },

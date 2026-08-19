@@ -14,13 +14,13 @@ const term = facts.meta.localTerm;
 ---
 
 <Layout
-	title={`${info.name} ${term} mock exam`}
-	description={`Sit a timed ${info.name} ${term} mock exam shaped like the real ${facts.meta.agencyCode} test, then review every question you missed.`}
+	title={`${info.name} ${term} mock test`}
+	description={`Sit a timed ${info.name} ${term} mock test shaped like the real ${facts.meta.agencyCode} exam, then review every question you missed.`}
 >
 	<div class="stack prose">
-		<h1 class="page-title">Mock exam</h1>
+		<h1 class="page-title">Mock test</h1>
 		<p class="lede">{info.name} {term}</p>
-		<p>The timed exam lands in Sprint 4.</p>
+		<p>The timed test lands in Sprint 4.</p>
 		<p><Button href={`/${cert}/${state}`} variant="secondary">Back to {info.name}</Button></p>
 	</div>
 </Layout>

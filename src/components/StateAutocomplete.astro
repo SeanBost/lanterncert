@@ -1,0 +1,53 @@
+---
+// Behavior lives in src/scripts/autocomplete.js and keys off the form id.
+import { usStates } from "../lib/us-states.js";
+import { findExactOption } from "../lib/match-option.js";
+
+const {
+	base,
+	options = usStates,
+	label = "Your state",
+	submitLabel = "Start Learning",
+	value = "",
+} = Astro.props;
+
+// Rendered enabled when the preset value already names a jurisdiction, so the button never flashes
+// from disabled to accent once the script runs.
+const preselected = findExactOption(options, value);
+---
+
+<form class="autocomplete" id="autocomplete" data-base={base} data-options={JSON.stringify(options)}>
+	<div class="autocomplete__row">
+		<div class="autocomplete__field">
+			<label class="visually-hidden" for="autocomplete-input">{label}</label>
+			<input
+				class="autocomplete__input"
+				id="autocomplete-input"
+				type="text"
+				name="state"
+				value={value}
+				placeholder="Type a state name or code"
+				autocomplete="off"
+				autocapitalize="off"
+				autocorrect="off"
+				spellcheck="false"
+				enterkeyhint="go"
+				role="combobox"
+				aria-controls="autocomplete-list"
+				aria-expanded="false"
+				aria-autocomplete="list"
+			/>
+			<ul class="autocomplete__list" id="autocomplete-list" role="listbox" aria-label={label} hidden>
+			</ul>
+		</div>
+		<button class="btn autocomplete__submit" type="submit" disabled={!preselected}>
+			{submitLabel}
+		</button>
+	</div>
+</form>
+
+<script>
+	import { initAutocomplete } from "../scripts/autocomplete.js";
+
+	initAutocomplete();
+</script>

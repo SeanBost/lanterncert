@@ -82,8 +82,22 @@ for (const [code, state] of Object.entries(facts)) {
   }
 }
 
+// ===================== TEMPORARY HARDCODE — DELETE THIS =====================
+// Twin of the list in src/content.config.ts; keep them identical until both go. These states have
+// registry entries for the homepage source wall but no facts, so every one is an orphan BY
+// CONSTRUCTION and would bury the real orphans under permanent noise. They still get swept, and
+// still print below — just on their own line, so ORPHANED keeps meaning something.
+// Delete this const, the filter and the wallOnly line the moment these states get facts.
+const WALL_ONLY_STATES = new Set(["AZ", "HI", "IL", "MA", "MO", "NJ", "OH", "WA"]);
+// Listed by key, not by state: scope `multi` is shared with cited entries, so exempting the whole
+// scope would silence a genuine future xx- orphan. Goes when the states above do.
+const WALL_ONLY_KEYS = new Set(["xx-nhtsa-admin-standards"]);
+// ============================================================================
+
 const dangling = [...citedBy.keys()].filter((k) => !sources[k]).map((k) => ({ key: k, citedBy: citedBy.get(k) }));
-const orphaned = Object.keys(sources).filter((k) => !citedBy.has(k));
+const isWallOnly = (k) => WALL_ONLY_STATES.has(sources[k].state) || WALL_ONLY_KEYS.has(k);
+const orphaned = Object.keys(sources).filter((k) => !citedBy.has(k) && !isWallOnly(k));
+const wallOnly = Object.keys(sources).filter(isWallOnly);
 
 const unknownApply = [...applying.keys()].filter((k) => !sources[k]);
 if (unknownApply.length) {
@@ -184,6 +198,8 @@ const summary = {
   behindYear: results.filter((r) => r.behindYear).length,
   dangling,
   orphaned,
+  // TEMPORARY — goes with the WALL_ONLY_STATES hardcode above.
+  wallOnly,
 };
 
 if (asJson) {
@@ -244,5 +260,9 @@ if (asJson) {
   }
   if (orphaned.length) {
     console.log(`  ORPHANED (in the registry, cited by nothing): ${orphaned.join(", ")}`);
+  }
+  // TEMPORARY — goes with the WALL_ONLY_STATES hardcode above.
+  if (wallOnly.length) {
+    console.log(`  WALL-ONLY (no facts for these states yet, so exempt from ORPHANED): ${wallOnly.length} entries`);
   }
 }

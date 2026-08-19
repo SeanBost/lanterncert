@@ -1,8 +1,16 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
 import Card from "../../../components/Card.astro";
-import { certStatePaths, stateInfo, loadState, loadSources } from "../../../lib/cert-data.js";
+import {
+	certStatePaths,
+	citedSourceIds,
+	loadExtraSources,
+	loadSourceEntries,
+	loadState,
+	stateInfo,
+} from "../../../lib/cert-data.js";
 import { formatFact } from "../../../lib/format-fact.js";
+import { formatSourceMeta } from "../../../lib/format-source.js";
 import { placeholderTopics } from "../../../lib/placeholder-topics.js";
 
 export async function getStaticPaths() {
@@ -12,64 +20,101 @@ export async function getStaticPaths() {
 const { cert, state } = Astro.params;
 const info = stateInfo(state);
 const facts = await loadState(cert, state);
-const { cited, extra } = await loadSources(cert, facts);
+const extra = await loadExtraSources(cert, facts);
 
 const term = facts.meta.localTerm;
 const base = `/${cert}/${state}`;
 
-// A sectioned exam scores each part separately, so a bare percentage next to a total question count
-// reads as one global threshold and can tell a rider they passed a test they failed. The label has
-// to carry the gate. CLAUDE.md ▸ Gotchas ▸ Process.
+// Parsed as UTC and formatted as UTC — a local-timezone render of a bare date lands a day early.
+const [vy, vm, vd] = facts.meta.dateVerified.split("-").map(Number);
+const validated = new Date(Date.UTC(vy, vm - 1, vd)).toLocaleDateString("en-US", {
+	year: "numeric",
+	month: "long",
+	day: "numeric",
+	timeZone: "UTC",
+});
+
+// The LABEL has to carry the per-section gate, or a rider reads a pass into a fail.
+// CLAUDE.md ▸ Gotchas ▸ Process.
 const sectioned = facts.exam.isExamSectioned.value === true;
 
-// Unit per fact so the shared formatter stays the only place a value becomes text.
 const quickFacts = [
-	["Minimum age", formatFact(facts.criteria.minAge.value, "years")],
-	["Agency fees", formatFact(facts.criteria.dmvCost.value, "usd")],
-	["Course cost", formatFact(facts.criteria.classCost.value, "usd")],
-	[sectioned ? "Questions in total" : "Questions on the test", formatFact(facts.exam.questionCount.value)],
+	["Minimum age", formatFact(facts.criteria.minAge.value, "years"), facts.criteria.minAge],
+	["Agency fees", formatFact(facts.criteria.dmvCost.value, "usd"), facts.criteria.dmvCost],
+	["Course cost", formatFact(facts.criteria.classCost.value, "usd"), facts.criteria.classCost],
+	[
+		sectioned ? "Questions in total" : "Questions on the exam",
+		formatFact(facts.exam.questionCount.value),
+		facts.exam.questionCount,
+	],
 	[
 		sectioned ? "Passing score on each section" : "Passing score",
 		formatFact(facts.exam.passingScorePercent.value, "percent"),
+		facts.exam.passingScorePercent,
 	],
-	["Time limit", formatFact(facts.exam.timeLimitMinutes.value, "minutes")],
-];
+	[
+		"Time limit",
+		formatFact(facts.exam.timeLimitMinutes.value, "minutes"),
+		facts.exam.timeLimitMinutes,
+	],
+].map(([label, value, fact]) => ({ label, value, sourceId: fact.source?.id ?? null }));
+
+// Numbered in the order markers appear, so a null value doesn't burn a number. The second loop keeps
+// a source backing an unsurfaced fact on the page it provides provenance for.
+const citations = new Map();
+for (const fact of quickFacts) {
+	if (fact.value === null || !fact.sourceId) continue;
+	if (!citations.has(fact.sourceId)) citations.set(fact.sourceId, citations.size + 1);
+}
+for (const id of citedSourceIds(facts)) {
+	if (!citations.has(id)) citations.set(id, citations.size + 1);
+}
+const cited = await loadSourceEntries(cert, [...citations.keys()]);
 
 const modes = [
 	{ href: `${base}/study`, title: "Study", blurb: "Work through the material one card at a time." },
 	{ href: `${base}/practice`, title: "Practice", blurb: "Answer questions with instant feedback." },
-	{ href: `${base}/test`, title: "Mock exam", blurb: `Sit a timed test shaped like ${facts.meta.agencyCode}'s.` },
+	{ href: `${base}/test`, title: "Mock test", blurb: `Sit a timed test shaped like the real ${facts.meta.agencyCode} exam.` },
 	{ href: `${base}/guide`, title: "Study guide", blurb: "Read up on one topic at a time." },
 ];
 ---
 
 <Layout
 	title={`${info.name} ${term}`}
-	description={`How to get your ${term} in ${info.name} - requirements, costs and test details from ${facts.meta.agencyName}, plus free practice questions.`}
+	description={`How to get your ${term} in ${info.name} - requirements, costs and exam details from ${facts.meta.agencyName}, plus free practice questions.`}
 >
 	<div class="stack-lg">
-		<div class="stack">
-			<h1 class="page-title">{info.name} {term}</h1>
-			<p class="lede">
-				What {facts.meta.agencyCode} requires, what it costs, and free practice built from {info.name}'s
-				own material.
-			</p>
-			<p><span class="badge">Verified {facts.meta.dateVerified}</span></p>
-		</div>
+		<div class="split">
+			<div class="stack">
+				<h1 class="page-title">{info.name} {term}</h1>
+				<p class="caption">All information last validated {validated}.</p>
+				{/* Placeholder for the per-cert generated summary, which will carry its own citations. */}
+				<p class="lede">
+					What {facts.meta.agencyCode} requires, what it costs, and free practice built from {info.name}'s
+					own material.
+				</p>
+			</div>
 
-		<section class="stack" aria-labelledby="facts-heading">
-			<h2 class="section-title" id="facts-heading">Quick facts</h2>
-			<dl class="facts">
-				{
-					quickFacts.map(([label, value]) => (
-						<div class="facts__row">
-							<dt class="facts__label">{label}</dt>
-							<dd class="facts__value">{value ?? "Not published"}</dd>
-						</div>
-					))
-				}
-			</dl>
-		</section>
+			<section class="stack" aria-labelledby="facts-heading">
+				<h2 class="section-title" id="facts-heading">Quick facts</h2>
+				<dl class="facts">
+					{
+						quickFacts.map((fact) => {
+							const number = fact.value === null ? null : citations.get(fact.sourceId);
+							return (
+								<div class="facts__row">
+									<dt>{fact.label}</dt>
+									{/* No whitespace between the two — a superscript citation hugs its value. */}
+									<dd class="facts__value">
+										{fact.value ?? "Not published"}{number && <a class="cite" href={`#source-${number}`}>[{number}]</a>}
+									</dd>
+								</div>
+							);
+						})
+					}
+				</dl>
+			</section>
+		</div>
 
 		<section class="stack" aria-labelledby="modes-heading">
 			<h2 class="section-title" id="modes-heading">Start studying</h2>
@@ -78,7 +123,7 @@ const modes = [
 					modes.map((mode) => (
 						<li>
 							<Card title={mode.title} href={mode.href}>
-								<p class="muted">{mode.blurb}</p>
+								<p>{mode.blurb}</p>
 							</Card>
 						</li>
 					))
@@ -100,36 +145,33 @@ const modes = [
 		</section>
 
 		<section class="stack" aria-labelledby="sources-heading">
-			<h2 class="section-title" id="sources-heading">Verified against</h2>
-			<ul class="source-list">
+			<h2 class="section-title" id="sources-heading">Sources</h2>
+			<ol class="source-list">
 				{
 					cited.map((source) => (
-						<li>
+						<li id={`source-${citations.get(source.id)}`}>
 							<a href={source.url} target="_blank" rel="noopener noreferrer">
 								{source.title}
 							</a>
-							<span class="source-list__meta">
-								{" - "}
-								{source.publisher}
-								{source.published ? `, published ${source.published}` : ""}
-								{source.verifiedCurrentIn ? ` · verified current in ${source.verifiedCurrentIn}` : ""}
-							</span>
+							<span class="source-list__meta">{formatSourceMeta(source)}</span>
 						</li>
 					))
 				}
-			</ul>
+			</ol>
 		</section>
 
 		{
 			extra.length > 0 && (
 				<section class="stack" aria-labelledby="more-heading">
-					<h2 class="section-title" id="more-heading">More from {facts.meta.agencyCode}</h2>
+					{/* Named for the state, not the agency — the list holds documents it did not publish. */}
+					<h2 class="section-title" id="more-heading">Helpful {info.name} resources</h2>
 					<ul class="source-list">
 						{extra.map((source) => (
 							<li>
 								<a href={source.url} target="_blank" rel="noopener noreferrer">
 									{source.title}
 								</a>
+								<span class="source-list__meta">{source.description}</span>
 							</li>
 						))}
 					</ul>

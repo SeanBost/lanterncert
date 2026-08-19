@@ -9,6 +9,7 @@
     "motorcycle-endorsement": {
       "name": "Motorcycle Endorsement",
       "slug": "motorcycle-endorsement",
+      "blurb": "Requirements, costs, course and exam details, plus practice questions written from each state's own manual.",
       "stateDependent": true
     }
   }

@@ -1,16 +1,23 @@
-// Universal schema machinery plus the collection registry. Everything cert-specific lives in
-// src/schemas/<cert>.ts — adding a cert is one import and one spread.
+// Universal schema machinery only; cert vocabulary lives in src/schemas/<cert>.ts.
 import { reference, z } from "astro:content";
 import states from "./content/states.json";
 import * as motorcycleEndorsement from "./schemas/motorcycle-endorsement";
 
 const stateCodes = Object.values(states).map((s) => s.abbreviation);
 
-// Registry scope is any state in states.json, or `multi` for xx- keys. data-handling.md ▸ Sources §2.
-const scopeEnum = z.enum(["multi", ...stateCodes] as [string, ...string[]]);
+// ===================== TEMPORARY HARDCODE — DELETE THIS =====================
+// These states have registry entries feeding the homepage source wall, but no facts, no pages and
+// no entry in states.json. This list widens the REGISTRY scope only — putting them in states.json
+// would widen `applies_to` too, which is not wanted. It knowingly breaks data-handling.md §2 rule 2.
+// Delete this const and its use below the moment any state here gets a facts block.
+// The twin of this list is in scripts/audit-sources.mjs. Both go at the same time.
+const WALL_ONLY_STATES = ["AZ", "HI", "IL", "MA", "MO", "NJ", "OH", "WA"];
+// ============================================================================
 
-// applies_to takes a state code, ALL, or an exam token. One token space, and the overlap is harmless
-// because a single-state exam takes that state's own code. data-handling.md ▸ Questions §3.
+// Registry scope is any state in states.json, or `multi` for xx- keys. data-handling.md ▸ Sources §2.
+const scopeEnum = z.enum(["multi", ...stateCodes, ...WALL_ONLY_STATES] as [string, ...string[]]);
+
+// applies_to takes a state code, ALL, or an exam token. data-handling.md ▸ Questions §3.
 const appliesToEnum = (examTypes: string[]) =>
   z.enum([...new Set(["ALL", ...stateCodes, ...examTypes])] as [string, ...string[]]);
 
@@ -24,9 +31,8 @@ const range = z
 
 const amount = z.union([z.number().nonnegative(), range]);
 
-// A bare reference() does NOT fail the build on a dangling key — it resolves to undefined silently
-// at render. The refine is the enforcement; the pipe only buys getEntry() ergonomics.
-// data-handling.md ▸ Questions §12.
+// The refine is the enforcement; reference() alone lets a dangling key through silently.
+// CLAUDE.md ▸ Locked decisions. data-handling.md ▸ Questions §12.
 const makeSourceRef = (registry: object, collection: any) => {
   const keys = new Set(Object.keys(registry));
   return () =>
@@ -36,8 +42,7 @@ const makeSourceRef = (registry: object, collection: any) => {
       .pipe(reference(collection));
 };
 
-// A fact is verified iff it has a source: source null = unresearched, source set with value null =
-// checked and no single honest answer. A value without a source is neither, so it fails.
+// A fact is verified iff it has a source, so a value without one fails. data-handling.md ▸ Contract.
 const makeFact =
   (sourceRef: () => any) =>
   (value: any) =>

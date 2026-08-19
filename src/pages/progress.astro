@@ -1,0 +1,66 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Card from "../components/Card.astro";
+
+// Static placeholders; the real page reads local storage. CLAUDE.md ▸ Open decisions.
+const sections = [
+	{
+		title: "Study and practice",
+		blurb: "Which topics you have worked through, and how recently.",
+	},
+	{
+		title: "Test results",
+		blurb: "Every mock test you have taken, with your score and what you missed.",
+	},
+	{
+		title: "Starred certifications",
+		blurb: "The certifications and states you have saved to come back to.",
+	},
+];
+---
+
+<Layout
+	title="My Progress"
+	description="See how far you have got, review your past test results, and manage the study data your browser is keeping for you."
+>
+	<div class="stack-lg">
+		<div class="stack">
+			<h1 class="page-title">My progress</h1>
+			<p class="lede">
+				Everything on this page is stored only on this device, in this browser. It is never sent to
+				us, and we never see it. <a href="/about#privacy">Read the privacy policy</a>.
+			</p>
+		</div>
+
+		<section class="stack" aria-labelledby="progress-heading">
+			<h2 class="section-title" id="progress-heading">Your activity</h2>
+			<ul class="card-grid">
+				{sections.map((section) => (
+					<li>
+						<Card title={section.title}>
+							<p>{section.blurb}</p>
+							<p><span class="badge">Nothing recorded yet</span></p>
+						</Card>
+					</li>
+				))}
+			</ul>
+		</section>
+
+		<section class="stack" aria-labelledby="data-heading">
+			<h2 class="section-title" id="data-heading">Your data</h2>
+			<div class="prose">
+				<p>
+					Browsers keep local storage until something clears it, so your progress should stay put
+					indefinitely on this device - but clearing your browsing data, using private browsing, or
+					switching to another device or browser will lose it. Download a copy if you want to keep
+					it.
+				</p>
+			</div>
+			<div class="button-row">
+				<button class="btn btn--secondary" type="button" disabled>Download my data</button>
+				<button class="btn btn--secondary" type="button" disabled>Erase my data</button>
+			</div>
+			<p class="caption">These controls turn on once there is something stored to act on.</p>
+		</section>
+	</div>
+</Layout>

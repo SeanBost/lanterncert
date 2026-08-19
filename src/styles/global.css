@@ -1,7 +1,5 @@
 /* ==========================================================================
-   LanternCert — global stylesheet
-   Mobile-first. Sprint 1 scaffold: neutral placeholder values, real structure.
-   Sprint 2 replaces the palette and type without touching the token names.
+   LanternCert — global stylesheet. Mobile-first. CLAUDE.md ▸ Design system.
 
    1. Reset
    2. Tokens
@@ -39,7 +37,7 @@ img, svg {
 :root {
   /* Type */
   --font-body: "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-display: "Newsreader", Georgia, "Times New Roman", serif;
+  --font-display: "Bitter", Georgia, "Times New Roman", serif;
   --weight-normal: 400;
   --weight-semi: 600;
   --weight-bold: 700;
@@ -51,6 +49,9 @@ img, svg {
   --text-xl: 1.375rem;
   --text-2xl: 1.75rem;
   --text-3xl: 2.25rem;
+  --text-4xl: 2.5rem;
+  --text-5xl: 3rem;
+  --text-6xl: 3.375rem;
 
   --leading-tight: 1.25;
   --leading-body: 1.6;
@@ -64,6 +65,9 @@ img, svg {
   --space-6: 2rem;
   --space-7: 3rem;
   --space-8: 4rem;
+  --space-9: 5rem;
+  --space-10: 6rem;
+  --space-11: 7rem;
 
   /* Radius — three values, reused; nothing defines its own */
   --radius-sm: 0.25rem;
@@ -71,34 +75,60 @@ img, svg {
   --radius-lg: 0.75rem;
   --radius-pill: 999px;
 
-  /* Brand palette — the real colors. Both accents fail AA as ink; they are surfaces, not text. */
+  /* ---- Color: decided ---------------------------------------------------
+     A new hex belongs here and nowhere else. An unused color is kept on purpose. */
+
+  /* Form controls only — the page itself is never white. */
+  --white: #ffffff;
+
+  /* The button's hover label only. True black outruns --color-ink on orange, 7.21:1 against 5.92. */
+  --black: #000000;
+
   --color-ink: #1c1a1f;
+  --color-ink-light: #4a4552;
+  --color-ink-lightest: #736b80;
+
+  /* Surfaces, never ink — both fail AA as type and fail the 3:1 non-text bar. */
   --color-lantern-yellow: #f2b230;
   --color-lantern-orange: #f47030;
   --color-lantern-yellow-offwhite: #fcf0d6;
   --color-lantern-orange-offwhite: #fde2d6;
+  --color-lantern-yellow-nearwhite: #fffcf7;
+  --color-lantern-orange-nearwhite: #fff5eb;
 
-  /* Color — placeholder neutrals, deliberately distinguishable per surface */
-  --color-page: #ffffff;
-  --color-surface: #f4f6f9;
-  --color-surface-raised: #ffffff;
-  --color-header: #e7ecf3;
-  --color-footer: #eef0f4;
-  --color-border: #d2d8e2;
-  --color-text: #1b1f26;
-  --color-text-muted: #575f6d;
-  --color-accent: #2f5fd0;
-  --color-accent-hover: #24499f;
-  --color-accent-ink: #ffffff;
-  --color-focus: #b8500f;
+  /* Dark enough to be ink, which the accents above are not. Orange measures 5.32:1 on white and
+     carries white type; yellow is 3.33:1, so it is a rule or a fill and never a text color. */
+  --color-lantern-yellow-dark: #bf8000;
+  --color-lantern-orange-dark: #bf4000;
 
-  /* One shadow recipe */
-  --shadow: 0 1px 2px rgb(27 31 38 / 8%), 0 2px 8px rgb(27 31 38 / 6%);
+  /* ---- Color: semantic roles --------------------------------------------
+     Roles resolve to a token above and may never introduce a hex. */
+
+  /* Three fills: the page, white for anything set INTO it, and the footer's warm band. */
+  --color-page: var(--color-lantern-yellow-nearwhite);
+  --color-surface: var(--white);
+  --color-header: var(--color-lantern-yellow-nearwhite);
+  --color-footer: var(--color-lantern-orange-nearwhite);
+
+  --color-text: var(--color-ink);
+  --color-border: var(--color-ink-lightest);
+  /* The two ends of the button's hover sweep, each with the type color it carries. Orange is a
+     surface and never holds type, so it arrives as the sweep rather than sitting under the label. */
+  --color-accent: var(--color-ink);
+  --color-accent-hover: var(--color-lantern-orange);
+  --color-accent-ink: var(--color-page);
+  --color-accent-hover-ink: var(--black);
+  --color-focus: var(--color-lantern-orange-dark);
+  /* Deliberately 1.83:1, the one place contrast is unwanted — the fill reads as a control, the label
+     as unreadable, so a disabled button never invites the click. CLAUDE.md ▸ Design system. */
+  --color-disabled: var(--color-ink-lightest);
+  --color-disabled-ink: var(--color-ink-light);
 
   /* Layout */
-  --measure: 68ch;
   --page-max: 72rem;
   --gutter: var(--space-4);
+  --rule: 1px solid var(--color-border);
+  --header-h: 3.75rem;
 
   --focus-ring: 3px solid var(--color-focus);
   --focus-offset: 2px;
@@ -108,6 +138,8 @@ img, svg {
 
 html {
   -webkit-text-size-adjust: 100%;
+  /* The header is fixed at every width, so in-page anchors need somewhere to land. */
+  scroll-padding-top: calc(var(--header-h) + var(--space-4));
 }
 
 body {
@@ -120,6 +152,7 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  padding-top: var(--header-h);
 }
 
 /* Bare selectors on purpose: the display face is the identity of every h1 and h2, class or not. */
@@ -134,38 +167,47 @@ h2 {
   font-weight: var(--weight-bold);
 }
 
+/* Sized explicitly so an h3 can never inherit its way up past an h2. */
+h3 {
+  font-family: var(--font-display);
+  font-weight: var(--weight-semi);
+  font-size: var(--text-lg);
+}
+
 :focus-visible {
   outline: var(--focus-ring);
   outline-offset: var(--focus-offset);
   border-radius: var(--radius-sm);
 }
 
-/* Hard-coded browser defaults, deliberately outside the token system: no colour signals "this is a
-   real link to a real source" more reliably than the two every user already knows. */
-a {
+/* Browser defaults, hardcoded and deliberately outside the token system. CLAUDE.md ▸ Locked decisions. */
+/* The mosaic's URL line joins each list rather than restating the hexes; a visited color reaches a
+   child only through a selector, never through inheritance, so all four states name it. */
+a, .source-tile__host {
   color: #0000ca;
 }
 
-a:visited {
+a:visited, .source-tile:visited .source-tile__host {
   color: #481676;
 }
 
-a:hover {
+a:hover, .source-tile:hover .source-tile__host {
   color: #2626f1;
 }
 
-a:visited:hover {
+a:visited:hover, .source-tile:visited:hover .source-tile__host {
   color: #6e3c9c;
 }
 
 /* 4. Layout --------------------------------------------------------------- */
 
+/* Top padding is the gap below the header; body's padding-top is structural and only clears it. */
 .page {
   flex: 1;
   width: 100%;
   max-width: var(--page-max);
   margin-inline: auto;
-  padding: var(--space-6) var(--gutter) var(--space-8);
+  padding: var(--space-5) var(--gutter) var(--space-9);
 }
 
 .stack > * + * {
@@ -176,16 +218,60 @@ a:visited:hover {
   margin-top: var(--space-6);
 }
 
+/* Between the major blocks of a landing page, where --space-6 reads as cramped. A narrow column
+   separates its blocks on its own, so the desktop gap is set in the breakpoint rather than here. */
+.stack-xl > * + * {
+  margin-top: var(--space-7);
+}
+
+/* Prose beside a sidebar. One column until the desktop breakpoint, 60/40 above it. */
+.split {
+  display: grid;
+  gap: var(--space-6);
+}
+
+/* PLACEHOLDER - holds the hero's right column until the source mosaic is composed. */
+/* Bleeds out to the viewport edges and clips there, so the wall runs off both sides equally rather
+   than widening the page. Desktop puts it back in its column below. */
+.hero-art {
+  --art-fade: 22%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow: hidden;
+  min-height: 22rem;
+  margin-inline: calc(var(--gutter) * -1);
+  /* Two crossed fades, multiplied. Only the alpha matters, so --black is standing in for "opaque"
+     rather than acting as a color choice. `intersect` is load-bearing: the default `add` unions the
+     layers into a fully opaque mask, which is also the safe way this degrades. */
+  mask-image:
+    linear-gradient(
+      to right,
+      transparent,
+      var(--black) var(--art-fade),
+      var(--black) calc(100% - var(--art-fade)),
+      transparent
+    ),
+    linear-gradient(
+      to bottom,
+      transparent,
+      var(--black) var(--art-fade),
+      var(--black) calc(100% - var(--art-fade)),
+      transparent
+    );
+  mask-composite: intersect;
+}
+
 /* 5. Components ----------------------------------------------------------- */
 
 .skip-link, .skip-link:visited {
-  position: absolute;
+  position: fixed;
   left: var(--space-2);
   top: var(--space-2);
-  z-index: 10;
+  z-index: 30;
   padding: var(--space-2) var(--space-4);
-  background-color: var(--color-accent);
-  color: var(--color-accent-ink);
+  background-color: var(--color-ink);
+  color: var(--color-page);
   border-radius: var(--radius-md);
   transform: translateY(-200%);
 }
@@ -194,19 +280,26 @@ a:visited:hover {
   transform: translateY(0);
 }
 
+/* Fixed at every width; SiteHeader.astro owns the mobile scroll-to-hide toggling. */
 .site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
   background-color: var(--color-header);
-  border-bottom: 1px solid var(--color-border);
+  /* border-bottom: var(--rule); */
 }
 
 .site-header__inner {
   max-width: var(--page-max);
   margin-inline: auto;
-  padding: var(--space-3) var(--gutter);
+  min-height: var(--header-h);
+  padding-inline: var(--gutter);
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--space-3) var(--space-5);
+  justify-content: space-between;
 }
 
 /* The wordmark is artwork now; the link is only its frame. */
@@ -220,17 +313,76 @@ a:visited:hover {
   width: auto;
 }
 
+/* margin-right pulls the target in off the gutter without shrinking it. The full bar height is
+   load-bearing: it is the tallest item, so it alone sets the top flex line once the panel wraps. */
+.site-header__toggle {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 44px;
+  height: var(--header-h);
+  padding: 0 10px;
+  margin-right: var(--space-2);
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+/* A glyph, not a rule — full ink at 2px, so the control reads as a control. */
+.site-header__toggle span {
+  display: block;
+  height: 2px;
+  background-color: var(--color-ink);
+}
+
+/* Collapsed by default; the toggle reveals it. Desktop puts it back inline below. */
+.site-nav {
+  display: none;
+  flex-basis: 100%;
+}
+
+.site-header--open .site-nav {
+  display: block;
+  padding-block: var(--space-5) var(--space-4);
+}
+
+/* The scrim over everything below the open panel. Absolute, not fixed: a fixed child would resolve
+   top: 100% against the viewport rather than against the header it has to start under.
+   It takes pointer events on purpose - SiteHeader.astro closes the menu on a tap here. */
+.site-header--open::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  height: 100vh;
+  background-color: color-mix(in srgb, var(--color-ink) 33%, transparent);
+}
+
 .site-nav__list {
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-4);
-  font-size: var(--text-sm);
+  flex-direction: column;
+  align-items: center;
+  font-size: var(--text-xl);
+  font-weight: var(--weight-semi);
+}
+
+/* Nav separators, commented out rather than deleted.
+.site-nav__list > li + li {
+  border-top: var(--rule);
+}
+*/
+
+.site-nav__list a {
+  display: block;
+  padding-block: var(--space-3);
 }
 
 .site-footer {
   background-color: var(--color-footer);
-  border-top: 1px solid var(--color-border);
-  color: var(--color-text-muted);
+  /* border-top: var(--rule); */
   font-size: var(--text-sm);
 }
 
@@ -240,19 +392,28 @@ a:visited:hover {
   padding: var(--space-5) var(--gutter);
 }
 
-/* Chrome links opt out of the default blue — navigation is not a citation — and out of the hover
-   shift, which this rule suppresses by outranking `a:hover` on source order. Keep it below that. */
+.site-footer__legal {
+  padding-bottom: var(--space-4);
+}
+
+.site-footer__meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
+}
+
+/* Suppresses a:hover by SOURCE ORDER, not specificity — keep it below the base link rules. */
 .site-nav__list a, .site-nav__list a:visited, .site-footer a, .site-footer a:visited {
   color: var(--color-ink);
   text-decoration: none;
 }
 
 .card {
-  background-color: var(--color-surface-raised);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow);
+  border: var(--rule);
+  border-radius: var(--radius-md);
   padding: var(--space-5);
+  background-color: var(--color-surface);
 }
 
 .card__title {
@@ -267,38 +428,92 @@ a:visited:hover {
   grid-template-columns: 1fr;
 }
 
+/* Registered so it can be transitioned - an unregistered custom property has no type to interpolate
+   and would jump. Browsers without @property still get both end states, just no sweep between. */
+@property --btn-sweep {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+
+/* One color driving the whole halo stack, so the shadows are declared once and the states below are
+   a single line each. Registered for the same reason as --btn-sweep: an unregistered custom property
+   cannot be transitioned. */
+@property --btn-glow {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: transparent;
+}
+
 .btn, .btn:visited {
   display: inline-block;
-  padding: var(--space-3) var(--space-5);
+  padding: var(--space-2) var(--space-5);
   min-height: 44px;
+  /* transparent, not 0: the 1px still occupies space, so the button and the field stay the same
+     height. .btn--secondary paints it back, having no fill of its own to draw an edge with. */
   border: 1px solid transparent;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
+  /* Splash-fade. The hover color is a diagonal wedge that grows across the button, fading out over
+     its trailing 30% into the ink underneath - so the sweep is one moving edge, not two layers.
+     --btn-sweep is a percentage ALONG THE GRADIENT LINE, which always spans the real box, so the
+     wedge covers every corner at any width; a fixed-size background slid behind the button cannot,
+     because a diagonal reaches the far corner later than the near edge.
+     background-color is the ink end; border-box origin keeps the fill under the 1px border. */
   background-color: var(--color-accent);
+  background-image: linear-gradient(
+    135deg,
+    var(--color-accent-hover) calc(var(--btn-sweep) - 30%),
+    transparent var(--btn-sweep)
+  );
+  background-origin: border-box;
   color: var(--color-accent-ink);
+  /* text-shadow has no spread, so area comes from stacking blurs rather than enlarging one - the
+     passes composite into a dense core and a wide bloom that one shadow cannot reach at any alpha.
+     Transparent at rest, never `none`: `none` has nothing to interpolate and would pop in. */
+  text-shadow: 0 0 var(--space-3) var(--btn-glow), 0 0 var(--space-4) var(--btn-glow),
+    0 0 var(--space-5) var(--btn-glow), 0 0 var(--space-6) var(--btn-glow),
+    0 0 var(--space-7) var(--btn-glow), 0 0 var(--space-8) var(--btn-glow);
   font: inherit;
+  font-size: var(--text-lg);
   font-weight: var(--weight-semi);
   text-align: center;
   text-decoration: none;
   cursor: pointer;
 }
 
+/* Past 100% so the wedge's trailing fade clears the far corner instead of resting inside it. The
+   yellow halo blooms with the sweep, and lightens the ground right at the glyph edges as it goes. */
 .btn:hover {
-  background-color: var(--color-accent-hover);
-  color: var(--color-accent-ink);
+  --btn-sweep: 130%;
+  color: var(--color-accent-hover-ink);
+  --btn-glow: color-mix(in srgb, var(--color-lantern-yellow) 75%, transparent);
 }
 
+/* image: none is load-bearing - the splash-fade gradient would paint straight over a transparent
+   fill. transparent, not unset: a bare <button> has a UA background behind it. */
 .btn--secondary, .btn--secondary:visited {
-  background-color: var(--color-surface);
+  background-image: none;
+  background-color: transparent;
   border-color: var(--color-border);
-  color: var(--color-text);
+  color: var(--color-ink);
 }
 
+/* Both of these also match .btn:hover, so each has to put the halo back out. */
 .btn--secondary:hover {
-  background-color: var(--color-header);
-  color: var(--color-text);
+  background-color: var(--color-lantern-yellow-offwhite);
+  color: var(--color-ink);
+  --btn-glow: transparent;
 }
 
-.state-list {
+.btn:disabled, .btn[aria-disabled="true"] {
+  background-image: none;
+  background-color: var(--color-disabled);
+  color: var(--color-disabled-ink);
+  --btn-glow: transparent;
+  cursor: not-allowed;
+}
+
+.button-row {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-3);
@@ -307,8 +522,8 @@ a:visited:hover {
 /* Label/value pairs — quick facts and anything else that pairs a name to a value. */
 .facts {
   background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  border: var(--rule);
+  border-radius: var(--radius-md);
   padding: var(--space-5);
 }
 
@@ -318,19 +533,53 @@ a:visited:hover {
   justify-content: space-between;
   gap: var(--space-2) var(--space-4);
   padding-block: var(--space-3);
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: var(--rule);
 }
 
 .facts__row:last-child {
   border-bottom: 0;
 }
 
-.facts__label {
-  color: var(--color-text-muted);
+/* Scoped to .facts, never a bare dt — a global element rule is a landmine for the next <dl>. */
+.facts dt {
+  font-weight: var(--weight-semi);
 }
 
 .facts__value {
   font-weight: var(--weight-semi);
+}
+
+/* The .facts panel for a list of things rather than label/value pairs.
+   Needs the element in the selector to outrank the ul[class] padding reset in §1. */
+ul.row-list, ol.row-list {
+  border: var(--rule);
+  border-radius: var(--radius-md);
+  padding-inline: var(--space-5);
+  background-color: var(--color-surface);
+}
+
+.row-list > li {
+  padding-block: var(--space-4);
+  border-bottom: var(--rule);
+}
+
+.row-list > li:last-child {
+  border-bottom: 0;
+}
+
+.row-list__title {
+  font-size: var(--text-lg);
+  line-height: var(--leading-tight);
+  margin-bottom: var(--space-1);
+}
+
+/* Wikipedia-style citation marker. Numbers are assigned at build in first-cited order. */
+.cite {
+  font-size: 0.7em;
+  line-height: 0;
+  vertical-align: super;
+  margin-left: 0.15em;
+  font-weight: var(--weight-normal);
 }
 
 .source-list {
@@ -339,20 +588,268 @@ a:visited:hover {
   font-size: var(--text-sm);
 }
 
+/* One indent for both, so unnumbered extras line up with the numbered items' TEXT. The element in
+   the selector is load-bearing: a lone .source-list loses to the ul[class] padding reset in §1. */
+ol.source-list, ul.source-list {
+  padding-left: var(--space-5);
+}
+
+/* Numbered so a citation marker has something to point at; the count is the marker. */
+ol.source-list {
+  list-style: decimal;
+}
+
 .source-list__meta {
-  color: var(--color-text-muted);
+  display: block;
+}
+
+/* A correction shown as one: the claim struck through, the sourced answer under it. The marker
+   column spans both rows so the glyph centers against the pair, not against the label alone.
+   Sits closer to its heading and its source line than .stack's default gap - ties that rule on
+   specificity, so it only wins by living below §4. */
+.correction, .correction + * {
+  margin-top: var(--space-2);
+}
+
+.correction__row {
+  display: grid;
+  grid-template-columns: 1.5rem minmax(0, 1fr);
+  gap: 0 var(--space-2);
+  padding-block: var(--space-3);
+}
+
+/* The empty alt text is load-bearing - the dt beside it already names the row, so the glyph is
+   decoration and assistive tech should skip it rather than announce "times" or "check". */
+.correction__row::before {
+  grid-column: 1;
+  grid-row: 1 / 3;
+  align-self: center;
+  justify-self: center;
+  font-size: var(--text-2xl);
+  line-height: 1;
+}
+
+.correction__label {
+  grid-column: 2;
+  font-size: var(--text-sm);
+  color: var(--color-ink-light);
+}
+
+.correction__value {
+  grid-column: 2;
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  line-height: var(--leading-tight);
+}
+
+.correction__row--wrong::before {
+  content: "\2715" / "";
+  color: var(--color-ink);
+}
+
+.correction__row--wrong .correction__value {
+  color: var(--color-ink-light);
+  text-decoration: line-through;
+}
+
+.correction__row--right::before {
+  content: "\2713" / "";
+  color: var(--color-lantern-orange-dark);
+}
+
+/* Ties the lead-in to the field width so the two read as one control. Owns its own inner gap rather
+   than taking .stack's, so the sentence sits close to the field it runs into. */
+.madlib-block {
+  max-width: 30rem;
+}
+
+.madlib-block > * + * {
+  margin-top: var(--space-2);
+}
+
+/* Fill-in-the-blank lead-in above the state field. The cert becomes a second control at cert #2.
+   Indented to the input's TEXT rather than its border, so the sentence continues into the field. */
+.madlib {
+  font-size: var(--text-lg);
+}
+
+.madlib strong {
+  font-weight: var(--weight-semi);
+}
+
+/* The hero mosaic. Every knob lives here; the tile reads them so one place tunes the whole wall. */
+.source-wall {
+  --tile-w: 10rem;
+  --tile-h: 3rem;
+  --tile-gap: 2px;
+  --tile-condense: 0.9;
+  display: flex;
+  flex-direction: column;
+  gap: var(--tile-gap);
+}
+
+ul.source-wall__row {
+  display: flex;
+  gap: var(--tile-gap);
+}
+
+/* Half a tile plus half a gutter lands this row's seams over the next row's tile centers. */
+.source-wall__row--offset {
+  margin-left: calc((var(--tile-w) + var(--tile-gap)) / 2);
+}
+
+/* One brick. The box is fixed so a swapped-in source can never reflow the wall.
+   TEMP white fill while the tile shape is being judged. */
+.source-tile {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-1);
+  width: var(--tile-w);
+  height: var(--tile-h);
+  overflow: hidden;
+  padding-inline: var(--space-3);
+  font-size: var(--text-sm);
+  line-height: 1.15;
+  text-decoration: none;
+}
+
+/* Synthetic condensing: the width overshoot is what buys the extra characters, and scaleX gives the
+   space back. Change one without the other and the text still fits exactly as much as before. */
+.source-tile__line {
+  width: calc(100% / var(--tile-condense));
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  transform: scaleX(var(--tile-condense));
+  transform-origin: left;
+}
+
+/* Its own color declaration, so the anchor's link states never reach it by inheritance. */
+.source-tile__title {
+  color: var(--color-text);
+  font-weight: var(--weight-semi);
+}
+
+/* The tile clears the anchor's underline; the URL line puts it back, as everywhere else we use the
+   link colors. Color for all four states comes from the base link rules in §3. */
+.source-tile__host {
+  text-decoration: underline;
+}
+
+/* Set by hero-art.js for the length of a swap - a half-faded tile is not a link you can aim at. */
+.source-tile[aria-disabled="true"] {
+  pointer-events: none;
+}
+
+/* Text field plus its submit button, with the match list stacked underneath. */
+.autocomplete {
+  max-width: 30rem;
+}
+
+/* Stacked on mobile, side by side from the desktop breakpoint. */
+.autocomplete__row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.autocomplete__field {
+  position: relative;
+}
+
+/* Field and submit both take the lede's size, so the hero's three text sizes are two. Weight comes
+   from .btn, which is already semibold. flex: none plus nowrap is what stops the label wrapping -
+   a flex child defaults to shrinkable, so a squeezed row breaks the words instead of the layout. */
+.autocomplete__submit {
+  flex: none;
+  font-size: var(--text-xl);
+  white-space: nowrap;
+}
+
+/* Padding, size and leading all match .btn so the field and its submit compute the same height. */
+.autocomplete__input {
+  width: 100%;
+  min-height: 44px;
+  padding: var(--space-2) var(--space-3);
+  border: var(--rule);
+  border-radius: var(--radius-md);
+  background-color: var(--white);
+  color: var(--color-ink);
+  font: inherit;
+  font-size: var(--text-xl);
+  line-height: var(--leading-body);
+}
+
+/* The field's own border carries focus, so the global ring would be a second border around it. */
+.autocomplete__input:focus-visible {
+  outline: none;
+  border-color: var(--color-focus);
+}
+
+.autocomplete__list {
+  position: absolute;
+  z-index: 5;
+  left: 0;
+  right: 0;
+  margin-top: var(--space-1);
+  border: var(--rule);
+  border-radius: var(--radius-md);
+  background-color: var(--white);
+  overflow: hidden;
+}
+
+.autocomplete__list[hidden] {
+  display: none;
+}
+
+.autocomplete__option {
+  position: relative;
+  padding: var(--space-2) var(--space-3);
+  cursor: pointer;
+}
+
+/* Inset to the text edge so a separator divides two rows without cutting the list in two. */
+.autocomplete__option + .autocomplete__option::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: var(--space-3);
+  right: var(--space-3);
+  border-top: var(--rule);
+}
+
+.autocomplete__option[aria-selected="true"] {
+  background-color: var(--color-lantern-yellow-offwhite);
+}
+
+.faq__item {
+  border-bottom: var(--rule);
+  padding-block: var(--space-3);
+}
+
+.faq__item:first-child {
+  border-top: var(--rule);
+}
+
+.faq__item summary {
+  cursor: pointer;
+  font-weight: var(--weight-semi);
+}
+
+.faq__item p {
+  margin-top: var(--space-2);
 }
 
 /* 6. Utilities ------------------------------------------------------------ */
 
-/* Prose styling is scoped, never applied to bare elements — a global `p, ul`
-   rule becomes a landmine for the second list on a page. */
-.prose {
-  max-width: var(--measure);
-}
-
+/* Scoped, never bare elements — a global `p, ul` rule is a landmine for the next list on a page. */
 .prose > * + * {
   margin-top: var(--space-4);
+}
+
+.prose p {
+  font-size: var(--text-lg);
 }
 
 .prose ul, .prose ol {
@@ -360,33 +857,77 @@ a:visited:hover {
 }
 
 .page-title {
-  font-size: var(--text-3xl);
+  font-size: var(--text-4xl);
   line-height: var(--leading-tight);
 }
 
+/* balance evens the lines out rather than filling the first one, which is what was pushing a stray
+   word onto a third line. Unsupported browsers just get the normal greedy wrap. */
+.page-title--hero {
+  text-wrap: balance;
+}
+
+.page-title--hero em {
+  font-weight: var(--weight-bold);
+}
+
+/* The dark orange, not the accent: --color-lantern-orange measures 2.85:1 on the page and misses
+   even the 3:1 large-text bar. CLAUDE.md ▸ Design system — both accents are surfaces, never ink. */
+.page-title__accent {
+  color: var(--color-lantern-orange-dark);
+  font-weight: var(--weight-bold);
+}
+
+/* On the FOLLOWING element: a margin-bottom here would collapse into the .stack gap and do nothing.
+   Ties .stack > * + * on specificity and only wins on source order, so keep it below §4. */
+.page-title--hero + * {
+  margin-top: var(--space-6);
+}
+
+/* Three separate mechanisms in here are load-bearing. CLAUDE.md ▸ Gotchas ▸ CSS before touching it. */
+@supports (background-clip: text) or (-webkit-background-clip: text) {
+  /* Ink is the background COLOR and the gradient only ever hides it; never put ink in the gradient. */
+  .sweep-in {
+    background-color: var(--color-ink);
+    background-image: linear-gradient(90deg, transparent 0 48%, var(--color-page) 53% 100%);
+    background-size: 220% 100%;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    /* Widens the painted area past the last glyph's ink. The negative margin gives most of that
+       width back - the 0.08em it keeps is the breathing room after the word. */
+    padding-right: 0.24em;
+    margin-right: -0.12em;
+  }
+}
+
 .section-title {
-  font-size: var(--text-xl);
+  font-size: var(--text-2xl);
   line-height: var(--leading-tight);
 }
 
 .lede {
-  font-size: var(--text-lg);
-  color: var(--color-text-muted);
-  max-width: var(--measure);
+  font-size: var(--text-xl);
 }
 
-.muted {
-  color: var(--color-text-muted);
+.caption {
+  font-size: var(--text-sm);
+}
+
+/* An inline label, not emphasis - so it carries weight without <strong>'s semantics. */
+.label {
+  font-weight: var(--weight-semi);
 }
 
 .badge {
   display: inline-block;
   padding: var(--space-1) var(--space-3);
-  border: 1px solid var(--color-border);
+  border: var(--rule);
   border-radius: var(--radius-pill);
   background-color: var(--color-surface);
   font-size: var(--text-sm);
-  color: var(--color-text-muted);
 }
 
 .visually-hidden {
@@ -404,8 +945,86 @@ a:visited:hover {
     --gutter: var(--space-6);
   }
 
+  .page {
+    padding-top: var(--space-9);
+  }
+
   .card-grid {
     grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  }
+
+  /* minmax(0,…) on both: a bare fr floors at min-content and won't give up its share of the row. */
+  .split {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    align-items: start;
+  }
+
+  /* Even halves, against the 60/40 the rest of the site splits on. */
+  .split--even {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .stack-xl > * + * {
+    margin-top: var(--space-11);
+  }
+
+  /* Back into its column, offset left and overhanging the right edge. */
+  .hero-art {
+    justify-content: flex-start;
+    min-width: 115%;
+    margin-inline: -5% 0;
+  }
+
+  /* The main column's width for a block that stands alone on a page rather than inside a .split. */
+  .col-main {
+    width: 60%;
+  }
+
+  .page-title--hero {
+    font-size: var(--text-6xl);
+  }
+
+  .site-header__toggle {
+    display: none;
+  }
+
+  /* --open can survive a resize, so the panel's mobile dressing is undone rather than left latched. */
+  .site-nav, .site-header--open .site-nav {
+    display: block;
+    flex-basis: auto;
+    padding-block: 0;
+  }
+
+  .site-header--open::after {
+    content: none;
+  }
+
+  .site-nav__list {
+    flex-direction: row;
+    align-items: center;
+    font-size: var(--text-lg);
+    font-weight: var(--weight-normal);
+  }
+
+  .site-nav__list > li + li {
+    /* border-left: var(--rule); */
+    margin-left: var(--space-4);
+    padding-left: var(--space-4);
+  }
+
+  .site-nav__list a {
+    padding-block: 0;
+  }
+
+  .autocomplete__row {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  /* A fixed basis rather than 1 1 auto: the field is sized to the longest state name, not to
+     whatever space is left over, so the form ends up only as wide as it needs to be. */
+  .autocomplete__field {
+    flex: 0 0 17rem;
   }
 }
 
@@ -416,8 +1035,35 @@ a:visited:hover {
     transition: transform 150ms ease-out;
   }
 
-  .btn,
+  .site-header {
+    transition: transform 200ms ease-out;
+  }
+
   a {
     transition: background-color 120ms ease-out, color 120ms ease-out;
   }
+
+  /* The splash-fade is --btn-sweep alone. color runs SHORTER on purpose: the label flips light to
+     dark across the sweep, and matching the durations parks a mid-grey over a mid-brown. */
+  .btn {
+    transition: --btn-sweep 160ms ease-out, background-color 120ms ease-out, color 70ms ease-out,
+      --btn-glow 160ms ease-out;
+  }
+
+  /* `backwards` holds the hidden frame through the delay; no `forwards`, so nothing stays latched. */
+  .sweep-in {
+    animation: sweep-in 400ms ease-out 200ms backwards;
+  }
+}
+
+/* Only `from` is declared — the implicit `to` is the resting state in §6. */
+@keyframes sweep-in {
+  from {
+    background-position: 100% 0;
+  }
+}
+
+/* Kept outside the motion query: hiding must work whether or not it animates. */
+.site-header--hidden {
+  transform: translateY(-100%);
 }

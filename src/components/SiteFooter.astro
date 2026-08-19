@@ -4,10 +4,31 @@ const year = new Date().getFullYear();
 
 <footer class="site-footer">
 	<div class="site-footer__inner">
-		<p>
+		<p class="site-footer__legal">
 			LanternCert is free study material, not legal advice. Always confirm requirements with your
 			state's licensing agency.
 		</p>
-		<p class="muted">&copy; {year} LanternCert</p>
+		<div class="site-footer__meta">
+			<p>&copy; {year} LanternCert</p>
+			{/* Hidden by default so a short page never renders it, then revealed if the page scrolls. */}
+			<p class="site-footer__top" hidden><a href="#main">Back to top</a></p>
+		</div>
 	</div>
 </footer>
+
+<script>
+	const link = document.querySelector(".site-footer__top");
+
+	// Against the layout viewport, not a scroll position — the question is whether the page CAN scroll.
+	const sync = () => {
+		if (link instanceof HTMLElement) {
+			link.hidden = document.documentElement.scrollHeight <= window.innerHeight + 1;
+		}
+	};
+
+	sync();
+	window.addEventListener("resize", sync, { passive: true });
+	// Late-loading fonts and images change the page height after first paint.
+	window.addEventListener("load", sync);
+	if (document.fonts) document.fonts.ready.then(sync);
+</script>

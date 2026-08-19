@@ -1,7 +1,9 @@
 ---
-import { certs } from "../lib/cert-data.js";
-
-const entries = Object.values(certs);
+const links = [
+	{ href: "/#certifications", label: "Certifications" },
+	{ href: "/about", label: "About" },
+	{ href: "/progress", label: "My Progress" },
+];
 ---
 
 <header class="site-header">
@@ -15,16 +17,73 @@ const entries = Object.values(certs);
 				height="138"
 			/>
 		</a>
-		<nav class="site-nav" aria-label="Certifications">
+		<button
+			class="site-header__toggle"
+			type="button"
+			aria-expanded="false"
+			aria-controls="site-nav"
+			aria-label="Menu"
+		>
+			<span></span><span></span><span></span>
+		</button>
+		<nav class="site-nav" id="site-nav" aria-label="Main">
 			<ul class="site-nav__list">
-				{
-					entries.map((cert) => (
-						<li>
-							<a href={`/${cert.slug}`}>{cert.name}</a>
-						</li>
-					))
-				}
+				{links.map((link) => (
+					<li>
+						<a href={link.href}>{link.label}</a>
+					</li>
+				))}
 			</ul>
 		</nav>
 	</div>
 </header>
+
+<script>
+	const header = document.querySelector(".site-header");
+	const toggle = /** @type {HTMLButtonElement | null} */ (
+		header?.querySelector(".site-header__toggle") ?? null
+	);
+	const desktop = window.matchMedia("(min-width: 768px)");
+
+	const isOpen = () => toggle?.getAttribute("aria-expanded") === "true";
+
+	/** @param {boolean} open */
+	function setOpen(open) {
+		toggle?.setAttribute("aria-expanded", String(open));
+		header?.classList.toggle("site-header--open", open);
+		if (open) header?.classList.remove("site-header--hidden");
+	}
+
+	toggle?.addEventListener("click", () => setOpen(!isOpen()));
+
+	// A tap on the scrim reports the header as its target, the scrim being a pseudo-element of it.
+	header?.addEventListener("click", (event) => {
+		if (event.target === header) setOpen(false);
+	});
+
+	// The keyboard's half of the same dismissal, since the scrim can only be tapped.
+	document.addEventListener("keydown", (event) => {
+		if (event.key !== "Escape" || !isOpen()) return;
+		setOpen(false);
+		toggle?.focus();
+	});
+
+	// Mobile only: hides on the way down, returns on the way up. Desktop keeps it always visible.
+	let last = window.scrollY;
+	window.addEventListener(
+		"scroll",
+		() => {
+			const y = window.scrollY;
+			const menuOpen = header?.classList.contains("site-header--open");
+			if (!desktop.matches && !menuOpen) {
+				// The 80px floor stops the header flickering away during a short bounce at the top.
+				header?.classList.toggle("site-header--hidden", y > last && y > 80);
+			}
+			last = y;
+		},
+		{ passive: true },
+	);
+
+	// Crossing into desktop mid-session leaves the mobile state behind otherwise.
+	desktop.addEventListener("change", () => header?.classList.remove("site-header--hidden"));
+</script>
