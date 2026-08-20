@@ -859,6 +859,13 @@ ul.source-wall__row {
   line-height: var(--leading-body);
 }
 
+/* The value starts invisible so the region guess can replace it before it is ever read. The delayed
+   animation is a safety net: without it, JS failing anywhere would hide the value permanently. */
+[data-geo] .autocomplete__input:not(.autocomplete__input--revealed) {
+  color: var(--white);
+  animation: field-reveal 1ms linear 400ms forwards;
+}
+
 /* The field's own border carries focus, so the global ring would be a second border around it. */
 .autocomplete__input:focus-visible {
   outline: none;
@@ -1179,10 +1186,9 @@ ul.source-wall__row {
     animation: sweep-in 400ms ease-out 200ms backwards;
   }
 
-  /* Scoped to [data-geo] so it cannot outlive its reason - it masks the region guess overwriting the
-     rendered fallback. CLAUDE.md ▸ Design system. */
+  /* Runs when the reveal class lands, so the fade always covers the swap rather than racing it. */
   [data-geo] .autocomplete__input {
-    animation: field-fade-in 50ms ease-out;
+    transition: color 100ms ease-out;
   }
 }
 
@@ -1195,10 +1201,10 @@ ul.source-wall__row {
   }
 }
 
-/* White rather than transparent: the field's own fill is white, so the value resolves out of it. */
-@keyframes field-fade-in {
-  from {
-    color: var(--white);
+/* The one place the reveal is not driven by JS - see the safety net in §6. */
+@keyframes field-reveal {
+  to {
+    color: var(--color-ink);
   }
 }
 

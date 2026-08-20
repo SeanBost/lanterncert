@@ -119,6 +119,9 @@ export function initAutocomplete() {
   input.addEventListener("focus", selectAll);
   input.addEventListener("click", selectAll);
 
+  // Covers tabbing as well as clicking, so nobody can ever be typing into invisible text.
+  input.addEventListener("focus", reveal);
+
   input.addEventListener("blur", close);
 
   function go() {
@@ -141,15 +144,19 @@ export function initAutocomplete() {
     );
   }
 
-  // The rendered value is a fallback the region guess replaces - but a reader's own typing outranks
-  // both, and the guess can land after they have started.
+  // Until this runs the value is invisible, so it must run whether or not a state came back.
+  function reveal() {
+    input.classList.add("autocomplete__input--revealed");
+  }
+
   async function prefillFromRegion() {
     if (form.dataset.geo !== "true") return;
     const data = await pendingRegion();
-    if (!data) return;
-    if (touched || document.activeElement === input) return;
-    const option = findExactOption(options, data.state);
-    if (option) fill(option);
+    const option = data && findExactOption(options, data.state);
+    // The rendered value is a fallback the guess replaces - but a reader who got to the field first
+    // owns it, and the guess can land after they have started.
+    if (option && !touched && document.activeElement !== input) fill(option);
+    reveal();
   }
 
   sync();
