@@ -21,6 +21,9 @@ function one(value, unit) {
       return `${NUMBER.format(value)} min`;
     case "years":
       return `${NUMBER.format(value)} ${value === 1 ? "year" : "years"}`;
+    // 0 is a verified "never", not a gap — null is the gap. data-handling.md ▸ Cert facts ▸ Contract.
+    case "renewal":
+      return value === 0 ? "Does not expire" : one(value, "years");
     default:
       return NUMBER.format(value);
   }

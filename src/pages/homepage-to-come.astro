@@ -57,20 +57,20 @@ for (const size of rowSizes) {
 */}
 
 <Layout
-	title="LanternCert - Learn what matters"
+	title="LanternCert - Learn exactly what gets you certified"
 	bareTitle
-	description="Free, no-signup info and practice tests for certification exams, with every fact cited to the agency that publishes it."
+	description="Free info and practice tests for earning certifications, with every fact cited to the agency that publishes it. No ads, and no signup needed."
 >
 	<div class="stack-xl">
 		<div class="split split--even">
 			<div class="stack-lg">
 				<div class="stack">
 					<h1 class="page-title page-title--hero">
-						Learn <em class="sweep-in">exactly</em> what gets you
-						<span class="page-title__accent">certified</span>
+						Learn <em>exactly</em> what gets you
+						<span class="page-title__accent sweep-in">certified</span>
 					</h1>
 					<p class="lede">
-						Quick facts, free practice tests, and what the certification process is like. 
+						Requirements, free practice tests, and what the certification process is like.
             All cited and linked on-page.
 					</p>
 				</div>
@@ -82,18 +82,20 @@ for (const size of rowSizes) {
 			</div>
 
 			{/* PLACEHOLDER - the first bricks of the source mosaic that fills this column. */}
-			<div class="hero-art">
+			<div class="hero-art baseline-drop">
 				<div class="source-wall" id="source-wall">
 					{
 						wallRows.map((row, i) => (
 							<ul class:list={["source-wall__row", i % 2 === 0 && "source-wall__row--offset"]}>
 								{row.map((source) => (
 									<li>
+										{/* Out of the tab order on purpose - the wall is artwork. CLAUDE.md ▸ Current state. */}
 										<a
 											class="source-tile"
 											href={source.url}
 											target="_blank"
 											rel="noopener noreferrer"
+											tabindex="-1"
 										>
 											<span class="source-tile__line source-tile__title">{source.title}</span>
 											<span class="source-tile__line source-tile__host">{source.url}</span>
@@ -109,54 +111,55 @@ for (const size of rowSizes) {
 
 		<div class="split">
 			<section class="stack" aria-labelledby="trust-heading">
-        <h2 class="section-title" id="trust-heading">Everything to know in one place, cited</h2>
+        <h2 class="section-title" id="trust-heading">Everything you need to know, cited</h2>
 				<div class="prose">
 					<p>
 						AI overviews and other prep sites confidently omit important-to-know details. 
-            Government sources overcomplicate sharing how things work. 
-						LanternCert organizes everything you need to know to get certified in a single place, and transparently links every source. 
+            Certification agencies overcomplicate how they share requirements. 
+						LanternCert organizes everything you need to know to get certified in a single place, and transparently links every source.
+            All with no ads, and no signup needed.
 					</p>
 					<p>
-						Discover what your certification journey looks like, then study and take practice tests on what your exam will cover.
-						See where every fact and question's material was validated to reinforce and further your learning. 
+						Discover what certification takes, then study and take practice tests on what your exam will cover.
+						See where every fact and question's material is validated to reinforce and further your learning. 
 					</p>
 				</div>
 			</section>
 
-			<section aria-labelledby="correction-heading">
-				<div class="card stack">
-					<h3 class="card__title" id="correction-heading">Don't settle for sorta</h3>
+			<section class="stack accent-edge baseline-drop" aria-labelledby="correction-heading">
+				<h3 class="correction__title" id="correction-heading">Don't settle for sorta</h3>
 
-					<dl class="correction">
-						<div class="correction__row correction__row--wrong">
-							<dt class="correction__label">What others have claimed</dt>
-							<dd class="correction__value">20 questions, 75% or 80% to pass</dd>
-						</div>
-						<div class="correction__row correction__row--right">
-							<dt class="correction__label">What LanternCert makes clear</dt>
-							<dd class="correction__value">
-								Two 20-question sections, Road Rules and Road Signs, needing 15 right on each
-							</dd>
-						</div>
-					</dl>
+				<p>Others often muddy important details, like with Georgia Department of Driver Services' Knowledge Exam.</p>
 
-					<p>
-						<span class="label">Source:</span>{" "}
-						<a
-							href="https://dds.georgia.gov/testing-and-training/test-and-exams-information"
-							target="_blank"
-							rel="noopener noreferrer"
-						>
-							Georgia DDS: Test and Exams Information
-						</a>
-					</p>
-				</div>
+				<dl class="correction">
+					<div class="correction__row correction__row--wrong">
+						<dt class="correction__label">What others have claimed</dt>
+						<dd class="correction__value">20 questions, 75% or 80% to pass</dd>
+					</div>
+					<div class="correction__row correction__row--right">
+						<dt class="correction__label">What LanternCert makes clear</dt>
+						<dd class="correction__value">
+							Two 20-question sections tailored by license type, Road Rules and Road Signs, needing 15 right on each
+						</dd>
+					</div>
+				</dl>
+
+				<p>
+					<span class="label">Source:</span>{" "}
+					<a
+						href="https://dds.georgia.gov/testing-and-training/test-and-exams-information"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						Georgia DDS: Test and Exams Information
+					</a>
+				</p>
 			</section>
 		</div>
 
-		<section class="stack" aria-labelledby="certs-heading" id="certifications">
+		<section class="stack gap-tight" aria-labelledby="certs-heading" id="certifications">
 			<h2 class="section-title" id="certs-heading">Certifications we cover</h2>
-			<ul class="row-list col-main">
+			<ul class="row-list accent-edge col-main">
 				{
 					list.map((cert) => (
 						<li>
@@ -168,6 +171,9 @@ for (const size of rowSizes) {
 					))
 				}
 			</ul>
+			<p class="col-main">
+				We're always researching to expand what we cover, so check back soon.
+			</p>
 		</section>
 	</div>
 </Layout>

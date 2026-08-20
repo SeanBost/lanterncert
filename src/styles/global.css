@@ -241,6 +241,8 @@ a:visited:hover, .source-tile:visited:hover .source-tile__host {
   overflow: hidden;
   min-height: 22rem;
   margin-inline: calc(var(--gutter) * -1);
+  /* The mask below covers the element's own background too, so the panel fades out with the tiles. */
+  background-color: color-mix(in srgb, var(--color-lantern-orange-nearwhite) 25%, transparent);
   /* Two crossed fades, multiplied. Only the alpha matters, so --black is standing in for "opaque"
      rather than acting as a color choice. `intersect` is load-bearing: the default `add` unions the
      layers into a fully opaque mask, which is also the safe way this degrades. */
@@ -409,14 +411,14 @@ a:visited:hover, .source-tile:visited:hover .source-tile__host {
   text-decoration: none;
 }
 
+/* No border, so the warm fill is the only thing drawing the card. */
 .card {
-  border: var(--rule);
   border-radius: var(--radius-md);
   padding: var(--space-5);
-  background-color: var(--color-surface);
+  background-color: var(--color-lantern-orange-nearwhite);
 }
 
-.card__title {
+.card__title, .correction__title {
   font-size: var(--text-lg);
   line-height: var(--leading-tight);
   margin-bottom: var(--space-2);
@@ -426,6 +428,26 @@ a:visited:hover, .source-tile:visited:hover .source-tile__host {
   display: grid;
   gap: var(--space-4);
   grid-template-columns: 1fr;
+}
+
+/* An accent down the left edge instead of a card. Painted as a sized background rather than a
+   border, which cannot hold a gradient; unsupported color-mix drops the whole image, never the text. */
+.accent-edge {
+  padding-left: var(--space-5);
+  background-image: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-lantern-yellow-dark) 50%, var(--color-lantern-orange)),
+    var(--color-lantern-orange-dark)
+  );
+  background-size: 3px 100%;
+  background-repeat: no-repeat;
+  background-position: left top;
+}
+
+/* The ul[class] reset in §1 is (0,1,1) and silently outranks the class above; a list needs its
+   element in the selector to get the indent back. CLAUDE.md ▸ Gotchas ▸ CSS. */
+ul.accent-edge, ol.accent-edge {
+  padding-left: var(--space-5);
 }
 
 /* Registered so it can be transitioned - an unregistered custom property has no type to interpolate
@@ -519,25 +541,47 @@ a:visited:hover, .source-tile:visited:hover .source-tile__host {
   gap: var(--space-3);
 }
 
-/* Label/value pairs — quick facts and anything else that pairs a name to a value. */
+/* Label/value pairs — quick facts and anything else that pairs a name to a value.
+   The role override is scoped, so the row dividers pick up the accent through --rule. */
 .facts {
-  background-color: var(--color-surface);
-  border: var(--rule);
-  border-radius: var(--radius-md);
-  padding: var(--space-5);
+  --color-border: var(--color-lantern-orange-dark);
+  padding-right: var(--space-5);
+}
+
+/* Two classes, so it outranks .stack > * + * wherever either rule sits in the file. The accent line
+   is the panel's own background, so this drops the line with the content rather than just the text. */
+.stack > * + .facts {
+  margin-top: var(--space-5);
 }
 
 .facts__row {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  gap: var(--space-2) var(--space-4);
-  padding-block: var(--space-3);
+  gap: var(--space-1) var(--space-4);
+  padding-block: var(--space-2);
   border-bottom: var(--rule);
 }
 
+/* Each group is its own dl, so the last row of each one closes on a clean edge under its heading. */
 .facts__row:last-child {
   border-bottom: 0;
+}
+
+.facts__group {
+  margin-bottom: var(--space-1);
+  color: var(--color-lantern-orange-dark);
+}
+
+/* Stands in for a whole group whose every fact was checked and found unpublished. */
+.facts__empty {
+  padding-block: var(--space-2);
+  color: var(--color-ink-light);
+}
+
+/* Only a group opening below another one needs air above it; the first sits flush with the padding. */
+.facts > * + .facts__group {
+  margin-top: var(--space-5);
 }
 
 /* Scoped to .facts, never a bare dt — a global element rule is a landmine for the next <dl>. */
@@ -549,15 +593,7 @@ a:visited:hover, .source-tile:visited:hover .source-tile__host {
   font-weight: var(--weight-semi);
 }
 
-/* The .facts panel for a list of things rather than label/value pairs.
-   Needs the element in the selector to outrank the ul[class] padding reset in §1. */
-ul.row-list, ol.row-list {
-  border: var(--rule);
-  border-radius: var(--radius-md);
-  padding-inline: var(--space-5);
-  background-color: var(--color-surface);
-}
-
+/* A list of things rather than label/value pairs. The surface is .accent-edge's job now. */
 .row-list > li {
   padding-block: var(--space-4);
   border-bottom: var(--rule);
@@ -585,7 +621,7 @@ ul.row-list, ol.row-list {
 .source-list {
   display: grid;
   gap: var(--space-3);
-  font-size: var(--text-sm);
+  font-size: var(--text-base);
 }
 
 /* One indent for both, so unnumbered extras line up with the numbered items' TEXT. The element in
@@ -599,8 +635,21 @@ ol.source-list {
   list-style: decimal;
 }
 
+/* Held a step under the link and its number, so the entry leads with the document. */
 .source-list__meta {
   display: block;
+  font-size: var(--text-sm);
+}
+
+.source-list__verify {
+  font-style: italic;
+}
+
+/* Upright inside the italic line, so the separators stay separators rather than joining the text.
+   The breathing room is margin rather than spaces in the markup, so it stays one place to tune. */
+.source-list__sep {
+  font-style: normal;
+  margin-inline: 0.5em;
 }
 
 /* A correction shown as one: the claim struck through, the sourced answer under it. The marker
@@ -867,29 +916,43 @@ ul.source-wall__row {
   text-wrap: balance;
 }
 
+/* The oblique leans the last glyph toward the next word, so the gap after it is set by hand. */
 .page-title--hero em {
   font-weight: var(--weight-bold);
+  margin-right: 0.12em;
 }
 
 /* The dark orange, not the accent: --color-lantern-orange measures 2.85:1 on the page and misses
    even the 3:1 large-text bar. CLAUDE.md ▸ Design system — both accents are surfaces, never ink. */
 .page-title__accent {
-  color: var(--color-lantern-orange-dark);
+  --sweep-ink: var(--color-lantern-orange-dark);
+  --sweep-from: var(--black);
+  --sweep-glow: color-mix(in srgb, var(--color-lantern-yellow) 15%, transparent);
+  color: var(--sweep-ink);
   font-weight: var(--weight-bold);
 }
 
 /* On the FOLLOWING element: a margin-bottom here would collapse into the .stack gap and do nothing.
-   Ties .stack > * + * on specificity and only wins on source order, so keep it below §4. */
-.page-title--hero + * {
+   Two classes, so it outranks .stack > * + * on specificity rather than on where it sits. */
+.stack > .page-title--hero + * {
   margin-top: var(--space-6);
+}
+
+/* Registered for the same reason as --btn-glow: an unregistered custom property has no type to
+   interpolate, so the halo would snap at the midpoint instead of blooming with the sweep. */
+@property --sweep-glow {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: transparent;
 }
 
 /* Three separate mechanisms in here are load-bearing. CLAUDE.md ▸ Gotchas ▸ CSS before touching it. */
 @supports (background-clip: text) or (-webkit-background-clip: text) {
-  /* Ink is the background COLOR and the gradient only ever hides it; never put ink in the gradient. */
+  /* The swept color is the background COLOR and the gradient only ever hides it; never put it in the
+     gradient. --sweep-ink is what the word sweeps TO, --sweep-from what the gradient hides it with. */
   .sweep-in {
-    background-color: var(--color-ink);
-    background-image: linear-gradient(90deg, transparent 0 48%, var(--color-page) 53% 100%);
+    background-color: var(--sweep-ink, var(--color-ink));
+    background-image: linear-gradient(90deg, transparent 0 48%, var(--sweep-from, var(--color-page)) 53% 100%);
     background-size: 220% 100%;
     background-repeat: no-repeat;
     background-position: 0 0;
@@ -900,6 +963,12 @@ ul.source-wall__row {
        width back - the 0.08em it keeps is the breathing room after the word. */
     padding-right: 0.24em;
     margin-right: -0.12em;
+    /* The button's halo, cast from the glyph instead of laid under it: a text-shadow paints ON TOP of
+       a background-clip fill and would smear yellow across the letters. Chained drop-shadows each
+       take the previous result as input, so three reach the bloom the button needs six passes for. */
+    filter: drop-shadow(0 0 var(--space-2) var(--sweep-glow))
+      drop-shadow(0 0 var(--space-4) var(--sweep-glow))
+      drop-shadow(0 0 var(--space-6) var(--sweep-glow));
   }
 }
 
@@ -964,8 +1033,20 @@ ul.source-wall__row {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   }
 
+  /* Drops a right column onto the left column's first BASELINE rather than its box top. The measured
+     drop is 11.4px and this is the scale step nearest it. Margin, not padding, so a column carrying
+     a fill moves together with its background. */
+  .baseline-drop {
+    margin-top: var(--space-3);
+  }
+
   .stack-xl > * + * {
     margin-top: var(--space-11);
+  }
+
+  /* Pulls one block up under the one above it. Two classes, so it outranks the (0,1,0) step above. */
+  .stack-xl > .gap-tight {
+    margin-top: var(--space-9);
   }
 
   /* Back into its column, offset left and overhanging the right edge. */
@@ -977,7 +1058,7 @@ ul.source-wall__row {
 
   /* The main column's width for a block that stands alone on a page rather than inside a .split. */
   .col-main {
-    width: 60%;
+    width: 50%;
   }
 
   .page-title--hero {
@@ -1056,10 +1137,12 @@ ul.source-wall__row {
   }
 }
 
-/* Only `from` is declared — the implicit `to` is the resting state in §6. */
+/* Only `from` is declared — the implicit `to` is the resting state in §6. The halo blooms over the
+   same 400ms, so it arrives as the word turns; an element that sets no --sweep-glow animates nothing. */
 @keyframes sweep-in {
   from {
     background-position: 100% 0;
+    --sweep-glow: transparent;
   }
 }
 

@@ -86,9 +86,18 @@ export function initAutocomplete() {
 
   input.addEventListener("keydown", (event) => {
     if (event.key === "Escape") return close();
-    if (event.key === "Enter" && active >= 0) {
-      event.preventDefault();
-      return choose(matches[active]);
+    if (event.key === "Enter") {
+      // A lone match is unambiguous, so Enter takes it and goes rather than only filling the field.
+      if (matches.length === 1) {
+        event.preventDefault();
+        choose(matches[0]);
+        return go();
+      }
+      if (active >= 0) {
+        event.preventDefault();
+        return choose(matches[active]);
+      }
+      return;
     }
     if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return;
     if (matches.length === 0) return;
@@ -106,9 +115,13 @@ export function initAutocomplete() {
 
   input.addEventListener("blur", close);
 
+  function go() {
+    if (selected) window.location.href = `${base}/${selected.code.toLowerCase()}`;
+  }
+
   form.addEventListener("submit", (event) => {
     event.preventDefault();
-    if (selected) window.location.href = `${base}/${selected.code.toLowerCase()}`;
+    go();
   });
 
   sync();

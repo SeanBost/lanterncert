@@ -2,7 +2,7 @@
 // mounted per page. The wall renders real sources server-side and works with this script absent.
 
 const FADE_MS = 1000;
-const HOLD_MS = 1000;
+const HOLD_MS = 200;
 
 // Mirrored from src/content/sources/motorcycle-endorsement-sources.json - every multi-state and
 // non-MVP entry, then FL/GA/TX/CA round-robin to 48. HAND-MAINTAINED: a registry edit does not
@@ -124,14 +124,13 @@ export function initHeroArt() {
   async function swap(cell) {
     // A link that changes identity under the cursor is a mis-click waiting to happen, so mid-fade it
     // stops being a link at all. The attribute drives the pointer-events rule in global.css.
+    // The tile's own tabindex="-1" is permanent and set in the markup, so nothing here touches it.
     cell.el.setAttribute("aria-disabled", "true");
-    cell.el.setAttribute("tabindex", "-1");
     await fade(cell.el, 1, 0);
     cell.shown ^= 1;
     paint(cell);
     await fade(cell.el, 0, 1);
     cell.el.removeAttribute("aria-disabled");
-    cell.el.removeAttribute("tabindex");
   }
 
   // Re-shuffled every pass: a fixed order would swap each tile at the same point in every cycle,

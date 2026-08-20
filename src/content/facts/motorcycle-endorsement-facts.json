@@ -10,6 +10,7 @@
     },
     "exam": {
       "examType":            { "value": "MSFBRC", "source": "fl-hsmv-endorsement-info" },
+      "examName":            { "value": null, "source": "xx-msf-brc-handbook" },
       "questionCount":       { "value": 25, "source": "xx-msf-brc-handbook" },
       "timeLimitMinutes":    { "value": null, "source": "xx-msf-brc-handbook" },
       "passingScorePercent": { "value": 80, "source": "xx-msf-brc-handbook" },
@@ -24,7 +25,7 @@
       "courseType":      { "value": "MSFBRC", "source": "fl-hsmv-endorsement-info" },
       "findCourse":      { "value": "stateLocator", "source": "fl-hsmv-course-locations" },
       "requirementType": { "value": "50ccUp", "source": "fl-hsmv-endorsement-info" },
-      "expirationType":  { "value": "never", "source": "fl-hsmv-endorsement-faqs" }
+      "renewalYears":    { "value": 0, "source": "fl-hsmv-endorsement-faqs" }
     },
     "additionalResources": [
       "fl-hsmv-frtp-courses",
@@ -48,6 +49,7 @@
     },
     "exam": {
       "examType":            { "value": "GA", "source": "ga-dds-test-exams" },
+      "examName":            { "value": "Motorcycle Knowledge Exam", "source": "ga-dds-test-exams" },
       "questionCount":       { "value": 40, "source": "ga-dds-test-exams" },
       "timeLimitMinutes":    { "value": null, "source": null },
       "passingScorePercent": { "value": 75, "source": "ga-dds-test-exams" },
@@ -62,7 +64,7 @@
       "courseType":      { "value": "MSFBRC", "source": "ga-dds-motorcycle-manual" },
       "findCourse":      { "value": "stateProgram", "source": "ga-dds-gmsp-registration" },
       "requirementType": { "value": "50ccUp", "source": "ga-dds-motorcycle-hub" },
-      "expirationType":  { "value": "8year", "source": "ga-dds-fees-terms" }
+      "renewalYears":    { "value": 8, "source": "ga-dds-fees-terms" }
     },
     "additionalResources": [
       "ga-dds-drivers-manual-testing",
@@ -83,6 +85,7 @@
     },
     "exam": {
       "examType":            { "value": "MNS2011", "source": "tx-tdlr-curriculum" },
+      "examName":            { "value": null, "source": "tx-tdlr-curriculum" },
       "questionCount":       { "value": null, "source": "tx-tdlr-curriculum" },
       "timeLimitMinutes":    { "value": null, "source": "tx-tdlr-curriculum" },
       "passingScorePercent": { "value": null, "source": "tx-tdlr-curriculum" },
@@ -97,7 +100,7 @@
       "courseType":      { "value": "MNS2011", "source": "tx-tdlr-curriculum" },
       "findCourse":      { "value": "stateLocator", "source": "tx-tdlr-find-schools" },
       "requirementType": { "value": "50ccUp", "source": "tx-stat-541-201" },
-      "expirationType":  { "value": "8year", "source": "tx-dps-fees" }
+      "renewalYears":    { "value": 8, "source": "tx-dps-fees" }
     },
     "additionalResources": [
       "tx-stat-521-001",
@@ -119,6 +122,7 @@
     },
     "exam": {
       "examType":            { "value": "CA", "source": "ca-dmv-instruction-permits" },
+      "examName":            { "value": null, "source": "ca-dmv-instruction-permits" },
       "questionCount":       { "value": null, "source": null },
       "timeLimitMinutes":    { "value": null, "source": null },
       "passingScorePercent": { "value": 80, "source": "ca-dmv-instruction-permits" },
@@ -133,7 +137,7 @@
       "courseType":      { "value": "CA", "source": "ca-chp-cmsp" },
       "findCourse":      { "value": "stateProgram", "source": "ca-cmsp-new-riders" },
       "requirementType": { "value": "all", "source": "ca-dmv-motorcycle-licenses" },
-      "expirationType":  { "value": "5year", "source": "ca-veh-12816" }
+      "renewalYears":    { "value": 5, "source": "ca-veh-12816" }
     },
     "additionalResources": [
       "ca-dmv-motorcyclists-guide",

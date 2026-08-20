@@ -5,14 +5,46 @@ import { file } from "astro/loaders";
 
 import registry from "../content/sources/motorcycle-endorsement-sources.json";
 import exams from "../content/exams/motorcycle-endorsement-exams.json";
+import display from "../content/display/motorcycle-endorsement-display.json";
+import states from "../content/states.json";
 
 export const slug = "motorcycle-endorsement";
 
 // The exams file is the authority on the examType vocabulary — a token exists iff it has an entry.
 const examTypes = Object.keys(exams) as [string, ...string[]];
 
+// Every constrained vocabulary in one place: what Zod enforces, and what the display file must cover.
+const vocab: Record<string, [string, ...string[]]> = {
+  minLicense: ["None", "Learners", "Drivers"],
+  transferOutOfStateEndorsement: ["all", "none", "non-Alabama"],
+  courseType: ["MSFBRC", "MNS2011", "CA"],
+  findCourse: ["stateLocator", "stateProgram"],
+  requirementType: ["50ccUp", "all"],
+  examType: examTypes,
+};
+
 export function collections(kit: any) {
   const { makeSourceRef, makeFact, amount, year, scopeEnum, appliesToEnum } = kit;
+
+  // A token with no display string renders raw to a reader, so it fails the build instead.
+  // data-handling.md ▸ Cert facts ▸ Display.
+  const form = z.strictObject({ short: z.string().min(1), long: z.string().min(1) });
+  const displayMap = z
+    .record(
+      z.string(),
+      z.record(z.string(), z.union([form, z.strictObject({ named: form, unnamed: form })])),
+    )
+    .parse(display);
+  // A state-code token is satisfied by the field's _stateSpecific pattern, since its display string
+  // is built from the state's own facts rather than written out. data-handling.md ▸ Display §5.
+  const stateCodes = new Set(Object.values(states).map((s: any) => s.abbreviation));
+  for (const [field, tokens] of Object.entries(vocab)) {
+    for (const token of tokens) {
+      if (displayMap[field]?.[token]) continue;
+      if (stateCodes.has(token) && displayMap[field]?._stateSpecific) continue;
+      throw new Error(`${slug}-display.json: no entry for ${field}.${token}`);
+    }
+  }
 
   const sourceRef = makeSourceRef(registry, `${slug}-sources`);
   const fact = makeFact(sourceRef);
@@ -75,6 +107,8 @@ export function collections(kit: any) {
         }),
         exam: z.strictObject({
           examType: fact(z.enum(examTypes)),
+          // What the agency calls its exam. Null where the documents only describe it generically.
+          examName: fact(z.string().min(1)),
           questionCount: fact(z.number().int().positive()),
           timeLimitMinutes: fact(z.number().int().positive()),
           passingScorePercent: fact(z.number().min(0).max(100)),
@@ -84,12 +118,13 @@ export function collections(kit: any) {
           dmvCost: fact(amount),
           classCost: fact(amount),
           minAge: fact(z.number().int().positive()),
-          minLicense: fact(z.enum(["None", "Learners", "Drivers"])),
-          transferOutOfStateEndorsement: fact(z.enum(["all", "none", "non-Alabama"])),
-          courseType: fact(z.enum(["MSFBRC", "MNS2011", "CA"])),
-          findCourse: fact(z.enum(["stateLocator", "stateProgram"])),
-          requirementType: fact(z.enum(["50ccUp", "all"])),
-          expirationType: fact(z.enum(["never", "8year", "5year"])),
+          minLicense: fact(z.enum(vocab.minLicense)),
+          transferOutOfStateEndorsement: fact(z.enum(vocab.transferOutOfStateEndorsement)),
+          courseType: fact(z.enum(vocab.courseType)),
+          findCourse: fact(z.enum(vocab.findCourse)),
+          requirementType: fact(z.enum(vocab.requirementType)),
+          // Years until renewal. 0 is "does not expire"; null is "not researched".
+          renewalYears: fact(z.number().int().nonnegative()),
         }),
         additionalResources: z.array(sourceRef()),
       })

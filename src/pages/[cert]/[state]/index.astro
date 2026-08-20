@@ -4,13 +4,14 @@ import Card from "../../../components/Card.astro";
 import {
 	certStatePaths,
 	citedSourceIds,
-	loadExtraSources,
+	// loadExtraSources,
 	loadSourceEntries,
 	loadState,
 	stateInfo,
+	tokenDisplay,
 } from "../../../lib/cert-data.js";
 import { formatFact } from "../../../lib/format-fact.js";
-import { formatSourceMeta } from "../../../lib/format-source.js";
+import { sourceMetaParts } from "../../../lib/format-source.js";
 import { placeholderTopics } from "../../../lib/placeholder-topics.js";
 
 export async function getStaticPaths() {
@@ -20,7 +21,7 @@ export async function getStaticPaths() {
 const { cert, state } = Astro.params;
 const info = stateInfo(state);
 const facts = await loadState(cert, state);
-const extra = await loadExtraSources(cert, facts);
+// const extra = await loadExtraSources(cert, facts);
 
 const term = facts.meta.localTerm;
 const base = `/${cert}/${state}`;
@@ -38,34 +39,80 @@ const validated = new Date(Date.UTC(vy, vm - 1, vd)).toLocaleDateString("en-US",
 // CLAUDE.md ▸ Gotchas ▸ Process.
 const sectioned = facts.exam.isExamSectioned.value === true;
 
-const quickFacts = [
-	["Minimum age", formatFact(facts.criteria.minAge.value, "years"), facts.criteria.minAge],
-	["Agency fees", formatFact(facts.criteria.dmvCost.value, "usd"), facts.criteria.dmvCost],
-	["Course cost", formatFact(facts.criteria.classCost.value, "usd"), facts.criteria.classCost],
+/** @param {string | null} text */
+const approx = (text) => (text === null ? null : `~${text}`);
+
+/** @type {(list: any[][]) => { label: string, value: string | null, sourceId: string | null }[]} */
+const rows = (list) =>
+	list.map(([label, value, fact]) => ({ label, value, sourceId: fact.source?.id ?? null }));
+
+const token = tokenDisplay(cert, facts);
+
+const examRows = rows([
+	["Questions in total", formatFact(facts.exam.questionCount.value), facts.exam.questionCount],
 	[
-		sectioned ? "Questions in total" : "Questions on the exam",
-		formatFact(facts.exam.questionCount.value),
-		facts.exam.questionCount,
-	],
-	[
-		sectioned ? "Passing score on each section" : "Passing score",
+		sectioned ? "Passing score for each section" : "Passing score",
 		formatFact(facts.exam.passingScorePercent.value, "percent"),
 		facts.exam.passingScorePercent,
 	],
-	[
-		"Time limit",
-		formatFact(facts.exam.timeLimitMinutes.value, "minutes"),
-		facts.exam.timeLimitMinutes,
-	],
-].map(([label, value, fact]) => ({ label, value, sourceId: fact.source?.id ?? null }));
+	["Time limit", formatFact(facts.exam.timeLimitMinutes.value, "minutes"), facts.exam.timeLimitMinutes],
+]);
 
-// Numbered in the order markers appear, so a null value doesn't burn a number. The second loop keeps
-// a source backing an unsurfaced fact on the page it provides provenance for.
+// A sourced null is "checked, nothing published"; an unsourced one is "nobody has looked". Only the
+// first earns the sentence — the second would assert something about the state that we never verified.
+const examUnpublished = examRows.every((row) => row.value === null && row.sourceId !== null);
+
+// Grouped by the question a reader is asking, not by the shape of the facts file.
+const factGroups = [
+	{
+		title: "Certification Requirements",
+		fallback: null,
+		facts: rows([
+			["Minimum age", formatFact(facts.criteria.minAge.value, "years"), facts.criteria.minAge],
+			["Minimum license", token("minLicense", facts.criteria.minLicense), facts.criteria.minLicense],
+			[
+				"Renewal period",
+				formatFact(facts.criteria.renewalYears.value, "renewal"),
+				facts.criteria.renewalYears,
+			],
+			[
+				`${facts.meta.agencyCode} fees`,
+				formatFact(facts.criteria.dmvCost.value, "usd"),
+				facts.criteria.dmvCost,
+			],
+			// Providers set their own tuition, so the figure is approximate however precise the range looks.
+			["Course cost", approx(formatFact(facts.criteria.classCost.value, "usd")), facts.criteria.classCost],
+		]),
+	},
+	{
+		title: "Exam Details",
+		fallback: examUnpublished ? `${info.name} sets no statewide exam format.` : null,
+		// The passing score is the most foundational exam property here, so its source is the one that
+		// backs a sentence standing in for the whole group. Never assume the nulls share a source.
+		fallbackSource: facts.exam.passingScorePercent.source?.id ?? null,
+		facts: examRows,
+	},
+];
+
+// Numbered in the order markers appear, so a null value doesn't burn a number. A fallback sentence is
+// itself a claim, so it takes a number too.
+// The last loop keeps a source backing an unsurfaced fact on the page it provides provenance for.
 const citations = new Map();
-for (const fact of quickFacts) {
-	if (fact.value === null || !fact.sourceId) continue;
-	if (!citations.has(fact.sourceId)) citations.set(fact.sourceId, citations.size + 1);
+for (const group of factGroups) {
+	if (group.fallback) {
+		const id = group.fallbackSource;
+		if (id && !citations.has(id)) citations.set(id, citations.size + 1);
+		continue;
+	}
+	for (const fact of group.facts) {
+		if (fact.value === null || !fact.sourceId) continue;
+		if (!citations.has(fact.sourceId)) citations.set(fact.sourceId, citations.size + 1);
+	}
 }
+const groups = factGroups.map((group) => ({
+	...group,
+	cite: group.fallback ? (citations.get(group.fallbackSource) ?? null) : null,
+}));
 for (const id of citedSourceIds(facts)) {
 	if (!citations.has(id)) citations.set(id, citations.size + 1);
 }
@@ -89,30 +136,47 @@ const modes = [
 				<h1 class="page-title">{info.name} {term}</h1>
 				<p class="caption">All information last validated {validated}.</p>
 				{/* Placeholder for the per-cert generated summary, which will carry its own citations. */}
-				<p class="lede">
-					What {facts.meta.agencyCode} requires, what it costs, and free practice built from {info.name}'s
-					own material.
-				</p>
+				<div class="prose">
+					<p>
+						What {facts.meta.agencyCode} requires, what it costs, and free practice built from {info.name}'s
+						own material.
+					</p>
+				</div>
 			</div>
 
-			<section class="stack" aria-labelledby="facts-heading">
-				<h2 class="section-title" id="facts-heading">Quick facts</h2>
-				<dl class="facts">
+			<section class="stack baseline-drop" aria-labelledby="facts-heading">
+				<h2 class="section-title" id="facts-heading">What you need to know</h2>
+				{/* A div, not a dl — a heading cannot live inside a dl, so each group brings its own. */}
+				<div class="facts accent-edge">
 					{
-						quickFacts.map((fact) => {
-							const number = fact.value === null ? null : citations.get(fact.sourceId);
-							return (
-								<div class="facts__row">
-									<dt>{fact.label}</dt>
-									{/* No whitespace between the two — a superscript citation hugs its value. */}
-									<dd class="facts__value">
-										{fact.value ?? "Not published"}{number && <a class="cite" href={`#source-${number}`}>[{number}]</a>}
-									</dd>
-								</div>
-							);
-						})
+						groups.map((group) => (
+							<Fragment>
+								<h3 class="facts__group">{group.title}</h3>
+								{/* No whitespace inside the p — the marker hugs the sentence it backs. */}
+								{group.fallback ? (
+									<p class="facts__empty">
+										{group.fallback}{group.cite && <a class="cite" href={`#source-${group.cite}`}>[{group.cite}]</a>}
+									</p>
+								) : (
+									<dl>
+										{group.facts.map((fact) => {
+											const number = fact.value === null ? null : citations.get(fact.sourceId);
+											return (
+												<div class="facts__row">
+													<dt>{fact.label}</dt>
+													{/* No whitespace between the two — a superscript citation hugs its value. */}
+													<dd class="facts__value">
+														{fact.value ?? "Not published"}{number && <a class="cite" href={`#source-${number}`}>[{number}]</a>}
+													</dd>
+												</div>
+											);
+										})}
+									</dl>
+								)}
+							</Fragment>
+						))
 					}
-				</dl>
+				</div>
 			</section>
 		</div>
 
@@ -153,18 +217,31 @@ const modes = [
 							<a href={source.url} target="_blank" rel="noopener noreferrer">
 								{source.title}
 							</a>
-							<span class="source-list__meta">{formatSourceMeta(source)}</span>
+							<span class="source-list__meta">{source.description}</span>
+							{/* Separators are their own spans so the italic can skip them. */}
+							<span class="source-list__meta source-list__verify">
+								{sourceMetaParts(source).map((part, i) => (
+									<Fragment>
+										{i > 0 && <span class="source-list__sep">|</span>}
+										{part}
+									</Fragment>
+								))}
+							</span>
 						</li>
 					))
 				}
 			</ol>
 		</section>
 
+		{/*
+		  PARKED - uncited sources competed with the Sources list above for a reader's attention.
+		  Restoring it means uncommenting the loadExtraSources import and the `extra` const too.
+
 		{
 			extra.length > 0 && (
 				<section class="stack" aria-labelledby="more-heading">
-					{/* Named for the state, not the agency — the list holds documents it did not publish. */}
-					<h2 class="section-title" id="more-heading">Helpful {info.name} resources</h2>
+					Named for the state, not the agency - the list holds documents it did not publish.
+					<h2 class="section-title" id="more-heading">Additional {info.name} resources</h2>
 					<ul class="source-list">
 						{extra.map((source) => (
 							<li>
@@ -178,5 +255,6 @@ const modes = [
 				</section>
 			)
 		}
+		*/}
 	</div>
 </Layout>

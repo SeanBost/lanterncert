@@ -25,6 +25,41 @@ export function certConfig(cert) {
   return certs[cert] ?? null;
 }
 
+// Display strings for constrained token values, keyed by cert slug. The schema module guarantees
+// every token has an entry, so a lookup here never misses. data-handling.md ▸ Cert facts ▸ Display.
+const displays = Object.fromEntries(
+  Object.entries(import.meta.glob("../content/display/*-display.json", { eager: true })).map(
+    ([path, mod]) => [path.match(/([^/]+)-display\.json$/)[1], mod.default],
+  ),
+);
+
+const stateCodes = new Set(Object.values(states).map((s) => s.abbreviation));
+
+/**
+ * A token belonging to one state is named with that state's code, so a state code is the whole test
+ * for "build this from the state's own facts". CLAUDE.md ▸ Locked decisions.
+ * @returns {(field: string, fact: any, form?: "short" | "long") => string | null}
+ */
+export function tokenDisplay(cert, facts) {
+  const map = displays[cert] ?? {};
+  const vars = {
+    agencyCode: facts.meta.agencyCode,
+    agencyName: facts.meta.agencyName,
+    examName: facts.exam.examName?.value ?? null,
+  };
+  const fill = (text) => text.replace(/\{(\w+)\}/g, (_, key) => vars[key] ?? "");
+
+  return (field, fact, form = "short") => {
+    if (fact.value === null) return null;
+    const entry = map[field]?.[fact.value];
+    if (entry) return fill(entry[form]);
+
+    const pattern = stateCodes.has(fact.value) ? map[field]?._stateSpecific : null;
+    if (!pattern) return null;
+    return fill((vars.examName ? pattern.named : pattern.unnamed)[form]);
+  };
+}
+
 export function stateInfo(slug) {
   return states[slug] ?? null;
 }

@@ -48,6 +48,10 @@
           "_naming": "Same convention as courseType: an exam belonging to exactly one state takes that state's code, and only exams spanning states get a broad name. A state code here means content that travels nowhere else."
         }
       },
+      "examName": {
+        "what": "What the agency actually calls this exam, in the agency's own capitalization — Georgia's 'Motorcycle Knowledge Exam'. Null where the documents only ever describe it generically.",
+        "why": "Same job as meta.agencyName: it lets the page name the thing the way a rider will see it named. It also removes the reason to enumerate one display string per state — a state-specific examType builds its label from this plus agencyCode, so adding a state that runs its own exam costs no copy. Null is a researched answer, not a gap: 'we read the document and it just says knowledge test' is what makes the generic phrasing correct rather than lazy. Verify the capitalization, since a lowercase description is exactly the signal that the value should be null."
+      },
       "questionCount": {
         "what": "Number of questions on the knowledge exam named by examType.",
         "why": "Where a state administers no test of its own, this describes the knowledge test inside the required course — examType records which, and meta.note carries the detail. Without examType this field silently implied a DMV exam that does not exist."
@@ -126,14 +130,9 @@
           "all": "Required at every engine size, with no moped exemption. California is the case: a moped or motorized bicycle needs a Class M2 and a motorcycle needs an M1, so there is no unlicensed tier at all."
         }
       },
-      "expirationType": {
-        "what": "How long the credential lasts before it must be renewed.",
-        "why": "A token rather than a number so that 'never' and a fixed term can share one field. New terms follow the same form.",
-        "values": {
-          "never": "Does not expire on its own.",
-          "8year": "Expires on an eight-year term.",
-          "5year": "Expires on a five-year term."
-        }
+      "renewalYears": {
+        "what": "Whole years the credential lasts before it must be renewed. 0 means it does not expire on its own.",
+        "why": "An integer rather than a token, so a new term needs no vocabulary entry and the value can be compared, sorted and rendered by the same number-plus-unit path every other figure uses. 0 carries 'never' because null already means 'not researched' and the two are different claims — a state that never expires the credential is a verified fact, not a gap."
       }
     },
 
