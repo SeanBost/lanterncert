@@ -36,8 +36,10 @@ img, svg {
 
 :root {
   /* Type */
-  --font-body: "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-display: "Bitter", Georgia, "Times New Roman", serif;
+  --font-body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* EXPERIMENT - all-sans page. To revert: restore the Bitter stack here and its family in the
+     Layout.astro font URL. Was: "Bitter", Georgia, "Times New Roman", serif */
+  --font-display: var(--font-body);
   --weight-normal: 400;
   --weight-semi: 600;
   --weight-bold: 700;
@@ -45,13 +47,13 @@ img, svg {
 
   --text-sm: 0.875rem;
   --text-base: 1rem;
-  --text-lg: 1.125rem;
-  --text-xl: 1.375rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.5rem;
   --text-2xl: 1.75rem;
   --text-3xl: 2.25rem;
   --text-4xl: 2.5rem;
   --text-5xl: 3rem;
-  --text-6xl: 3.375rem;
+  --text-6xl: 3.5rem;
 
   --leading-tight: 1.25;
   --leading-body: 1.6;
@@ -81,10 +83,11 @@ img, svg {
   /* Form controls only — the page itself is never white. */
   --white: #ffffff;
 
-  /* The button's hover label only. True black outruns --color-ink on orange, 7.21:1 against 5.92. */
+  /* Stands in for "opaque" in the hero art's mask gradients, where only the alpha is ever read. */
   --black: #000000;
 
   --color-ink: #1c1a1f;
+  --color-ink-med: #2e2a33;
   --color-ink-light: #4a4552;
   --color-ink-lightest: #736b80;
 
@@ -114,10 +117,10 @@ img, svg {
   --color-border: var(--color-ink-lightest);
   /* The two ends of the button's hover sweep, each with the type color it carries. Orange is a
      surface and never holds type, so it arrives as the sweep rather than sitting under the label. */
-  --color-accent: var(--color-ink);
+  --color-accent: var(--color-ink-med);
   --color-accent-hover: var(--color-lantern-orange);
   --color-accent-ink: var(--color-page);
-  --color-accent-hover-ink: var(--black);
+  --color-accent-hover-ink: var(--color-ink);
   --color-focus: var(--color-lantern-orange-dark);
   /* Deliberately 1.83:1, the one place contrast is unwanted — the fill reads as a control, the label
      as unreadable, so a disabled button never invites the click. CLAUDE.md ▸ Design system. */
@@ -125,7 +128,7 @@ img, svg {
   --color-disabled-ink: var(--color-ink-light);
 
   /* Layout */
-  --page-max: 72rem;
+  --page-max: 78rem;
   --gutter: var(--space-4);
   --rule: 1px solid var(--color-border);
   --header-h: 3.75rem;
@@ -140,6 +143,9 @@ html {
   -webkit-text-size-adjust: 100%;
   /* The header is fixed at every width, so in-page anchors need somewhere to land. */
   scroll-padding-top: calc(var(--header-h) + var(--space-4));
+  /* The hero art overhangs its column on purpose; this stops the overhang scrolling the document.
+     Needed on BOTH html and body — measured: either one alone still scrolls. Gotchas ▸ CSS. */
+  overflow-x: clip;
 }
 
 body {
@@ -153,25 +159,29 @@ body {
   display: flex;
   flex-direction: column;
   padding-top: var(--header-h);
+  /* The other half of the pair above. Clips at the viewport, so the bleed survives where there's room. */
+  overflow-x: clip;
 }
 
-/* Bare selectors on purpose: the display face is the identity of every h1 and h2, class or not. */
+/* Bare selectors on purpose: weight and color are the identity of every heading, class or not.
+   A heading wanting another color sets it on a class, which outranks these - see .facts__group. */
 h1 {
   font-family: var(--font-display);
-  font-weight: var(--weight-semi);
+  font-weight: var(--weight-bold);
   font-size: var(--text-xl);
+  color: var(--color-ink-med);
 }
 
 h2 {
   font-family: var(--font-display);
-  font-weight: var(--weight-bold);
+  font-weight: var(--weight-extrabold);
+  color: var(--color-ink-med);
 }
 
-/* Sized explicitly so an h3 can never inherit its way up past an h2. */
 h3 {
   font-family: var(--font-display);
-  font-weight: var(--weight-semi);
-  font-size: var(--text-lg);
+  font-weight: var(--weight-bold);
+  color: var(--color-ink-med);
 }
 
 :focus-visible {
@@ -315,6 +325,25 @@ a:visited:hover, .source-tile:visited:hover .source-tile__host {
   width: auto;
 }
 
+/* Positioning context for the glow twin, which stacks on the base rather than replacing its src. */
+.site-header__mark {
+  position: relative;
+  display: block;
+}
+
+/* Same intrinsic size as the base, so top/left alone registers the two exactly. */
+.site-header__logo--glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+}
+
+.site-header__brand:hover .site-header__logo--glow,
+.site-header__brand:focus-visible .site-header__logo--glow {
+  opacity: 1;
+}
+
 /* margin-right pulls the target in off the gutter without shrinking it. The full bar height is
    load-bearing: it is the tallest item, so it alone sets the top flex line once the panel wraps. */
 .site-header__toggle {
@@ -419,7 +448,7 @@ a:visited:hover, .source-tile:visited:hover .source-tile__host {
 }
 
 .card__title, .correction__title {
-  font-size: var(--text-lg);
+  font-size: var(--text-xl);
   line-height: var(--leading-tight);
   margin-bottom: var(--space-2);
 }
@@ -906,7 +935,7 @@ ul.source-wall__row {
 }
 
 .page-title {
-  font-size: var(--text-4xl);
+  font-size: var(--text-5xl);
   line-height: var(--leading-tight);
 }
 
@@ -918,7 +947,7 @@ ul.source-wall__row {
 
 /* The oblique leans the last glyph toward the next word, so the gap after it is set by hand. */
 .page-title--hero em {
-  font-weight: var(--weight-bold);
+  font-weight: var(--weight-extrabold);
   margin-right: 0.12em;
 }
 
@@ -926,10 +955,10 @@ ul.source-wall__row {
    even the 3:1 large-text bar. CLAUDE.md ▸ Design system — both accents are surfaces, never ink. */
 .page-title__accent {
   --sweep-ink: var(--color-lantern-orange-dark);
-  --sweep-from: var(--black);
+  --sweep-from: var(--color-ink-med);
   --sweep-glow: color-mix(in srgb, var(--color-lantern-yellow) 15%, transparent);
   color: var(--sweep-ink);
-  font-weight: var(--weight-bold);
+  font-weight: var(--weight-extrabold);
 }
 
 /* On the FOLLOWING element: a margin-bottom here would collapse into the .stack gap and do nothing.
@@ -981,6 +1010,12 @@ ul.source-wall__row {
   font-size: var(--text-xl);
 }
 
+/* An explicit width for the paragraph under a page title, NOT a ch-based measure token. At the
+   --text-lg prose size 34rem is roughly 68 characters; each 1rem is about 2 characters either way. */
+.page-intro {
+  max-width: 34rem;
+}
+
 .caption {
   font-size: var(--text-sm);
 }
@@ -1024,8 +1059,10 @@ ul.source-wall__row {
 
   /* minmax(0,…) on both: a bare fr floors at min-content and won't give up its share of the row. */
   .split {
-    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    grid-template-columns: minmax(0, 4fr) minmax(0, 3fr);
     align-items: start;
+    /* Column only — the base `gap` stays the row rhythm between the halves once they stack. */
+    column-gap: var(--space-10);
   }
 
   /* Even halves, against the 60/40 the rest of the site splits on. */
@@ -1037,7 +1074,7 @@ ul.source-wall__row {
      drop is 11.4px and this is the scale step nearest it. Margin, not padding, so a column carrying
      a fill moves together with its background. */
   .baseline-drop {
-    margin-top: var(--space-3);
+    margin-top: var(--space-4);
   }
 
   .stack-xl > * + * {
@@ -1056,9 +1093,10 @@ ul.source-wall__row {
     margin-inline: -5% 0;
   }
 
-  /* The main column's width for a block that stands alone on a page rather than inside a .split. */
+  /* The main column's width for a block that stands alone on a page rather than inside a .split.
+     Held at its pre-widening pixel width, so the extra page width never lengthens a line of copy. */
   .col-main {
-    width: 50%;
+    width: 45%;
   }
 
   .page-title--hero {
@@ -1122,6 +1160,11 @@ ul.source-wall__row {
 
   a {
     transition: background-color 120ms ease-out, color 120ms ease-out;
+  }
+
+  /* Matches the button's sweep, so the two hover effects in the chrome read as one gesture. */
+  .site-header__logo--glow {
+    transition: opacity 160ms ease-out;
   }
 
   /* The splash-fade is --btn-sweep alone. color runs SHORTER on purpose: the label flips light to

@@ -1,8 +1,14 @@
 // Browser-side behavior for the hero source wall. The hook is an id because at most one may be
 // mounted per page. The wall renders real sources server-side and works with this script absent.
 
-const FADE_MS = 1000;
-const HOLD_MS = 200;
+// A swap runs 2 * FADE_MS and one begins every INTERVAL_MS, so 2 * FADE_MS / INTERVAL_MS overlap.
+// Keep that above two - at exactly two the only fade-in and fade-out are coincident and read as one beat.
+const FADE_MS = 2000;
+const INTERVAL_MS = 1000;
+// Off a metronome, so the eye can't predict the next swap. 0 disables.
+const JITTER = 0.0;
+// Only how often a paused wall re-checks whether it may resume. Not a gap between swaps.
+const POLL_MS = 200;
 
 // Mirrored from src/content/sources/motorcycle-endorsement-sources.json - every multi-state and
 // non-MVP entry, then FL/GA/TX/CA round-robin to 48. HAND-MAINTAINED: a registry edit does not
@@ -121,7 +127,21 @@ export function initHeroArt() {
   const form = document.getElementById("autocomplete");
   const paused = () => document.hidden || !onScreen || !!form?.contains(document.activeElement);
 
-  async function swap(cell) {
+  // Re-shuffled every pass: a fixed order would swap each tile at the same point in every cycle,
+  // which the eye starts to track. Alternating the pair is what makes a pass reversible.
+  // The in-flight skip guards the pass BOUNDARY - without it a tile ending one pass could be drawn
+  // again at the start of the next while still mid-fade, running two animations on one element.
+  let queue = [];
+  const inFlight = new Set();
+  function nextIndex() {
+    if (!queue.length) queue = randomOrder(cells.length);
+    const slot = Math.max(0, queue.findIndex((i) => !inFlight.has(i)));
+    return queue.splice(slot, 1)[0];
+  }
+
+  async function swap(index) {
+    const cell = cells[index];
+    inFlight.add(index);
     // A link that changes identity under the cursor is a mis-click waiting to happen, so mid-fade it
     // stops being a link at all. The attribute drives the pointer-events rule in global.css.
     // The tile's own tabindex="-1" is permanent and set in the markup, so nothing here touches it.
@@ -131,17 +151,16 @@ export function initHeroArt() {
     paint(cell);
     await fade(cell.el, 0, 1);
     cell.el.removeAttribute("aria-disabled");
+    inFlight.delete(index);
   }
 
-  // Re-shuffled every pass: a fixed order would swap each tile at the same point in every cycle,
-  // which the eye starts to track. Alternating the pair is what makes a pass reversible.
+  // Started rather than awaited, so a swap still running overlaps the ones after it. That single
+  // line is what stacks the fades; a paused wall stops STARTING swaps and lets the rest land.
   async function run() {
     for (;;) {
-      for (const i of randomOrder(cells.length)) {
-        while (paused()) await wait(HOLD_MS);
-        await swap(cells[i]);
-        await wait(HOLD_MS);
-      }
+      while (paused()) await wait(POLL_MS);
+      swap(nextIndex());
+      await wait(INTERVAL_MS * (1 + (Math.random() * 2 - 1) * JITTER));
     }
   }
 

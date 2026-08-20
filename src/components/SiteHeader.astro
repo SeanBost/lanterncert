@@ -9,13 +9,23 @@ const links = [
 <header class="site-header">
 	<div class="site-header__inner">
 		<a class="site-header__brand" href="/">
-			<img
-				class="site-header__logo"
-				src="/lanterncert-logo.png"
-				alt="LanternCert"
-				width="836"
-				height="138"
-			/>
+			<span class="site-header__mark">
+				<img
+					class="site-header__logo"
+					src="/lanterncert-logo.png"
+					alt="LanternCert"
+					width="820"
+					height="138"
+				/>
+				{/* Decorative twin, crossfaded in on hover. Empty alt so the mark is announced once. */}
+				<img
+					class="site-header__logo site-header__logo--glow"
+					src="/lanterncert-logo-glow.png"
+					alt=""
+					width="820"
+					height="138"
+				/>
+			</span>
 		</a>
 		<button
 			class="site-header__toggle"
