@@ -4,7 +4,7 @@ import SiteHeader from "../components/SiteHeader.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 import { site } from "../lib/cert-data.js";
 
-const { title, description, bareTitle = false, noindex = false } = Astro.props;
+const { title, description, bareTitle = false, noindex = false, geo = false } = Astro.props;
 
 // Title standard: "[brief self-describing title] - LanternCert", homepage excepted.
 const pageTitle = bareTitle ? title : `${title} - ${site.name}`;
@@ -18,6 +18,17 @@ const canonical = new URL(path, site.url).href;
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+		{/* A pending stylesheet blocks every script below it, so this has to stay above the first
+		    <link> to start the request before first paint. src/scripts/autocomplete.js consumes it. */}
+		{geo && (
+			<script is:inline>
+				window.__lanternGeo = fetch("/api/geo")
+					.then((r) => (r.ok ? r.json() : null))
+					.catch(() => null);
+			</script>
+		)}
+
 		<meta name="generator" content={Astro.generator} />
 		<link rel="icon" href="/favicon.ico" />
 

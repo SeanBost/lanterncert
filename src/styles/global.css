@@ -124,8 +124,8 @@ img, svg {
   --color-focus: var(--color-lantern-orange-dark);
   /* Deliberately 1.83:1, the one place contrast is unwanted — the fill reads as a control, the label
      as unreadable, so a disabled button never invites the click. CLAUDE.md ▸ Design system. */
-  --color-disabled: var(--color-ink-lightest);
-  --color-disabled-ink: var(--color-ink-light);
+  --color-disabled: var(--color-ink-light);
+  --color-disabled-ink: var(--color-ink-lightest);
 
   /* Layout */
   --page-max: 78rem;
@@ -1178,6 +1178,12 @@ ul.source-wall__row {
   .sweep-in {
     animation: sweep-in 400ms ease-out 200ms backwards;
   }
+
+  /* Scoped to [data-geo] so it cannot outlive its reason - it masks the region guess overwriting the
+     rendered fallback. CLAUDE.md ▸ Design system. */
+  [data-geo] .autocomplete__input {
+    animation: field-fade-in 50ms ease-out;
+  }
 }
 
 /* Only `from` is declared — the implicit `to` is the resting state in §6. The halo blooms over the
@@ -1186,6 +1192,13 @@ ul.source-wall__row {
   from {
     background-position: 100% 0;
     --sweep-glow: transparent;
+  }
+}
+
+/* White rather than transparent: the field's own fill is white, so the value resolves out of it. */
+@keyframes field-fade-in {
+  from {
+    color: var(--white);
   }
 }
 

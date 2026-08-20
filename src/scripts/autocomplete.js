@@ -130,20 +130,25 @@ export function initAutocomplete() {
     go();
   });
 
+  // Layout starts this in <head> so the request is not waiting on this bundle; the fallback covers a
+  // page that mounts the control without setting Layout's own `geo`.
+  function pendingRegion() {
+    return (
+      window.__lanternGeo ??
+      fetch("/api/geo")
+        .then((r) => (r.ok ? r.json() : null))
+        .catch(() => null)
+    );
+  }
+
   // The rendered value is a fallback the region guess replaces - but a reader's own typing outranks
   // both, and the guess can land after they have started.
   async function prefillFromRegion() {
     if (form.dataset.geo !== "true") return;
-    let state = null;
-    try {
-      const response = await fetch("/api/geo");
-      if (!response.ok) return;
-      ({ state } = await response.json());
-    } catch {
-      return;
-    }
+    const data = await pendingRegion();
+    if (!data) return;
     if (touched || document.activeElement === input) return;
-    const option = findExactOption(options, state);
+    const option = findExactOption(options, data.state);
     if (option) fill(option);
   }
 
