@@ -9,6 +9,7 @@ const {
 	label = "Your state",
 	submitLabel = "Start Learning",
 	value = "",
+	geo = false,
 } = Astro.props;
 
 // Rendered enabled when the preset value already names a jurisdiction, so the button never flashes
@@ -16,7 +17,13 @@ const {
 const preselected = findExactOption(options, value);
 ---
 
-<form class="autocomplete" id="autocomplete" data-base={base} data-options={JSON.stringify(options)}>
+<form
+	class="autocomplete"
+	id="autocomplete"
+	data-base={base}
+	data-options={JSON.stringify(options)}
+	data-geo={geo ? "true" : undefined}
+>
 	<div class="autocomplete__row">
 		<div class="autocomplete__field">
 			<label class="visually-hidden" for="autocomplete-input">{label}</label>

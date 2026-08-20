@@ -18,6 +18,7 @@ export function initAutocomplete() {
   let matches = [];
   let active = -1;
   let selected = null;
+  let touched = false;
 
   const norm = (value) => value.trim().toLowerCase();
 
@@ -44,10 +45,14 @@ export function initAutocomplete() {
     render();
   }
 
-  function choose(option) {
+  function fill(option) {
     input.value = option.name;
     close();
     sync();
+  }
+
+  function choose(option) {
+    fill(option);
     input.focus();
     // focus() selects the whole value; a just-picked state wants a caret, not a pending overwrite.
     input.setSelectionRange(option.name.length, option.name.length);
@@ -78,6 +83,7 @@ export function initAutocomplete() {
   }
 
   input.addEventListener("input", () => {
+    touched = true;
     matches = search(input.value);
     active = -1;
     render();
@@ -124,5 +130,23 @@ export function initAutocomplete() {
     go();
   });
 
+  // The rendered value is a fallback the region guess replaces - but a reader's own typing outranks
+  // both, and the guess can land after they have started.
+  async function prefillFromRegion() {
+    if (form.dataset.geo !== "true") return;
+    let state = null;
+    try {
+      const response = await fetch("/api/geo");
+      if (!response.ok) return;
+      ({ state } = await response.json());
+    } catch {
+      return;
+    }
+    if (touched || document.activeElement === input) return;
+    const option = findExactOption(options, state);
+    if (option) fill(option);
+  }
+
   sync();
+  prefillFromRegion();
 }
