@@ -7,13 +7,12 @@ JSON content files, and what deploys is HTML, CSS, and a small amount of client 
 modes.
 
 **Status: pre-alpha.** Scaffold and content pipeline are in place, and the deploy pipeline is live —
-what's published is a placeholder page, not the product.
+what's published is a placeholder page, not a completed product. A WIP version as I build is at [lanterncert.com/homepage-to-come](https://lanterncert.com/homepage-to-come/)
 
 ## Stack
-- **Astro** — static site generator, builds to `/dist`
-- JSON content + `.astro` components, mobile-first
-- Google Fonts, 1–2 faces *(not yet chosen)*
-- Free Cloudflare Pages hosting, Git-connected
+- **Astro**, a static site generator with built-in validation, builds to `/dist`
+- JSON content + `.astro` components
+- Free Cloudflare Pages hosting, Github-hooked
 - GA4 with custom events *(planned)*
 
 ## Commands
@@ -47,7 +46,7 @@ scripts/             content-research tooling
 
 ## How it's put together
 
-A certification is a slug — `motorcycle-endorsement` — and that slug is the registry key, the URL
+A certification is a slug, like `motorcycle-endorsement`, and that slug is the registry key, the URL
 segment, and the stem of every file belonging to that cert. Adding a certification means adding
 files, not rewriting routes. Anything true of a state regardless of cert lives once, in
 `states.json`, and joins on the key.
@@ -59,17 +58,17 @@ citation naming a document that isn't in the registry is intended to fail the bu
 
 Exam parameters are recorded as each agency actually publishes them, including when that's *not at
 all*. A missing value stays null instead of being filled with a plausible one, and a structure that
-doesn't flatten cleanly — an exam scored per section rather than overall — keeps its structure.
+doesn't flatten cleanly, like an exam scored per section rather than overall, keeps its structure.
 
 ## Sourcing
 
-Facts come from official agency documents and nothing else — no attorney pages, no journalism, no
+Facts come from official agency documents and nothing else. No attorney pages, no journalism, no
 competing practice-test sites. Questions and explanations are written fresh rather than paraphrased
 from a manual.
 
 `scripts/` holds the research tooling: a fetcher that renders through local headless Chrome and
 extracts text from PDFs, and an auditor that re-fetches every cited page on a 21-day cycle and
-reports what changed. Snapshots are stored locally and gitignored — the registry publishes metadata
+reports what changed. Snapshots are stored locally and gitignored - the registry publishes metadata
 about documents, never the documents.
 
 Each state's facts carry the date they were last verified, and that date is meant to be visible to
@@ -80,8 +79,8 @@ Push to `main`. Cloudflare Pages watches the repo, runs `npm run build` on its o
 publishes `/dist`. `.nvmrc` pins Node 24 so their build matches local.
 
 ## Legal
-Test-preparation material assembled from publicly available sources. Not official agency material.
-Verify current requirements with your state's licensing agency before testing.
+This is free exam-preparation material assembled from publicly available sources. Not official 
+agency material. Verify current requirements with your state's licensing agency.
 
 ## You are currently reading this
 That's really awesome. Please tell me about it: seantbost@gmail.com

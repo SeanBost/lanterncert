@@ -1,8 +1,7 @@
 ---
 import Layout from "../../../../layouts/Layout.astro";
-import Card from "../../../../components/Card.astro";
+import Button from "../../../../components/Button.astro";
 import { certStatePaths, stateInfo, loadState } from "../../../../lib/cert-data.js";
-import { placeholderTopics } from "../../../../lib/placeholder-topics.js";
 
 export async function getStaticPaths() {
 	return await certStatePaths();
@@ -15,26 +14,16 @@ const term = facts.meta.localTerm;
 ---
 
 <Layout
-	title={`${info.name} ${term} study guide`}
-	description={`A plain-language ${info.name} ${term} study guide, broken into topics and written from ${facts.meta.agencyCode}'s own material.`}
+	title={`${info.name} ${term} Study Guide`}
+	description={`A plain-language crash course in the ${info.name} ${term} material, sorted by topic and written from ${facts.meta.agencyCode}'s own documents.`}
 >
-	<div class="stack-lg">
-		<div class="stack">
-			<h1 class="page-title">Study guide</h1>
-			<p class="lede">{info.name} {term}</p>
-		</div>
-
-		<section class="stack" aria-labelledby="topics-heading">
-			<h2 class="section-title" id="topics-heading">Topics</h2>
-			<ul class="card-grid">
-				{
-					placeholderTopics.map((topic) => (
-						<li>
-							<Card title={topic.name} href={`/${cert}/${state}/guide/${topic.slug}`} />
-						</li>
-					))
-				}
-			</ul>
-		</section>
+	<div class="stack prose">
+		<h1 class="page-title">Study Guide</h1>
+		<p class="lede">{info.name} {term}</p>
+		<p>
+			One sheet of the material, sorted by topic. Content is authored in Sprint 3; topics are
+			sections of this page rather than pages of their own.
+		</p>
+		<p><Button href={`/${cert}/${state}`} variant="secondary">Back to {info.name}</Button></p>
 	</div>
 </Layout>

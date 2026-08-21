@@ -1,5 +1,6 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
+import Button from "../../../components/Button.astro";
 import Card from "../../../components/Card.astro";
 import {
 	certStatePaths,
@@ -12,7 +13,6 @@ import {
 } from "../../../lib/cert-data.js";
 import { formatFact } from "../../../lib/format-fact.js";
 import { sourceMetaParts } from "../../../lib/format-source.js";
-import { placeholderTopics } from "../../../lib/placeholder-topics.js";
 
 export async function getStaticPaths() {
 	return await certStatePaths();
@@ -118,11 +118,23 @@ for (const id of citedSourceIds(facts)) {
 }
 const cited = await loadSourceEntries(cert, [...citations.keys()]);
 
+// Order is the progression, and the three names are proper nouns. CLAUDE.md ▸ The three modes.
 const modes = [
-	{ href: `${base}/study`, title: "Study", blurb: "Work through the material one card at a time." },
-	{ href: `${base}/practice`, title: "Practice", blurb: "Answer questions with instant feedback." },
-	{ href: `${base}/test`, title: "Mock test", blurb: `Sit a timed test shaped like the real ${facts.meta.agencyCode} exam.` },
-	{ href: `${base}/guide`, title: "Study guide", blurb: "Read up on one topic at a time." },
+	{
+		href: `${base}/guide`,
+		title: "Study Guide",
+		blurb: "Start here. A crash course in the material, sorted by topic, with the source behind every section.",
+	},
+	{
+		href: `${base}/practice`,
+		title: "Practice Cards",
+		blurb: "One question at a time, untimed. Every answer comes with the reason and the source.",
+	},
+	{
+		href: `${base}/test`,
+		title: "Mock Test",
+		blurb: `Sit a timed test shaped like the real ${facts.meta.agencyCode} exam, scored at the end.`,
+	},
 ];
 ---
 
@@ -130,7 +142,8 @@ const modes = [
 	title={`${info.name} ${term}`}
 	description={`How to get your ${term} in ${info.name} - requirements, costs and exam details from ${facts.meta.agencyName}, plus free practice questions.`}
 >
-	<div class="stack-lg">
+	{/* stack-xl with both lower blocks tightened - the homepage's smaller row gap, 3rem / 5rem. */}
+	<div class="stack-xl">
 		<div class="split">
 			<div class="stack">
 				<h1 class="page-title">{info.name} {term}</h1>
@@ -180,35 +193,31 @@ const modes = [
 			</section>
 		</div>
 
-		<section class="stack" aria-labelledby="modes-heading">
-			<h2 class="section-title" id="modes-heading">Start studying</h2>
-			<ul class="card-grid">
+		<section class="stack gap-tight" aria-labelledby="modes-heading">
+			<h2 class="section-title" id="modes-heading">How to prepare</h2>
+			{/* An ordered list - the three are a progression, not a menu. --lit expects exactly three. */}
+			<ol class="card-grid card-grid--lit">
 				{
 					modes.map((mode) => (
 						<li>
 							<Card title={mode.title} href={mode.href}>
-								<p>{mode.blurb}</p>
+								<div class="prose">
+									<p>{mode.blurb}</p>
+								</div>
+								{/* The title links to the same place, so the mode is named for anyone hearing this alone. */}
+								<p class="card__cta">
+									<Button href={mode.href}>
+										Get started<span class="visually-hidden"> with {mode.title}</span>
+									</Button>
+								</p>
 							</Card>
 						</li>
 					))
 				}
-			</ul>
+			</ol>
 		</section>
 
-		<section class="stack" aria-labelledby="topics-heading">
-			<h2 class="section-title" id="topics-heading">Guide topics</h2>
-			<ul class="card-grid">
-				{
-					placeholderTopics.map((topic) => (
-						<li>
-							<Card title={topic.name} href={`${base}/guide/${topic.slug}`} />
-						</li>
-					))
-				}
-			</ul>
-		</section>
-
-		<section class="stack" aria-labelledby="sources-heading">
+		<section class="stack gap-tight" aria-labelledby="sources-heading">
 			<h2 class="section-title" id="sources-heading">Sources</h2>
 			<ol class="source-list">
 				{

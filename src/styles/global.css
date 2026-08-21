@@ -129,9 +129,14 @@ img, svg {
 
   /* Layout */
   --page-max: 78rem;
+  /* The widest a card gets on mobile — the page's content width at the last pixel before 768. The
+     tablet band holds a stacked card at it rather than letting it grow with the page. */
+  --card-w: 46rem;
   --gutter: var(--space-4);
   --rule: 1px solid var(--color-border);
   --header-h: 3.75rem;
+  /* Desktop only. Deepens the band below the centered row, so it never moves the logo or the nav. */
+  --header-drop: 0.25rem;
 
   --focus-ring: 3px solid var(--color-focus);
   --focus-offset: 2px;
@@ -143,6 +148,9 @@ html {
   -webkit-text-size-adjust: 100%;
   /* The header is fixed at every width, so in-page anchors need somewhere to land. */
   scroll-padding-top: calc(var(--header-h) + var(--space-4));
+  /* Reserves the scrollbar's width whether or not the page scrolls, so centered content sits at the
+     same x on every page. Without it a short page is offset from a tall one by half a scrollbar. */
+  scrollbar-gutter: stable;
   /* The hero art overhangs its column on purpose; this stops the overhang scrolling the document.
      Needed on BOTH html and body — measured: either one alone still scrolls. Gotchas ▸ CSS. */
   overflow-x: clip;
@@ -453,10 +461,81 @@ a:visited:hover, .source-tile:visited:hover .source-tile__host {
   margin-bottom: var(--space-2);
 }
 
+/* A heading that happens to be a link: it keeps the h3's own ink and gains nothing else, because the
+   card's button is the affordance. Must stay BELOW the base link rules, which it ties at (0,1,1). */
+.card__title a, .card__title a:visited, .card__title a:hover {
+  color: inherit;
+  text-decoration: none;
+}
+
 .card-grid {
   display: grid;
   gap: var(--space-4);
   grid-template-columns: 1fr;
+}
+
+/* One gradient spanning the whole grid, with each card's 3px border as the only cutout of it.
+   CLAUDE.md ▸ Design system ▸ The lit grid before touching any of it. */
+.card-grid--lit {
+  /* Equal rows, so the stacked cards divide the gradient evenly. The math needs uniform items. */
+  grid-auto-rows: 1fr;
+}
+
+.card-grid--lit .card {
+  border: 3px solid transparent;
+  /* A column so the CTA can be pushed to the bottom edge and the three buttons line up. */
+  display: flex;
+  flex-direction: column;
+  /* No fill of its own - the ring draws the card. The page-colored layer is not decoration, it is
+     what hides the gradient everywhere except the ring, so it cannot be dropped. */
+  background-color: transparent;
+  background-image:
+    linear-gradient(var(--color-page) 0 0),
+    linear-gradient(135deg, var(--color-lantern-orange-dark), var(--color-lantern-orange));
+  background-origin: padding-box, border-box;
+  background-clip: padding-box, border-box;
+  background-repeat: no-repeat;
+  /* Stacked: the gradient image is the height of all three cards plus the two gaps between them. */
+  background-size: auto, 100% calc(300% + 2 * var(--space-4));
+  background-position: 0 0, 0 var(--lit-stop);
+}
+
+/* PLACEHOLDER icon - the correction block's check, standing in until each mode has its own mark. */
+.card-grid--lit .card__title {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+/* Empty alt text, as on .correction__row: the heading beside it says everything the glyph does. */
+.card-grid--lit .card__title::before {
+  content: "\2713" / "";
+  color: var(--color-lantern-orange-dark);
+}
+
+/* One step of air under the heading, against .stack's default. Two classes, so it beats the (0,1,0)
+   step from anywhere in the file rather than relying on sitting below it. */
+.stack > * + .card-grid--lit {
+  margin-top: var(--space-6);
+}
+
+/* auto pushes it to the bottom edge; the padding is the floor, since auto collapses to nothing on
+   whichever card is tallest. */
+.card__cta {
+  margin-top: auto;
+  padding-top: var(--space-4);
+}
+
+/* A percentage position aligns the IMAGE's stop with the ELEMENT's, so on an oversized image these
+   three land on consecutive slices and the hidden parts fall in the gaps. Exactly three cards. */
+.card-grid--lit > li:nth-child(1) .card { --lit-stop: 0%; }
+.card-grid--lit > li:nth-child(2) .card { --lit-stop: 50%; }
+.card-grid--lit > li:nth-child(3) .card { --lit-stop: 100%; }
+
+/* The li stretches to the row but the card inside it does not, so a shorter card leaves a short box
+   in a tall row. Making the li a grid hands it that height. */
+.card-grid > li {
+  display: grid;
 }
 
 /* An accent down the left edge instead of a card. Painted as a sized background rather than a
@@ -1050,7 +1129,8 @@ ul.source-wall__row {
   white-space: nowrap;
 }
 
-/* Desktop — 768 exactly, complementing any future max-width: 767. */
+/* Above mobile — 768 exactly, complementing any future max-width: 767. Everything universal lives
+   here; the wide block below only overrides what the tablet band gets wrong. */
 @media (min-width: 768px) {
   :root {
     --gutter: var(--space-6);
@@ -1060,21 +1140,19 @@ ul.source-wall__row {
     padding-top: var(--space-9);
   }
 
+  /* One card per row, centered and capped at the mobile maximum, so the stack reads as continuous
+     with mobile. The alternative reflows to a 2-then-1 row that reads as a mistake. */
   .card-grid {
-    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    grid-template-columns: minmax(0, var(--card-w));
+    justify-content: center;
   }
 
   /* minmax(0,…) on both: a bare fr floors at min-content and won't give up its share of the row. */
   .split {
-    grid-template-columns: minmax(0, 4fr) minmax(0, 3fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     align-items: start;
     /* Column only — the base `gap` stays the row rhythm between the halves once they stack. */
-    column-gap: var(--space-10);
-  }
-
-  /* Even halves, against the 60/40 the rest of the site splits on. */
-  .split--even {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: var(--space-6);
   }
 
   /* Drops a right column onto the left column's first BASELINE rather than its box top. The measured
@@ -1114,11 +1192,28 @@ ul.source-wall__row {
     display: none;
   }
 
+  /* Padding on the band, never on __inner, which owns --header-h and the centering the row sits in.
+     body's clearance has to grow with it or page content slides under the fixed header. */
+  .site-header {
+    padding-bottom: var(--header-drop);
+  }
+
+  body {
+    padding-top: calc(var(--header-h) + var(--header-drop));
+  }
+
   /* --open can survive a resize, so the panel's mobile dressing is undone rather than left latched. */
   .site-nav, .site-header--open .site-nav {
     display: block;
     flex-basis: auto;
     padding-block: 0;
+  }
+
+  /* Optical, not spacing: the wordmark's letters sit ~3px low in their own box, so two centered boxes
+     read as a high nav. Offset rather than margin - a margin halves under the inner's align-items. */
+  .site-nav {
+    position: relative;
+    top: 0.375rem;
   }
 
   .site-header--open::after {
@@ -1151,6 +1246,38 @@ ul.source-wall__row {
      whatever space is left over, so the form ends up only as wide as it needs to be. */
   .autocomplete__field {
     flex: 0 0 17rem;
+  }
+}
+
+/* Wide — the width at which .page can finally reach --page-max. Below it the band is "tablet": not
+   designed for, only kept from breaking. Nothing universal belongs here, only what the narrow band
+   gets wrong. 1248 = 78rem; a media query cannot read a custom property, so the two track by hand. */
+@media (min-width: 1248px) {
+  .card-grid {
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  }
+
+  /* Pinned rather than auto-fit: the slicing below needs three columns of identical width, and two
+     classes so it outranks .card-grid rather than tying it. */
+  .card-grid.card-grid--lit {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  /* One row now, so the gradient runs across the three cards instead of down them. */
+  .card-grid--lit .card {
+    background-size: auto, calc(300% + 2 * var(--space-4)) 100%;
+    background-position: 0 0, var(--lit-stop) 0;
+  }
+
+  .split {
+    grid-template-columns: minmax(0, 4fr) minmax(0, 3fr);
+    column-gap: var(--space-10);
+  }
+
+  /* Only needed here: the narrow band splits evenly already, so this rides on that. It must also sit
+     AFTER .split, which it ties at (0,1,0) and only beats on source order. */
+  .split--even {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   }
 }
 
@@ -1188,7 +1315,7 @@ ul.source-wall__row {
 
   /* Runs when the reveal class lands, so the fade always covers the swap rather than racing it. */
   [data-geo] .autocomplete__input {
-    transition: color 100ms ease-out;
+    transition: color 50ms ease-out;
   }
 }
 
