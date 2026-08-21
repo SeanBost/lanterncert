@@ -135,8 +135,9 @@ img, svg {
   --gutter: var(--space-4);
   --rule: 1px solid var(--color-border);
   --header-h: 3.75rem;
-  /* Desktop only. Deepens the band below the centered row, so it never moves the logo or the nav. */
-  --header-drop: 0.25rem;
+  /* Desktop only. Deepens the band below the centered row, so it never moves the logo or the nav.
+     Set to match the space ABOVE a nav item, which the row's own centering puts at --space-3. */
+  --header-drop: var(--space-3);
 
   --focus-ring: 3px solid var(--color-focus);
   --focus-offset: 2px;
@@ -175,20 +176,20 @@ body {
    A heading wanting another color sets it on a class, which outranks these - see .facts__group. */
 h1 {
   font-family: var(--font-display);
-  font-weight: var(--weight-bold);
+  font-weight: var(--weight-semi);
   font-size: var(--text-xl);
   color: var(--color-ink-med);
 }
 
 h2 {
   font-family: var(--font-display);
-  font-weight: var(--weight-extrabold);
+  font-weight: var(--weight-bold);
   color: var(--color-ink-med);
 }
 
 h3 {
   font-family: var(--font-display);
-  font-weight: var(--weight-bold);
+  font-weight: var(--weight-semi);
   color: var(--color-ink-med);
 }
 
@@ -253,14 +254,20 @@ a:visited:hover, .source-tile:visited:hover .source-tile__host {
    than widening the page. Desktop puts it back in its column below. */
 .hero-art {
   --art-fade: 22%;
+  --art-tint: 5%;
   display: flex;
   align-items: flex-start;
   justify-content: center;
   overflow: hidden;
   min-height: 22rem;
   margin-inline: calc(var(--gutter) * -1);
-  /* The mask below covers the element's own background too, so the panel fades out with the tiles. */
-  background-color: color-mix(in srgb, var(--color-lantern-orange-nearwhite) 25%, transparent);
+  /* The mask below covers the element's own background too, so the panel fades out with the tiles.
+     The accents rather than their nearwhites: yellow-nearwhite IS --color-page, so it would paint nothing. */
+  background-image: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--color-lantern-yellow) var(--art-tint), transparent),
+    color-mix(in srgb, var(--color-lantern-orange-dark) var(--art-tint), transparent)
+  );
   /* Two crossed fades, multiplied. Only the alpha matters, so --black is standing in for "opaque"
      rather than acting as a color choice. `intersect` is load-bearing: the default `add` unions the
      layers into a fully opaque mask, which is also the safe way this degrades. */
@@ -300,15 +307,67 @@ a:visited:hover, .source-tile:visited:hover .source-tile__host {
   transform: translateY(0);
 }
 
+/* Registered so the veil can be transitioned - an unregistered custom property has no type to
+   interpolate and would snap at the midpoint. CLAUDE.md ▸ Gotchas ▸ CSS. */
+@property --header-veil {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+
 /* Fixed at every width; SiteHeader.astro owns the mobile scroll-to-hide toggling. */
+/* Resting at the shadow's own geometry in transparent, never at none - none has nothing to
+   interpolate against and pops in at full strength. CLAUDE.md ▸ Gotchas ▸ CSS. */
 .site-header {
+  /* The scrolled shadow's two knobs. Its color is applied by the [data-scrolled] rule below. */
+  --header-shadow-tint: 8%;
+  --header-shadow-geometry: 0 3px 6px;
+  /* How white the band goes once scrolled, over the blur. The dial for legibility. */
+  --header-veil-max: 33%;
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 20;
   background-color: var(--color-header);
-  /* border-bottom: var(--rule); */
+  box-shadow: var(--header-shadow-geometry) transparent;
+}
+
+/* Translucent ONLY where it can be blurred - unblurred see-through chrome is worse than an opaque
+   band, so the alpha rides on the same test rather than needing a fallback of its own. */
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  /* background-image paints ABOVE background-color, so the veil lands on top of the blurred backdrop
+     rather than under it. Its own layer, so the two alphas stay independently tunable. */
+  .site-header {
+    background-color: color-mix(in srgb, var(--color-header) 72%, transparent);
+    background-image: linear-gradient(
+      color-mix(in srgb, var(--white) var(--header-veil), transparent),
+      color-mix(in srgb, var(--white) var(--header-veil), transparent)
+    );
+    -webkit-backdrop-filter: blur(12px) saturate(1.6);
+    backdrop-filter: blur(12px) saturate(1.6);
+  }
+
+  /* Nothing has passed under the band yet at the top of the page, so the blur has nothing to say. */
+  .site-header--open, :root:not([data-scrolled]) .site-header {
+    background-color: var(--color-header);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  /* :not() rather than letting the --open rule above override it - that rule is (0,1,0) and this is
+     (0,3,0), so it could not win on specificity. An opaque band needs no veil. */
+  :root[data-scrolled] .site-header:not(.site-header--open) {
+    --header-veil: var(--header-veil-max);
+  }
+}
+
+/* What makes the band read as a layer over the content rather than as part of the page. Set by
+   src/scripts/global.js, so it is absent until something is actually behind the header.
+   The one approved exception to the no-drop-shadows rule (Sean). CLAUDE.md ▸ Design system. */
+:root[data-scrolled] .site-header {
+  box-shadow: var(--header-shadow-geometry)
+    color-mix(in srgb, var(--color-ink) var(--header-shadow-tint), transparent);
 }
 
 .site-header__inner {
@@ -376,6 +435,19 @@ a:visited:hover, .source-tile:visited:hover .source-tile__host {
   background-color: var(--color-ink);
 }
 
+/* Into an X. 7px is the gap plus a bar, which is each outer bar's distance from the middle one. */
+.site-header--open .site-header__toggle span:first-child {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.site-header--open .site-header__toggle span:nth-child(2) {
+  opacity: 0;
+}
+
+.site-header--open .site-header__toggle span:last-child {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
 /* Collapsed by default; the toggle reveals it. Desktop puts it back inline below. */
 .site-nav {
   display: none;
@@ -400,7 +472,11 @@ a:visited:hover, .source-tile:visited:hover .source-tile__host {
   background-color: color-mix(in srgb, var(--color-ink) 33%, transparent);
 }
 
+/* --nav-pad-x is declared here rather than on the anchor so the desktop rule below can pull the list
+   by it. --nav-underline-drop is how far the bar sits BELOW the item, 0 in the stacked panel. */
 .site-nav__list {
+  --nav-pad-x: var(--space-5);
+  --nav-underline-drop: 0px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -414,9 +490,35 @@ a:visited:hover, .source-tile:visited:hover .source-tile__host {
 }
 */
 
+/* The positioning context for the underline below. The nav renders identically on every page -
+   aria-current stays in the markup for assistive tech and is deliberately given no styling. */
 .site-nav__list a {
+  position: relative;
   display: block;
-  padding-block: var(--space-3);
+  padding: var(--space-3) var(--nav-pad-x);
+}
+
+/* Inset to --nav-pad-x rather than to 0: an absolute pseudo-element lays out against the PADDING box,
+   so this puts the bar at the label's own width instead of the padded box's. Gotchas ▸ CSS. */
+.site-nav__list a::after {
+  content: "";
+  position: absolute;
+  left: var(--nav-pad-x);
+  right: var(--nav-pad-x);
+  bottom: calc(-1 * var(--nav-underline-drop));
+  height: 3px;
+  background-image: linear-gradient(
+    90deg,
+    var(--color-lantern-orange-dark),
+    color-mix(in srgb, var(--color-lantern-yellow-dark) 50%, var(--color-lantern-orange))
+  );
+  opacity: 0;
+}
+
+/* Fades in at full width. The chrome links keep their ink color, so the affordance the nav was
+   missing arrives without reopening the link-color decision. CLAUDE.md ▸ Locked decisions. */
+.site-nav__list a:hover::after, .site-nav__list a:focus-visible::after {
+  opacity: 1;
 }
 
 .site-footer {
@@ -542,10 +644,11 @@ a:visited:hover, .source-tile:visited:hover .source-tile__host {
    border, which cannot hold a gradient; unsupported color-mix drops the whole image, never the text. */
 .accent-edge {
   padding-left: var(--space-5);
+  /* Dark to light as read, matching the lit grid's sweep on the state pages. */
   background-image: linear-gradient(
     180deg,
-    color-mix(in srgb, var(--color-lantern-yellow-dark) 50%, var(--color-lantern-orange)),
-    var(--color-lantern-orange-dark)
+    var(--color-lantern-orange-dark),
+    color-mix(in srgb, var(--color-lantern-yellow-dark) 50%, var(--color-lantern-orange))
   );
   background-size: 3px 100%;
   background-repeat: no-repeat;
@@ -1137,7 +1240,7 @@ ul.source-wall__row {
   }
 
   .page {
-    padding-top: var(--space-9);
+    padding-top: var(--space-8);
   }
 
   /* One card per row, centered and capped at the mobile maximum, so the stack reads as continuous
@@ -1220,21 +1323,31 @@ ul.source-wall__row {
     content: none;
   }
 
+  /* The gap plus the anchors' own padding reproduces the 2rem that used to sit on the li, which now
+     has to stay clear so the current item's pill can draw the whole target.
+     margin-right cancels that padding on the last label, which is otherwise held off the gutter the
+     logo aligns to - the nav is right-aligned, so the trailing padding pushes every label left. */
   .site-nav__list {
+    --nav-pad-x: var(--space-3);
+    /* Drops the bar onto the header's bottom edge. It equals --header-drop only because .site-nav's
+       optical offset below consumes the item's other free space - re-measure if that offset moves. */
+    --nav-underline-drop: var(--header-drop);
     flex-direction: row;
     align-items: center;
+    gap: var(--space-2);
+    margin-right: calc(-1 * var(--nav-pad-x));
     font-size: var(--text-lg);
-    font-weight: var(--weight-normal);
+    font-weight: var(--weight-semi);
   }
 
+  /* Nav separators, commented out rather than deleted. Restoring one needs its own spacing back.
   .site-nav__list > li + li {
-    /* border-left: var(--rule); */
-    margin-left: var(--space-4);
-    padding-left: var(--space-4);
+    border-left: var(--rule);
   }
+  */
 
   .site-nav__list a {
-    padding-block: 0;
+    padding: var(--space-2) var(--nav-pad-x);
   }
 
   .autocomplete__row {
@@ -1288,8 +1401,16 @@ ul.source-wall__row {
     transition: transform 150ms ease-out;
   }
 
+  /* background-color covers the opaque-to-translucent swap at the top of the page; box-shadow is the
+     scrolled edge fading in against its own transparent resting geometry. */
   .site-header {
-    transition: transform 200ms ease-out;
+    transition: transform 200ms ease-out, background-color 200ms ease-out,
+      box-shadow 200ms ease-out, --header-veil 200ms ease-out;
+  }
+
+  /* Matches the logo glow, so the chrome's motions agree. */
+  .site-nav__list a::after {
+    transition: opacity 160ms ease-out;
   }
 
   a {
@@ -1299,6 +1420,11 @@ ul.source-wall__row {
   /* Matches the button's sweep, so the two hover effects in the chrome read as one gesture. */
   .site-header__logo--glow {
     transition: opacity 160ms ease-out;
+  }
+
+  /* The hamburger's X morph, on the same 160ms as the glow above. */
+  .site-header__toggle span {
+    transition: transform 160ms ease-out, opacity 160ms ease-out;
   }
 
   /* The splash-fade is --btn-sweep alone. color runs SHORTER on purpose: the label flips light to

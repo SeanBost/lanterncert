@@ -56,5 +56,11 @@ const canonical = new URL(path, site.url).href;
 			<slot />
 		</main>
 		<SiteFooter />
+
+		<script>
+			import { initGlobal } from "../scripts/global.js";
+
+			initGlobal();
+		</script>
 	</body>
 </html>

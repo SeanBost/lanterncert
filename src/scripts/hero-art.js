@@ -10,6 +10,16 @@ const JITTER = 0.0;
 // Only how often a paused wall re-checks whether it may resume. Not a gap between swaps.
 const POLL_MS = 200;
 
+// Peak drift of a tile from its layout position, per axis. The sine weights below sum to 1, so this
+// is a true maximum rather than an approximate one.
+const DRIFT_PX = 4;
+const DRIFT_DEG = 0;
+// Seconds. Each tile draws its own periods from this range - see wave().
+const DRIFT_PERIOD_MIN = 10;
+const DRIFT_PERIOD_MAX = 12;
+// A frame after a background tab returns is worth the whole hidden span, which would teleport a tile.
+const MAX_FRAME_S = 0.05;
+
 // Mirrored from src/content/sources/motorcycle-endorsement-sources.json - every multi-state and
 // non-MVP entry, then FL/GA/TX/CA round-robin to 48. HAND-MAINTAINED: a registry edit does not
 // reach this list, so a retired URL here outlives the sweep that would have caught it.
@@ -77,6 +87,17 @@ function randomOrder(length) {
 
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+/** One axis of drift: two out-of-step sines summing to a peak of 1, as a function of seconds.
+    The two periods almost never divide each other, so the path never closes into a loop the eye learns. */
+function wave() {
+  const term = () => ({
+    w: (2 * Math.PI) / (DRIFT_PERIOD_MIN + Math.random() * (DRIFT_PERIOD_MAX - DRIFT_PERIOD_MIN)),
+    phase: Math.random() * 2 * Math.PI,
+  });
+  const [a, b] = [term(), term()];
+  return (t) => 0.6 * Math.sin(a.w * t + a.phase) + 0.4 * Math.sin(b.w * t + b.phase);
+}
+
 /** Committed and cancelled rather than left filling, so the passes can't stack up over a long visit. */
 async function fade(el, from, to) {
   const anim = el.animate([{ opacity: from }, { opacity: to }], {
@@ -126,6 +147,29 @@ export function initHeroArt() {
   // Nothing moves in a background tab, off screen, or while someone is typing their state.
   const form = document.getElementById("autocomplete");
   const paused = () => document.hidden || !onScreen || !!form?.contains(document.activeElement);
+
+  // Each tile drifts a couple of pixels on its own clock. Transform, not margin: the layout box never
+  // moves, and the tile's overflow clip travels with it so the ellipsis can't re-cut mid-drift.
+  cells.forEach((cell) => (cell.drift = { x: wave(), y: wave(), r: wave() }));
+
+  // An accumulated clock rather than the wall clock, so a pause resumes from the phase it stopped at.
+  let driftT = 0;
+  let lastFrame = 0;
+  function drift(now) {
+    const elapsed = Math.min((now - lastFrame) / 1000, MAX_FRAME_S);
+    lastFrame = now;
+    if (!paused()) {
+      driftT += elapsed;
+      for (const cell of cells) {
+        const { x, y, r } = cell.drift;
+        cell.el.style.transform =
+          `translate(${(x(driftT) * DRIFT_PX).toFixed(2)}px, ${(y(driftT) * DRIFT_PX).toFixed(2)}px)` +
+          ` rotate(${(r(driftT) * DRIFT_DEG).toFixed(3)}deg)`;
+      }
+    }
+    requestAnimationFrame(drift);
+  }
+  requestAnimationFrame(drift);
 
   // Re-shuffled every pass: a fixed order would swap each tile at the same point in every cycle,
   // which the eye starts to track. Alternating the pair is what makes a pass reversible.

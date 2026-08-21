@@ -4,6 +4,10 @@ const links = [
 	{ href: "/about", label: "About" },
 	{ href: "/progress", label: "My Progress" },
 ];
+
+// Compared without the hash, so "/#certifications" marks the homepage it points into.
+const here = Astro.url.pathname.replace(/\/+$/, "") || "/";
+const isCurrent = (href) => (href.split("#")[0].replace(/\/+$/, "") || "/") === here;
 ---
 
 <header class="site-header">
@@ -40,7 +44,9 @@ const links = [
 			<ul class="site-nav__list">
 				{links.map((link) => (
 					<li>
-						<a href={link.href}>{link.label}</a>
+						<a href={link.href} aria-current={isCurrent(link.href) ? "page" : undefined}>
+							{link.label}
+						</a>
 					</li>
 				))}
 			</ul>
