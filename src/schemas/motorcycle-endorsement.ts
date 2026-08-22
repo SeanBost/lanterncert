@@ -23,6 +23,12 @@ const vocab: Record<string, [string, ...string[]]> = {
   examType: examTypes,
 };
 
+// Boolean facts are not enums, so Zod types them directly - but they still reach a reader as prose,
+// so the display file has to cover both values. Kept out of `vocab`, which feeds z.enum().
+const boolVocab: Record<string, [string, ...string[]]> = {
+  isExamSectioned: ["true", "false"],
+};
+
 export function collections(kit: any) {
   const { makeSourceRef, makeFact, amount, year, scopeEnum, appliesToEnum } = kit;
 
@@ -38,7 +44,7 @@ export function collections(kit: any) {
   // A state-code token is satisfied by the field's _stateSpecific pattern, since its display string
   // is built from the state's own facts rather than written out. data-handling.md ▸ Display §5.
   const stateCodes = new Set(Object.values(states).map((s: any) => s.abbreviation));
-  for (const [field, tokens] of Object.entries(vocab)) {
+  for (const [field, tokens] of Object.entries({ ...vocab, ...boolVocab })) {
     for (const token of tokens) {
       if (displayMap[field]?.[token]) continue;
       if (stateCodes.has(token) && displayMap[field]?._stateSpecific) continue;
@@ -61,8 +67,8 @@ export function collections(kit: any) {
         // Renders inline under the link on state pages. data-handling.md ▸ Sources — registry.
         description: z
           .string()
-          .min(60, { error: "description is under 60 characters" })
-          .max(100, { error: "description is over 100 characters" }),
+          .min(50, { error: "description is under 50 characters" })
+          .max(90, { error: "description is over 90 characters" }),
         publisher: z.string().min(1),
         url: z.url(),
         access: z.enum(["public", "purchase", "restricted"]),
@@ -113,6 +119,9 @@ export function collections(kit: any) {
           timeLimitMinutes: fact(z.number().int().positive()),
           passingScorePercent: fact(z.number().min(0).max(100)),
           isExamSectioned: fact(z.boolean()),
+          // What the sections are CALLED, for copy. isExamSectioned stays the machine-readable
+          // flag: null here must never be read as "not sectioned". data-handling.md ▸ Cert facts.
+          examSectionNames: fact(z.string().min(1)),
         }),
         criteria: z.strictObject({
           dmvCost: fact(amount),

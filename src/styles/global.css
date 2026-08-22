@@ -57,6 +57,7 @@ img, svg {
 
   --leading-tight: 1.25;
   --leading-body: 1.6;
+  --leading-loose: 1.75;
 
   /* Space — one scale, used everywhere */
   --space-1: 0.25rem;
@@ -70,6 +71,10 @@ img, svg {
   --space-9: 5rem;
   --space-10: 6rem;
   --space-11: 7rem;
+
+  /* Outside the scale on purpose: a gap between inline punctuation and its text rides on the type
+     size, not on layout rhythm. It tops up the markup's own space either side of a pipe. */
+  --sep-gap: 0.15em;
 
   /* Radius — three values, reused; nothing defines its own */
   --radius-sm: 0.25rem;
@@ -147,14 +152,19 @@ img, svg {
 
 html {
   -webkit-text-size-adjust: 100%;
-  /* The header is fixed at every width, so in-page anchors need somewhere to land. */
-  scroll-padding-top: calc(var(--header-h) + var(--space-4));
+  /* The header is fixed at every width, so in-page anchors need somewhere to land. --space-7 rather
+     than a hairline gap, so a jumped-to target arrives clear of the band instead of against it.
+     Tracks body's clearance and gains --header-drop at 768, where the band deepens. */
+  scroll-padding-top: calc(var(--header-h) + var(--space-7));
   /* Reserves the scrollbar's width whether or not the page scrolls, so centered content sits at the
      same x on every page. Without it a short page is offset from a tall one by half a scrollbar. */
   scrollbar-gutter: stable;
   /* The hero art overhangs its column on purpose; this stops the overhang scrolling the document.
      Needed on BOTH html and body — measured: either one alone still scrolls. Gotchas ▸ CSS. */
   overflow-x: clip;
+  /* The canvas behind the document, which is what an iOS overscroll reveals. Declaring it here is
+     also what stops body's background propagating to the canvas, so body paints only its own box. */
+  background-color: var(--color-footer);
 }
 
 body {
@@ -202,20 +212,32 @@ h3 {
 /* Browser defaults, hardcoded and deliberately outside the token system. CLAUDE.md ▸ Locked decisions. */
 /* The mosaic's URL line joins each list rather than restating the hexes; a visited color reaches a
    child only through a selector, never through inheritance, so all four states name it. */
+/* The browsers' LinkText and VisitedText, lightened at their own hues to ~2:1 against body ink -
+   an interim step toward the 3:1 WCAG G183 wants now that the underline is hover-only. Each hover
+   keeps the luminance jump the pair already had (x1.41 blue, x1.65 purple). */
 a, .source-tile__host {
-  color: #0000ca;
+  color: #0000ff;
+  text-decoration: none;
 }
 
 a:visited, .source-tile:visited .source-tile__host {
-  color: #481676;
+  color: #6b18b7;
 }
 
 a:hover, .source-tile:hover .source-tile__host {
-  color: #2626f1;
+  color: #4242ff;
 }
 
 a:visited:hover, .source-tile:visited:hover .source-tile__host {
-  color: #6e3c9c;
+  color: #8d4dc8;
+}
+
+/* The underline is the interaction cue, not the resting state. Decoration is state-independent, so
+   this one rule covers visited too. :focus-visible is not optional here - with no resting underline
+   the color is the only thing marking a link, so the keyboard needs the same cue the mouse gets. */
+a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
 }
 
 /* 4. Layout --------------------------------------------------------------- */
@@ -384,6 +406,11 @@ a:visited:hover, .source-tile:visited:hover .source-tile__host {
 /* The wordmark is artwork now; the link is only its frame. */
 .site-header__brand {
   display: inline-flex;
+  text-decoration: none;
+}
+
+/* Decoration only - the glow is this link's cue, not an underline. See the note on .btn's twin. */
+.site-header__brand:hover, .site-header__brand:focus-visible, .site-header__brand:active {
   text-decoration: none;
 }
 
@@ -615,6 +642,11 @@ a:visited:hover, .source-tile:visited:hover .source-tile__host {
   color: var(--color-lantern-orange-dark);
 }
 
+/* A little air either side of the blurb - the title's margin and the CTA's floor alone read tight. */
+.card-grid--lit .card .prose {
+  margin-block: var(--space-2);
+}
+
 /* One step of air under the heading, against .stack's default. Two classes, so it beats the (0,1,0)
    step from anywhere in the file rather than relying on sitting below it. */
 .stack > * + .card-grid--lit {
@@ -712,6 +744,13 @@ ul.accent-edge, ol.accent-edge {
   text-align: center;
   text-decoration: none;
   cursor: pointer;
+}
+
+/* Decoration ONLY. Naming the interaction states on the base block above would apply every one of
+   its properties at (0,1,1), outranking the size .autocomplete__submit sets and shrinking the
+   button mid-hover. Keep an interaction-state override down to the property it is for. */
+.btn:hover, .btn:focus-visible, .btn:active {
+  text-decoration: none;
 }
 
 /* Past 100% so the wedge's trailing fade clears the far corner instead of resting inside it. The
@@ -825,31 +864,76 @@ ul.accent-edge, ol.accent-edge {
   font-size: 0.7em;
   line-height: 0;
   vertical-align: super;
-  margin-left: 0.15em;
+  margin-left: 0.35em;
   font-weight: var(--weight-normal);
 }
 
 .source-list {
   display: grid;
-  gap: var(--space-3);
   font-size: var(--text-base);
+  /* Three stacked lines per entry, so they need more air between them than body copy does. */
+  line-height: var(--leading-loose);
 }
 
-/* One indent for both, so unnumbered extras line up with the numbered items' TEXT. The element in
-   the selector is load-bearing: a lone .source-list loses to the ul[class] padding reset in §1. */
+/* Delineated like .row-list, so the gap between entries is padding either side of a rule. The rule
+   spans the li, which starts on the list's content edge - so it lines up with the numbers, exactly
+   as .facts__row's rules line up with that panel's rows. */
+.source-list > li {
+  padding-block: var(--space-3);
+  border-bottom: var(--rule);
+  font-weight: var(--weight-semi);
+}
+
+.source-list > li:last-child {
+  border-bottom: 0;
+}
+
+/* One indent for both, and for .accent-edge it doubles as the gutter off the bar - the same
+   --space-5 .facts uses, so the two blocks hold their content the same distance off the accent.
+   The element in the selector is load-bearing: a lone .source-list loses to the ul[class] reset. */
 ol.source-list, ul.source-list {
   padding-left: var(--space-5);
 }
 
-/* Numbered so a citation marker has something to point at; the count is the marker. */
+/* The number is drawn INSIDE the li rather than as a list marker, because a marker is laid out
+   beyond the content edge and would hang into the accent gutter. list-item needs no counter-reset. */
 ol.source-list {
-  list-style: decimal;
+  list-style: none;
 }
 
-/* Held a step under the link and its number, so the entry leads with the document. */
+ol.source-list > li {
+  position: relative;
+  padding-left: var(--space-5);
+}
+
+ol.source-list > li::before {
+  content: counter(list-item) ".";
+  position: absolute;
+  left: 0;
+}
+
+/* Marks the source a citation just jumped to. NOT in §7: a background fading in and out is a color
+   change, not movement, so a reduced-motion reader still gets the one cue that says "this one".
+   Ends on the page color rather than transparent, so nothing rides on how alpha interpolates. */
+@keyframes source-hit {
+  0% { background-color: var(--color-page); }
+  17% { background-color: var(--color-lantern-yellow-offwhite); }
+  67% { background-color: var(--color-lantern-yellow-offwhite); }
+  100% { background-color: var(--color-page); }
+}
+
+/* Two classes, so it outranks the li rules above rather than relying on sitting below them.
+   src/scripts/cite-jump.js adds it after the scroll settles and drops it on animationend. */
+.source-list > li.source-list__entry--hit {
+  animation: source-hit 2300ms ease-out;
+}
+
+/* Held a step under the link and its number, so the entry leads with the document. Weight is put
+   back by hand - the li above carries semibold for the marker and every child inherits it. */
 .source-list__meta {
   display: block;
   font-size: var(--text-sm);
+  font-weight: var(--weight-normal);
 }
 
 .source-list__verify {
@@ -857,10 +941,10 @@ ol.source-list {
 }
 
 /* Upright inside the italic line, so the separators stay separators rather than joining the text.
-   The breathing room is margin rather than spaces in the markup, so it stays one place to tune. */
+   Same structure as .quick-links__sep - a space each side in the markup, topped up by --sep-gap. */
 .source-list__sep {
   font-style: normal;
-  margin-inline: 0.5em;
+  margin-inline: var(--sep-gap);
 }
 
 /* A correction shown as one: the claim struck through, the sourced answer under it. The marker
@@ -974,6 +1058,12 @@ ul.source-wall__row {
   text-decoration: none;
 }
 
+/* Decoration only, so the hover underline lands on the URL line rather than striking the whole
+   tile - and so the tile's fixed box is never restated at (0,1,1). See the note on .btn's twin. */
+.source-tile:hover, .source-tile:focus-visible, .source-tile:active {
+  text-decoration: none;
+}
+
 /* Synthetic condensing: the width overshoot is what buys the extra characters, and scaleX gives the
    space back. Change one without the other and the text still fits exactly as much as before. */
 .source-tile__line {
@@ -991,11 +1081,8 @@ ul.source-wall__row {
   font-weight: var(--weight-semi);
 }
 
-/* The tile clears the anchor's underline; the URL line puts it back, as everywhere else we use the
-   link colors. Color for all four states comes from the base link rules in §3. */
-.source-tile__host {
-  text-decoration: underline;
-}
+/* Color for all four states comes from the base link rules in §3, and so does the hover underline -
+   the tile follows the site-wide model rather than carrying a resting underline of its own. */
 
 /* Set by hero-art.js for the length of a swap - a half-faded tile is not a link you can aim at. */
 .source-tile[aria-disabled="true"] {
@@ -1119,18 +1206,26 @@ ul.source-wall__row {
   font-size: var(--text-lg);
 }
 
+/* Weight is presentation; the ELEMENT carries the meaning, so semibold is set here rather than by
+   swapping <strong> for something lighter. <b> draws the eye, <strong> says it matters. */
+.prose strong, .prose b {
+  font-weight: var(--weight-semi);
+}
+
 .prose ul, .prose ol {
   padding-left: var(--space-5);
 }
 
 .page-title {
-  font-size: var(--text-5xl);
+  font-size: var(--text-4xl);
   line-height: var(--leading-tight);
 }
 
-/* balance evens the lines out rather than filling the first one, which is what was pushing a stray
-   word onto a third line. Unsupported browsers just get the normal greedy wrap. */
+/* The homepage is the one page whose title is sized as artwork rather than as a heading. balance
+   evens the lines out rather than filling the first one, which is what was pushing a stray word
+   onto a third line. Unsupported browsers just get the normal greedy wrap. */
 .page-title--hero {
+  font-size: var(--text-5xl);
   text-wrap: balance;
 }
 
@@ -1199,14 +1294,95 @@ ul.source-wall__row {
   font-size: var(--text-xl);
 }
 
-/* An explicit width for the paragraph under a page title, NOT a ch-based measure token. At the
-   --text-lg prose size 34rem is roughly 68 characters; each 1rem is about 2 characters either way. */
-.page-intro {
-  max-width: 34rem;
-}
+/* .page-intro is gone: the lede fills its column, which Figtree at --text-lg puts at ~67 characters.
+   That is inside the range a measure wants, so the explicit cap stopped earning its place. The knob
+   is the column, per CLAUDE.md ▸ Page width - there is still no measure token. */
 
 .caption {
-  font-size: var(--text-sm);
+  font-size: var(--text-base);
+}
+
+/* Same mechanism as .page-title--hero above - on the FOLLOWING element, two classes to outrank .stack. */
+.stack > .caption + * {
+  margin-top: var(--space-5);
+}
+
+/* Stacked captions are one block, so they close up and the rule above spaces what follows the pair. */
+.stack > .caption + .caption {
+  margin-top: var(--space-2);
+}
+
+/* Punctuation between the links. The markup's own spaces carry most of the gap; this tops it up
+   without removing them, since they are what lets the row wrap. */
+.quick-links__sep {
+  margin-inline: var(--sep-gap);
+}
+
+/* The row wraps on a narrow screen, and a mode name is a proper noun that may not wrap mid-phrase.
+   nowrap also keeps each link ONE line box, which is what stops its gradient restarting mid-label. */
+.quick-links a {
+  white-space: nowrap;
+}
+
+/* Stops on one dark-to-light run, each named for how far along it it sits. The links below take
+   OVERLAPPING spans of it, so each word grades hard while the row as a whole still lightens. */
+.quick-links {
+  --ql-00: var(--color-lantern-orange-dark);
+  --ql-15: color-mix(in srgb, var(--color-lantern-orange) 15%, var(--color-lantern-orange-dark));
+  --ql-30: color-mix(in srgb, var(--color-lantern-orange) 30%, var(--color-lantern-orange-dark));
+  --ql-40: color-mix(in srgb, var(--color-lantern-orange) 40%, var(--color-lantern-orange-dark));
+  --ql-45: color-mix(in srgb, var(--color-lantern-orange) 45%, var(--color-lantern-orange-dark));
+  --ql-55: color-mix(in srgb, var(--color-lantern-orange) 55%, var(--color-lantern-orange-dark));
+  --ql-70: color-mix(in srgb, var(--color-lantern-orange) 70%, var(--color-lantern-orange-dark));
+  --ql-85: color-mix(in srgb, var(--color-lantern-orange) 85%, var(--color-lantern-orange-dark));
+}
+
+.quick-links a:nth-of-type(1) { --ql-from: var(--ql-00); --ql-to: var(--ql-40); }
+.quick-links a:nth-of-type(2) { --ql-from: var(--ql-15); --ql-to: var(--ql-55); }
+.quick-links a:nth-of-type(3) { --ql-from: var(--ql-30); --ql-to: var(--ql-70); }
+.quick-links a:nth-of-type(4) { --ql-from: var(--ql-45); --ql-to: var(--ql-85); }
+
+/* Navigation rather than prose, so it leaves the browser hues. Also the resting state where the clip
+   is unavailable, in which case the base a:hover underline is the affordance the sweep would be.
+   Suppresses a:hover and a:visited:hover by SOURCE ORDER - keep it below the base link rules. */
+.quick-links a, .quick-links a:visited {
+  color: var(--color-ink-med);
+  font-weight: var(--weight-bold);
+}
+
+/* Registered so it has a type to interpolate; unregistered it would snap at the midpoint. */
+@property --ql-sweep {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: -12%;
+}
+
+/* Transparent type is only safe where the clip is, so the whole effect is gated. CLAUDE.md ▸ Gotchas.
+   Two layers: the ink veil paints ABOVE the ramp, and retreating it is what lights the word up. A
+   wedge rather than a crossfade, so no pixel is ever a blend of the two - see .btn's mid-brown note. */
+@supports (background-clip: text) or (-webkit-background-clip: text) {
+  .quick-links a, .quick-links a:visited {
+    --ql-sweep: -12%;
+    background-color: var(--color-ink-med);
+    background-image: linear-gradient(
+        100deg,
+        transparent 0 var(--ql-sweep),
+        var(--color-ink-med) calc(var(--ql-sweep) + 12%) 100%
+      ),
+      linear-gradient(100deg, var(--ql-from), var(--ql-to));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    /* The clip paints only inside the box, so glyph ink past it is never drawn. The negative margin
+       hands the width straight back, leaving the row's spacing untouched. */
+    padding-right: 0.08em;
+    margin-right: -0.08em;
+  }
+
+  /* Overshoots so the trailing edge of the veil clears the last glyph, exactly as .btn does. */
+  .quick-links a:hover, .quick-links a:focus-visible, .quick-links a:active {
+    --ql-sweep: 130%;
+  }
 }
 
 /* An inline label, not emphasis - so it carries weight without <strong>'s semantics. */
@@ -1305,6 +1481,11 @@ ul.source-wall__row {
     padding-top: calc(var(--header-h) + var(--header-drop));
   }
 
+  /* The deeper band, same as body's clearance above - the two must always agree. */
+  html {
+    scroll-padding-top: calc(var(--header-h) + var(--header-drop) + var(--space-7));
+  }
+
   /* --open can survive a resize, so the panel's mobile dressing is undone rather than left latched. */
   .site-nav, .site-header--open .site-nav {
     display: block;
@@ -1387,6 +1568,13 @@ ul.source-wall__row {
     column-gap: var(--space-10);
   }
 
+  /* .split's main column, for a block that sits BELOW a split rather than inside one. It reproduces
+     the ratio and column-gap by hand, so it lives beside .split. Declared only here: through the
+     tablet band the block runs full width, where a half-width column wraps every line. */
+  .col-split-main {
+    width: calc((100% - var(--space-10)) * 4 / 7);
+  }
+
   /* Only needed here: the narrow band splits evenly already, so this rides on that. It must also sit
      AFTER .split, which it ties at (0,1,0) and only beats on source order. */
   .split--even {
@@ -1397,6 +1585,12 @@ ul.source-wall__row {
 /* 7. Motion --------------------------------------------------------------- */
 
 @media (prefers-reduced-motion: no-preference) {
+  /* Every in-page anchor, so a citation glides to its source instead of teleporting. Declared here
+     rather than gated in JS, so a reduced-motion reader gets the instant jump they asked for. */
+  html {
+    scroll-behavior: smooth;
+  }
+
   .skip-link {
     transition: transform 150ms ease-out;
   }
@@ -1432,6 +1626,12 @@ ul.source-wall__row {
   .btn {
     transition: --btn-sweep 160ms ease-out, background-color 120ms ease-out, color 70ms ease-out,
       --btn-glow 160ms ease-out;
+  }
+
+  /* The button's sweep on type: the ink veil retreats and the ramp behind it lights. Same 160ms, so
+     every hover on the page reads as one gesture. */
+  .quick-links a {
+    transition: --ql-sweep 160ms ease-out;
   }
 
   /* `backwards` holds the hidden frame through the delay; no `forwards`, so nothing stays latched. */

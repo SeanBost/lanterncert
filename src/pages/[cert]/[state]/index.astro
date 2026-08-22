@@ -3,6 +3,7 @@ import Layout from "../../../layouts/Layout.astro";
 import Button from "../../../components/Button.astro";
 import Card from "../../../components/Card.astro";
 import {
+	certIntro,
 	certStatePaths,
 	citedSourceIds,
 	// loadExtraSources,
@@ -13,6 +14,7 @@ import {
 } from "../../../lib/cert-data.js";
 import { formatFact } from "../../../lib/format-fact.js";
 import { sourceMetaParts } from "../../../lib/format-source.js";
+import { stateIntro } from "../../../lib/state-intro.js";
 
 export async function getStaticPaths() {
 	return await certStatePaths();
@@ -46,7 +48,29 @@ const approx = (text) => (text === null ? null : `~${text}`);
 const rows = (list) =>
 	list.map(([label, value, fact]) => ({ label, value, sourceId: fact.source?.id ?? null }));
 
-const token = tokenDisplay(cert, facts);
+const token = tokenDisplay(cert, facts, { stateName: info.name, stateCode: info.abbreviation });
+
+// ONE numbering rule for the whole page: a source takes its number the first time it appears
+// anywhere, reading order - the lede paragraphs top to bottom, then the facts panel, then any
+// source backing a fact the page never surfaces. That order is also the Sources list's order.
+// The lede assigns its own numbers as it renders, which is what makes reading order automatic.
+const citations = new Map();
+/** @param {string | null} id */
+const numberSource = (id) => {
+	if (id && !citations.has(id)) citations.set(id, citations.size + 1);
+	return id ? citations.get(id) : null;
+};
+
+// One template per cert, filled from this state. src/content/intro/<cert>-intro.json ▸ _about.
+// tokenDisplay is built with asHtml because the lede renders through set:html.
+const intro = stateIntro({
+	cert,
+	facts,
+	stateName: info.name,
+	template: certIntro(cert),
+	token: tokenDisplay(cert, facts, { asHtml: true, stateName: info.name, stateCode: info.abbreviation }),
+	hrefFor: (id) => `#source-${numberSource(id)}`,
+});
 
 const examRows = rows([
 	["Questions in total", formatFact(facts.exam.questionCount.value), facts.exam.questionCount],
@@ -69,7 +93,7 @@ const factGroups = [
 		fallback: null,
 		facts: rows([
 			["Minimum age", formatFact(facts.criteria.minAge.value, "years"), facts.criteria.minAge],
-			["Minimum license", token("minLicense", facts.criteria.minLicense), facts.criteria.minLicense],
+			["Prerequisite license", token("minLicense", facts.criteria.minLicense), facts.criteria.minLicense],
 			[
 				"Renewal period",
 				formatFact(facts.criteria.renewalYears.value, "renewal"),
@@ -94,19 +118,16 @@ const factGroups = [
 	},
 ];
 
-// Numbered in the order markers appear, so a null value doesn't burn a number. A fallback sentence is
-// itself a claim, so it takes a number too.
-// The last loop keeps a source backing an unsurfaced fact on the page it provides provenance for.
-const citations = new Map();
+// Continues the numbering the lede started. A null value burns no number, and a fallback sentence
+// is itself a claim, so it takes one.
 for (const group of factGroups) {
 	if (group.fallback) {
-		const id = group.fallbackSource;
-		if (id && !citations.has(id)) citations.set(id, citations.size + 1);
+		numberSource(group.fallbackSource);
 		continue;
 	}
 	for (const fact of group.facts) {
-		if (fact.value === null || !fact.sourceId) continue;
-		if (!citations.has(fact.sourceId)) citations.set(fact.sourceId, citations.size + 1);
+		if (fact.value === null) continue;
+		numberSource(fact.sourceId);
 	}
 }
 const groups = factGroups.map((group) => ({
@@ -117,6 +138,12 @@ for (const id of citedSourceIds(facts)) {
 	if (!citations.has(id)) citations.set(id, citations.size + 1);
 }
 const cited = await loadSourceEntries(cert, [...citations.keys()]);
+// loadSourceEntries drops an id the registry does not hold, which would leave a numbered marker
+// pointing at a source that never renders. A cite key is hand-typed, so this has to fail loudly.
+if (cited.length !== citations.size) {
+	const missing = [...citations.keys()].filter((id) => !cited.some((s) => s.id === id));
+	throw new Error(`${state}: cited source not in the registry - ${missing.join(", ")}`);
+}
 
 // Order is the progression, and the three names are proper nouns. CLAUDE.md ▸ The three modes.
 const modes = [
@@ -133,8 +160,30 @@ const modes = [
 	{
 		href: `${base}/test`,
 		title: "Mock Test",
-		blurb: `Sit a timed test shaped like the real ${facts.meta.agencyCode} exam, scored at the end.`,
+		// Naming the agency's exam only where the state actually sets one - same trigger as the panel's
+		// fallback sentence, so the page never shapes a test after an exam that isn't published.
+		blurb: examUnpublished
+			? "Sit a timed test covering the essentials you need to know, scored at the end."
+			: `Sit a timed test shaped like the real ${facts.meta.agencyCode} exam, scored at the end.`,
 	},
+];
+
+// Where a rider goes to start for real, off our site. findCourse's own source IS that destination -
+// a state directory or booking portal - so the CTA needs no second registry entry.
+const courseSourceId = facts.criteria.findCourse.source?.id ?? null;
+const [courseSource] = courseSourceId ? await loadSourceEntries(cert, [courseSourceId]) : [];
+const courseUrl = courseSource?.url ?? null;
+
+const quickLinks = [
+	...modes.map((mode) => ({ label: mode.title, attrs: { href: mode.href } })),
+	...(courseUrl
+		? [
+				{
+					label: "Find a riding course",
+					attrs: { href: courseUrl, target: "_blank", rel: "noopener noreferrer" },
+				},
+			]
+		: []),
 ];
 ---
 
@@ -146,14 +195,22 @@ const modes = [
 	<div class="stack-xl">
 		<div class="split">
 			<div class="stack">
-				<h1 class="page-title">{info.name} {term}</h1>
-				<p class="caption">All information last validated {validated}.</p>
-				{/* Placeholder for the per-cert generated summary, which will carry its own citations. */}
-				<div class="prose page-intro">
-					<p>
-						What {facts.meta.agencyCode} requires, what it costs, and free practice built from {info.name}'s
-						own material.
-					</p>
+				<h1 class="page-title">Getting your {term} in {info.name}</h1>
+				<p class="caption"><em>All information last validated {validated}.</em></p>
+				{/* The only CTAs above the fold. Separators are their own spans so they can be spaced
+				    by margin, and hidden from assistive tech - punctuation, not content. The spaces
+				    inside the span are the row's only break opportunities, and one on each side is
+				    what keeps a pipe centered between its links. */}
+				<p class="caption quick-links">
+					Quick links:{" "}
+					{quickLinks.map((link, i) => (
+						<Fragment>{i > 0 && <span class="quick-links__sep" aria-hidden="true">{" | "}</span>}<a {...link.attrs}>{link.label}</a></Fragment>
+					))}
+				</p>
+				{/* set:html because the template and the display strings are authored copy that may
+				    carry markup. Everything out of the facts file is escaped before it gets here. */}
+				<div class="prose">
+					{intro.map((paragraph) => <p set:html={paragraph.html} />)}
 				</div>
 			</div>
 
@@ -194,7 +251,7 @@ const modes = [
 		</div>
 
 		<section class="stack gap-tight" aria-labelledby="modes-heading">
-			<h2 class="section-title" id="modes-heading">How to prepare</h2>
+			<h2 class="section-title" id="modes-heading">Prepare to pass</h2>
 			{/* An ordered list - the three are a progression, not a menu. --lit expects exactly three. */}
 			<ol class="card-grid card-grid--lit">
 				{
@@ -215,23 +272,37 @@ const modes = [
 					))
 				}
 			</ol>
+			{
+				courseUrl && (
+					<div class="prose">
+						{/* The period rides inside the expression - a newline before it renders as a space. */}
+						<p class="col-split-main">
+							Ready to get your {term}?{" "}
+							<a href={courseUrl} target="_blank" rel="noopener noreferrer">Find a riding course</a>.
+						</p>
+					</div>
+				)
+			}
 		</section>
 
 		<section class="stack gap-tight" aria-labelledby="sources-heading">
 			<h2 class="section-title" id="sources-heading">Sources</h2>
-			<ol class="source-list">
+			{/* role="list" restores the semantics Safari drops from a list-style: none list. */}
+			<ol class="source-list accent-edge col-split-main" role="list">
 				{
 					cited.map((source) => (
 						<li id={`source-${citations.get(source.id)}`}>
-							<a href={source.url} target="_blank" rel="noopener noreferrer">
-								{source.title}
-							</a>
+							<p class="source-list__title">
+								<a href={source.url} target="_blank" rel="noopener noreferrer">
+									{source.title}
+								</a>
+							</p>
 							<span class="source-list__meta">{source.description}</span>
 							{/* Separators are their own spans so the italic can skip them. */}
 							<span class="source-list__meta source-list__verify">
 								{sourceMetaParts(source).map((part, i) => (
 									<Fragment>
-										{i > 0 && <span class="source-list__sep">|</span>}
+										{i > 0 && <span class="source-list__sep">{" | "}</span>}
 										{part}
 									</Fragment>
 								))}
@@ -267,3 +338,9 @@ const modes = [
 		*/}
 	</div>
 </Layout>
+
+<script>
+	import { initCiteJump } from "../../../scripts/cite-jump.js";
+
+	initCiteJump();
+</script>

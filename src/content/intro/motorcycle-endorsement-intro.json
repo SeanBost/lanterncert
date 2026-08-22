@@ -1,0 +1,84 @@
+{
+  "_about": {
+    "what": "The lede under the h1 on every motorcycle-endorsement state page. One template for the cert, filled from whichever state the page is for.",
+    "shape": "Each paragraph is a list of sentence slots. A slot is one string, or a list of variants tried in order.",
+    "variants": "The first variant whose placeholders ALL resolve is the one used, so a state missing a fact drops to a shorter sentence rather than printing a hole. Order them longest-first. A slot where nothing resolves is skipped, and a paragraph whose slots are all skipped disappears.",
+    "placeholders": "{group.field} is a fact. A constrained one renders the `long` string from motorcycle-endorsement-display.json; a number renders through format-fact.js. {stateName}, {localTerm}, {agencyCode} and {agencyName} come from the state's meta. A path naming no real fact THROWS at build - it is a typo, not a gap, and the two must not look alike.",
+    "when": "A variant may carry `when`, requiring a fact to equal an exact value. For where a number needs different prose at one value: renewalYears 0 means 'does not expire', never 'every 0 years'.",
+    "sectionedExams": "isExamSectioned true gates a parallel set of exam variants, listed FIRST so they win before the plain ones are reached. They deliberately hold passingScorePercent OUT of the exam sentence and state it in the sectioning sentence instead, because a per-section gate printed as a bare score reads as an overall one. Keep the two halves in step when editing either.",
+    "editing": "Sentence copy lives here. The phrases that fill a {group.field} slot live in motorcycle-endorsement-display.json under `long`, because one phrase serves every state sharing that token."
+  },
+
+  "paragraphs": [
+    [
+      "In {stateName}, riding legally means holding a <strong>{localTerm}</strong>, and it's required for {criteria.requirementType}.",
+      [
+        {
+          "when": { "criteria.minLicense": "None" },
+          "text": "Certification is handled by the <strong>{agencyName}</strong> ({agencyCode}). You can apply at age {criteria.minAge}, with no other license needed beforehand."
+        },
+        "Certification is handled by the <strong>{agencyName}</strong> ({agencyCode}). You can apply at age {criteria.minAge}, once you already hold a {criteria.minLicense}."
+      ],
+      [
+        {
+          "when": { "criteria.transferOutOfStateEndorsement": "none" },
+          "text": "{stateName} accepts no out-of-state credential, so you'll test in-state even if you're already endorsed elsewhere."
+        },
+        "If you're already endorsed in another state, {stateName} accepts a credential from {criteria.transferOutOfStateEndorsement}."
+      ]
+    ],
+    [
+      "Required riding and road-rules training is built on the {criteria.courseType}, and courses are listed on a {criteria.findCourse}.",
+      "Plan to budget around {criteria.classCost} for the course itself, plus {criteria.dmvCost} to {agencyCode} for the credential.",
+      {
+        "cite": ["xx-nhtsa-motorcycle-safety", "xx-nhtsa-helmet-guide"],
+        "text": "We strongly encourage you to <strong>purchase a full set of gear</strong>, including a DOT-certified full-face or modular helmet. <strong>Proper gear will save your life</strong>."
+      }
+    ],
+    [
+      [
+        {
+          "when": { "exam.isExamSectioned": true },
+          "text": "After completing the required training, you'll take the {exam.examType}, which is {exam.questionCount} questions, with {exam.timeLimitMinutes} permitted for testing."
+        },
+        {
+          "when": { "exam.isExamSectioned": true },
+          "text": "After completing the required training, you'll take the {exam.examType}, which is {exam.questionCount} questions."
+        },
+        {
+          "when": { "exam.isExamSectioned": true },
+          "text": "After completing the required training, you'll take the {exam.examType}."
+        },
+        "After completing the required training, you'll take the {exam.examType}, which is {exam.questionCount} questions, requires a score of {exam.passingScorePercent} to pass, with {exam.timeLimitMinutes} permitted for testing.",
+        "After completing the required training, you'll take the {exam.examType}, which is {exam.questionCount} questions and requires a score of {exam.passingScorePercent} to pass.",
+        "After completing the required training, you'll take the {exam.examType}, where {exam.passingScorePercent} is the score needed to pass.",
+        "After completing the required training, you'll take the {exam.examType}."
+      ],
+      [
+        {
+          "when": { "exam.isExamSectioned": true },
+          "text": "It's split into separately scored sections, {exam.examSectionNames}, and you'll need a {exam.passingScorePercent} on each section to pass."
+        },
+        {
+          "when": { "exam.isExamSectioned": true },
+          "text": "It's split into separately scored sections, and you'll need a {exam.passingScorePercent} on each section to pass."
+        },
+        {
+          "when": { "exam.isExamSectioned": true },
+          "text": "That exam is split into separately scored sections: {exam.examSectionNames}."
+        },
+        {
+          "when": { "exam.isExamSectioned": true },
+          "text": "That exam is {exam.isExamSectioned}."
+        }
+      ],
+      [
+        {
+          "when": { "criteria.renewalYears": 0 },
+          "text": "Once you have your {localTerm} in {stateName}, it does not expire."
+        },
+        "Once you have your {localTerm} in {stateName}, you'll need to renew it every {criteria.renewalYears}."
+      ]
+    ]
+  ]
+}

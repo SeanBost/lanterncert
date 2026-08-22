@@ -36,12 +36,18 @@ what you read and why it wasn't there.
 
 ```
 /cert-facts <cert-slug> <state|all>   full pass over one state, or every state in the cert
+/cert-facts <cert-slug> xx            the cert-wide sources only — scope `multi`, no state's facts
 /cert-facts <cert-slug> --links       registry sweep only: links, snapshots, drift. No fact work.
 /cert-facts <cert-slug> <state> --verify-only   verify what is sourced; do not research nulls
 ```
 
 `<cert-slug>` is a key in `src/site-config.json` ▸ `testTypes`. `<state>` is a key in
 `src/content/states.json`.
+
+**`all` sweeps the whole registry, cert-wide `xx-` entries included** — it omits `--state`, so scope
+is every key, not the union of the states' keys. **`xx` is the only argument that reaches those
+entries on their own.** They belong to no state, so no state code will ever pull them in, and
+without their own argument they could only be revalidated as part of a full pass.
 
 ## Owns / never touches
 
@@ -85,7 +91,7 @@ template. Resolve the target. If the two owned JSON files have uncommitted chang
 report — do not refuse.
 
 **1 · Sweep.** `node scripts/audit-sources.mjs <cert> --state <code>` (omit `--state` for `all` or
-`--links`). This refreshes any snapshot older than 21 days and reports dangling refs, orphans,
+`--links`; `--state xx` for the cert-wide sources). This refreshes any snapshot older than 21 days and reports dangling refs, orphans,
 canonical drift and pages whose text changed since last time. **Never fetch a page yourself when a
 snapshot under 21 days old exists** — read `blackbox/source-snapshots/<cert>/<key>.json`. Both
 snapshot stores are partitioned by cert slug; a new cert gets its directory in

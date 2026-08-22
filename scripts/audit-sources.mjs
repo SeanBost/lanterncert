@@ -41,6 +41,21 @@ function keysForState(state) {
   return keys;
 }
 
+// The cert's lede template cites sources no fact does — a sentence carrying a claim but no figure.
+// Without this they read as ORPHANED forever, which is the noise the wall-only split exists to stop.
+function keysForIntro(cert) {
+  const path = join(ROOT, "src", "content", "intro", `${cert}-intro.json`);
+  if (!existsSync(path)) return new Set();
+  const keys = new Set();
+  const walk = (node) => {
+    if (Array.isArray(node)) return node.forEach(walk);
+    if (!node || typeof node !== "object") return;
+    for (const key of node.cite ?? []) keys.add(key);
+  };
+  walk(JSON.parse(readFileSync(path, "utf8")).paragraphs ?? []);
+  return keys;
+}
+
 const args = process.argv.slice(2);
 const cert = args.find((a) => !a.startsWith("--"));
 const stateArg = args.indexOf("--state");
@@ -65,7 +80,7 @@ const applying = new Map([
 
 if (!cert) {
   console.error(
-    "audit-sources: usage — node scripts/audit-sources.mjs <cert-slug> [--state <code>] [--force] [--json]\n" +
+    "audit-sources: usage — node scripts/audit-sources.mjs <cert-slug> [--state <code>|xx] [--force] [--json]\n" +
       "                       [--apply-meaningful <key,key>] [--apply-cosmetic <key,key>] [--expect-hash <hash>]"
   );
   process.exit(1);
@@ -75,12 +90,15 @@ const sources = loadJson(join(ROOT, "src", "content", "sources", `${cert}-source
 const facts = loadJson(join(ROOT, "src", "content", "facts", `${cert}-facts.json`));
 
 const citedBy = new Map();
+const note = (key, by) => {
+  if (!citedBy.has(key)) citedBy.set(key, []);
+  citedBy.get(key).push(by);
+};
 for (const [code, state] of Object.entries(facts)) {
-  for (const key of keysForState(state)) {
-    if (!citedBy.has(key)) citedBy.set(key, []);
-    citedBy.get(key).push(code);
-  }
+  for (const key of keysForState(state)) note(key, code);
 }
+const introKeys = keysForIntro(cert);
+for (const key of introKeys) note(key, "intro");
 
 // ===================== TEMPORARY HARDCODE — DELETE THIS =====================
 // Twin of the list in src/content.config.ts; keep them identical until both go. These states have
@@ -105,12 +123,21 @@ if (unknownApply.length) {
   process.exit(1);
 }
 
+// "xx" sweeps the cert-wide sources — scope `multi`, the ones belonging to no state. They ride the
+// full sweep too, but no state code reaches them, so without this they can only be swept as part of
+// all 56. Named for the key prefix those entries already use.
+const CERT_WIDE = "xx";
+
 let scope;
 if (applying.size) {
   scope = [...applying.keys()];
+} else if (stateCode === CERT_WIDE) {
+  scope = Object.keys(sources).filter((k) => sources[k].state === "multi");
 } else if (stateCode) {
   if (!facts[stateCode]) {
-    console.error(`audit-sources: no state "${stateCode}" in ${cert}-facts.json`);
+    console.error(
+      `audit-sources: no state "${stateCode}" in ${cert}-facts.json (use "${CERT_WIDE}" for the cert-wide sources)`
+    );
     process.exit(1);
   }
   scope = [...keysForState(facts[stateCode])].filter((k) => sources[k]);

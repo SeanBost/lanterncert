@@ -33,21 +33,57 @@ const displays = Object.fromEntries(
   ),
 );
 
+// The lede template for each cert, loaded the same way as display strings and for the same reason:
+// it is per-cert content, not a collection. src/content/intro/<cert>-intro.json ▸ _about.
+const intros = Object.fromEntries(
+  Object.entries(import.meta.glob("../content/intro/*-intro.json", { eager: true })).map(
+    ([path, mod]) => [path.match(/([^/]+)-intro\.json$/)[1], mod.default],
+  ),
+);
+
+export function certIntro(cert) {
+  return intros[cert] ?? null;
+}
+
 const stateCodes = new Set(Object.values(states).map((s) => s.abbreviation));
+
+export function escapeHtml(text) {
+  return String(text).replace(
+    /[&<>"']/g,
+    (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c],
+  );
+}
 
 /**
  * A token belonging to one state is named with that state's code, so a state code is the whole test
  * for "build this from the state's own facts". CLAUDE.md ▸ Locked decisions.
+ *
+ * `asHtml` escapes the VALUES filled into a display string while leaving the string itself alone -
+ * the display file is authored copy and may carry markup, an agency name is data and may not.
+ * Only a caller that renders the result as HTML may pass it; text callers would show the entities.
+ * @param {{ asHtml?: boolean, stateName?: string | null, stateCode?: string | null }} [opts]
  * @returns {(field: string, fact: any, form?: "short" | "long") => string | null}
  */
-export function tokenDisplay(cert, facts) {
+export function tokenDisplay(cert, facts, opts = {}) {
+  const { asHtml = false, stateName = null, stateCode = null } = opts;
   const map = displays[cert] ?? {};
+  const safe = asHtml ? escapeHtml : (v) => v;
   const vars = {
-    agencyCode: facts.meta.agencyCode,
-    agencyName: facts.meta.agencyName,
-    examName: facts.exam.examName?.value ?? null,
+    agencyCode: safe(facts.meta.agencyCode),
+    agencyName: safe(facts.meta.agencyName),
+    examName: facts.exam.examName?.value == null ? null : safe(facts.exam.examName.value),
+    stateName: stateName === null ? null : safe(stateName),
+    stateCode: stateCode === null ? null : safe(stateCode),
   };
-  const fill = (text) => text.replace(/\{(\w+)\}/g, (_, key) => vars[key] ?? "");
+  // A placeholder naming nothing is a typo, and rendering it as "" is how it hides - a missing state
+  // name reads as "-run directory" on the page and as nothing at all in the build.
+  const fill = (text) =>
+    text.replace(/\{(\w+)\}/g, (_, key) => {
+      if (!(key in vars)) {
+        throw new Error(`${cert}-display.json: "{${key}}" is not a display variable`);
+      }
+      return vars[key] ?? "";
+    });
 
   return (field, fact, form = "short") => {
     if (fact.value === null) return null;

@@ -14,7 +14,8 @@
       "questionCount":       { "value": 25, "source": "xx-msf-brc-handbook" },
       "timeLimitMinutes":    { "value": null, "source": "xx-msf-brc-handbook" },
       "passingScorePercent": { "value": 80, "source": "xx-msf-brc-handbook" },
-      "isExamSectioned":     { "value": false, "source": "xx-msf-brc-handbook" }
+      "isExamSectioned":     { "value": false, "source": "xx-msf-brc-handbook" },
+      "examSectionNames":    { "value": null, "source": "xx-msf-brc-handbook" }
     },
     "criteria": {
       "dmvCost":    { "value": [32, 38.25], "source": "fl-hsmv-fees" },
@@ -53,7 +54,8 @@
       "questionCount":       { "value": 40, "source": "ga-dds-test-exams" },
       "timeLimitMinutes":    { "value": null, "source": null },
       "passingScorePercent": { "value": 75, "source": "ga-dds-test-exams" },
-      "isExamSectioned":     { "value": true, "source": "ga-dds-test-exams" }
+      "isExamSectioned":     { "value": true, "source": "ga-dds-test-exams" },
+      "examSectionNames":    { "value": "Road Rules and Road Signs", "source": "ga-dds-test-exams" }
     },
     "criteria": {
       "dmvCost":    { "value": [32, 42], "source": "ga-dds-fees-terms" },
@@ -89,7 +91,8 @@
       "questionCount":       { "value": null, "source": "tx-tdlr-curriculum" },
       "timeLimitMinutes":    { "value": null, "source": "tx-tdlr-curriculum" },
       "passingScorePercent": { "value": null, "source": "tx-tdlr-curriculum" },
-      "isExamSectioned":     { "value": null, "source": "tx-tdlr-curriculum" }
+      "isExamSectioned":     { "value": null, "source": "tx-tdlr-curriculum" },
+      "examSectionNames":    { "value": null, "source": "tx-tdlr-curriculum" }
     },
     "criteria": {
       "dmvCost":    { "value": [16, 33], "source": "tx-dps-fees" },
@@ -126,7 +129,8 @@
       "questionCount":       { "value": null, "source": null },
       "timeLimitMinutes":    { "value": null, "source": null },
       "passingScorePercent": { "value": 80, "source": "ca-dmv-instruction-permits" },
-      "isExamSectioned":     { "value": false, "source": "ca-dmv-instruction-permits" }
+      "isExamSectioned":     { "value": false, "source": "ca-dmv-instruction-permits" },
+      "examSectionNames":    { "value": null, "source": "ca-dmv-instruction-permits" }
     },
     "criteria": {
       "dmvCost":    { "value": 46, "source": "ca-dmv-licensing-fees" },

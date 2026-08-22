@@ -19,6 +19,9 @@ function one(value, unit) {
       return `${NUMBER.format(value)}%`;
     case "minutes":
       return `${NUMBER.format(value)} min`;
+    // The same unit spelled out, for prose - "45 min" abbreviates well in a table and not in a sentence.
+    case "minutesLong":
+      return `${NUMBER.format(value)} ${value === 1 ? "minute" : "minutes"}`;
     case "years":
       return `${NUMBER.format(value)} ${value === 1 ? "year" : "years"}`;
     // 0 is a verified "never", not a gap — null is the gap. data-handling.md ▸ Cert facts ▸ Contract.
@@ -32,6 +35,8 @@ function one(value, unit) {
 /** Returns null for an absent value — only the caller can say what "we don't know" looks like. */
 export function formatFact(value, unit) {
   if (value === null || value === undefined) return null;
-  if (Array.isArray(value)) return `${one(value[0], unit)} - ${one(value[1], unit)}`;
+  // Unspaced, the standard form for a range. A spaced hyphen reads as a dash between two separate
+  // figures; "$32-$42" reads as one span. CLAUDE.md ▸ Conventions rules out an en dash.
+  if (Array.isArray(value)) return `${one(value[0], unit)}-${one(value[1], unit)}`;
   return one(value, unit);
 }

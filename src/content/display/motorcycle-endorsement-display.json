@@ -1,80 +1,92 @@
 {
   "minLicense": {
     "None": { "short": "None", "long": "no prior credential" },
-    "Learners": { "short": "Learner permit", "long": "a learner or instruction permit" },
-    "Drivers": { "short": "Driver license", "long": "a full driver license" }
+    "Learners": { "short": "Learner permit", "long": "learner or instruction permit" },
+    "Drivers": { "short": "Driver's license", "long": "full driver's license" }
   },
 
   "requirementType": {
     "50ccUp": {
       "short": "Over 50cc",
-      "long": "any motorcycle over 50cc, with 50cc and under treated as a moped"
+      "long": "any motorcycle over 50cc"
     },
     "all": {
       "short": "Every engine size",
-      "long": "every engine size, with no moped exemption at all"
+      "long": "motorcycles of every engine size"
     }
   },
 
   "transferOutOfStateEndorsement": {
     "all": {
       "short": "All states",
-      "long": "a valid motorcycle credential from any other US jurisdiction"
+      "long": "any other US jurisdiction"
     },
     "none": {
       "short": "None, retest required",
-      "long": "no out-of-state credential, so every applicant tests in-state"
+      "long": "no other US jurisdiction"
     },
     "non-Alabama": {
       "short": "All states but Alabama",
-      "long": "a credential from any other US jurisdiction, except that an Alabama one counts only alongside an MSF Basic RiderCourse completion card"
+      "long": "any other US jurisdiction excluding Alabama"
     }
   },
 
   "courseType": {
     "MSFBRC": {
       "short": "MSF Basic RiderCourse",
-      "long": "the Motorcycle Safety Foundation Basic RiderCourse"
+      "long": "Motorcycle Safety Foundation Basic RiderCourse"
     },
     "MNS2011": {
       "short": "State-approved course",
-      "long": "any curriculum the state approved against the 2011 Model National Standards"
+      "long": "{stateName}-approved 2011 Model National Standards"
     },
     "CA": {
       "short": "CMSP",
-      "long": "the California Motorcyclist Safety Program curriculum"
+      "long": "California Motorcyclist Safety Program curriculum"
     }
   },
 
   "findCourse": {
     "stateLocator": {
       "short": "Provider directory",
-      "long": "a directory of independent providers you book with directly"
+      "long": "state-run directory of independent providers"
     },
     "stateProgram": {
       "short": "State booking portal",
-      "long": "a single booking portal the agency runs"
+      "long": "state-run booking portal"
     }
   },
+
+  "isExamSectioned": {
+    "true": {
+      "short": "Sectioned",
+      "long": "split into separately scored sections, each with its own gate"
+    },
+    "false": {
+      "short": "Single score",
+      "long": "a single comprehensive session"
+    }
+  },
+
 
   "examType": {
     "_stateSpecific": {
       "named": {
         "short": "{agencyCode} {examName}",
-        "long": "the {examName}, administered by {agencyName}"
+        "long": "{examName}"
       },
       "unnamed": {
         "short": "{agencyCode} knowledge test",
-        "long": "the motorcycle knowledge test administered by {agencyName}"
+        "long": "motorcycle knowledge test"
       }
     },
     "MSFBRC": {
       "short": "MSF course test",
-      "long": "the Motorcycle Safety Foundation Basic RiderCourse end-of-course knowledge test"
+      "long": "MSF Basic RiderCourse end-of-course knowledge test"
     },
     "MNS2011": {
       "short": "Provider test",
-      "long": "a knowledge test set by a state-approved provider"
+      "long": "knowledge test set by a state-approved provider"
     }
   }
 }
