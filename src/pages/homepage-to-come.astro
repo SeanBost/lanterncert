@@ -1,9 +1,31 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import StateAutocomplete from "../components/StateAutocomplete.astro";
-import { certs, loadAllSources } from "../lib/cert-data.js";
+import { certs, loadAllSources, loadSourceEntries, loadState } from "../lib/cert-data.js";
 
 const list = Object.values(certs);
+
+// Georgia until there is a sourced correction per state - blackbox/todo.md. The link and the date
+// come from the registry rather than the copy, so the homepage can never cite a stale URL.
+const CORRECTION = { cert: "motorcycle-endorsement", state: "ga", sourceId: "ga-dds-test-exams" };
+const correctionFacts = await loadState(CORRECTION.cert, CORRECTION.state);
+const [correctionSource] = await loadSourceEntries(CORRECTION.cert, [CORRECTION.sourceId]);
+// Hand-typed, and loadSourceEntries drops an id the registry doesn't hold - so this has to fail loudly.
+if (!correctionSource) {
+	throw new Error(`homepage correction: ${CORRECTION.sourceId} is not in the ${CORRECTION.cert} registry`);
+}
+
+// Split so the address bar can weight the host over the path, the way a real one does.
+const correctionUrl = new URL(correctionSource.url);
+
+// Parsed and formatted as UTC — a local-timezone render of a bare date lands a day early.
+const [cy, cm, cd] = correctionFacts.meta.dateVerified.split("-").map(Number);
+const correctionVerified = new Date(Date.UTC(cy, cm - 1, cd)).toLocaleDateString("en-US", {
+	year: "numeric",
+	month: "long",
+	day: "numeric",
+	timeZone: "UTC",
+});
 
 // The madlib fills its cert from the registry; at cert #2 this half becomes a control of its own.
 const [primary] = list;
@@ -61,6 +83,7 @@ for (const size of rowSizes) {
 	bareTitle
 	description="Free info and practice tests for earning certifications, with every fact cited to the agency that publishes it. No ads, and no signup needed."
 	geo
+	fonts={["Montserrat:wght@100..900", "Roboto:wght@100..900"]}
 >
 	<div class="stack-xl">
 		<div class="split split--even">
@@ -115,46 +138,99 @@ for (const size of rowSizes) {
         <h2 class="section-title" id="trust-heading">Everything you need to know, cited</h2>
 				<div class="prose">
 					<p>
-						AI overviews and other prep sites confidently omit important-to-know details. 
-            Certification agencies overcomplicate how they share requirements. 
-						LanternCert organizes everything you need to know to get certified in a single place, and transparently links every source.
-            All with no ads, and no signup needed.
+						AI overviews and other prep sites will confidently omit or muddy important-to-know details, while 
+            certification agencies overcomplicate how they share requirements. 
 					</p>
-					<p>
-						Discover what certification takes, then study and take practice tests on what your exam will cover.
-						See where every fact and question's material is validated to reinforce and further your learning. 
+          <p>
+            Don't settle for sorta. 
+						LanternCert organizes everything you need to know to get certified in a single place, and transparently links a source for every fact and answer.
+            All with no ads and no signup needed, so you can focus on achieving your goals.
+          </p>
+          <p>
+						See what certification takes, then study and take practice tests to get exam-ready.
 					</p>
 				</div>
 			</section>
 
-			<section class="stack accent-edge baseline-drop" aria-labelledby="correction-heading">
-				<h3 class="correction__title" id="correction-heading"><em>Don't settle for sorta</em></h3>
+			{/* The label sits OUTSIDE the struck line on purpose: text-decoration propagates to
+			    descendants and a child cannot turn an ancestor's line off. */}
+			<section class="stack correction" aria-labelledby="correction-heading">
+				{/*<h3 class="correction__title" id="correction-heading"><em>Don't settle for sorta</em></h3>*/}
 
-				<p>Others often muddy important details, like with Georgia Department of Driver Services' Knowledge Exam.</p>
+				{/* <p>Others often muddy important details, like with Georgia's Knowledge Exam.</p> */}
 
-				<dl class="correction">
-					<div class="correction__row correction__row--wrong">
-						<dt class="correction__label">What others have claimed</dt>
-						<dd class="correction__value">20 questions, 75% or 80% to pass</dd>
+				{/* A real AI overview for the query shown, captured 2026-08-23. NOT a registry source and it
+				    must never become one: it is non-primary, non-reproducible and not a document we hold.
+				    It is exhibited as an example of the problem, never cited as evidence of a fact.
+				    Two contiguous fragments, never a stitched sentence: the leading ellipsis drops the agency's
+				    full name and the internal one drops "based strictly on the official Georgia Motorcycle
+				    Operators Manual". Neither carries a qualifier that would have made the claim right. */}
+				<figure class="correction__evidence">
+					<div class="correction__browser">
+						<div class="correction__chrome">
+							<span class="correction__dots" aria-hidden="true"></span>
+							<div class="correction__bar">
+								<svg class="correction__glyph" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+									<circle cx="7" cy="7" r="4.5" fill="none" stroke="currentColor" stroke-width="1.6" />
+									<line
+										x1="10.6"
+										y1="10.6"
+										x2="14"
+										y2="14"
+										stroke="currentColor"
+										stroke-width="1.6"
+										stroke-linecap="round"
+									/>
+								</svg>
+								<span class="correction__search">georgia motorcycle exam questions</span>
+							</div>
+						</div>
+						<blockquote class="correction__overview">
+							&#8230;the Class M motorcycle knowledge test consists of 20 multiple-choice
+							questions&#8230; You must answer at least 15 questions correctly (75% to 80%) to
+							pass.
+						</blockquote>
 					</div>
-					<div class="correction__row correction__row--right">
-						<dt class="correction__label">What LanternCert makes clear</dt>
-						<dd class="correction__value">
-							Two 20-question sections tailored by license type, Road Rules and Road Signs, needing 15 right on each
-						</dd>
-					</div>
-				</dl>
+          <p class="correction__label">What an AI overview claimed, searched August 23, 2026</p>
+				</figure>
 
-				<p>
-					<span class="label">Source:</span>{" "}
-					<a
-						href="https://dds.georgia.gov/testing-and-training/test-and-exams-information"
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						Georgia DDS: Test and Exams Information
-					</a>
-				</p>
+				<figure class="correction__evidence">
+					{/* A window onto their page. The address bar is the block's ONLY attribution now, so it is
+					    a real link and only the dots are hidden - see the note on .correction__url. */}
+					<div class="correction__browser">
+						<div class="correction__chrome">
+							<span class="correction__dots" aria-hidden="true"></span>
+							<div class="correction__bar">
+								<a
+									class="correction__url"
+									href={correctionSource.url}
+									target="_blank"
+									rel="noopener noreferrer"
+								>
+									{/* The visible text is a bare URL, which is a poor accessible name on its own. The
+									    prefix is included in the name, so WCAG 2.5.3 still holds. */}
+									<span class="visually-hidden">Source: </span><span class="correction__host"
+										>{correctionUrl.host}</span
+									>{correctionUrl.pathname}
+								</a>
+							</div>
+						</div>
+						{/* Verbatim, and set in the publisher's own face - see .correction__quote in global.css. */}
+						<blockquote class="correction__quote" cite={correctionSource.url}>
+							The Knowledge Exam includes <span class="correction__key">two tests</span>: the Road Rules
+							Test and the Road Signs Test, both requiring a minimum score of 15 out of 20 to pass.
+						</blockquote>
+					</div>
+					{/*<figcaption class="correction__source">
+						<a href={correctionSource.url} target="_blank" rel="noopener noreferrer">
+							{correctionSource.title}
+						</a>
+						<span class="correction__meta">
+							{correctionSource.publisher}, verified {correctionVerified}
+						</span>
+					</figcaption>*/}
+          <p class="correction__label">What Georgia DDS actually publishes, verified August 14, 2026</p>
+				</figure>
 			</section>
 		</div>
 
@@ -183,6 +259,8 @@ for (const size of rowSizes) {
 
 <script>
 	import { initHeroArt } from "../scripts/hero-art.js";
+	import { initCorrection } from "../scripts/correction.js";
 
 	initHeroArt();
+	initCorrection();
 </script>

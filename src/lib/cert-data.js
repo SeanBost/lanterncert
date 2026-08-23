@@ -55,12 +55,8 @@ export function escapeHtml(text) {
 }
 
 /**
- * A token belonging to one state is named with that state's code, so a state code is the whole test
- * for "build this from the state's own facts". CLAUDE.md ▸ Locked decisions.
- *
- * `asHtml` escapes the VALUES filled into a display string while leaving the string itself alone -
- * the display file is authored copy and may carry markup, an agency name is data and may not.
- * Only a caller that renders the result as HTML may pass it; text callers would show the entities.
+ * Resolves a token to its display string. CLAUDE.md ▸ Locked decisions.
+ * `asHtml` escapes the filled values only - pass it only from a caller that renders HTML.
  * @param {{ asHtml?: boolean, stateName?: string | null, stateCode?: string | null }} [opts]
  * @returns {(field: string, fact: any, form?: "short" | "long") => string | null}
  */

@@ -101,10 +101,7 @@ const introKeys = keysForIntro(cert);
 for (const key of introKeys) note(key, "intro");
 
 // ===================== TEMPORARY HARDCODE — DELETE THIS =====================
-// Twin of the list in src/content.config.ts; keep them identical until both go. These states have
-// registry entries for the homepage source wall but no facts, so every one is an orphan BY
-// CONSTRUCTION and would bury the real orphans under permanent noise. They still get swept, and
-// still print below — just on their own line, so ORPHANED keeps meaning something.
+// Twin of the list in src/content.config.ts; keep them identical until both go.
 // Delete this const, the filter and the wallOnly line the moment these states get facts.
 const WALL_ONLY_STATES = new Set(["AZ", "HI", "IL", "MA", "MO", "NJ", "OH", "WA"]);
 // Listed by key, not by state: scope `multi` is shared with cited entries, so exempting the whole
@@ -123,9 +120,7 @@ if (unknownApply.length) {
   process.exit(1);
 }
 
-// "xx" sweeps the cert-wide sources — scope `multi`, the ones belonging to no state. They ride the
-// full sweep too, but no state code reaches them, so without this they can only be swept as part of
-// all 56. Named for the key prefix those entries already use.
+// "xx" sweeps the cert-wide sources - scope `multi`, which no state code reaches on its own.
 const CERT_WIDE = "xx";
 
 let scope;

@@ -6,11 +6,8 @@ import * as motorcycleEndorsement from "./schemas/motorcycle-endorsement";
 const stateCodes = Object.values(states).map((s) => s.abbreviation);
 
 // ===================== TEMPORARY HARDCODE — DELETE THIS =====================
-// These states have registry entries feeding the homepage source wall, but no facts, no pages and
-// no entry in states.json. This list widens the REGISTRY scope only — putting them in states.json
-// would widen `applies_to` too, which is not wanted. It knowingly breaks data-handling.md §2 rule 2.
-// Delete this const and its use below the moment any state here gets a facts block.
-// The twin of this list is in scripts/audit-sources.mjs. Both go at the same time.
+// Widens the REGISTRY scope only, for wall-only states. data-handling.md §2 ▸ TEMPORARY deviation.
+// Twin of the list in scripts/audit-sources.mjs - delete both the moment these states get facts.
 const WALL_ONLY_STATES = ["AZ", "HI", "IL", "MA", "MO", "NJ", "OH", "WA"];
 // ============================================================================
 

@@ -1,9 +1,5 @@
-// Rebuilds public/favicon.ico from the full-size mark. Run it whenever the mark changes.
-//
-//   node scripts/build-ico.mjs [source.png] [out.ico]
-//
-// The source lives in blackbox/, so this reads a private file and writes a public one - that is the
-// one direction the public/private split allows, and nothing in a build ever reads the source.
+// Rebuilds public/favicon.ico from the full-size mark: node scripts/build-ico.mjs [src.png] [out.ico]
+// Reads blackbox/ and writes public/ - the one direction the public/private split allows.
 
 import { createCanvas, loadImage } from "@napi-rs/canvas";
 import { writeFileSync } from "node:fs";

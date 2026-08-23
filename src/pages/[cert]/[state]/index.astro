@@ -50,10 +50,8 @@ const rows = (list) =>
 
 const token = tokenDisplay(cert, facts, { stateName: info.name, stateCode: info.abbreviation });
 
-// ONE numbering rule for the whole page: a source takes its number the first time it appears
-// anywhere, reading order - the lede paragraphs top to bottom, then the facts panel, then any
-// source backing a fact the page never surfaces. That order is also the Sources list's order.
-// The lede assigns its own numbers as it renders, which is what makes reading order automatic.
+// A source takes its number the first time it appears, in reading order, which is also the
+// Sources list's order. CLAUDE.md ▸ Current state.
 const citations = new Map();
 /** @param {string | null} id */
 const numberSource = (id) => {

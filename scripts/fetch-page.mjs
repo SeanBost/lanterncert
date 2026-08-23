@@ -114,9 +114,8 @@ function hash(text) {
 }
 
 /**
- * Preferred PDF reader. pdf-parse resolves each font's ToUnicode map, which is what subset-encoded
- * PDFs need — DL 665 R2-2024 extracts as mojibake without it. Falls back to the hand-rolled reader
- * below when the library is absent or refuses the file; an encrypted PDF defeats both.
+ * Preferred PDF reader: pdf-parse resolves ToUnicode maps, which subset-encoded PDFs need.
+ * Falls back to the reader below; an encrypted PDF defeats both.
  */
 export async function readPdfText(buf) {
   try {
@@ -129,9 +128,7 @@ export async function readPdfText(buf) {
   return extractPdfText(buf);
 }
 
-// Fallback PDF text layer reader: inflate each content stream and keep the strings fed to the
-// text-showing operators. Returns "" for scanned or otherwise text-free PDFs, which is the signal
-// to read the file in primary-sources/ by hand instead.
+// Fallback PDF text reader. Returns "" for scanned PDFs - the signal to read the file by hand.
 export function extractPdfText(buf) {
   const streams = [];
   let pos = 0;
@@ -289,12 +286,7 @@ async function fetchRendered(url) {
 
 /**
  * Returns { snapshot, fromCache, previousHash, changed, written, archivedTo, mismatch }.
- *
- * Never touches the network when a stored snapshot is younger than SNAPSHOT_MAX_AGE_DAYS and
- * `force` is not set. A detected content change is NEVER written — the candidate comes back
- * unwritten for a human to review. `apply` commits an approved outcome: "cosmetic" keeps the
- * content window open and refreshes the text, "meaningful" archives the old snapshot first and
- * starts a new window. See CLAUDE.md ▸ The snapshot store.
+ * A detected change is NEVER written unprompted; `apply` commits a reviewed one. CLAUDE.md ▸ The snapshot store.
  */
 export async function getPage({
   cert,

@@ -1,6 +1,5 @@
-// Browser-side behavior that belongs to EVERY page, imported once by Layout.astro. The other modules
-// beside it are purpose-built and imported by the one component or page that needs them.
-// Anything added here ships on all routes, so it earns its place by being small and cross-cutting.
+// Browser-side behavior for EVERY page, imported once by Layout.astro.
+// Anything added here ships on all routes, so it must be small and cross-cutting.
 
 // Past this the page counts as scrolled. Low, so the chrome reacts to the first wheel notch.
 const SCROLLED_PX = 4;

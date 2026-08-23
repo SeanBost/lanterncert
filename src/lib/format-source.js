@@ -1,8 +1,7 @@
 // The one place a registry entry becomes the line of text under its link.
 
 /**
- * Parts rather than one string, so the render layer can set the separators apart from the text.
- * Both years are optional and often absent.
+ * Parts rather than one string, so the render layer can style the separators apart.
  * @param {{ publisher: string, published: number | null, verifiedCurrentIn: number | null }} source
  * @returns {string[]}
  */

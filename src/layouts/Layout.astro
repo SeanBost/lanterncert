@@ -4,7 +4,9 @@ import SiteHeader from "../components/SiteHeader.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 import { site } from "../lib/cert-data.js";
 
-const { title, description, bareTitle = false, noindex = false, geo = false } = Astro.props;
+// fonts: extra Google Fonts specs for ONE page, e.g. "Montserrat:wght@100..900". Site-wide type is
+// Figtree alone; a page asks for another face only to reproduce a quoted source in its own.
+const { title, description, bareTitle = false, noindex = false, geo = false, fonts = [] } = Astro.props;
 
 // Title standard: "[brief self-describing title] - LanternCert", homepage excepted.
 const pageTitle = bareTitle ? title : `${title} - ${site.name}`;
@@ -48,6 +50,11 @@ const canonical = new URL(path, site.url).href;
 			href="https://fonts.googleapis.com/css2?family=Figtree:wght@300..900&display=swap"
 			rel="stylesheet"
 		/>
+		{/* One family per link - a combined request has been seen to silently drop families, and a
+		    missing face falls back looking plausible. CLAUDE.md ▸ Gotchas ▸ CSS. */}
+		{fonts.map((family) => (
+			<link href={`https://fonts.googleapis.com/css2?family=${family}&display=swap`} rel="stylesheet" />
+		))}
 	</head>
 	<body>
 		<a class="skip-link" href="#main">Skip to content</a>

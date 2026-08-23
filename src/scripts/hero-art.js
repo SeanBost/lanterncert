@@ -20,10 +20,8 @@ const DRIFT_PERIOD_MAX = 12;
 // A frame after a background tab returns is worth the whole hidden span, which would teleport a tile.
 const MAX_FRAME_S = 0.05;
 
-// Mirrored from src/content/sources/motorcycle-endorsement-sources.json - every multi-state and
-// non-MVP entry, then FL/GA/TX/CA round-robin to 48. HAND-MAINTAINED: a registry edit does not
-// reach this list, so a retired URL here outlives the sweep that would have caught it.
-// Sources refreshed on 2026-08-18.
+// Mirrored from the sources registry, HAND-MAINTAINED: a registry edit does not reach this list,
+// so a retired URL here outlives the sweep. Refreshed 2026-08-18.
 const SOURCES = [
   { title: "AZ MVD Motorcycle License and Endorsement Guide", url: "https://azdot.gov/mvd/services/driver-license-ID/motorcycle-license" },
   { title: "HI DOT Motorcycle, Scooter and Moped Rules", url: "https://hidot.hawaii.gov/highways/safe-communites/motorcycles-motor-scooters-and-mopeds-general-information/" },
@@ -171,10 +169,8 @@ export function initHeroArt() {
   }
   requestAnimationFrame(drift);
 
-  // Re-shuffled every pass: a fixed order would swap each tile at the same point in every cycle,
-  // which the eye starts to track. Alternating the pair is what makes a pass reversible.
-  // The in-flight skip guards the pass BOUNDARY - without it a tile ending one pass could be drawn
-  // again at the start of the next while still mid-fade, running two animations on one element.
+  // Re-shuffled every pass, so the eye cannot learn the order.
+  // The in-flight skip guards the pass boundary: without it one tile could run two animations.
   let queue = [];
   const inFlight = new Set();
   function nextIndex() {
@@ -186,9 +182,8 @@ export function initHeroArt() {
   async function swap(index) {
     const cell = cells[index];
     inFlight.add(index);
-    // A link that changes identity under the cursor is a mis-click waiting to happen, so mid-fade it
-    // stops being a link at all. The attribute drives the pointer-events rule in global.css.
-    // The tile's own tabindex="-1" is permanent and set in the markup, so nothing here touches it.
+    // Mid-fade a tile stops being a link, via the pointer-events rule in global.css.
+    // tabindex="-1" is permanent and set in the markup - nothing here may touch it.
     cell.el.setAttribute("aria-disabled", "true");
     await fade(cell.el, 1, 0);
     cell.shown ^= 1;

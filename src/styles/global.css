@@ -40,6 +40,11 @@ img, svg {
   /* EXPERIMENT - all-sans page. To revert: restore the Bitter stack here and its family in the
      Layout.astro font URL. Was: "Bitter", Georgia, "Times New Roman", serif */
   --font-display: var(--font-body);
+  /* Quoted sources are set in their publisher's own face; only pages that ask Layout for it have it. */
+  --font-quote: "Montserrat", "Open Sans", Corbel, Arial, sans-serif;
+  /* The AI overview's own stack, minus Google Sans - reproducing a search product's exact house face
+     is too on the nose (Sean). Roboto is the real fallback in that stack, so this stays honest. */
+  --font-overview: "Roboto", Arial, sans-serif;
   --weight-normal: 400;
   --weight-semi: 600;
   --weight-bold: 700;
@@ -95,6 +100,8 @@ img, svg {
   --color-ink-med: #2e2a33;
   --color-ink-light: #4a4552;
   --color-ink-lightest: #736b80;
+  /* The ink ramp's hue and saturation at 88% lightness. Unused; kept per the unused-color rule. */
+  --color-ink-lightester: #9e99a7;
 
   /* Surfaces, never ink — both fail AA as type and fail the 3:1 non-text bar. */
   --color-lantern-yellow: #f2b230;
@@ -109,6 +116,10 @@ img, svg {
   --color-lantern-yellow-dark: #bf8000;
   --color-lantern-orange-dark: #bf4000;
 
+  /* GA DDS's own body ink - a quoted artifact only, never part of the palette.
+     A second publisher gets a second token, never this one. */
+  --color-quote-ink: #38424b;
+
   /* ---- Color: semantic roles --------------------------------------------
      Roles resolve to a token above and may never introduce a hex. */
 
@@ -119,7 +130,7 @@ img, svg {
   --color-footer: var(--color-lantern-orange-nearwhite);
 
   --color-text: var(--color-ink);
-  --color-border: var(--color-ink-lightest);
+  --color-border: var(--color-ink-lightester);
   /* The two ends of the button's hover sweep, each with the type color it carries. Orange is a
      surface and never holds type, so it arrives as the sweep rather than sitting under the label. */
   --color-accent: var(--color-ink-med);
@@ -138,7 +149,7 @@ img, svg {
      tablet band holds a stacked card at it rather than letting it grow with the page. */
   --card-w: 46rem;
   --gutter: var(--space-4);
-  --rule: 1px solid var(--color-border);
+  --standard-border: 1px solid var(--color-border);
   --header-h: 3.75rem;
   /* Desktop only. Deepens the band below the centered row, so it never moves the logo or the nav.
      Set to match the space ABOVE a nav item, which the row's own centering puts at --space-3. */
@@ -152,9 +163,7 @@ img, svg {
 
 html {
   -webkit-text-size-adjust: 100%;
-  /* The header is fixed at every width, so in-page anchors need somewhere to land. --space-7 rather
-     than a hairline gap, so a jumped-to target arrives clear of the band instead of against it.
-     Tracks body's clearance and gains --header-drop at 768, where the band deepens. */
+  /* Where an in-page anchor lands under the fixed header. Gains --header-drop at 768. */
   scroll-padding-top: calc(var(--header-h) + var(--space-7));
   /* Reserves the scrollbar's width whether or not the page scrolls, so centered content sits at the
      same x on every page. Without it a short page is offset from a tall one by half a scrollbar. */
@@ -212,9 +221,7 @@ h3 {
 /* Browser defaults, hardcoded and deliberately outside the token system. CLAUDE.md ▸ Locked decisions. */
 /* The mosaic's URL line joins each list rather than restating the hexes; a visited color reaches a
    child only through a selector, never through inheritance, so all four states name it. */
-/* The browsers' LinkText and VisitedText, lightened at their own hues to ~2:1 against body ink -
-   an interim step toward the 3:1 WCAG G183 wants now that the underline is hover-only. Each hover
-   keeps the luminance jump the pair already had (x1.41 blue, x1.65 purple). */
+/* The browsers' own hues, lightened. CLAUDE.md ▸ Locked decisions. */
 a, .source-tile__host {
   color: #0000ff;
   text-decoration: none;
@@ -232,9 +239,8 @@ a:visited:hover, .source-tile:visited:hover .source-tile__host {
   color: #8d4dc8;
 }
 
-/* The underline is the interaction cue, not the resting state. Decoration is state-independent, so
-   this one rule covers visited too. :focus-visible is not optional here - with no resting underline
-   the color is the only thing marking a link, so the keyboard needs the same cue the mouse gets. */
+/* The underline is the interaction cue, not the resting state.
+   :focus-visible is not optional - with no resting underline, color is the only marker. */
 a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
   text-decoration: underline;
   text-underline-offset: 0.15em;
@@ -266,8 +272,11 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
 }
 
 /* Prose beside a sidebar. One column until the desktop breakpoint, 60/40 above it. */
+/* minmax(0,…) is load-bearing: an auto track floors at min-content, so one nowrap descendant
+   pushes the column past the viewport, where overflow-x: clip hides the damage. */
 .split {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-6);
 }
 
@@ -290,9 +299,8 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
     color-mix(in srgb, var(--color-lantern-yellow) var(--art-tint), transparent),
     color-mix(in srgb, var(--color-lantern-orange-dark) var(--art-tint), transparent)
   );
-  /* Two crossed fades, multiplied. Only the alpha matters, so --black is standing in for "opaque"
-     rather than acting as a color choice. `intersect` is load-bearing: the default `add` unions the
-     layers into a fully opaque mask, which is also the safe way this degrades. */
+  /* Two crossed fades, multiplied.
+     `intersect` is load-bearing - the default `add` unions them opaque, which is how this degrades. */
   mask-image:
     linear-gradient(
       to right,
@@ -384,9 +392,7 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
   }
 }
 
-/* What makes the band read as a layer over the content rather than as part of the page. Set by
-   src/scripts/global.js, so it is absent until something is actually behind the header.
-   The one approved exception to the no-drop-shadows rule (Sean). CLAUDE.md ▸ Design system. */
+/* The scrolled band's shadow, set by src/scripts/global.js. CLAUDE.md ▸ The header band. */
 :root[data-scrolled] .site-header {
   box-shadow: var(--header-shadow-geometry)
     color-mix(in srgb, var(--color-ink) var(--header-shadow-tint), transparent);
@@ -486,9 +492,8 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
   padding-block: var(--space-5) var(--space-4);
 }
 
-/* The scrim over everything below the open panel. Absolute, not fixed: a fixed child would resolve
-   top: 100% against the viewport rather than against the header it has to start under.
-   It takes pointer events on purpose - SiteHeader.astro closes the menu on a tap here. */
+/* The scrim under the open panel. Absolute, not fixed - a fixed child resolves top: 100% against
+   the viewport. It takes pointer events; SiteHeader.astro closes the menu on a tap here. */
 .site-header--open::after {
   content: "";
   position: absolute;
@@ -513,7 +518,7 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
 
 /* Nav separators, commented out rather than deleted.
 .site-nav__list > li + li {
-  border-top: var(--rule);
+  border-top: var(--standard-border);
 }
 */
 
@@ -550,7 +555,7 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
 
 .site-footer {
   background-color: var(--color-footer);
-  /* border-top: var(--rule); */
+  /* border-top: var(--standard-border); */
   font-size: var(--text-sm);
 }
 
@@ -636,7 +641,8 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
   gap: var(--space-2);
 }
 
-/* Empty alt text, as on .correction__row: the heading beside it says everything the glyph does. */
+/* Empty alt text is load-bearing: the heading beside it says everything the glyph does, so assistive
+   tech should skip it rather than announce "check". */
 .card-grid--lit .card__title::before {
   content: "\2713" / "";
   color: var(--color-lantern-orange-dark);
@@ -701,9 +707,7 @@ ul.accent-edge, ol.accent-edge {
   initial-value: 0%;
 }
 
-/* One color driving the whole halo stack, so the shadows are declared once and the states below are
-   a single line each. Registered for the same reason as --btn-sweep: an unregistered custom property
-   cannot be transitioned. */
+/* One color driving the whole halo stack; registered so it can be transitioned. */
 @property --btn-glow {
   syntax: "<color>";
   inherits: false;
@@ -718,12 +722,8 @@ ul.accent-edge, ol.accent-edge {
      height. .btn--secondary paints it back, having no fill of its own to draw an edge with. */
   border: 1px solid transparent;
   border-radius: var(--radius-lg);
-  /* Splash-fade. The hover color is a diagonal wedge that grows across the button, fading out over
-     its trailing 30% into the ink underneath - so the sweep is one moving edge, not two layers.
-     --btn-sweep is a percentage ALONG THE GRADIENT LINE, which always spans the real box, so the
-     wedge covers every corner at any width; a fixed-size background slid behind the button cannot,
-     because a diagonal reaches the far corner later than the near edge.
-     background-color is the ink end; border-box origin keeps the fill under the 1px border. */
+  /* Splash-fade: a diagonal wedge growing across the button.
+     --btn-sweep is a percentage along the GRADIENT LINE, so it covers every corner at any size. */
   background-color: var(--color-accent);
   background-image: linear-gradient(
     135deg,
@@ -732,9 +732,8 @@ ul.accent-edge, ol.accent-edge {
   );
   background-origin: border-box;
   color: var(--color-accent-ink);
-  /* text-shadow has no spread, so area comes from stacking blurs rather than enlarging one - the
-     passes composite into a dense core and a wide bloom that one shadow cannot reach at any alpha.
-     Transparent at rest, never `none`: `none` has nothing to interpolate and would pop in. */
+  /* Area comes from stacking blurs; text-shadow has no spread.
+     Transparent at rest, never `none` - `none` has nothing to interpolate and pops in. */
   text-shadow: 0 0 var(--space-3) var(--btn-glow), 0 0 var(--space-4) var(--btn-glow),
     0 0 var(--space-5) var(--btn-glow), 0 0 var(--space-6) var(--btn-glow),
     0 0 var(--space-7) var(--btn-glow), 0 0 var(--space-8) var(--btn-glow);
@@ -746,9 +745,8 @@ ul.accent-edge, ol.accent-edge {
   cursor: pointer;
 }
 
-/* Decoration ONLY. Naming the interaction states on the base block above would apply every one of
-   its properties at (0,1,1), outranking the size .autocomplete__submit sets and shrinking the
-   button mid-hover. Keep an interaction-state override down to the property it is for. */
+/* Decoration ONLY - naming interaction states on the base block re-applies every declaration at
+   (0,1,1) and outranks .autocomplete__submit's size. CLAUDE.md ▸ Gotchas ▸ CSS. */
 .btn:hover, .btn:focus-visible, .btn:active {
   text-decoration: none;
 }
@@ -792,7 +790,7 @@ ul.accent-edge, ol.accent-edge {
 }
 
 /* Label/value pairs — quick facts and anything else that pairs a name to a value.
-   The role override is scoped, so the row dividers pick up the accent through --rule. */
+   The role override is scoped, so the row dividers pick up the accent through --standard-border. */
 .facts {
   --color-border: var(--color-lantern-orange-dark);
   padding-right: var(--space-5);
@@ -810,7 +808,7 @@ ul.accent-edge, ol.accent-edge {
   justify-content: space-between;
   gap: var(--space-1) var(--space-4);
   padding-block: var(--space-2);
-  border-bottom: var(--rule);
+  border-bottom: var(--standard-border);
 }
 
 /* Each group is its own dl, so the last row of each one closes on a clean edge under its heading. */
@@ -846,7 +844,7 @@ ul.accent-edge, ol.accent-edge {
 /* A list of things rather than label/value pairs. The surface is .accent-edge's job now. */
 .row-list > li {
   padding-block: var(--space-4);
-  border-bottom: var(--rule);
+  border-bottom: var(--standard-border);
 }
 
 .row-list > li:last-child {
@@ -875,12 +873,10 @@ ul.accent-edge, ol.accent-edge {
   line-height: var(--leading-loose);
 }
 
-/* Delineated like .row-list, so the gap between entries is padding either side of a rule. The rule
-   spans the li, which starts on the list's content edge - so it lines up with the numbers, exactly
-   as .facts__row's rules line up with that panel's rows. */
+/* Entries delineated by a rule, aligned to the list's content edge. */
 .source-list > li {
   padding-block: var(--space-3);
-  border-bottom: var(--rule);
+  border-bottom: var(--standard-border);
   font-weight: var(--weight-semi);
 }
 
@@ -888,9 +884,8 @@ ul.accent-edge, ol.accent-edge {
   border-bottom: 0;
 }
 
-/* One indent for both, and for .accent-edge it doubles as the gutter off the bar - the same
-   --space-5 .facts uses, so the two blocks hold their content the same distance off the accent.
-   The element in the selector is load-bearing: a lone .source-list loses to the ul[class] reset. */
+/* One indent for both, doubling as the gutter off .accent-edge's bar.
+   The element in the selector is load-bearing: a lone class loses to the ul[class] reset. */
 ol.source-list, ul.source-list {
   padding-left: var(--space-5);
 }
@@ -912,9 +907,8 @@ ol.source-list > li::before {
   left: 0;
 }
 
-/* Marks the source a citation just jumped to. NOT in §7: a background fading in and out is a color
-   change, not movement, so a reduced-motion reader still gets the one cue that says "this one".
-   Ends on the page color rather than transparent, so nothing rides on how alpha interpolates. */
+/* Marks the source a citation jumped to. NOT in §7 - a color change is not movement, so a
+   reduced-motion reader still gets the cue. */
 @keyframes source-hit {
   0% { background-color: var(--color-page); }
   17% { background-color: var(--color-lantern-yellow-offwhite); }
@@ -947,59 +941,200 @@ ol.source-list > li::before {
   margin-inline: var(--sep-gap);
 }
 
-/* A correction shown as one: the claim struck through, the sourced answer under it. The marker
-   column spans both rows so the glyph centers against the pair, not against the label alone.
-   Sits closer to its heading and its source line than .stack's default gap - ties that rule on
-   specificity, so it only wins by living below §4. */
-.correction, .correction + * {
+/* The homepage's proof block: a claim as an AI overview stated it, then the agency's own sentence,
+   each reproduced inside the chrome of where it came from. */
+.correction__label {
+  font-size: var(--text-sm);
+  color: var(--color-ink-light);
+  text-align: center;
+}
+
+/* The caption sits UNDER its card now, so the gap is on this side. A step tighter than the --space-3
+   it had above the card, since a caption belongs to what it follows. */
+.correction__browser + .correction__label {
   margin-top: var(--space-2);
 }
 
-.correction__row {
-  display: grid;
-  grid-template-columns: 1.5rem minmax(0, 1fr);
-  gap: 0 var(--space-2);
-  padding-block: var(--space-3);
+/* Registered so the glow can be transitioned - an unregistered custom property has no type to
+   interpolate and would snap at the midpoint. CLAUDE.md ▸ Gotchas ▸ CSS. */
+@property --key-glow {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: transparent;
 }
 
-/* The empty alt text is load-bearing - the dt beside it already names the row, so the glyph is
-   decoration and assistive tech should skip it rather than announce "times" or "check". */
-.correction__row::before {
-  grid-column: 1;
-  grid-row: 1 / 3;
-  align-self: center;
-  justify-self: center;
-  font-size: var(--text-2xl);
-  line-height: 1;
+/* The phrase the light lands on. CLAUDE.md ▸ The correction block.
+   Resting LIT - §7 darkens it only where a script can light it again. */
+.correction__key {
+  --key-glow: color-mix(in srgb, var(--color-lantern-yellow) 25%, transparent);
+  color: var(--color-ink);
+  font-weight: var(--weight-semi);
+  text-shadow: 0 0 var(--space-2) var(--key-glow), 0 0 var(--space-3) var(--key-glow),
+    0 0 var(--space-4) var(--key-glow), 0 0 var(--space-5) var(--key-glow),
+    0 0 var(--space-6) var(--key-glow);
 }
 
-.correction__label {
-  grid-column: 2;
+/* A window onto the publisher's page. CLAUDE.md ▸ The correction block.
+   --frame-w is the edge, the seam and the air around the pill at once. */
+.correction__browser {
+  --frame-w: 5px;
+  --card-glow: color-mix(in srgb, var(--color-lantern-yellow) 75%, transparent);
+  display: flex;
+  flex-direction: column;
+  gap: var(--frame-w);
+  padding: var(--frame-w);
+  border-radius: var(--radius-md);
+  background-color: var(--color-lantern-yellow-offwhite);
+  background-image: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--color-lantern-yellow) 12%, var(--color-lantern-orange-nearwhite)),
+    color-mix(in srgb, var(--color-lantern-orange) 12%, var(--color-lantern-orange-nearwhite))
+  );
+}
+
+/* The panes. The dots sit outside the bar, on the shell. */
+.correction__bar, .correction__quote, .correction__overview {
+  background-color: var(--color-surface);
+}
+
+.correction__quote, .correction__overview {
+  border-radius: var(--radius-sm);
+}
+
+/* A character waiting its turn - transparent, so the text is laid out and typing causes no reflow.
+   Scoped through the card so it outranks .correction__key's own color from anywhere in the file. */
+.correction__browser .correction__char--pending {
+  color: transparent;
+}
+
+/* The dots' row on the shell. No vertical padding on purpose: the frame's own padding above and the
+   gap below are what put --frame-w of air on each side of the pill, from the single knob. */
+.correction__chrome {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding-inline: var(--space-2);
+}
+
+/* min-width: 0 is load-bearing - without it the nowrap URL drags the whole column past the viewport,
+   where overflow-x: clip hides the damage rather than showing it. */
+.correction__bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex: 1;
+  min-width: 0;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-pill);
+  line-height: var(--leading-tight);
+}
+
+/* Three dots, two of them blends toward orange. 10px on a 15px pitch.
+   An unsupported color-mix drops the whole image and all three dots - decoration only. */
+.correction__dots {
+  flex: none;
+  width: 40px;
+  height: 10px;
+  background-image: radial-gradient(
+      circle 5px at 5px 5px,
+      color-mix(in srgb, var(--color-lantern-orange) 50%, var(--color-lantern-orange-nearwhite)) 99%,
+      transparent 100%
+    ),
+    radial-gradient(
+      circle 5px at 5px 5px,
+      color-mix(in srgb, var(--color-lantern-yellow) 50%, var(--color-lantern-yellow-nearwhite)) 99%,
+      transparent 100%
+    ),
+    radial-gradient(
+      circle 5px at 5px 5px,
+      color-mix(in srgb, var(--color-lantern-orange) 50%, var(--color-lantern-yellow-nearwhite)) 99%,
+      transparent 100%
+    );
+  background-position: 0 0, 15px 0, 30px 0;
+  background-size: 10px 10px;
+  background-repeat: no-repeat;
+}
+
+/* The address bar's link, in the site's own face and the base link hues.
+   min-width: 0 is load-bearing - without it the nowrap URL never ellipses and blows out the column. */
+.correction__url {
+  min-width: 0;
+  overflow: hidden;
+  font-size: var(--text-sm);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* Weight rather than color separates host from path, the way a real address bar dims the path -
+   which a single link color cannot do without breaking the link affordance. */
+.correction__host {
+  font-weight: var(--weight-semi);
+}
+
+/* PLACEHOLDER magnifier. Sized in the bar's own ink so it reads as chrome furniture, not as content. */
+.correction__glyph {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  color: var(--color-ink-lightest);
+}
+
+/* A query, not a destination - so unlike the address bar this is plain text and never a link.
+   min-width: 0 for the same reason .correction__url needs it. */
+.correction__search {
+  min-width: 0;
+  overflow: hidden;
+  font-size: var(--text-sm);
+  color: var(--color-ink-light);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* Roboto at Material's body-large metrics - CHOSEN, not measured, unlike the DDS card. */
+.correction__overview {
+  margin: 0;
+  padding: var(--space-5) var(--space-4);
+  font-family: var(--font-overview);
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--color-ink-med);
+}
+
+/* GA DDS's own type, measured from the live page; re-measure before changing these numbers.
+   blockquote is not in §1's margin reset, so the UA's 1em/40px is cleared here. */
+.correction__quote {
+  margin: 0;
+  padding: var(--space-5) var(--space-4);
+  font-family: var(--font-quote);
+  font-size: 16px;
+  font-weight: 380;
+  line-height: 26px;
+  letter-spacing: 0.32px;
+  color: var(--color-quote-ink);
+}
+
+/* Clear of the glow, which reaches --space-8 past the frame and would otherwise sit under the text. */
+.correction__browser + .correction__source {
+  margin-top: var(--space-5);
+}
+
+.correction__source {
   font-size: var(--text-sm);
   color: var(--color-ink-light);
 }
 
-.correction__value {
-  grid-column: 2;
-  font-family: var(--font-display);
-  font-size: var(--text-lg);
-  line-height: var(--leading-tight);
+.correction__meta {
+  display: block;
 }
 
-.correction__row--wrong::before {
-  content: "\2715" / "";
-  color: var(--color-ink);
+/* The quote is the block's centerpiece, so it gets more air above it than .stack's step. Two classes,
+   so it outranks that step from anywhere in the file rather than relying on sitting below it. */
+.correction > * + .correction__evidence {
+  margin-top: var(--space-5);
 }
 
-.correction__row--wrong .correction__value {
-  color: var(--color-ink-light);
-  text-decoration: line-through;
-}
-
-.correction__row--right::before {
-  content: "\2713" / "";
-  color: var(--color-lantern-orange-dark);
-}
+/* PARKED - ambient light under one card, cut so it cannot compete with the certifications art.
+   Three ways this renders as NOTHING rather than as something wrong: blackbox/sessions.md 24. */
 
 /* Ties the lead-in to the field width so the two read as one control. Owns its own inner gap rather
    than taking .stack's, so the sentence sits close to the field it runs into. */
@@ -1105,9 +1240,7 @@ ul.source-wall__row {
   position: relative;
 }
 
-/* Field and submit both take the lede's size, so the hero's three text sizes are two. Weight comes
-   from .btn, which is already semibold. flex: none plus nowrap is what stops the label wrapping -
-   a flex child defaults to shrinkable, so a squeezed row breaks the words instead of the layout. */
+/* Field and submit share a size so their heights compute equal; nowrap stops the label wrapping. */
 .autocomplete__submit {
   flex: none;
   font-size: var(--text-xl);
@@ -1119,7 +1252,7 @@ ul.source-wall__row {
   width: 100%;
   min-height: 44px;
   padding: var(--space-2) var(--space-3);
-  border: var(--rule);
+  border: var(--standard-border);
   border-radius: var(--radius-md);
   background-color: var(--white);
   color: var(--color-ink);
@@ -1147,7 +1280,7 @@ ul.source-wall__row {
   left: 0;
   right: 0;
   margin-top: var(--space-1);
-  border: var(--rule);
+  border: var(--standard-border);
   border-radius: var(--radius-md);
   background-color: var(--white);
   overflow: hidden;
@@ -1170,7 +1303,7 @@ ul.source-wall__row {
   top: 0;
   left: var(--space-3);
   right: var(--space-3);
-  border-top: var(--rule);
+  border-top: var(--standard-border);
 }
 
 .autocomplete__option[aria-selected="true"] {
@@ -1178,12 +1311,12 @@ ul.source-wall__row {
 }
 
 .faq__item {
-  border-bottom: var(--rule);
+  border-bottom: var(--standard-border);
   padding-block: var(--space-3);
 }
 
 .faq__item:first-child {
-  border-top: var(--rule);
+  border-top: var(--standard-border);
 }
 
 .faq__item summary {
@@ -1221,9 +1354,7 @@ ul.source-wall__row {
   line-height: var(--leading-tight);
 }
 
-/* The homepage is the one page whose title is sized as artwork rather than as a heading. balance
-   evens the lines out rather than filling the first one, which is what was pushing a stray word
-   onto a third line. Unsupported browsers just get the normal greedy wrap. */
+/* The one title sized as artwork rather than as a heading. */
 .page-title--hero {
   font-size: var(--text-5xl);
   text-wrap: balance;
@@ -1276,9 +1407,8 @@ ul.source-wall__row {
        width back - the 0.08em it keeps is the breathing room after the word. */
     padding-right: 0.24em;
     margin-right: -0.12em;
-    /* The button's halo, cast from the glyph instead of laid under it: a text-shadow paints ON TOP of
-       a background-clip fill and would smear yellow across the letters. Chained drop-shadows each
-       take the previous result as input, so three reach the bloom the button needs six passes for. */
+    /* The halo cast from the glyph: a text-shadow paints ON TOP of a background-clip fill and smears.
+       Chained drop-shadows compound, so three reach what a text-shadow needs six passes for. */
     filter: drop-shadow(0 0 var(--space-2) var(--sweep-glow))
       drop-shadow(0 0 var(--space-4) var(--sweep-glow))
       drop-shadow(0 0 var(--space-6) var(--sweep-glow));
@@ -1294,9 +1424,6 @@ ul.source-wall__row {
   font-size: var(--text-xl);
 }
 
-/* .page-intro is gone: the lede fills its column, which Figtree at --text-lg puts at ~67 characters.
-   That is inside the range a measure wants, so the explicit cap stopped earning its place. The knob
-   is the column, per CLAUDE.md ▸ Page width - there is still no measure token. */
 
 .caption {
   font-size: var(--text-base);
@@ -1342,8 +1469,7 @@ ul.source-wall__row {
 .quick-links a:nth-of-type(3) { --ql-from: var(--ql-30); --ql-to: var(--ql-70); }
 .quick-links a:nth-of-type(4) { --ql-from: var(--ql-45); --ql-to: var(--ql-85); }
 
-/* Navigation rather than prose, so it leaves the browser hues. Also the resting state where the clip
-   is unavailable, in which case the base a:hover underline is the affordance the sweep would be.
+/* Navigation, so it leaves the browser hues, and the resting state where the clip is unavailable.
    Suppresses a:hover and a:visited:hover by SOURCE ORDER - keep it below the base link rules. */
 .quick-links a, .quick-links a:visited {
   color: var(--color-ink-med);
@@ -1357,17 +1483,16 @@ ul.source-wall__row {
   initial-value: -12%;
 }
 
-/* Transparent type is only safe where the clip is, so the whole effect is gated. CLAUDE.md ▸ Gotchas.
-   Two layers: the ink veil paints ABOVE the ramp, and retreating it is what lights the word up. A
-   wedge rather than a crossfade, so no pixel is ever a blend of the two - see .btn's mid-brown note. */
+/* An ink veil above the ramp; retreating it lights the word. CLAUDE.md ▸ The quick links.
+   Gated on the clip - transparent type is only safe where background-clip: text exists. */
 @supports (background-clip: text) or (-webkit-background-clip: text) {
   .quick-links a, .quick-links a:visited {
     --ql-sweep: -12%;
-    background-color: var(--color-ink-med);
+    background-color: var(--color-ink-light);
     background-image: linear-gradient(
         100deg,
         transparent 0 var(--ql-sweep),
-        var(--color-ink-med) calc(var(--ql-sweep) + 12%) 100%
+        var(--color-ink-light) calc(var(--ql-sweep) + 12%) 100%
       ),
       linear-gradient(100deg, var(--ql-from), var(--ql-to));
     -webkit-background-clip: text;
@@ -1393,7 +1518,7 @@ ul.source-wall__row {
 .badge {
   display: inline-block;
   padding: var(--space-1) var(--space-3);
-  border: var(--rule);
+  border: var(--standard-border);
   border-radius: var(--radius-pill);
   background-color: var(--color-surface);
   font-size: var(--text-sm);
@@ -1434,9 +1559,7 @@ ul.source-wall__row {
     column-gap: var(--space-6);
   }
 
-  /* Drops a right column onto the left column's first BASELINE rather than its box top. The measured
-     drop is 11.4px and this is the scale step nearest it. Margin, not padding, so a column carrying
-     a fill moves together with its background. */
+  /* Drops a right column onto the left column's first baseline. Margin, so a fill moves with it. */
   .baseline-drop {
     margin-top: var(--space-4);
   }
@@ -1504,10 +1627,8 @@ ul.source-wall__row {
     content: none;
   }
 
-  /* The gap plus the anchors' own padding reproduces the 2rem that used to sit on the li, which now
-     has to stay clear so the current item's pill can draw the whole target.
-     margin-right cancels that padding on the last label, which is otherwise held off the gutter the
-     logo aligns to - the nav is right-aligned, so the trailing padding pushes every label left. */
+  /* Desktop nav metrics.
+     margin-right cancels the last label's trailing padding, which otherwise holds it off the gutter. */
   .site-nav__list {
     --nav-pad-x: var(--space-3);
     /* Drops the bar onto the header's bottom edge. It equals --header-drop only because .site-nav's
@@ -1523,7 +1644,7 @@ ul.source-wall__row {
 
   /* Nav separators, commented out rather than deleted. Restoring one needs its own spacing back.
   .site-nav__list > li + li {
-    border-left: var(--rule);
+    border-left: var(--standard-border);
   }
   */
 
@@ -1543,9 +1664,8 @@ ul.source-wall__row {
   }
 }
 
-/* Wide — the width at which .page can finally reach --page-max. Below it the band is "tablet": not
-   designed for, only kept from breaking. Nothing universal belongs here, only what the narrow band
-   gets wrong. 1248 = 78rem; a media query cannot read a custom property, so the two track by hand. */
+/* Wide - the width at which .page reaches --page-max. Only what the tablet band gets wrong belongs here.
+   1248 = 78rem by hand: a media query cannot read a custom property, so the two track together. */
 @media (min-width: 1248px) {
   .card-grid {
     grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
@@ -1568,9 +1688,7 @@ ul.source-wall__row {
     column-gap: var(--space-10);
   }
 
-  /* .split's main column, for a block that sits BELOW a split rather than inside one. It reproduces
-     the ratio and column-gap by hand, so it lives beside .split. Declared only here: through the
-     tablet band the block runs full width, where a half-width column wraps every line. */
+  /* .split's main column, for a block sitting BELOW a split rather than inside one. */
   .col-split-main {
     width: calc((100% - var(--space-10)) * 4 / 7);
   }
@@ -1642,6 +1760,21 @@ ul.source-wall__row {
   /* Runs when the reveal class lands, so the fade always covers the swap rather than racing it. */
   [data-geo] .autocomplete__input {
     transition: color 50ms ease-out;
+  }
+
+  /* The card is dark ONLY where a script exists to light it, so JS off, an old browser and a
+     reduced-motion reader all get the lit card rather than a flat one. */
+  @media (scripting: enabled) {
+    /* A :not() so lit is the ABSENCE of a rule - declaring transparent on .correction__key itself
+       would make that the resting value, and the transition would run toward it. */
+    .correction:not(.correction--typed) .correction__key {
+      --key-glow: transparent;
+    }
+
+    /* Keyed to typing finishing, not to scroll - src/scripts/correction.js adds the class. */
+    .correction__key {
+      transition: --key-glow 700ms ease-out;
+    }
   }
 }
 

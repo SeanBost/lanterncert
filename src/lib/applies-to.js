@@ -1,10 +1,7 @@
 // Resolves a question's applies_to against a state, via exam.examType and never courseType.
 // CLAUDE.md ▸ Locked decisions; data-handling.md ▸ Questions §3.
 
-/**
- * Exam tokens a state's own exam satisfies, walking `conformsTo` UPWARD.
- * Content inherits downward only, and walking up from the state's own exam is what encodes that.
- */
+/** Exam tokens a state's exam satisfies, walking `conformsTo` upward - content inherits downward. */
 function satisfiedBy(examType, exams) {
   const seen = new Set();
   const queue = [examType];

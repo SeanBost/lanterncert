@@ -1,16 +1,9 @@
-// Fills a cert's lede template from one state's facts. Template and rules:
-// src/content/intro/<cert>-intro.json ▸ _about.
-//
-// Output is an HTML STRING, on a deliberate split: template sentences and display strings are
-// authored copy and may carry markup, while anything out of the facts file is data and is escaped.
+// Fills a cert's lede template from one state's facts. src/content/intro/<cert>-intro.json ▸ _about.
+// Returns an HTML string: authored copy may carry markup, facts-file values are escaped.
 import { escapeHtml } from "./cert-data.js";
 import { formatFact } from "./format-fact.js";
 
-/**
- * Units chosen for a sentence rather than a table cell, so they differ from the quick-facts panel's:
- * an age reads "from 16", not "from 16 years". A field absent here renders as a bare number.
- * renewalYears is plain "years" because the template's `when` handles 0 as its own sentence.
- */
+/** Sentence units, deliberately not the quick-facts panel's. An absent field renders bare. */
 const PROSE_UNITS = {
 	"exam.timeLimitMinutes": "minutesLong",
 	"exam.passingScorePercent": "percent",
@@ -37,8 +30,7 @@ function requireFact(path, ctx) {
 }
 
 /**
- * Splits one sentence into segments, so the caller can decide what to do with each fact AFTER the
- * variant is accepted - a rejected variant must not number a source it never printed.
+ * Splits a sentence into segments so the caller acts per fact only once the variant is accepted.
  * @returns {{ segments: any[] } | null} null if any placeholder had no value.
  */
 function split(text, ctx) {
@@ -87,9 +79,8 @@ function pickVariant(slot, ctx) {
 		if (!picked) continue;
 		// A sentence carrying no fact still makes a claim, so `cite` lets it name its own sources.
 		const cite = spec.cite ?? [];
-		// A gated sentence is a claim ABOUT the fact it is gated on, so that fact is cited too even
-		// though it never appears as a placeholder - "it does not expire" is renewalYears speaking.
-		// It has no text of its own, so it attaches to the sentence's first segment.
+		// A gated sentence cites the fact it is gated on, which never appears as a placeholder.
+		// It has no text of its own, so it attaches to the first segment.
 		const gates = when.map(([path]) => requireFact(path, ctx).source?.id).filter(Boolean);
 		return { segments: picked.segments, gates, cite };
 	}
@@ -100,8 +91,7 @@ function pickVariant(slot, ctx) {
  * @param {{ cert: string, facts: any, stateName: string, template: any,
  *   token: (field: string, fact: any, form?: "short" | "long") => string | null,
  *   hrefFor: (sourceId: string) => string | null }} args
- *   `token` must be a tokenDisplay() built with asHtml, since the result is rendered as HTML.
- *   `hrefFor` is called once per cited fact IN READING ORDER, which is what numbers the sources.
+ *   `token` must be built with asHtml; `hrefFor` is called per cited fact in reading order.
  * @returns {{ html: string }[]} paragraphs of filled prose, empty ones dropped
  */
 export function stateIntro({ cert, facts, stateName, template, token, hrefFor }) {
