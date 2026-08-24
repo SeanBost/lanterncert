@@ -36,7 +36,7 @@ function one(value, unit) {
 export function formatFact(value, unit) {
   if (value === null || value === undefined) return null;
   // Unspaced, the standard form for a range. A spaced hyphen reads as a dash between two separate
-  // figures; "$32-$42" reads as one span. CLAUDE.md ▸ Conventions rules out an en dash.
+  // figures; "$32-$42" reads as one span. A rendered en dash is ruled out site-wide.
   if (Array.isArray(value)) return `${one(value[0], unit)}-${one(value[1], unit)}`;
   return one(value, unit);
 }

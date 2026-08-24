@@ -15,7 +15,8 @@
       "timeLimitMinutes":    { "value": null, "source": "xx-msf-brc-handbook" },
       "passingScorePercent": { "value": 80, "source": "xx-msf-brc-handbook" },
       "isExamSectioned":     { "value": false, "source": "xx-msf-brc-handbook" },
-      "examSectionNames":    { "value": null, "source": "xx-msf-brc-handbook" }
+      "examSectionNames":    { "value": null, "source": "xx-msf-brc-handbook" },
+      "practiceExam":        { "value": null, "source": null }
     },
     "criteria": {
       "dmvCost":    { "value": [32, 38.25], "source": "fl-hsmv-fees" },
@@ -45,7 +46,7 @@
       "agencyCode": "GA DDS",
       "agencyName": "Georgia Department of Driver Services",
       "localTerm": "Class M license",
-      "note": "Knowledge exam is two 20-question sections (Road Rules, Road Signs) needing 15 correct on each. Knowledge exam scores expire after one year. GMSP course completion waives both the knowledge and skills tests for 90 days; the course grades its own written evaluation at 80%. A Class MP permit is available at 16, allows one renewal, and is required to book a DDS skills test; DDS testers supply and insure their own motorcycle. Course tuition is $250 in-state and $300 out-of-state.",
+      "note": "Knowledge exam is two 20-question sections (Road Rules, Road Signs) needing 15 correct on each. Knowledge exam scores expire after one year. GMSP course completion waives both the knowledge and skills tests for 90 days; the course grades its own written evaluation at 80%. A Class MP permit is available at 16, allows one renewal, and is required to book a DDS skills test; DDS testers supply and insure their own motorcycle. Course tuition is $250 in-state and $300 out-of-state. DDS publishes no MOTORCYCLE practice test. The practice test at online.dds.ga.gov is the car one - 45 general knowledge questions plus 5 road signs, drawn from the Driver's Manual, and its only motorcycle question is asked from the car driver's side. It is offered anyway because the Class M knowledge exam is sectioned Road Rules and Road Signs exactly as that test is, and the signs half is common to both; practiceExam names it 'General Road Rules Practice Test' so a rider is never told it is motorcycle-specific.",
       "stateDetails": null
     },
     "exam": {
@@ -55,7 +56,8 @@
       "timeLimitMinutes":    { "value": null, "source": null },
       "passingScorePercent": { "value": 75, "source": "ga-dds-test-exams" },
       "isExamSectioned":     { "value": true, "source": "ga-dds-test-exams" },
-      "examSectionNames":    { "value": "Road Rules and Road Signs", "source": "ga-dds-test-exams" }
+      "examSectionNames":    { "value": "Road Rules and Road Signs", "source": "ga-dds-test-exams" },
+      "practiceExam":        { "value": "General Road Rules Practice Test", "source": "ga-dds-practice-test" }
     },
     "criteria": {
       "dmvCost":    { "value": [32, 42], "source": "ga-dds-fees-terms" },
@@ -92,7 +94,8 @@
       "timeLimitMinutes":    { "value": null, "source": "tx-tdlr-curriculum" },
       "passingScorePercent": { "value": null, "source": "tx-tdlr-curriculum" },
       "isExamSectioned":     { "value": null, "source": "tx-tdlr-curriculum" },
-      "examSectionNames":    { "value": null, "source": "tx-tdlr-curriculum" }
+      "examSectionNames":    { "value": null, "source": "tx-tdlr-curriculum" },
+      "practiceExam":        { "value": null, "source": null }
     },
     "criteria": {
       "dmvCost":    { "value": [16, 33], "source": "tx-dps-fees" },
@@ -130,7 +133,8 @@
       "timeLimitMinutes":    { "value": null, "source": null },
       "passingScorePercent": { "value": 80, "source": "ca-dmv-instruction-permits" },
       "isExamSectioned":     { "value": false, "source": "ca-dmv-instruction-permits" },
-      "examSectionNames":    { "value": null, "source": "ca-dmv-instruction-permits" }
+      "examSectionNames":    { "value": null, "source": "ca-dmv-instruction-permits" },
+      "practiceExam":        { "value": "Sample Motorcycle Written Test", "source": "ca-dmv-sample-m-test-1" }
     },
     "criteria": {
       "dmvCost":    { "value": 46, "source": "ca-dmv-licensing-fees" },

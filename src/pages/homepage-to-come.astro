@@ -5,8 +5,8 @@ import { certs, loadAllSources, loadSourceEntries, loadState } from "../lib/cert
 
 const list = Object.values(certs);
 
-// Georgia until there is a sourced correction per state - blackbox/todo.md. The link and the date
-// come from the registry rather than the copy, so the homepage can never cite a stale URL.
+// Georgia until there is a sourced correction per state. The link and the date come from the
+// registry rather than the copy, so the homepage can never cite a stale URL.
 const CORRECTION = { cert: "motorcycle-endorsement", state: "ga", sourceId: "ga-dds-test-exams" };
 const correctionFacts = await loadState(CORRECTION.cert, CORRECTION.state);
 const [correctionSource] = await loadSourceEntries(CORRECTION.cert, [CORRECTION.sourceId]);
@@ -113,7 +113,7 @@ for (const size of rowSizes) {
 							<ul class:list={["source-wall__row", i % 2 === 0 && "source-wall__row--offset"]}>
 								{row.map((source) => (
 									<li>
-										{/* Out of the tab order on purpose - the wall is artwork. CLAUDE.md ▸ Current state. */}
+										{/* Out of the tab order on purpose - the wall is artwork, and hero-art.js may never touch this. */}
 										<a
 											class="source-tile"
 											href={source.url}
@@ -134,7 +134,7 @@ for (const size of rowSizes) {
 		</div>
 
 		<div class="split band band--warm">
-			<section class="stack" aria-labelledby="trust-heading">
+			<section class="stack band-warm-blur" aria-labelledby="trust-heading">
         <h2 class="section-title" id="trust-heading">Everything you need to know, <span class="text-accent">cited</span></h2>
 				<div class="prose">
 					<p>
@@ -160,12 +160,8 @@ for (const size of rowSizes) {
 
 				{/* <p>Others often muddy important details, like with Georgia's Knowledge Exam.</p> */}
 
-				{/* A real AI overview for the query shown, captured 2026-08-23. NOT a registry source and it
-				    must never become one: it is non-primary, non-reproducible and not a document we hold.
-				    It is exhibited as an example of the problem, never cited as evidence of a fact.
-				    Two contiguous fragments, never a stitched sentence: the leading ellipsis drops the agency's
-				    full name and the internal one drops "based strictly on the official Georgia Motorcycle
-				    Operators Manual". Neither carries a qualifier that would have made the claim right. */}
+				{/* Exhibited as the problem, never cited as evidence - this must never enter the sources registry.
+				    Trimmed to two contiguous fragments; nothing dropped carried a qualifier. */}
 				<figure class="correction__evidence">
 					<div class="correction__browser">
 						<div class="correction__chrome">

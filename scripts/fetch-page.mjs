@@ -286,7 +286,7 @@ async function fetchRendered(url) {
 
 /**
  * Returns { snapshot, fromCache, previousHash, changed, written, archivedTo, mismatch }.
- * A detected change is NEVER written unprompted; `apply` commits a reviewed one. CLAUDE.md ▸ The snapshot store.
+ * A detected change is NEVER written unprompted; `apply` commits a reviewed one.
  */
 export async function getPage({
   cert,

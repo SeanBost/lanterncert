@@ -71,6 +71,14 @@
           "true": "Scored in two or more parts, each with its own gate.",
           "false": "One undivided test with a single passing score."
         }
+      },
+      "practiceExam": {
+        "what": "The agency's own practice test, valued as the short name the state page calls it by. A RESOURCE FACT: the source is not a document backing a claim, it is the practice test itself, and the page links straight to it.",
+        "why": "Same shape as criteria.findCourse, and for the same reason — the destination is already a registry entry, so a second copy of the URL in the value would be a drift vector and the audit sweep already checks the link is live. The value is a title rather than a bare true because an adjacent official test can be worth offering when it is labelled honestly: Georgia's is the CAR test, offered because the Class M knowledge exam is sectioned Road Rules and Road Signs exactly as it is and the signs half is common to both, and titled 'General Road Rules Practice Test' so no rider reads it as motorcycle-specific. That overlap is a reason to link it and never evidence about the exam — nothing about a state's real exam may be cited to this source. A third-party practice site is not a source under any circumstances.",
+        "values": {
+          "<title>": "Their name for it, shortened but not re-worded, where they publish one; ours where they don't. Title Case, since it is link text inside 'the official {agencyCode} …'. Honest about scope before it is short.",
+          "null": "No official practice test worth offering was found. This is a checked answer, not a gap — the field carries no sourced-null form, because the source and the resource are the same thing."
+        }
       }
     },
 

@@ -1,5 +1,5 @@
 // Resolves a question's applies_to against a state, via exam.examType and never courseType.
-// CLAUDE.md ▸ Locked decisions; data-handling.md ▸ Questions §3.
+// data-handling.md ▸ Questions §3.
 
 /** Exam tokens a state's exam satisfies, walking `conformsTo` upward - content inherits downward. */
 function satisfiedBy(examType, exams) {

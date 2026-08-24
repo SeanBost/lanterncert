@@ -51,7 +51,7 @@ const canonical = new URL(path, site.url).href;
 			rel="stylesheet"
 		/>
 		{/* One family per link - a combined request has been seen to silently drop families, and a
-		    missing face falls back looking plausible. CLAUDE.md ▸ Gotchas ▸ CSS. */}
+		    missing face falls back looking plausible. */}
 		{fonts.map((family) => (
 			<link href={`https://fonts.googleapis.com/css2?family=${family}&display=swap`} rel="stylesheet" />
 		))}

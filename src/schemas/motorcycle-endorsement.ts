@@ -1,5 +1,5 @@
 // Everything specific to the motorcycle-endorsement cert. `kit` is PASSED IN from content.config.ts;
-// importing it back would catch the Zod consts in their TDZ. CLAUDE.md ▸ Current state.
+// importing it back would catch the Zod consts in their TDZ.
 import { defineCollection, z } from "astro:content";
 import { file } from "astro/loaders";
 
@@ -122,6 +122,9 @@ export function collections(kit: any) {
           // What the sections are CALLED, for copy. isExamSectioned stays the machine-readable
           // flag: null here must never be read as "not sectioned". data-handling.md ▸ Cert facts.
           examSectionNames: fact(z.string().min(1)),
+          // A resource fact - the source is the test itself, valued as its display title.
+          // data-handling.md ▸ Cert facts ▸ Resource facts.
+          practiceExam: fact(z.string().min(1)),
         }),
         criteria: z.strictObject({
           dmvCost: fact(amount),

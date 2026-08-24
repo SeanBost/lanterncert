@@ -38,7 +38,6 @@ const validated = new Date(Date.UTC(vy, vm - 1, vd)).toLocaleDateString("en-US",
 });
 
 // The LABEL has to carry the per-section gate, or a rider reads a pass into a fail.
-// CLAUDE.md ▸ Gotchas ▸ Process.
 const sectioned = facts.exam.isExamSectioned.value === true;
 
 const examLabel = facts.exam.examName.value ?? `${info.name} exam`;
@@ -53,7 +52,7 @@ const rows = (list) =>
 const token = tokenDisplay(cert, facts, { stateName: info.name, stateCode: info.abbreviation });
 
 // A source takes its number the first time it appears, in reading order, which is also the
-// Sources list's order. CLAUDE.md ▸ Current state.
+// Sources list's order.
 const citations = new Map();
 /** @param {string | null} id */
 const numberSource = (id) => {
@@ -145,7 +144,7 @@ if (cited.length !== citations.size) {
 	throw new Error(`${state}: cited source not in the registry - ${missing.join(", ")}`);
 }
 
-// Order is the progression, and the three names are proper nouns. CLAUDE.md ▸ The three modes.
+// Order is the progression, and the three names are proper nouns.
 const modes = [
 	{
 		href: `${base}/guide`,
@@ -168,11 +167,15 @@ const modes = [
 	},
 ];
 
-// Where a rider goes to start for real, off our site. findCourse's own source IS that destination -
-// a state directory or booking portal - so the CTA needs no second registry entry.
-const courseSourceId = facts.criteria.findCourse.source?.id ?? null;
-const [courseSource] = courseSourceId ? await loadSourceEntries(cert, [courseSourceId]) : [];
-const courseUrl = courseSource?.url ?? null;
+// Resolves a resource fact to its own source's URL. data-handling.md ▸ Cert facts ▸ Resource facts.
+/** @type {(fact: any) => Promise<string | null>} */
+const destination = async (fact) => {
+	const id = fact.source?.id ?? null;
+	const [entry] = id ? await loadSourceEntries(cert, [id]) : [];
+	return entry?.url ?? null;
+};
+const courseUrl = await destination(facts.criteria.findCourse);
+const practiceExamUrl = await destination(facts.exam.practiceExam);
 
 const quickLinks = [
 	...modes.map((mode) => ({ label: mode.title, attrs: { href: mode.href } })),
@@ -191,16 +194,14 @@ const quickLinks = [
 	title={`${info.name} ${term}`}
 	description={`How to get your ${term} in ${info.name} - requirements, costs and exam details from ${facts.meta.agencyName}, plus free practice questions.`}
 >
-	{/* Three full-bleed bands, alternating wash / warm / wash. CLAUDE.md ▸ The section bands. */}
+	{/* Three full-bleed bands, alternating wash / warm / wash. */}
 	<div class="bands">
 		<div class="split band band--wash">
 			<div class="stack">
 				<h1 class="page-title">Getting your {term} in {info.name}</h1>
 				<p class="caption"><em>All information last validated {validated}.</em></p>
-				{/* The only CTAs above the fold. Separators are their own spans so they can be spaced
-				    by margin, and hidden from assistive tech - punctuation, not content. The spaces
-				    inside the span are the row's only break opportunities, and one on each side is
-				    what keeps a pipe centered between its links. */}
+				{/* Separators are their own spans, hidden from assistive tech - punctuation, not content.
+				    The spaces inside each span are the row's only break opportunities. */}
 				<p class="caption quick-links">
 					Quick links:{" "}
 					{quickLinks.map((link, i) => (
@@ -251,7 +252,7 @@ const quickLinks = [
 		</div>
 
 		<section class="stack band band--warm" aria-labelledby="modes-heading">
-			<h2 class="section-title" id="modes-heading">
+			<h2 class="section-title band-warm-blur" id="modes-heading">
 				Prepare to <span class="text-accent">pass</span> your {examLabel}
 			</h2>
 			{/* An ordered list - the three are a progression, not a menu. --lit expects exactly three. */}
@@ -275,25 +276,29 @@ const quickLinks = [
 				}
 			</ol>
 			{
-				courseUrl && (
-					<div class="prose">
+				(practiceExamUrl || courseUrl) && (
+					<div class="prose band-warm-blur">
 						{/* The period rides inside the expression - a newline before it renders as a space. */}
 						{/* Full band width, not .col-split-main - each is one sentence and should not wrap. */}
-						<p>
-							Interested in additional study materials?
-							<a href={courseUrl} target="_blank" rel="noopener noreferrer">Take {info.name}'s official practice exam</a>.
-						</p>
-            <p>
-							Ready to get your {term}?{" "}
-							<a href={courseUrl} target="_blank" rel="noopener noreferrer">Find a riding course</a>.
-						</p>
+						{practiceExamUrl && (
+							<p>
+								Interested in additional study materials?{" "}
+								<a href={practiceExamUrl} target="_blank" rel="noopener noreferrer">Take the official {facts.meta.agencyCode} {facts.exam.practiceExam.value}</a>.
+							</p>
+						)}
+						{courseUrl && (
+							<p>
+								Ready to get your {term}?{" "}
+								<a href={courseUrl} target="_blank" rel="noopener noreferrer">Find a riding course</a>.
+							</p>
+						)}
 					</div>
 				)
 			}
 		</section>
 
 		<section class="stack band band--wash" aria-labelledby="sources-heading">
-			<h2 class="section-title" id="sources-heading">Sources</h2>
+			<h2 class="section-title" id="sources-heading">Sources and helpful links</h2>
 			{/* role="list" restores the semantics Safari drops from a list-style: none list. */}
 			<ol class="source-list accent-edge col-split-main" role="list">
 				{

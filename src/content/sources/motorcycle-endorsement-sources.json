@@ -120,6 +120,17 @@
     "published": null,
     "verifiedCurrentIn": 2026
   },
+  "ca-dmv-sample-m-test-1": {
+    "state": "CA",
+    "sourceID": "0057",
+    "title": "CA DMV Sample Motorcycle Written Test 1",
+    "description": "Ten official practice questions for the Class M test, scored when you submit.",
+    "publisher": "California Department of Motor Vehicles",
+    "url": "https://www.dmv.ca.gov/portal/driver-education-and-safety/educational-materials/sample-driver-license-dl-knowledge-tests/sample-motorcycle-drivers-written-test-1/",
+    "access": "public",
+    "published": null,
+    "verifiedCurrentIn": 2026
+  },
   "ca-veh-12816": {
     "state": "CA",
     "sourceID": "0037",
@@ -314,6 +325,17 @@
     "description": "Getting a Class MP permit at 16, what it restricts, and its one renewal.",
     "publisher": "Georgia Department of Driver Services",
     "url": "https://dds.georgia.gov/georgia-licenses-ids-and-permits/new-license-id-or-permit/how-do-i-motorcycle-permit",
+    "access": "public",
+    "published": null,
+    "verifiedCurrentIn": 2026
+  },
+  "ga-dds-practice-test": {
+    "state": "GA",
+    "sourceID": "0058",
+    "title": "GA DDS Driver's License Practice Test",
+    "description": "Fifty road rules and road signs questions, drawn from the car manual.",
+    "publisher": "Georgia Department of Driver Services",
+    "url": "https://online.dds.ga.gov/ddsgeorgiagov/practicetest/index.aspx",
     "access": "public",
     "published": null,
     "verifiedCurrentIn": 2026

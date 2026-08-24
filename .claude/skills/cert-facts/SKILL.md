@@ -170,6 +170,25 @@ the question isn't re-answered with work that's already been done.
 
 Choosing between two candidates is a **Decide**, not an *Escalate*. Say why in the source note.
 
+### Resource facts
+
+A **resource fact** is one whose source IS the destination a rider is sent to — `criteria.findCourse`
+and `exam.practiceExam`. **The ten rules are in `data-handling.md` ▸ *Cert facts* ▸ *Resource facts*
+and are not restated here.** Three things that are run behavior:
+
+- **Research them like any other fact, but the ladder ends at the agency.** A third-party practice
+  site is never a source however good it looks, so steps 6 and 8 of *Finding a source* do not apply —
+  there is no aggregator to read for direction and nothing to escalate. Search the agency's own
+  driver-license section, not just the motorcycle pages.
+- **Read the resource before naming it. A page's title is not its content** — GA DDS's prominent
+  "Practice Test" is the **car** test, and only opening it showed 45 car questions and 5 road signs.
+  The value you write is the title a reader sees, so a run that titled it from the nav label would
+  have told Georgians it was theirs.
+- **An imperfect one is a Decide, not an Escalate**, provided rule 8's bar is met — a demonstrable
+  overlap stated in the state's own terms, plus a title that says its scope. Put the overlap in the
+  source note. **If you cannot title it honestly in a few words, it does not qualify and the value is
+  null.** A weak link is worse than no link.
+
 ### Fetching discipline
 
 Identity checks, binary handling, snapshot rules and survey keys are in `data-handling.md` ▸
@@ -198,7 +217,8 @@ Escalate only what is genuinely split *after the ladder above is exhausted*. Do 
 where one option is obviously right.
 
 **Decide:** which of two agency pages is the better citation · which of two tiers a source sits in ·
-a registry `title` in the house voice · whether a note fact is load-bearing enough to keep ·
+a registry `title` in the house voice · a `practiceExam` title, and whether an imperfect practice
+test clears the overlap bar · whether a note fact is load-bearing enough to keep ·
 whether an inference is documented well enough to be `inferred` rather than `unsupported` · which of
 several snapshots best supports a fact · anything the template or `data-handling.md` already answers.
 
@@ -249,8 +269,12 @@ Before writing the report, confirm:
   the entry.
 - Every new entry carries `state` and a `sourceID` that is the next unused number in the file, and
   sits in its alphabetical position. No `sourceID` is reused, including one freed by a removal.
-- Every new entry carries a `description` inside 60–100 characters, and every entry you re-read
-  still describes what that document actually holds. A `purchase` or `restricted` entry says so.
+- Every new entry carries a `description` inside **50–90 characters**, the range Zod enforces, and
+  every entry you re-read still describes what that document actually holds. A `purchase` or
+  `restricted` entry says so.
+- Every resource fact you are proposing names a destination you actually opened, and its `value`
+  titles what is really there — scope first, brevity second. Its overlap, if imperfect, is in the
+  source note.
 - Every new or re-dated entry carries both year fields, each derived per `data-handling.md` ▸
   *Dating a source*. A `null` on either is explained in the note.
 - Every range is ascending, same unit, both ends quoted.

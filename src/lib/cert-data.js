@@ -55,7 +55,7 @@ export function escapeHtml(text) {
 }
 
 /**
- * Resolves a token to its display string. CLAUDE.md ▸ Locked decisions.
+ * Resolves a token to its display string. data-handling.md ▸ Cert facts ▸ Display strings.
  * `asHtml` escapes the filled values only - pass it only from a caller that renders HTML.
  * @param {{ asHtml?: boolean, stateName?: string | null, stateCode?: string | null }} [opts]
  * @returns {(field: string, fact: any, form?: "short" | "long") => string | null}

@@ -1,5 +1,5 @@
 /* ==========================================================================
-   LanternCert — global stylesheet. Mobile-first. CLAUDE.md ▸ Design system.
+   LanternCert — global stylesheet. Mobile-first.
 
    1. Reset
    2. Tokens
@@ -37,13 +37,11 @@ img, svg {
 :root {
   /* Type */
   --font-body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
-  /* EXPERIMENT - all-sans page. To revert: restore the Bitter stack here and its family in the
-     Layout.astro font URL. Was: "Bitter", Georgia, "Times New Roman", serif */
+  /* Resolves to the body face. A second display face needs its family in Layout.astro's font URL too. */
   --font-display: var(--font-body);
   /* Quoted sources are set in their publisher's own face; only pages that ask Layout for it have it. */
   --font-quote: "Montserrat", "Open Sans", Corbel, Arial, sans-serif;
-  /* The AI overview's own stack, minus Google Sans - reproducing a search product's exact house face
-     is too on the nose (Sean). Roboto is the real fallback in that stack, so this stays honest. */
+  /* The quoted overview's own stack, minus Google Sans - Roboto is the real fallback in it. */
   --font-overview: "Roboto", Arial, sans-serif;
   --weight-normal: 400;
   --weight-semi: 600;
@@ -111,8 +109,7 @@ img, svg {
   --color-lantern-yellow-nearwhite: #fffcf7;
   --color-lantern-orange-nearwhite: #fff5eb;
 
-  /* Dark enough to be ink, which the accents above are not. Orange measures 5.32:1 on white and
-     carries white type; yellow is 3.62:1, so it is a rule or a fill and never a text color. */
+  /* Dark enough to be ink, which the accents above are not. Yellow stays a rule or a fill only. */
   --color-lantern-yellow-dark: #bf7600;
   --color-lantern-orange-dark: #bf4000;
 
@@ -127,7 +124,7 @@ img, svg {
   --color-page: color-mix(in srgb, var(--color-lantern-orange-nearwhite) 50%, var(--color-lantern-yellow-nearwhite));
   --color-surface: var(--white);
   --color-header: var(--color-lantern-yellow-nearwhite);
-  --color-footer: var(--color-lantern-orange-nearwhite);
+  --color-footer: color-mix(in srgb, var(--color-lantern-yellow-offwhite) 50%, var(--color-lantern-orange-nearwhite));
 
   --color-text: var(--color-ink);
   --color-border: var(--color-ink-lightester);
@@ -138,8 +135,11 @@ img, svg {
   --color-accent-ink: var(--white);
   --color-accent-hover-ink: var(--color-ink);
   --color-focus: var(--color-lantern-orange-dark);
-  /* Deliberately 1.83:1, the one place contrast is unwanted — the fill reads as a control, the label
-     as unreadable, so a disabled button never invites the click. CLAUDE.md ▸ Design system. */
+  /* The light beams raked across a warm band - the band's own offwhite, barely warmed. */
+  --color-beam: color-mix(in srgb, var(--color-lantern-yellow-offwhite) 98%, var(--color-lantern-yellow));
+  /* The pane set behind text that needs a busy band quieted under it. */
+  --color-band-warm-blur: color-mix(in srgb, var(--color-lantern-yellow-offwhite), var(--color-lantern-yellow-nearwhite));
+  /* Deliberately low contrast, the one place it is unwanted: a disabled control must not invite a click. */
   --color-disabled: var(--color-ink-light);
   --color-disabled-ink: var(--color-ink-lightest);
 
@@ -149,14 +149,20 @@ img, svg {
      tablet band holds a stacked card at it rather than letting it grow with the page. */
   --card-w: 46rem;
   --gutter: var(--space-4);
-  /* The air inside a section band. Bands butt together, so this is the whole gap between two. */
+  /* The air inside a section band. Bands butt together, so a gap between two is twice this. */
   --band-pad: var(--space-6);
-  /* The outer edge only, against the header and the footer. Held while --band-pad grows.
-     Must be restated wherever --band-pad is, or the var() below resolves to the new value. */
+  /* The outer edge only - against the header and the footer, never between two bands.
+     Must be redeclared wherever --band-pad is, or this var() picks up the new value. */
   --band-pad-edge: var(--band-pad);
   /* How far the white seam glow reaches into the bands either side of a warm one. */
   --band-glow-y: 18px;
   --band-glow-blur: 32px;
+  /* Strength and scaling of a warm band's light beams; --color-beam carries the hue. */
+  --beam-opacity: 1;
+  --beam-fit: 100% 100%;
+  /* Alpha and edge feather of the pane; --color-band-warm-blur carries the tint. */
+  --band-warm-blur-opacity: 67%;
+  --band-warm-blur-radius: 20px;
   --standard-border: 1px solid var(--color-border);
   --header-h: 3.75rem;
   /* Desktop only. Deepens the band below the centered row, so it never moves the logo or the nav.
@@ -188,7 +194,7 @@ html {
      same x on every page. Without it a short page is offset from a tall one by half a scrollbar. */
   scrollbar-gutter: stable;
   /* The hero art overhangs its column on purpose; this stops the overhang scrolling the document.
-     Needed on BOTH html and body — measured: either one alone still scrolls. Gotchas ▸ CSS. */
+     Needed on BOTH html and body — either one alone still scrolls. */
   overflow-x: clip;
   /* The canvas behind the document, which is what an iOS overscroll reveals. Declaring it here is
      also what stops body's background propagating to the canvas, so body paints only its own box. */
@@ -237,10 +243,8 @@ h3 {
   border-radius: var(--radius-sm);
 }
 
-/* Browser defaults, hardcoded and deliberately outside the token system. CLAUDE.md ▸ Locked decisions. */
-/* The mosaic's URL line joins each list rather than restating the hexes; a visited color reaches a
-   child only through a selector, never through inheritance, so all four states name it. */
-/* The browsers' own hues, lightened. CLAUDE.md ▸ Locked decisions. */
+/* The browsers' own link hues, lightened - hardcoded and deliberately outside the token system.
+   The mosaic's URL line joins each list, since a visited color reaches a child only by selector. */
 a, .source-tile__host {
   color: #0000ff;
   text-decoration: none;
@@ -311,8 +315,8 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
 .band--warm {
   background-color: var(--color-lantern-yellow-offwhite);
   background-image: linear-gradient(135deg,
-    color-mix(in srgb, var(--color-lantern-yellow-offwhite) 40%, var(--color-lantern-orange-nearwhite)),
-    color-mix(in srgb, var(--color-lantern-yellow-offwhite) 20%, var(--color-lantern-orange-nearwhite)));
+    color-mix(in srgb, var(--color-lantern-yellow-offwhite) 75%, var(--color-lantern-yellow-nearwhite)),
+    color-mix(in srgb, var(--color-lantern-yellow-offwhite) 25%, var(--color-lantern-yellow-nearwhite)));
 }
 
 /* The white seam glow either side of a warm band, painted by its NEIGHBOURS rather than by it.
@@ -353,7 +357,7 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
   padding-top: calc(var(--band-pad-edge) + var(--header-clear));
 }
 
-/* Prose beside a sidebar. One column until the desktop breakpoint, 60/40 above it. */
+/* Prose beside a sidebar. One column on mobile, even halves from 768, 4/3 from 1248. */
 /* minmax(0,…) is load-bearing: an auto track floors at min-content, so one nowrap descendant
    pushes the column past the viewport, where overflow-x: clip hides the damage. */
 .split {
@@ -418,8 +422,7 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
   transform: translateY(0);
 }
 
-/* Registered so the veil can be transitioned - an unregistered custom property has no type to
-   interpolate and would snap at the midpoint. CLAUDE.md ▸ Gotchas ▸ CSS. */
+/* Registered so the veil can be transitioned - unregistered it has no type and would snap. */
 @property --header-veil {
   syntax: "<percentage>";
   inherits: false;
@@ -427,8 +430,7 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
 }
 
 /* Fixed at every width; SiteHeader.astro owns the mobile scroll-to-hide toggling. */
-/* Resting at the shadow's own geometry in transparent, never at none - none has nothing to
-   interpolate against and pops in at full strength. CLAUDE.md ▸ Gotchas ▸ CSS. */
+/* The shadow rests at its own geometry in transparent, never at none - none pops in at full strength. */
 .site-header {
   /* The scrolled shadow's two knobs. Its color is applied by the [data-scrolled] rule below. */
   --header-shadow-tint: 8%;
@@ -481,7 +483,7 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
   backdrop-filter: none;
 }
 
-/* The scrolled band's shadow, set by src/scripts/global.js. CLAUDE.md ▸ The header band. */
+/* The scrolled band's shadow. [data-scrolled] is published by src/scripts/global.js. */
 :root[data-scrolled] .site-header {
   box-shadow: var(--header-shadow-geometry)
     color-mix(in srgb, var(--color-ink) var(--header-shadow-tint), transparent);
@@ -620,7 +622,7 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
 }
 
 /* Inset to --nav-pad-x rather than to 0: an absolute pseudo-element lays out against the PADDING box,
-   so this puts the bar at the label's own width instead of the padded box's. Gotchas ▸ CSS. */
+   so this puts the bar at the label's own width instead of the padded box's. */
 .site-nav__list a::after {
   content: "";
   position: absolute;
@@ -636,8 +638,7 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
   opacity: 0;
 }
 
-/* Fades in at full width. The chrome links keep their ink color, so the affordance the nav was
-   missing arrives without reopening the link-color decision. CLAUDE.md ▸ Locked decisions. */
+/* Fades in at full width. The chrome links keep their ink color rather than taking a hover hue. */
 .site-nav__list a:hover::after, .site-nav__list a:focus-visible::after {
   opacity: 1;
 }
@@ -697,8 +698,7 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
   grid-template-columns: 1fr;
 }
 
-/* One gradient spanning the whole grid, with each card's 3px border as the only cutout of it.
-   CLAUDE.md ▸ Design system ▸ The lit grid before touching any of it. */
+/* One gradient spanning the whole grid, with each card's border as the only cutout of it. */
 .card-grid--lit {
   /* Equal rows, so the stacked cards divide the gradient evenly. The math needs uniform items. */
   grid-auto-rows: 1fr;
@@ -790,7 +790,7 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
 }
 
 /* The ul[class] reset in §1 is (0,1,1) and silently outranks the class above; a list needs its
-   element in the selector to get the whole box back, not just the indent. Gotchas ▸ CSS. */
+   element in the selector to get the whole box back, not just the indent. */
 ul.accent-edge, ol.accent-edge {
   padding: 0 var(--space-5);
 }
@@ -842,7 +842,7 @@ ul.accent-edge, ol.accent-edge {
 }
 
 /* Decoration ONLY - naming interaction states on the base block re-applies every declaration at
-   (0,1,1) and outranks .autocomplete__submit's size. CLAUDE.md ▸ Gotchas ▸ CSS. */
+   (0,1,1) and outranks .autocomplete__submit's size. */
 .btn:hover, .btn:focus-visible, .btn:active {
   text-decoration: none;
 }
@@ -1038,8 +1038,7 @@ ol.source-list > li::before {
   margin-inline: var(--sep-gap);
 }
 
-/* The homepage's proof block: a claim as an AI overview stated it, then the agency's own sentence,
-   each reproduced inside the chrome of where it came from. */
+/* The homepage's proof block - two quoted claims, each inside the chrome of where it came from. */
 .correction__label {
   font-size: var(--text-sm);
   color: var(--color-ink-light);
@@ -1052,8 +1051,7 @@ ol.source-list > li::before {
   margin-top: var(--space-2);
 }
 
-/* Registered so the glow can be transitioned - an unregistered custom property has no type to
-   interpolate and would snap at the midpoint. CLAUDE.md ▸ Gotchas ▸ CSS. */
+/* Registered so the glow can be transitioned - unregistered it has no type and would snap. */
 @property --key-glow {
   syntax: "<color>";
   inherits: false;
@@ -1067,14 +1065,13 @@ ol.source-list > li::before {
   text-shadow: 0 0 var(--space-2) var(--key-glow), 0 0 var(--space-4) var(--key-glow);
 }
 
-/* The phrase the light lands on. CLAUDE.md ▸ The correction block. */
+/* The phrase the light lands on. */
 .correction__key {
   color: var(--color-ink);
   font-weight: var(--weight-semi);
 }
 
-/* A window onto the publisher's page. CLAUDE.md ▸ The correction block.
-   --frame-w is the edge, the seam and the air around the pill at once. */
+/* A window onto the publisher's page. --frame-w is the edge, the seam and the air around the pill. */
 .correction__browser {
   --frame-w: 5px;
   --card-glow: color-mix(in srgb, var(--color-lantern-yellow) 75%, transparent);
@@ -1228,8 +1225,7 @@ ol.source-list > li::before {
   margin-top: var(--space-5);
 }
 
-/* PARKED - ambient light under one card, cut so it cannot compete with the certifications art.
-   Three ways this renders as NOTHING rather than as something wrong: blackbox/sessions.md 24. */
+/* PARKED - ambient light under one card, cut so it cannot compete with the certifications art. */
 
 /* Ties the lead-in to the field width so the two read as one control. Owns its own inner gap rather
    than taking .stack's, so the sentence sits close to the field it runs into. */
@@ -1461,8 +1457,7 @@ ul.source-wall__row {
   margin-right: 0.12em;
 }
 
-/* The dark orange, not the accent: --color-lantern-orange measures 2.85:1 on the page and misses
-   even the 3:1 large-text bar. CLAUDE.md ▸ Design system — both accents are surfaces, never ink. */
+/* The dark orange, not the accent - both accents are surfaces and never carry type. */
 .page-title__accent {
   --sweep-ink: var(--color-lantern-orange-dark);
   --sweep-from: var(--color-ink-med);
@@ -1485,7 +1480,7 @@ ul.source-wall__row {
   initial-value: transparent;
 }
 
-/* Three separate mechanisms in here are load-bearing. CLAUDE.md ▸ Gotchas ▸ CSS before touching it. */
+/* The background-color, the padding pair and the drop-shadow filter are each load-bearing below. */
 @supports (background-clip: text) or (-webkit-background-clip: text) {
   /* The swept color is the background COLOR and the gradient only ever hides it; never put it in the
      gradient. --sweep-ink is what the word sweeps TO, --sweep-from what the gradient hides it with. */
@@ -1584,7 +1579,7 @@ ul.source-wall__row {
   initial-value: -12%;
 }
 
-/* An ink veil above the ramp; retreating it lights the word. CLAUDE.md ▸ The quick links.
+/* An ink veil above the ramp; retreating it lights the word.
    Gated on the clip - transparent type is only safe where background-clip: text exists. */
 @supports (background-clip: text) or (-webkit-background-clip: text) {
   .quick-links a, .quick-links a:visited {
@@ -1625,6 +1620,24 @@ ul.source-wall__row {
   font-size: var(--text-sm);
 }
 
+/* Quiets a textured band under a block of text. Sits on any block inside one, heading and all. */
+.band-warm-blur {
+  position: relative;
+  isolation: isolate;
+}
+
+/* The pane, blurred to nothing at its edges so it dissolves into the band instead of drawing a box. */
+.band-warm-blur::before {
+  content: "";
+  position: absolute;
+  inset: calc(var(--band-warm-blur-radius) * -1);
+  z-index: -1;
+  border-radius: var(--radius-lg);
+  background-color: color-mix(in srgb, var(--color-band-warm-blur) var(--band-warm-blur-opacity), transparent);
+  filter: blur(var(--band-warm-blur-radius));
+  pointer-events: none;
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -1646,6 +1659,27 @@ ul.source-wall__row {
 
   .page {
     padding-top: var(--space-8);
+  }
+
+  /* isolation is load-bearing: without it the -1 child escapes to the page background and vanishes. */
+  .band--warm {
+    position: relative;
+    isolation: isolate;
+  }
+
+  /* Light beams raking down from a point above the band's top-left corner. */
+  .band--warm::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-color: var(--color-beam);
+    opacity: var(--beam-opacity);
+    mask-image: url("/assets/band-beams.svg");
+    mask-size: var(--beam-fit);
+    mask-position: top left;
+    mask-repeat: no-repeat;
+    pointer-events: none;
   }
 
   /* One card per row, centered and capped at the mobile maximum, so the stack reads as continuous

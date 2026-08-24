@@ -29,7 +29,7 @@ const range = z
 const amount = z.union([z.number().nonnegative(), range]);
 
 // The refine is the enforcement; reference() alone lets a dangling key through silently.
-// CLAUDE.md ▸ Locked decisions. data-handling.md ▸ Questions §12.
+// data-handling.md ▸ Questions §12.
 const makeSourceRef = (registry: object, collection: any) => {
   const keys = new Set(Object.keys(registry));
   return () =>
