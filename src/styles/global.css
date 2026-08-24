@@ -305,11 +305,19 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
   box-shadow: var(--band-glow-top), var(--band-glow-bottom);
 }
 
-/* Diagonal, matching the lit grid and the accent edge - light arrives from the bottom right. */
+/* Diagonal, light arriving from the top left and falling to page color at the bottom right. */
 .band--wash {
+  --band-angle: 135deg;
+  --band-from: var(--white);
+  --band-to: var(--color-page);
+  background-image: linear-gradient(var(--band-angle), var(--band-from), var(--band-to));
+}
+
+/* The wash below the warm band runs back the other way - page color top right, white bottom left. */
+.band--warm + .band--wash {
+  --band-angle: 225deg;
   --band-from: var(--color-page);
   --band-to: var(--white);
-  background-image: linear-gradient(135deg, var(--band-from), var(--band-to));
 }
 
 .band--warm {
@@ -333,15 +341,6 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
 .bands > .band:last-child {
   --band-glow-bottom: inset 0 calc(-1 * var(--band-glow-y)) var(--band-glow-blur) -8px var(--white);
   padding-bottom: var(--band-pad-edge);
-}
-
-/* Flat white while the certifications list is too short for a wash to read across the band.
-   Swap the fill for the parked gradient below once it is long enough. */
-.band--plain {
-  background-color: var(--white);
-  /* --band-from: var(--color-page);
-     --band-to: var(--white);
-     background-image: linear-gradient(135deg, var(--band-from), var(--band-to)); */
 }
 
 /* Bands run edge to edge and butt against each other and against the chrome, so no page color is
