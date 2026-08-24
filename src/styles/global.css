@@ -104,16 +104,16 @@ img, svg {
   --color-ink-lightester: #9e99a7;
 
   /* Surfaces, never ink — both fail AA as type and fail the 3:1 non-text bar. */
-  --color-lantern-yellow: #f2b230;
+  --color-lantern-yellow: #f2a830;
   --color-lantern-orange: #f47030;
-  --color-lantern-yellow-offwhite: #fcf0d6;
+  --color-lantern-yellow-offwhite: #fceed6;
   --color-lantern-orange-offwhite: #fde2d6;
   --color-lantern-yellow-nearwhite: #fffcf7;
   --color-lantern-orange-nearwhite: #fff5eb;
 
   /* Dark enough to be ink, which the accents above are not. Orange measures 5.32:1 on white and
-     carries white type; yellow is 3.33:1, so it is a rule or a fill and never a text color. */
-  --color-lantern-yellow-dark: #bf8000;
+     carries white type; yellow is 3.62:1, so it is a rule or a fill and never a text color. */
+  --color-lantern-yellow-dark: #bf7600;
   --color-lantern-orange-dark: #bf4000;
 
   /* GA DDS's own body ink - a quoted artifact only, never part of the palette.
@@ -124,7 +124,7 @@ img, svg {
      Roles resolve to a token above and may never introduce a hex. */
 
   /* Three fills: the page, white for anything set INTO it, and the footer's warm band. */
-  --color-page: var(--color-lantern-yellow-nearwhite);
+  --color-page: color-mix(in srgb, var(--color-lantern-orange-nearwhite) 50%, var(--color-lantern-yellow-nearwhite));
   --color-surface: var(--white);
   --color-header: var(--color-lantern-yellow-nearwhite);
   --color-footer: var(--color-lantern-orange-nearwhite);
@@ -135,7 +135,7 @@ img, svg {
      surface and never holds type, so it arrives as the sweep rather than sitting under the label. */
   --color-accent: var(--color-ink-med);
   --color-accent-hover: var(--color-lantern-orange);
-  --color-accent-ink: var(--color-page);
+  --color-accent-ink: var(--white);
   --color-accent-hover-ink: var(--color-ink);
   --color-focus: var(--color-lantern-orange-dark);
   /* Deliberately 1.83:1, the one place contrast is unwanted — the fill reads as a control, the label
@@ -149,22 +149,41 @@ img, svg {
      tablet band holds a stacked card at it rather than letting it grow with the page. */
   --card-w: 46rem;
   --gutter: var(--space-4);
+  /* The air inside a section band. Bands butt together, so this is the whole gap between two. */
+  --band-pad: var(--space-6);
+  /* The outer edge only, against the header and the footer. Held while --band-pad grows.
+     Must be restated wherever --band-pad is, or the var() below resolves to the new value. */
+  --band-pad-edge: var(--band-pad);
+  /* How far the white seam glow reaches into the bands either side of a warm one. */
+  --band-glow-y: 18px;
+  --band-glow-blur: 32px;
   --standard-border: 1px solid var(--color-border);
   --header-h: 3.75rem;
   /* Desktop only. Deepens the band below the centered row, so it never moves the logo or the nav.
      Set to match the space ABOVE a nav item, which the row's own centering puts at --space-3. */
   --header-drop: var(--space-3);
+  /* The whole height the fixed header occupies. body clears it, the first band pulls back up under
+     it, and scroll-padding-top lands an anchor below it - change this and all three follow. */
+  --header-clear: var(--header-h);
 
   --focus-ring: 3px solid var(--color-focus);
   --focus-offset: 2px;
+
+  /* The frame both card types are drawn by - the homepage proof cards and the state page's prep
+     cards. One place to tune, so the two can never drift apart. */
+  --frame-gradient: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--color-lantern-yellow) 25%, var(--color-lantern-orange-nearwhite)),
+    color-mix(in srgb, var(--color-lantern-orange) 25%, var(--color-lantern-orange-nearwhite))
+  );
 }
 
 /* 3. Base ----------------------------------------------------------------- */
 
 html {
   -webkit-text-size-adjust: 100%;
-  /* Where an in-page anchor lands under the fixed header. Gains --header-drop at 768. */
-  scroll-padding-top: calc(var(--header-h) + var(--space-7));
+  /* Where an in-page anchor lands under the fixed header. */
+  scroll-padding-top: calc(var(--header-clear) + var(--space-7));
   /* Reserves the scrollbar's width whether or not the page scrolls, so centered content sits at the
      same x on every page. Without it a short page is offset from a tall one by half a scrollbar. */
   scrollbar-gutter: stable;
@@ -186,7 +205,7 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  padding-top: var(--header-h);
+  padding-top: var(--header-clear);
   /* The other half of the pair above. Clips at the viewport, so the bleed survives where there's room. */
   overflow-x: clip;
 }
@@ -208,7 +227,7 @@ h2 {
 
 h3 {
   font-family: var(--font-display);
-  font-weight: var(--weight-semi);
+  font-weight: var(--weight-bold);
   color: var(--color-ink-med);
 }
 
@@ -271,6 +290,69 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
   margin-top: var(--space-7);
 }
 
+/* A full-bleed section band, its content still on the page's own column.
+   The 50vw arithmetic is exact only while html keeps scrollbar-gutter: stable. */
+/* Two glow properties, not one box-shadow: box-shadow does not accumulate across the rules below. */
+.band {
+  --band-glow-top: 0 0 0 transparent;
+  --band-glow-bottom: 0 0 0 transparent;
+  margin-inline: calc(50% - 50vw);
+  padding: var(--band-pad) calc(50vw - 50%);
+  box-shadow: var(--band-glow-top), var(--band-glow-bottom);
+}
+
+/* Diagonal, matching the lit grid and the accent edge - light arrives from the bottom right. */
+.band--wash {
+  --band-from: var(--color-page);
+  --band-to: var(--white);
+  background-image: linear-gradient(135deg, var(--band-from), var(--band-to));
+}
+
+.band--warm {
+  background-color: var(--color-lantern-yellow-offwhite);
+  background-image: linear-gradient(135deg,
+    color-mix(in srgb, var(--color-lantern-yellow-offwhite) 40%, var(--color-lantern-orange-nearwhite)),
+    color-mix(in srgb, var(--color-lantern-yellow-offwhite) 20%, var(--color-lantern-orange-nearwhite)));
+}
+
+/* The white seam glow either side of a warm band, painted by its NEIGHBOURS rather than by it.
+   The negative spread is what holds the glow at the seam instead of washing the whole band. */
+.band:has(+ .band--warm) {
+  --band-glow-bottom: inset 0 calc(-1 * var(--band-glow-y)) var(--band-glow-blur) -8px var(--white);
+}
+
+.band--warm + .band {
+  --band-glow-top: inset 0 var(--band-glow-y) var(--band-glow-blur) -8px var(--white);
+}
+
+/* The same seam where the last band meets the footer. */
+.bands > .band:last-child {
+  --band-glow-bottom: inset 0 calc(-1 * var(--band-glow-y)) var(--band-glow-blur) -8px var(--white);
+  padding-bottom: var(--band-pad-edge);
+}
+
+/* Flat white while the certifications list is too short for a wash to read across the band.
+   Swap the fill for the parked gradient below once it is long enough. */
+.band--plain {
+  background-color: var(--white);
+  /* --band-from: var(--color-page);
+     --band-to: var(--white);
+     background-image: linear-gradient(135deg, var(--band-from), var(--band-to)); */
+}
+
+/* Bands run edge to edge and butt against each other and against the chrome, so no page color is
+   ever left showing between two of them. Their own --band-pad is the entire rhythm. */
+.page:has(> .bands) {
+  padding-block: 0;
+}
+
+/* Runs up UNDER the fixed header and pads its content back down, so the chrome sits on this band's
+   own background. The pull must equal body's padding-top or the band lands off the viewport top. */
+.bands > .band:first-child {
+  margin-top: calc(-1 * var(--header-clear));
+  padding-top: calc(var(--band-pad-edge) + var(--header-clear));
+}
+
 /* Prose beside a sidebar. One column until the desktop breakpoint, 60/40 above it. */
 /* minmax(0,…) is load-bearing: an auto track floors at min-content, so one nowrap descendant
    pushes the column past the viewport, where overflow-x: clip hides the damage. */
@@ -296,8 +378,7 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
      The accents rather than their nearwhites: yellow-nearwhite IS --color-page, so it would paint nothing. */
   background-image: linear-gradient(
     135deg,
-    color-mix(in srgb, var(--color-lantern-yellow) var(--art-tint), transparent),
-    color-mix(in srgb, var(--color-lantern-orange-dark) var(--art-tint), transparent)
+    var(--color-page)
   );
   /* Two crossed fades, multiplied.
      `intersect` is load-bearing - the default `add` unions them opaque, which is how this degrades. */
@@ -328,7 +409,7 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
   z-index: 30;
   padding: var(--space-2) var(--space-4);
   background-color: var(--color-ink);
-  color: var(--color-page);
+  color: var(--white);
   border-radius: var(--radius-md);
   transform: translateY(-200%);
 }
@@ -390,6 +471,14 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
   :root[data-scrolled] .site-header:not(.site-header--open) {
     --header-veil: var(--header-veil-max);
   }
+}
+
+/* Nothing has passed under the band yet, so it drops out and the first band's own background shows
+   through it. Outside the @supports block, since a browser with no blur still wants this at rest. */
+:root[data-at-top] .site-header:not(.site-header--open) {
+  background-color: transparent;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
 }
 
 /* The scrolled band's shadow, set by src/scripts/global.js. CLAUDE.md ▸ The header band. */
@@ -584,7 +673,7 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
 
 /* No border, so the warm fill is the only thing drawing the card. */
 .card {
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   padding: var(--space-5);
   background-color: var(--color-lantern-orange-nearwhite);
 }
@@ -616,16 +705,16 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
 }
 
 .card-grid--lit .card {
-  border: 3px solid transparent;
+  border: 5px solid transparent;
   /* A column so the CTA can be pushed to the bottom edge and the three buttons line up. */
   display: flex;
   flex-direction: column;
-  /* No fill of its own - the ring draws the card. The page-colored layer is not decoration, it is
-     what hides the gradient everywhere except the ring, so it cannot be dropped. */
-  background-color: transparent;
+  /* The first layer hides the frame everywhere except the ring, so it cannot be dropped.
+     background-color repeats it, so an unsupported color-mix costs the ring and nothing else. */
+  background-color: var(--white);
   background-image:
-    linear-gradient(var(--color-page) 0 0),
-    linear-gradient(135deg, var(--color-lantern-orange-dark), var(--color-lantern-orange));
+    linear-gradient(var(--white) 0 0),
+    var(--frame-gradient);
   background-origin: padding-box, border-box;
   background-clip: padding-box, border-box;
   background-repeat: no-repeat;
@@ -659,6 +748,11 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
   margin-top: var(--space-6);
 }
 
+/* On the FOLLOWING element: a margin-bottom here would collapse into the .stack gap and do nothing. */
+.stack > .card-grid--lit + * {
+  margin-top: var(--space-5);
+}
+
 /* auto pushes it to the bottom edge; the padding is the floor, since auto collapses to nothing on
    whichever card is tallest. */
 .card__cta {
@@ -680,8 +774,10 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
 
 /* An accent down the left edge instead of a card. Painted as a sized background rather than a
    border, which cannot hold a gradient; unsupported color-mix drops the whole image, never the text. */
+/* Square on the left so the accent bar runs the full height instead of tapering into a corner. */
 .accent-edge {
-  padding-left: var(--space-5);
+  padding: 0 var(--space-5);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
   /* Dark to light as read, matching the lit grid's sweep on the state pages. */
   background-image: linear-gradient(
     180deg,
@@ -694,9 +790,9 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
 }
 
 /* The ul[class] reset in §1 is (0,1,1) and silently outranks the class above; a list needs its
-   element in the selector to get the indent back. CLAUDE.md ▸ Gotchas ▸ CSS. */
+   element in the selector to get the whole box back, not just the indent. Gotchas ▸ CSS. */
 ul.accent-edge, ol.accent-edge {
-  padding-left: var(--space-5);
+  padding: 0 var(--space-5);
 }
 
 /* Registered so it can be transitioned - an unregistered custom property has no type to interpolate
@@ -753,7 +849,9 @@ ul.accent-edge, ol.accent-edge {
 
 /* Past 100% so the wedge's trailing fade clears the far corner instead of resting inside it. The
    yellow halo blooms with the sweep, and lightens the ground right at the glyph edges as it goes. */
-.btn:hover {
+/* The :visited half is load-bearing: a:visited:hover is (0,2,1) and outranks a lone .btn:hover,
+   so a button that has been clicked once turns the visited purple on every later hover. */
+.btn:hover, .btn:visited:hover {
   --btn-sweep: 130%;
   color: var(--color-accent-hover-ink);
   --btn-glow: color-mix(in srgb, var(--color-lantern-yellow) 75%, transparent);
@@ -769,7 +867,7 @@ ul.accent-edge, ol.accent-edge {
 }
 
 /* Both of these also match .btn:hover, so each has to put the halo back out. */
-.btn--secondary:hover {
+.btn--secondary:hover, .btn--secondary:visited:hover {
   background-color: var(--color-lantern-yellow-offwhite);
   color: var(--color-ink);
   --btn-glow: transparent;
@@ -793,7 +891,6 @@ ul.accent-edge, ol.accent-edge {
    The role override is scoped, so the row dividers pick up the accent through --standard-border. */
 .facts {
   --color-border: var(--color-lantern-orange-dark);
-  padding-right: var(--space-5);
 }
 
 /* Two classes, so it outranks .stack > * + * wherever either rule sits in the file. The accent line
@@ -910,10 +1007,10 @@ ol.source-list > li::before {
 /* Marks the source a citation jumped to. NOT in §7 - a color change is not movement, so a
    reduced-motion reader still gets the cue. */
 @keyframes source-hit {
-  0% { background-color: var(--color-page); }
+  0% { background-color: transparent; }
   17% { background-color: var(--color-lantern-yellow-offwhite); }
   67% { background-color: var(--color-lantern-yellow-offwhite); }
-  100% { background-color: var(--color-page); }
+  100% { background-color: transparent; }
 }
 
 /* Two classes, so it outranks the li rules above rather than relying on sitting below them.
@@ -963,15 +1060,17 @@ ol.source-list > li::before {
   initial-value: transparent;
 }
 
-/* The phrase the light lands on. CLAUDE.md ▸ The correction block.
-   Resting LIT - §7 darkens it only where a script can light it again. */
+/* The halo both accented phrases carry - area comes from stacking blurs, since text-shadow has no
+   spread. §7 darkens the correction's copy only where a script exists to light it again. */
 .correction__key {
   --key-glow: color-mix(in srgb, var(--color-lantern-yellow) 25%, transparent);
+  text-shadow: 0 0 var(--space-2) var(--key-glow), 0 0 var(--space-4) var(--key-glow);
+}
+
+/* The phrase the light lands on. CLAUDE.md ▸ The correction block. */
+.correction__key {
   color: var(--color-ink);
   font-weight: var(--weight-semi);
-  text-shadow: 0 0 var(--space-2) var(--key-glow), 0 0 var(--space-3) var(--key-glow),
-    0 0 var(--space-4) var(--key-glow), 0 0 var(--space-5) var(--key-glow),
-    0 0 var(--space-6) var(--key-glow);
 }
 
 /* A window onto the publisher's page. CLAUDE.md ▸ The correction block.
@@ -985,11 +1084,7 @@ ol.source-list > li::before {
   padding: var(--frame-w);
   border-radius: var(--radius-md);
   background-color: var(--color-lantern-yellow-offwhite);
-  background-image: linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--color-lantern-yellow) 12%, var(--color-lantern-orange-nearwhite)),
-    color-mix(in srgb, var(--color-lantern-orange) 12%, var(--color-lantern-orange-nearwhite))
-  );
+  background-image: var(--frame-gradient);
 }
 
 /* The panes. The dots sit outside the bar, on the shell. */
@@ -1042,7 +1137,7 @@ ol.source-list > li::before {
     ),
     radial-gradient(
       circle 5px at 5px 5px,
-      color-mix(in srgb, var(--color-lantern-yellow) 50%, var(--color-lantern-yellow-nearwhite)) 99%,
+      color-mix(in srgb, var(--color-lantern-yellow) 67%, var(--color-lantern-yellow-nearwhite)) 99%,
       transparent 100%
     ),
     radial-gradient(
@@ -1420,6 +1515,12 @@ ul.source-wall__row {
   line-height: var(--leading-tight);
 }
 
+/* The one word an accent lands on, where the hero's sweep is not wanted. */
+.text-accent {
+  color: var(--color-lantern-orange-dark);
+  font-weight: var(--weight-extrabold);
+}
+
 .lede {
   font-size: var(--text-xl);
 }
@@ -1538,6 +1639,9 @@ ul.source-wall__row {
 @media (min-width: 768px) {
   :root {
     --gutter: var(--space-6);
+    --band-pad: var(--space-9);
+    --band-pad-edge: var(--space-8);
+    --header-clear: calc(var(--header-h) + var(--header-drop));
   }
 
   .page {
@@ -1598,15 +1702,6 @@ ul.source-wall__row {
      body's clearance has to grow with it or page content slides under the fixed header. */
   .site-header {
     padding-bottom: var(--header-drop);
-  }
-
-  body {
-    padding-top: calc(var(--header-h) + var(--header-drop));
-  }
-
-  /* The deeper band, same as body's clearance above - the two must always agree. */
-  html {
-    scroll-padding-top: calc(var(--header-h) + var(--header-drop) + var(--space-7));
   }
 
   /* --open can survive a resize, so the panel's mobile dressing is undone rather than left latched. */

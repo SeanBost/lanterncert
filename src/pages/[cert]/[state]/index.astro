@@ -41,6 +41,8 @@ const validated = new Date(Date.UTC(vy, vm - 1, vd)).toLocaleDateString("en-US",
 // CLAUDE.md ▸ Gotchas ▸ Process.
 const sectioned = facts.exam.isExamSectioned.value === true;
 
+const examLabel = facts.exam.examName.value ?? `${info.name} exam`;
+
 /** @param {string | null} text */
 const approx = (text) => (text === null ? null : `~${text}`);
 
@@ -189,9 +191,9 @@ const quickLinks = [
 	title={`${info.name} ${term}`}
 	description={`How to get your ${term} in ${info.name} - requirements, costs and exam details from ${facts.meta.agencyName}, plus free practice questions.`}
 >
-	{/* stack-xl with both lower blocks tightened - the homepage's smaller row gap, 3rem / 5rem. */}
-	<div class="stack-xl">
-		<div class="split">
+	{/* Three full-bleed bands, alternating wash / warm / wash. CLAUDE.md ▸ The section bands. */}
+	<div class="bands">
+		<div class="split band band--wash">
 			<div class="stack">
 				<h1 class="page-title">Getting your {term} in {info.name}</h1>
 				<p class="caption"><em>All information last validated {validated}.</em></p>
@@ -248,8 +250,10 @@ const quickLinks = [
 			</section>
 		</div>
 
-		<section class="stack gap-tight" aria-labelledby="modes-heading">
-			<h2 class="section-title" id="modes-heading">Prepare to pass</h2>
+		<section class="stack band band--warm" aria-labelledby="modes-heading">
+			<h2 class="section-title" id="modes-heading">
+				Prepare to <span class="text-accent">pass</span> your {examLabel}
+			</h2>
 			{/* An ordered list - the three are a progression, not a menu. --lit expects exactly three. */}
 			<ol class="card-grid card-grid--lit">
 				{
@@ -274,7 +278,12 @@ const quickLinks = [
 				courseUrl && (
 					<div class="prose">
 						{/* The period rides inside the expression - a newline before it renders as a space. */}
-						<p class="col-split-main">
+						{/* Full band width, not .col-split-main - each is one sentence and should not wrap. */}
+						<p>
+							Interested in additional study materials?
+							<a href={courseUrl} target="_blank" rel="noopener noreferrer">Take {info.name}'s official practice exam</a>.
+						</p>
+            <p>
 							Ready to get your {term}?{" "}
 							<a href={courseUrl} target="_blank" rel="noopener noreferrer">Find a riding course</a>.
 						</p>
@@ -283,7 +292,7 @@ const quickLinks = [
 			}
 		</section>
 
-		<section class="stack gap-tight" aria-labelledby="sources-heading">
+		<section class="stack band band--wash" aria-labelledby="sources-heading">
 			<h2 class="section-title" id="sources-heading">Sources</h2>
 			{/* role="list" restores the semantics Safari drops from a list-style: none list. */}
 			<ol class="source-list accent-edge col-split-main" role="list">

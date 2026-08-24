@@ -9,8 +9,12 @@ function initScrollState() {
   const root = document.documentElement;
   let queued = false;
 
+  // data-at-top is asserted positively rather than read as :not([data-scrolled]): with no script
+  // neither attribute lands, so the chrome keeps the opaque band instead of going see-through.
   function apply() {
-    root.toggleAttribute("data-scrolled", window.scrollY > SCROLLED_PX);
+    const scrolled = window.scrollY > SCROLLED_PX;
+    root.toggleAttribute("data-scrolled", scrolled);
+    root.toggleAttribute("data-at-top", !scrolled);
     queued = false;
   }
 

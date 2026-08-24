@@ -85,8 +85,8 @@ for (const size of rowSizes) {
 	geo
 	fonts={["Montserrat:wght@100..900", "Roboto:wght@100..900"]}
 >
-	<div class="stack-xl">
-		<div class="split split--even">
+	<div class="bands">
+		<div class="split split--even band band--wash">
 			<div class="stack-lg">
 				<div class="stack">
 					<h1 class="page-title page-title--hero">
@@ -133,21 +133,22 @@ for (const size of rowSizes) {
 			</div>
 		</div>
 
-		<div class="split">
+		<div class="split band band--warm">
 			<section class="stack" aria-labelledby="trust-heading">
-        <h2 class="section-title" id="trust-heading">Everything you need to know, cited</h2>
+        <h2 class="section-title" id="trust-heading">Everything you need to know, <span class="text-accent">cited</span></h2>
 				<div class="prose">
 					<p>
 						AI overviews and other prep sites will confidently omit or muddy important-to-know details, while 
             certification agencies overcomplicate how they share requirements. 
 					</p>
           <p>
-            Don't settle for sorta. 
-						LanternCert organizes everything you need to know to get certified in a single place, and transparently links a source for every fact and answer.
-            All with no ads and no signup needed, so you can focus on achieving your goals.
+						LanternCert organizes everything you need to know to get certified in a single place.
+            Our mission is to validate and make simple every certification process in every state. 
+            Every fact and answer is backed by an official source that's linked to on-page.
+            All with no ads or signups, so you can focus on what matters most: getting certified.
           </p>
           <p>
-						See what certification takes, then study and take practice tests to get exam-ready.
+						Find out what the certification you're working towards takes, then study and take practice tests to get exam-ready.
 					</p>
 				</div>
 			</section>
@@ -234,7 +235,7 @@ for (const size of rowSizes) {
 			</section>
 		</div>
 
-		<section class="stack gap-tight" aria-labelledby="certs-heading" id="certifications">
+		<section class="stack band band--wash" aria-labelledby="certs-heading" id="certifications">
 			<h2 class="section-title" id="certs-heading">Certifications we cover</h2>
 			<ul class="row-list accent-edge col-main">
 				{
