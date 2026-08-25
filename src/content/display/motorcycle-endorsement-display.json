@@ -57,6 +57,21 @@
     }
   },
 
+  "ridingSkillsTest": {
+    "course": {
+      "short": "Inside the course",
+      "long": "riding evaluation held inside the required course"
+    },
+    "agencyWaivable": {
+      "short": "Agency test, course waives",
+      "long": "riding skills test the required course waives"
+    },
+    "agencyUnlessLicensed": {
+      "short": "Agency test, some waivers",
+      "long": "riding skills test waived for already-licensed adults"
+    }
+  },
+
   "isExamSectioned": {
     "true": {
       "short": "Sectioned",

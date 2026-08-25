@@ -10,6 +10,7 @@
       "name": "Motorcycle Endorsement",
       "slug": "motorcycle-endorsement",
       "blurb": "Requirements, costs, course and exam details, plus practice questions derived from each state's own manual.",
+      "timeToCertify": "Under a week",
       "stateDependent": true
     }
   }

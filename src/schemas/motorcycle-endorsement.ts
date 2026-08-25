@@ -19,6 +19,7 @@ const vocab: Record<string, [string, ...string[]]> = {
   transferOutOfStateEndorsement: ["all", "none", "non-Alabama"],
   courseType: ["MSFBRC", "MNS2011", "CA"],
   findCourse: ["stateLocator", "stateProgram"],
+  ridingSkillsTest: ["course", "agencyWaivable", "agencyUnlessLicensed"],
   requirementType: ["50ccUp", "all"],
   examType: examTypes,
 };
@@ -134,6 +135,8 @@ export function collections(kit: any) {
           transferOutOfStateEndorsement: fact(z.enum(vocab.transferOutOfStateEndorsement)),
           courseType: fact(z.enum(vocab.courseType)),
           findCourse: fact(z.enum(vocab.findCourse)),
+          // Who administers the riding test, and whether the required course waives it.
+          ridingSkillsTest: fact(z.enum(vocab.ridingSkillsTest)),
           requirementType: fact(z.enum(vocab.requirementType)),
           // Years until renewal. 0 is "does not expire"; null is "not researched".
           renewalYears: fact(z.number().int().nonnegative()),

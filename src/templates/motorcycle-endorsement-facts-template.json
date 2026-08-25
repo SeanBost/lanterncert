@@ -130,6 +130,15 @@
           "stateProgram": "The agency runs a single booking portal covering all courses."
         }
       },
+      "ridingSkillsTest": {
+        "what": "Who administers the on-motorcycle riding evaluation, and whether the required course gets a rider out of it.",
+        "why": "Informational only — LanternCert prepares nobody for a riding test, and this exists so the state page does not imply the knowledge exam is the last hurdle. Constrained rather than free text because the state page branches on it, including branching to silence: 'course' emits no sentence at all. The values split on the WAIVER, not on who administers the test, because the waiver is the only part a rider acts on — two states can both run an agency test and still owe different answers to 'will I actually have to sit it'. Verify the waiver conditions rather than the test's existence: nearly every state has one of these, and the conditions are what differ.",
+        "values": {
+          "course": "The state administers no riding test of its own; the required course's own on-cycle evaluation is the whole thing, and the agency records the result. Florida is the case — the FRTP Sponsor submits the result electronically and the endorsement is added. Note this is INFERRED from absence: no FLHSMV page states the agency administers no riding test.",
+          "agencyWaivable": "The agency administers a riding test, and completing the required course waives it for anyone. Georgia and California.",
+          "agencyUnlessLicensed": "The agency administers a riding test, waived only for adults who already hold a full driver license in the state, and never waivable for a minor. Texas is the case: the course is required of everyone but does not on its own waive the skills test."
+        }
+      },
       "requirementType": {
         "what": "What kind of machine triggers the requirement for this credential.",
         "why": "Constrained because it decides who the page is even for — a rider on a 49cc scooter needs a different answer than one on a 650.",

@@ -92,7 +92,7 @@ function pickVariant(slot, ctx) {
  *   token: (field: string, fact: any, form?: "short" | "long") => string | null,
  *   hrefFor: (sourceId: string) => string | null }} args
  *   `token` must be built with asHtml; `hrefFor` is called per cited fact in reading order.
- * @returns {{ html: string }[]} paragraphs of filled prose, empty ones dropped
+ * @returns {{ html?: string, heading?: string }[]} filled blocks in order, empty ones dropped
  */
 export function stateIntro({ cert, facts, stateName, template, token, hrefFor }) {
 	const ctx = {
@@ -108,9 +108,19 @@ export function stateIntro({ cert, facts, stateName, template, token, hrefFor })
 	};
 
 	return template.paragraphs
-		.map((slots) => {
+		.map((entry) => {
+			// A heading takes no citation markers and never calls hrefFor.
+			// Numbering a source here would take the number the first sentence citing it should get.
+			if (!Array.isArray(entry)) {
+				if (typeof entry?.heading !== "string") {
+					throw new Error(`${cert}-intro.json: a block is neither a slot list nor a { heading }`);
+				}
+				const picked = pickVariant(entry.heading, ctx);
+				return { heading: picked ? picked.segments.map(({ copy }) => copy).join("") : "" };
+			}
+
 			const parts = [];
-			for (const slot of slots) {
+			for (const slot of entry) {
 				const picked = pickVariant(slot, ctx);
 				if (!picked) continue;
 				// Gates first: they are the sentence's subject even with no text of their own.
@@ -132,5 +142,5 @@ export function stateIntro({ cert, facts, stateName, template, token, hrefFor })
 			}
 			return { html: parts.join(" ") };
 		})
-		.filter((paragraph) => paragraph.html !== "");
+		.filter((block) => (block.heading ?? block.html) !== "");
 }

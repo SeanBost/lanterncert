@@ -8,7 +8,7 @@ export const certs = siteConfig.testTypes;
 
 // The build gate for site-config.json, which gets no Zod pass. data-handling.md ▸ Site config.
 for (const [key, config] of Object.entries(certs)) {
-  for (const field of ["name", "slug", "blurb"]) {
+  for (const field of ["name", "slug", "blurb", "timeToCertify"]) {
     if (typeof config[field] !== "string" || config[field].trim() === "") {
       throw new Error(`site-config.json ▸ testTypes ▸ ${key}: "${field}" is missing or empty`);
     }

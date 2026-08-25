@@ -63,6 +63,7 @@ img, svg {
   --leading-loose: 1.75;
 
   /* Space — one scale, used everywhere */
+  --space-0: 0.1rem;
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 0.75rem;
@@ -138,7 +139,7 @@ img, svg {
   /* The light beams raked across a warm band - the band's own offwhite, barely warmed. */
   --color-beam: color-mix(in srgb, var(--color-lantern-yellow-offwhite) 98%, var(--color-lantern-yellow));
   /* The pane set behind text that needs a busy band quieted under it. */
-  --color-band-warm-blur: color-mix(in srgb, var(--color-lantern-yellow-offwhite), var(--color-lantern-yellow-nearwhite));
+  --color-band-warm-blur: color-mix(in srgb, var(--color-lantern-yellow-offwhite) 40%, var(--color-lantern-yellow-nearwhite));
   /* Deliberately low contrast, the one place it is unwanted: a disabled control must not invite a click. */
   --color-disabled: var(--color-ink-light);
   --color-disabled-ink: var(--color-ink-lightest);
@@ -323,8 +324,8 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
 .band--warm {
   background-color: var(--color-lantern-yellow-offwhite);
   background-image: linear-gradient(135deg,
-    color-mix(in srgb, var(--color-lantern-yellow-offwhite) 75%, var(--color-lantern-yellow-nearwhite)),
-    color-mix(in srgb, var(--color-lantern-yellow-offwhite) 25%, var(--color-lantern-yellow-nearwhite)));
+    color-mix(in srgb, var(--color-lantern-yellow-offwhite) 60%, var(--color-lantern-orange-nearwhite)),
+    color-mix(in srgb, var(--color-lantern-yellow-offwhite) 5%, var(--color-lantern-orange-nearwhite)));
 }
 
 /* The white seam glow either side of a warm band, painted by its NEIGHBOURS rather than by it.
@@ -719,18 +720,19 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
   background-position: 0 0, 0 var(--lit-stop);
 }
 
-/* PLACEHOLDER icon - the correction block's check, standing in until each mode has its own mark. */
+/* center, not baseline: a baseline-aligned icon claims its whole height above the baseline.
+   Keep .mode-icon no taller than --leading-tight, or this row grows and the title drops. */
 .card-grid--lit .card__title {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: var(--space-2);
 }
 
-/* Empty alt text is load-bearing: the heading beside it says everything the glyph does, so assistive
-   tech should skip it rather than announce "check". */
-.card-grid--lit .card__title::before {
-  content: "\2713" / "";
-  color: var(--color-lantern-orange-dark);
+/* The gradient is declared per icon in ModeIcon.astro, so no fill is set here. */
+.mode-icon {
+  width: 1.15em;
+  height: 1.15em;
+  flex-shrink: 0;
 }
 
 /* A little air either side of the blurb - the title's margin and the CTA's floor alone read tight. */
@@ -883,6 +885,75 @@ ul.accent-edge, ol.accent-edge {
   gap: var(--space-3);
 }
 
+/* Registered so it can be transitioned - unregistered it has no type and would snap. */
+@property --chip-sweep {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+
+@property --chip-glow {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: transparent;
+}
+
+/* A mini button carrying .btn's splash-fade at body size. The :visited half is
+   load-bearing: a:visited is (0,1,1) and outranks a lone class. */
+.chip, .chip:visited {
+  display: inline-block;
+  padding: var(--space-0) var(--space-2);
+  border-radius: var(--radius-lg);
+  /* The swept-TO fill. A color has no business in the gradient, which only ever hides it. */
+  --chip-fill-hover: color-mix(in srgb, var(--color-lantern-orange) 80%, var(--color-lantern-yellow-nearwhite));
+  background-color: var(--color-ink-light);
+  /* --chip-sweep is a percentage along the GRADIENT LINE, so it covers every corner at any size. */
+  background-image: linear-gradient(
+    135deg,
+    var(--chip-fill-hover) calc(var(--chip-sweep) - 30%),
+    transparent var(--chip-sweep)
+  );
+  background-origin: border-box;
+  color: var(--color-accent-ink);
+  /* Two passes; area comes from stacking blurs, since text-shadow has no spread. */
+  text-shadow: 0 0 var(--space-3) var(--chip-glow), 0 0 var(--space-5) var(--chip-glow);
+  font-size: var(--text-base);
+  font-weight: var(--weight-semi);
+  text-decoration: none;
+  /* A mode name is a proper noun and may not wrap mid-phrase. */
+  white-space: nowrap;
+}
+
+/* Past 100% so the wedge's trailing fade clears the far corner, exactly as .btn does.
+   text-decoration is restated because a:hover is (0,1,1) and would underline through the fill. */
+.chip:hover, .chip:visited:hover, .chip:focus-visible, .chip:visited:focus-visible, .chip:active {
+  --chip-sweep: 130%;
+  --chip-glow: color-mix(in srgb, var(--color-lantern-yellow) 80%, transparent);
+  color: var(--color-accent-hover-ink);
+  text-decoration: none;
+}
+
+/* The page's only above-the-fold CTAs. No wrap here, so the label always keeps the first row. */
+.quick-links {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.quick-links__label {
+  flex: none;
+}
+
+/* min-width: 0 is load-bearing - a flex item floors at min-content, and one nowrap chip
+   would then push the whole row below the label instead of wrapping inside it. */
+.quick-links__row {
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  min-width: 0;
+  gap: var(--space-3) var(--space-1);
+}
+
 /* Label/value pairs — quick facts and anything else that pairs a name to a value.
    The role override is scoped, so the row dividers pick up the accent through --standard-border. */
 .facts {
@@ -1028,7 +1099,7 @@ ol.source-list > li::before {
 }
 
 /* Upright inside the italic line, so the separators stay separators rather than joining the text.
-   Same structure as .quick-links__sep - a space each side in the markup, topped up by --sep-gap. */
+   The markup keeps a space each side, which is the row's only break opportunity. */
 .source-list__sep {
   font-style: normal;
   margin-inline: var(--sep-gap);
@@ -1426,6 +1497,16 @@ ul.source-wall__row {
   font-size: var(--text-lg);
 }
 
+.prose h2 {
+  font-size: var(--text-xl);
+  line-height: var(--leading-tight);
+}
+
+/* The element in the selector is what outranks .prose > * + * on specificity. */
+.prose > * + h2 {
+  margin-top: var(--space-5);
+}
+
 /* Weight is presentation; the ELEMENT carries the meaning, so semibold is set here rather than by
    swapping <strong> for something lighter. <b> draws the eye, <strong> says it matters. */
 .prose strong, .prose b {
@@ -1531,75 +1612,14 @@ ul.source-wall__row {
   margin-top: var(--space-2);
 }
 
-/* Punctuation between the links. The markup's own spaces carry most of the gap; this tops it up
-   without removing them, since they are what lets the row wrap. */
-.quick-links__sep {
-  margin-inline: var(--sep-gap);
+/* Four classes, so it outranks the rule above on specificity rather than on where it sits. */
+.stack > .caption + .caption.quick-links {
+  margin-top: var(--space-3);
 }
 
-/* The row wraps on a narrow screen, and a mode name is a proper noun that may not wrap mid-phrase.
-   nowrap also keeps each link ONE line box, which is what stops its gradient restarting mid-label. */
-.quick-links a {
-  white-space: nowrap;
-}
-
-/* Stops on one dark-to-light run, each named for how far along it it sits. The links below take
-   OVERLAPPING spans of it, so each word grades hard while the row as a whole still lightens. */
-.quick-links {
-  --ql-00: var(--color-lantern-orange-dark);
-  --ql-15: color-mix(in srgb, var(--color-lantern-orange) 15%, var(--color-lantern-orange-dark));
-  --ql-30: color-mix(in srgb, var(--color-lantern-orange) 30%, var(--color-lantern-orange-dark));
-  --ql-40: color-mix(in srgb, var(--color-lantern-orange) 40%, var(--color-lantern-orange-dark));
-  --ql-45: color-mix(in srgb, var(--color-lantern-orange) 45%, var(--color-lantern-orange-dark));
-  --ql-55: color-mix(in srgb, var(--color-lantern-orange) 55%, var(--color-lantern-orange-dark));
-  --ql-70: color-mix(in srgb, var(--color-lantern-orange) 70%, var(--color-lantern-orange-dark));
-  --ql-85: color-mix(in srgb, var(--color-lantern-orange) 85%, var(--color-lantern-orange-dark));
-}
-
-.quick-links a:nth-of-type(1) { --ql-from: var(--ql-00); --ql-to: var(--ql-40); }
-.quick-links a:nth-of-type(2) { --ql-from: var(--ql-15); --ql-to: var(--ql-55); }
-.quick-links a:nth-of-type(3) { --ql-from: var(--ql-30); --ql-to: var(--ql-70); }
-.quick-links a:nth-of-type(4) { --ql-from: var(--ql-45); --ql-to: var(--ql-85); }
-
-/* Navigation, so it leaves the browser hues, and the resting state where the clip is unavailable.
-   Suppresses a:hover and a:visited:hover by SOURCE ORDER - keep it below the base link rules. */
-.quick-links a, .quick-links a:visited {
-  color: var(--color-ink-med);
-  font-weight: var(--weight-bold);
-}
-
-/* Registered so it has a type to interpolate; unregistered it would snap at the midpoint. */
-@property --ql-sweep {
-  syntax: "<percentage>";
-  inherits: false;
-  initial-value: -12%;
-}
-
-/* An ink veil above the ramp; retreating it lights the word.
-   Gated on the clip - transparent type is only safe where background-clip: text exists. */
-@supports (background-clip: text) or (-webkit-background-clip: text) {
-  .quick-links a, .quick-links a:visited {
-    --ql-sweep: -12%;
-    background-color: var(--color-ink-light);
-    background-image: linear-gradient(
-        100deg,
-        transparent 0 var(--ql-sweep),
-        var(--color-ink-light) calc(var(--ql-sweep) + 12%) 100%
-      ),
-      linear-gradient(100deg, var(--ql-from), var(--ql-to));
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    /* The clip paints only inside the box, so glyph ink past it is never drawn. The negative margin
-       hands the width straight back, leaving the row's spacing untouched. */
-    padding-right: 0.08em;
-    margin-right: -0.08em;
-  }
-
-  /* Overshoots so the trailing edge of the veil clears the last glyph, exactly as .btn does. */
-  .quick-links a:hover, .quick-links a:focus-visible, .quick-links a:active {
-    --ql-sweep: 130%;
-  }
+/* Three classes, so it outranks .stack > .caption + * on specificity, not on where it sits. */
+.stack > .caption.quick-links + * {
+  margin-top: var(--space-6);
 }
 
 /* An inline label, not emphasis - so it carries weight without <strong>'s semantics. */
@@ -1871,10 +1891,9 @@ ul.source-wall__row {
       --btn-glow 160ms ease-out;
   }
 
-  /* The button's sweep on type: the ink veil retreats and the ramp behind it lights. Same 160ms, so
-     every hover on the page reads as one gesture. */
-  .quick-links a {
-    transition: --ql-sweep 160ms ease-out;
+  /* Same 160ms as the button above, so every hover on the page reads as one gesture. */
+  .chip {
+    transition: --chip-sweep 160ms ease-out, color 70ms ease-out, --chip-glow 160ms ease-out;
   }
 
   /* `backwards` holds the hidden frame through the delay; no `forwards`, so nothing stays latched. */

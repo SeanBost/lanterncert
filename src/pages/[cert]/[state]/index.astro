@@ -149,16 +149,19 @@ const modes = [
 	{
 		href: `${base}/guide`,
 		title: "Study Guide",
+		icon: "book",
 		blurb: "Start here. A crash course in the material, sorted by topic, with the source behind every section.",
 	},
 	{
 		href: `${base}/practice`,
 		title: "Practice Cards",
+		icon: "cards",
 		blurb: "One question at a time, untimed. Every answer comes with the reason and the source.",
 	},
 	{
 		href: `${base}/test`,
 		title: "Mock Test",
+		icon: "pencil",
 		// Naming the agency's exam only where the state actually sets one - same trigger as the panel's
 		// fallback sentence, so the page never shapes a test after an exam that isn't published.
 		blurb: examUnpublished
@@ -200,18 +203,19 @@ const quickLinks = [
 			<div class="stack">
 				<h1 class="page-title">Getting your {term} in {info.name}</h1>
 				<p class="caption"><em>All information last validated {validated}.</em></p>
-				{/* Separators are their own spans, hidden from assistive tech - punctuation, not content.
-				    The spaces inside each span are the row's only break opportunities. */}
-				<p class="caption quick-links">
-					Quick links:{" "}
-					{quickLinks.map((link, i) => (
-						<Fragment>{i > 0 && <span class="quick-links__sep" aria-hidden="true">{" | "}</span>}<a {...link.attrs}>{link.label}</a></Fragment>
-					))}
-				</p>
+				{/* .caption is what puts this on the date line's own rhythm, above and below. */}
+				<nav class="caption quick-links" aria-labelledby="quick-links-label">
+					<span class="quick-links__label" id="quick-links-label">Quick links:</span>
+					<ul class="quick-links__row">
+						{quickLinks.map((link) => (
+							<li><a class="chip" {...link.attrs}>{link.label}</a></li>
+						))}
+					</ul>
+				</nav>
 				{/* set:html because the template and the display strings are authored copy that may
 				    carry markup. Everything out of the facts file is escaped before it gets here. */}
 				<div class="prose">
-					{intro.map((paragraph) => <p set:html={paragraph.html} />)}
+					{intro.map((block) => (block.heading ? <h2 set:html={block.heading} /> : <p set:html={block.html} />))}
 				</div>
 			</div>
 
@@ -260,7 +264,7 @@ const quickLinks = [
 				{
 					modes.map((mode) => (
 						<li>
-							<Card title={mode.title} href={mode.href}>
+							<Card title={mode.title} href={mode.href} icon={mode.icon}>
 								<div class="prose">
 									<p>{mode.blurb}</p>
 								</div>

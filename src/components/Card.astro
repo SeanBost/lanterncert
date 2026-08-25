@@ -1,12 +1,15 @@
 ---
+import ModeIcon from "./ModeIcon.astro";
+
 // `as` sets the heading level so a card never forces a level skip on the page that hosts it.
-const { title, href, as: Heading = "h3" } = Astro.props;
+const { title, href, icon, as: Heading = "h3" } = Astro.props;
 ---
 
 <article class="card">
 	{
 		title && (
 			<Heading class="card__title">
+				{icon && <ModeIcon name={icon} />}
 				{href ? <a href={href}>{title}</a> : title}
 			</Heading>
 		)

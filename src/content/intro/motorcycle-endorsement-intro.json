@@ -2,10 +2,12 @@
   "_about": {
     "what": "The lede under the h1 on every motorcycle-endorsement state page. One template for the cert, filled from whichever state the page is for.",
     "shape": "Each paragraph is a list of sentence slots. A slot is one string, or a list of variants tried in order.",
+    "headings": "A block may instead be { heading }, which renders an h2 above the paragraphs that follow it. h2 because the page's h1 is the title and a heading level may never be skipped. The value takes placeholders and `when` like any slot, but NEVER a citation marker: a heading labels the paragraphs under it rather than making a claim of its own, and a marker there would number a source ahead of the sentence that earns it. Put the markup in the stylesheet, never in the string - the crude first pass carried an inline font-size.",
     "variants": "The first variant whose placeholders ALL resolve is the one used, so a state missing a fact drops to a shorter sentence rather than printing a hole. Order them longest-first. A slot where nothing resolves is skipped, and a paragraph whose slots are all skipped disappears.",
     "placeholders": "{group.field} is a fact. A constrained one renders the `long` string from motorcycle-endorsement-display.json; a number renders through format-fact.js. {stateName}, {localTerm}, {agencyCode} and {agencyName} come from the state's meta. A path naming no real fact THROWS at build - it is a typo, not a gap, and the two must not look alike.",
     "when": "A variant may carry `when`, requiring a fact to equal an exact value. For where a number needs different prose at one value: renewalYears 0 means 'does not expire', never 'every 0 years'.",
     "sectionedExams": "isExamSectioned true gates a parallel set of exam variants, listed FIRST so they win before the plain ones are reached. They deliberately hold passingScorePercent OUT of the exam sentence and state it in the sectioning sentence instead, because a per-section gate printed as a bare score reads as an overall one. Keep the two halves in step when editing either.",
+    "ridingSkillsTest": "The `course` value deliberately has NO variant, so a state where the required course handles the riding evaluation prints nothing rather than a sentence about a test that does not exist. That is the whole point of the value - do not add one to fill the gap. The two agency values are separate sentences because their waivers differ: agencyWaivable is waived by finishing the course, agencyUnlessLicensed is not waivable for a minor at all, and one shared sentence would be wrong for somebody either way.",
     "editing": "Sentence copy lives here. The phrases that fill a {group.field} slot live in motorcycle-endorsement-display.json under `long`, because one phrase serves every state sharing that token."
   },
 
@@ -15,9 +17,9 @@
       [
         {
           "when": { "criteria.minLicense": "None" },
-          "text": "Certification is handled by the <strong>{agencyName}</strong> ({agencyCode}). You can apply at age {criteria.minAge}, with no other license needed beforehand."
+          "text": "Certification is handled by the <strong>{agencyName}</strong> ({agencyCode}). You can apply starting at age {criteria.minAge} with no other license needed beforehand."
         },
-        "Certification is handled by the <strong>{agencyName}</strong> ({agencyCode}). You can apply at age {criteria.minAge}, once you already hold a {criteria.minLicense}."
+        "Certification is handled by the <strong>{agencyName}</strong> ({agencyCode}). You can apply starting at age {criteria.minAge} once you already hold a {criteria.minLicense}."
       ],
       [
         {
@@ -27,12 +29,13 @@
         "If you're already endorsed in another state, {stateName} accepts a credential from {criteria.transferOutOfStateEndorsement}."
       ]
     ],
+    { "heading": "What the certification process is like" },
     [
-      "Required riding and road-rules training is built on the {criteria.courseType}, and courses are listed on a {criteria.findCourse}.",
+      "The required riding and road-rules training you need in {stateName} is built on the {criteria.courseType}, and courses are listed on a {criteria.findCourse}. Courses will supply you a bike to learn on. Typically, your course will involve online and classroom informational sessions followed by two days of riding exercises.",
       "Plan to budget around {criteria.classCost} for the course itself, plus {criteria.dmvCost} to {agencyCode} for the credential.",
       {
         "cite": ["xx-nhtsa-motorcycle-safety", "xx-nhtsa-helmet-guide"],
-        "text": "We strongly encourage you to <strong>purchase a full set of gear</strong>, including a DOT-certified full-face or modular helmet. <strong>Proper gear will save your life</strong>."
+        "text": "We strongly encourage you to <strong>purchase a full set of gear</strong> to wear during every ride, including a DOT-certified full-face or modular helmet. <strong>Proper gear will save your life</strong>."
       }
     ],
     [
@@ -74,10 +77,20 @@
       ],
       [
         {
-          "when": { "criteria.renewalYears": 0 },
-          "text": "Once you have your {localTerm} in {stateName}, it does not expire."
+          "when": { "criteria.ridingSkillsTest": "agencyWaivable" },
+          "text": "{agencyCode} also gives a riding skills test, though finishing the required course waives it."
         },
-        "Once you have your {localTerm} in {stateName}, you'll need to renew it every {criteria.renewalYears}."
+        {
+          "when": { "criteria.ridingSkillsTest": "agencyUnlessLicensed" },
+          "text": "{agencyCode} also gives a riding skills test, waived for adults who already hold a full {stateName} driver's license."
+        }
+      ],
+      [
+        {
+          "when": { "criteria.renewalYears": 0 },
+          "text": "Once you have your {localTerm} in {stateName}, it does not expire. Happy riding!"
+        },
+        "Once you have your {localTerm} in {stateName}, you'll need to renew it every {criteria.renewalYears}. Happy riding!"
       ]
     ]
   ]

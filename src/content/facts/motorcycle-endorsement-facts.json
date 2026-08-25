@@ -24,10 +24,11 @@
       "minAge":     { "value": 16, "source": "fl-hsmv-endorsement-info" },
       "minLicense": { "value": "Drivers", "source": "fl-hsmv-endorsement-info" },
       "transferOutOfStateEndorsement": { "value": "non-Alabama", "source": "fl-hsmv-endorsement-info" },
-      "courseType":      { "value": "MSFBRC", "source": "fl-hsmv-endorsement-info" },
-      "findCourse":      { "value": "stateLocator", "source": "fl-hsmv-course-locations" },
-      "requirementType": { "value": "50ccUp", "source": "fl-hsmv-endorsement-info" },
-      "renewalYears":    { "value": 0, "source": "fl-hsmv-endorsement-faqs" }
+      "courseType":       { "value": "MSFBRC", "source": "fl-hsmv-endorsement-info" },
+      "findCourse":       { "value": "stateLocator", "source": "fl-hsmv-course-locations" },
+      "ridingSkillsTest": { "value": "course", "source": "fl-hsmv-endorsement-info" },
+      "requirementType":  { "value": "50ccUp", "source": "fl-hsmv-endorsement-info" },
+      "renewalYears":     { "value": 0, "source": "fl-hsmv-endorsement-faqs" }
     },
     "additionalResources": [
       "fl-hsmv-frtp-courses",
@@ -46,7 +47,7 @@
       "agencyCode": "GA DDS",
       "agencyName": "Georgia Department of Driver Services",
       "localTerm": "Class M license",
-      "note": "Knowledge exam is two 20-question sections (Road Rules, Road Signs) needing 15 correct on each. Knowledge exam scores expire after one year. GMSP course completion waives both the knowledge and skills tests for 90 days; the course grades its own written evaluation at 80%. A Class MP permit is available at 16, allows one renewal, and is required to book a DDS skills test; DDS testers supply and insure their own motorcycle. Course tuition is $250 in-state and $300 out-of-state. DDS publishes no MOTORCYCLE practice test. The practice test at online.dds.ga.gov is the car one - 45 general knowledge questions plus 5 road signs, drawn from the Driver's Manual, and its only motorcycle question is asked from the car driver's side. It is offered anyway because the Class M knowledge exam is sectioned Road Rules and Road Signs exactly as that test is, and the signs half is common to both; practiceExam names it 'General Road Rules Practice Test' so a rider is never told it is motorcycle-specific.",
+      "note": "Knowledge exam is two 20-question sections (Road Rules, Road Signs) needing 15 correct on each. Knowledge exam scores expire after one year. GMSP course completion waives both the knowledge and skills tests for 90 days; the course grades its own written evaluation at 80%. A Class MP permit is available at 16, allows one renewal, and is required to book a DDS skills test; the rider supplies and insures the motorcycle, which must pass a safety inspection before the test is given. The skills test is the Rider Skills Test, RST-2W for two wheels and RST-3W for three, four riding evaluations scored on time/distance standards and path violations. Failing to pass it within one year of the knowledge exam means retaking the knowledge exam. Course tuition is $250 in-state and $300 out-of-state. DDS publishes no MOTORCYCLE practice test. The practice test at online.dds.ga.gov is the car one - 45 general knowledge questions plus 5 road signs, drawn from the Driver's Manual, and its only motorcycle question is asked from the car driver's side. It is offered anyway because the Class M knowledge exam is sectioned Road Rules and Road Signs exactly as that test is, and the signs half is common to both; practiceExam names it 'General Road Rules Practice Test' so a rider is never told it is motorcycle-specific.",
       "stateDetails": null
     },
     "exam": {
@@ -65,16 +66,16 @@
       "minAge":     { "value": 17, "source": "ga-dds-class-m" },
       "minLicense": { "value": "None", "source": "ga-dds-class-m" },
       "transferOutOfStateEndorsement": { "value": "all", "source": "ga-dds-transfer" },
-      "courseType":      { "value": "MSFBRC", "source": "ga-dds-motorcycle-manual" },
-      "findCourse":      { "value": "stateProgram", "source": "ga-dds-gmsp-registration" },
-      "requirementType": { "value": "50ccUp", "source": "ga-dds-motorcycle-hub" },
-      "renewalYears":    { "value": 8, "source": "ga-dds-fees-terms" }
+      "courseType":       { "value": "MSFBRC", "source": "ga-dds-motorcycle-manual" },
+      "findCourse":       { "value": "stateProgram", "source": "ga-dds-gmsp-registration" },
+      "ridingSkillsTest": { "value": "agencyWaivable", "source": "ga-dds-road-test" },
+      "requirementType":  { "value": "50ccUp", "source": "ga-dds-motorcycle-hub" },
+      "renewalYears":     { "value": 8, "source": "ga-dds-fees-terms" }
     },
     "additionalResources": [
       "ga-dds-drivers-manual-testing",
       "ga-dds-motorcycle-permit",
-      "ga-dds-mopeds",
-      "ga-dds-road-test"
+      "ga-dds-mopeds"
     ]
   },
 
@@ -103,10 +104,11 @@
       "minAge":     { "value": 15, "source": "tx-dps-motorcycle-license" },
       "minLicense": { "value": "None", "source": "tx-dps-motorcycle-license" },
       "transferOutOfStateEndorsement": { "value": "all", "source": "tx-dps-motorcycle-license" },
-      "courseType":      { "value": "MNS2011", "source": "tx-tdlr-curriculum" },
-      "findCourse":      { "value": "stateLocator", "source": "tx-tdlr-find-schools" },
-      "requirementType": { "value": "50ccUp", "source": "tx-stat-541-201" },
-      "renewalYears":    { "value": 8, "source": "tx-dps-fees" }
+      "courseType":       { "value": "MNS2011", "source": "tx-tdlr-curriculum" },
+      "findCourse":       { "value": "stateLocator", "source": "tx-tdlr-find-schools" },
+      "ridingSkillsTest": { "value": "agencyUnlessLicensed", "source": "tx-dps-motorcycle-license" },
+      "requirementType":  { "value": "50ccUp", "source": "tx-stat-541-201" },
+      "renewalYears":     { "value": 8, "source": "tx-dps-fees" }
     },
     "additionalResources": [
       "tx-stat-521-001",
@@ -123,7 +125,7 @@
       "agencyCode": "CA DMV",
       "agencyName": "California Department of Motor Vehicles",
       "localTerm": "Class M1 license",
-      "note": "Two motorcycle classes: M1 covers any two-wheeled motorcycle and everything M2 covers, M2 covers a motorized bicycle, moped or bicycle with an attached motor. There is no unlicensed tier at any engine size. The CMSP is California's official training program, administered by the CHP through a contractor and delivered as a 15-hour course of 5 classroom hours and 10 riding hours; an extended Premier Program runs 7.5 classroom and 13.5 riding. The course is mandatory under 21 and optional at 21 and older. Riders under 21 must also hold an M1 or M2 instruction permit for six months before the license. Course completion issues a DL 389 certificate that waives the DMV skills test for 12 months. The DMV knowledge test draws on the California Motorcycle Handbook and is not offered after 4:30 p.m. The CMSP course sets its own written evaluation at 80%, the same threshold the DMV test uses but a separate exam.",
+      "note": "Two motorcycle classes: M1 covers any two-wheeled motorcycle and everything M2 covers, M2 covers a motorized bicycle, moped or bicycle with an attached motor. There is no unlicensed tier at any engine size. The CMSP is California's official training program, administered by the CHP through a contractor and delivered as a 15-hour course of 5 classroom hours and 10 riding hours; an extended Premier Program runs 7.5 classroom and 13.5 riding. The course is mandatory under 21 and optional at 21 and older. Riders under 21 must also hold an M1 or M2 instruction permit for six months before the license. Course completion issues a DL 389 certificate that waives the DMV skills test for 12 months, though an observation test may still be required. The DMV driving test covers a pre-trip inspection, track paths, slow riding and gear shifting; the application fee covers three attempts, a retest is $7, and three failures void the application. The DMV knowledge test draws on the California Motorcycle Handbook and is not offered after 4:30 p.m. The CMSP course sets its own written evaluation at 80%, the same threshold the DMV test uses but a separate exam.",
       "stateDetails": null
     },
     "exam": {
@@ -142,10 +144,11 @@
       "minAge":     { "value": 16, "source": "ca-dmv-handbook-getting-license" },
       "minLicense": { "value": "None", "source": "ca-dmv-motorcycle-licenses" },
       "transferOutOfStateEndorsement": { "value": "none", "source": "ca-dmv-motorcycle-handbook" },
-      "courseType":      { "value": "CA", "source": "ca-chp-cmsp" },
-      "findCourse":      { "value": "stateProgram", "source": "ca-cmsp-new-riders" },
-      "requirementType": { "value": "all", "source": "ca-dmv-motorcycle-licenses" },
-      "renewalYears":    { "value": 5, "source": "ca-veh-12816" }
+      "courseType":       { "value": "CA", "source": "ca-chp-cmsp" },
+      "findCourse":       { "value": "stateProgram", "source": "ca-cmsp-new-riders" },
+      "ridingSkillsTest": { "value": "agencyWaivable", "source": "ca-dmv-motorcycle-licenses" },
+      "requirementType":  { "value": "all", "source": "ca-dmv-motorcycle-licenses" },
+      "renewalYears":     { "value": 5, "source": "ca-veh-12816" }
     },
     "additionalResources": [
       "ca-dmv-motorcyclists-guide",
