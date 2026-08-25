@@ -1,6 +1,6 @@
 # LanternCert
 
-A free, no-signup certification test-prep site at [lanterncert.com](https://lanterncert.com).
+A free, no-signup certification-prep site at [lanterncert.com](https://lanterncert.com).
 
 A static Astro build: no backend, no database, no accounts. Pages are generated at build time from
 JSON content files, and what deploys is HTML, CSS, and a small amount of client JS for the study

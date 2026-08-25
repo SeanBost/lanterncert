@@ -84,6 +84,7 @@ img, svg {
   --radius-sm: 0.25rem;
   --radius-md: 0.5rem;
   --radius-lg: 0.75rem;
+  --radius-xl: 1.5rem;
   --radius-pill: 999px;
 
   /* ---- Color: decided ---------------------------------------------------
@@ -122,10 +123,10 @@ img, svg {
      Roles resolve to a token above and may never introduce a hex. */
 
   /* Three fills: the page, white for anything set INTO it, and the footer's warm band. */
-  --color-page: color-mix(in srgb, var(--color-lantern-orange-nearwhite) 50%, var(--color-lantern-yellow-nearwhite));
+  --color-page: #fff;
   --color-surface: var(--white);
   --color-header: var(--color-lantern-yellow-nearwhite);
-  --color-footer: color-mix(in srgb, var(--color-lantern-yellow-offwhite) 50%, var(--color-lantern-orange-nearwhite));
+  --color-footer: color-mix(in srgb, var(--color-lantern-yellow-offwhite) 95%, var(--color-lantern-yellow-nearwhite));
 
   --color-text: var(--color-ink);
   --color-border: var(--color-ink-lightester);
@@ -137,9 +138,13 @@ img, svg {
   --color-accent-hover-ink: var(--color-ink);
   --color-focus: var(--color-lantern-orange-dark);
   /* The light beams raked across a warm band - the band's own offwhite, barely warmed. */
-  --color-beam: color-mix(in srgb, var(--color-lantern-yellow-offwhite) 98%, var(--color-lantern-yellow));
+  --color-beam: var(--color-lantern-yellow-nearwhite);
+  /* Controls the color of the warm band's background gradient */
+  --band-warm-gradient: linear-gradient(160deg,
+    color-mix(in srgb, var(--color-lantern-yellow-offwhite) 50%, var(--color-lantern-yellow-nearwhite)),
+    color-mix(in srgb, var(--color-lantern-yellow-offwhite) 95%, var(--color-lantern-yellow-nearwhite)));
   /* The pane set behind text that needs a busy band quieted under it. */
-  --color-band-warm-blur: color-mix(in srgb, var(--color-lantern-yellow-offwhite) 40%, var(--color-lantern-yellow-nearwhite));
+  --color-band-warm-blur: color-mix(in srgb, var(--color-lantern-yellow-offwhite) 20%, var(--color-lantern-yellow-nearwhite));
   /* Deliberately low contrast, the one place it is unwanted: a disabled control must not invite a click. */
   --color-disabled: var(--color-ink-light);
   --color-disabled-ink: var(--color-ink-lightest);
@@ -162,8 +167,8 @@ img, svg {
   --beam-opacity: 1;
   --beam-fit: 100% 100%;
   /* Alpha and edge feather of the pane; --color-band-warm-blur carries the tint. */
-  --band-warm-blur-opacity: 67%;
-  --band-warm-blur-radius: 20px;
+  --band-warm-blur-opacity: 80%;
+  --band-warm-blur-radius: 16px;
   --standard-border: 1px solid var(--color-border);
   --header-h: 3.75rem;
   /* Desktop only. Deepens the band below the centered row, so it never moves the logo or the nav.
@@ -322,10 +327,8 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
 }
 
 .band--warm {
-  background-color: var(--color-lantern-yellow-offwhite);
-  background-image: linear-gradient(135deg,
-    color-mix(in srgb, var(--color-lantern-yellow-offwhite) 60%, var(--color-lantern-orange-nearwhite)),
-    color-mix(in srgb, var(--color-lantern-yellow-offwhite) 5%, var(--color-lantern-orange-nearwhite)));
+  background-color: var(--color-ink-med);
+  background-image: var(--band-warm-gradient);
 }
 
 /* The white seam glow either side of a warm band, painted by its NEIGHBOURS rather than by it.
@@ -905,7 +908,7 @@ ul.accent-edge, ol.accent-edge {
   padding: var(--space-0) var(--space-2);
   border-radius: var(--radius-lg);
   /* The swept-TO fill. A color has no business in the gradient, which only ever hides it. */
-  --chip-fill-hover: color-mix(in srgb, var(--color-lantern-orange) 80%, var(--color-lantern-yellow-nearwhite));
+  --chip-fill-hover: var(--color-lantern-orange);
   background-color: var(--color-ink-light);
   /* --chip-sweep is a percentage along the GRADIENT LINE, so it covers every corner at any size. */
   background-image: linear-gradient(
@@ -916,7 +919,7 @@ ul.accent-edge, ol.accent-edge {
   background-origin: border-box;
   color: var(--color-accent-ink);
   /* Two passes; area comes from stacking blurs, since text-shadow has no spread. */
-  text-shadow: 0 0 var(--space-3) var(--chip-glow), 0 0 var(--space-5) var(--chip-glow);
+  text-shadow: 0 0 var(--space-3) var(--chip-glow), 0 0 var(--space-4) var(--chip-glow), 0 0 var(--space-5) var(--chip-glow);
   font-size: var(--text-base);
   font-weight: var(--weight-semi);
   text-decoration: none;
@@ -1648,7 +1651,7 @@ ul.source-wall__row {
   position: absolute;
   inset: calc(var(--band-warm-blur-radius) * -1);
   z-index: -1;
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-xl);
   background-color: color-mix(in srgb, var(--color-band-warm-blur) var(--band-warm-blur-opacity), transparent);
   filter: blur(var(--band-warm-blur-radius));
   pointer-events: none;
