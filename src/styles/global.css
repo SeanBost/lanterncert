@@ -1828,9 +1828,9 @@ ul.source-wall__row {
 /* 7. Motion --------------------------------------------------------------- */
 
 @media (prefers-reduced-motion: no-preference) {
-  /* Every in-page anchor, so a citation glides to its source instead of teleporting. Declared here
-     rather than gated in JS, so a reduced-motion reader gets the instant jump they asked for. */
-  html {
+  /* Every in-page anchor, so a citation glides to its source instead of teleporting. The attribute
+     comes from global.js after load - browser scroll restoration animates under this rule too. */
+  html[data-scroll-settled] {
     scroll-behavior: smooth;
   }
 

@@ -32,6 +32,14 @@ function initScrollState() {
   );
 }
 
+/** Publishes "the load is over" on <html>, which is what arms scroll-behavior: smooth in global.css. */
+function initScrollSettled() {
+  const arm = () => document.documentElement.setAttribute("data-scroll-settled", "");
+  if (document.readyState === "complete") arm();
+  else window.addEventListener("load", arm, { once: true });
+}
+
 export function initGlobal() {
   initScrollState();
+  initScrollSettled();
 }
