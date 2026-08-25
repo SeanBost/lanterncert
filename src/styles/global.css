@@ -365,20 +365,17 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
   gap: var(--space-6);
 }
 
-/* PLACEHOLDER - holds the hero's right column until the source mosaic is composed. */
 /* Bleeds out to the viewport edges and clips there, so the wall runs off both sides equally rather
    than widening the page. Desktop puts it back in its column below. */
 .hero-art {
   --art-fade: 22%;
-  --art-tint: 5%;
   display: flex;
   align-items: flex-start;
   justify-content: center;
   overflow: hidden;
   min-height: 22rem;
   margin-inline: calc(var(--gutter) * -1);
-  /* The mask below covers the element's own background too, so the panel fades out with the tiles.
-     The accents rather than their nearwhites: yellow-nearwhite IS --color-page, so it would paint nothing. */
+  /* The mask below covers the element's own background too, so the panel fades out with the tiles. */
   background-image: linear-gradient(
     135deg,
     var(--color-page)
@@ -1248,8 +1245,8 @@ ol.source-list > li::before {
 
 /* The hero mosaic. Every knob lives here; the tile reads them so one place tunes the whole wall. */
 .source-wall {
-  --tile-w: 10rem;
-  --tile-h: 3rem;
+  --tile-w: 11.5rem;
+  --tile-h: 3.5rem;
   --tile-gap: 2px;
   --tile-condense: 0.9;
   display: flex;
@@ -1268,7 +1265,7 @@ ul.source-wall__row {
 }
 
 /* One brick. The box is fixed so a swapped-in source can never reflow the wall.
-   TEMP white fill while the tile shape is being judged. */
+   Its width and font size move together, or the ellipsis stops cutting at the same character. */
 .source-tile {
   display: flex;
   flex-direction: column;
@@ -1278,7 +1275,7 @@ ul.source-wall__row {
   height: var(--tile-h);
   overflow: hidden;
   padding-inline: var(--space-3);
-  font-size: var(--text-sm);
+  font-size: var(--text-base);
   line-height: 1.15;
   text-decoration: none;
 }
@@ -1710,11 +1707,11 @@ ul.source-wall__row {
     margin-top: var(--space-9);
   }
 
-  /* Back into its column, offset left and overhanging the right edge. */
+  /* Back into its column, overhanging its left edge by 10% of the column's width and its right by 15%. */
   .hero-art {
     justify-content: flex-start;
-    min-width: 115%;
-    margin-inline: -5% 0;
+    min-width: 125%;
+    margin-inline: -10% 0;
   }
 
   /* The main column's width for a block that stands alone on a page rather than inside a .split.

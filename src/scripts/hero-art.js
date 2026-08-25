@@ -12,11 +12,11 @@ const POLL_MS = 200;
 
 // Peak drift of a tile from its layout position, per axis. The sine weights below sum to 1, so this
 // is a true maximum rather than an approximate one.
-const DRIFT_PX = 4;
+const DRIFT_PX = 8;
 const DRIFT_DEG = 0;
 // Seconds. Each tile draws its own periods from this range - see wave().
-const DRIFT_PERIOD_MIN = 10;
-const DRIFT_PERIOD_MAX = 12;
+const DRIFT_PERIOD_MIN = 12;
+const DRIFT_PERIOD_MAX = 16;
 // A frame after a background tab returns is worth the whole hidden span, which would teleport a tile.
 const MAX_FRAME_S = 0.05;
 
