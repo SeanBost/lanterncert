@@ -1,7 +1,7 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import StateAutocomplete from "../../components/StateAutocomplete.astro";
-import { certs, certConfig } from "../../lib/cert-data.js";
+import { certs, certConfig, certNoindex } from "../../lib/cert-data.js";
 
 export async function getStaticPaths() {
 	return Object.keys(certs).map((cert) => ({ params: { cert } }));
@@ -14,6 +14,7 @@ const config = certConfig(cert);
 <Layout
 	title={config.name}
 	description={`Free ${config.name.toLowerCase()} practice tests and study guides, with requirements broken down state by state and every fact cited to its agency.`}
+	noindex={certNoindex(cert)}
 >
 	<div class="stack-lg">
 		<div class="stack">

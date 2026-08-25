@@ -1,10 +1,10 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
 import Button from "../../../components/Button.astro";
-import { certStatePaths, stateInfo, loadState } from "../../../lib/cert-data.js";
+import { certNoindex, certStatePaths, stateInfo, loadState } from "../../../lib/cert-data.js";
 
 export async function getStaticPaths() {
-	return await certStatePaths();
+	return await certStatePaths({ examOnly: true });
 }
 
 const { cert, state } = Astro.params;
@@ -16,6 +16,7 @@ const term = facts.meta.localTerm;
 <Layout
 	title={`${info.name} ${term} mock test`}
 	description={`Sit a timed ${info.name} ${term} mock test shaped like the real ${facts.meta.agencyCode} exam, then review every question you missed.`}
+	noindex={certNoindex(cert)}
 >
 	<div class="stack prose">
 		<h1 class="page-title">Mock test</h1>

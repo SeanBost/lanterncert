@@ -1,9 +1,9 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import StateAutocomplete from "../components/StateAutocomplete.astro";
-import { certs, loadAllSources, loadSourceEntries, loadState } from "../lib/cert-data.js";
+import { displayedCerts, loadAllSources, loadSourceEntries, loadState } from "../lib/cert-data.js";
 
-const list = Object.values(certs);
+const list = displayedCerts;
 
 // Georgia until there is a sourced correction per state. The link and the date come from the
 // registry rather than the copy, so the homepage can never cite a stale URL.
@@ -29,6 +29,10 @@ const correctionVerified = new Date(Date.UTC(cy, cm - 1, cd)).toLocaleDateString
 
 // The madlib fills its cert from the registry; at cert #2 this half becomes a control of its own.
 const [primary] = list;
+// The homepage cannot name a cert it may not link to, so an all-undisplayed registry has no homepage.
+if (!primary) {
+	throw new Error("homepage: no cert has displayOnSite true - site-config.json ▸ certTypes");
+}
 
 const sources = (await Promise.all(list.map((cert) => loadAllSources(cert.slug)))).flat();
 

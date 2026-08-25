@@ -3,7 +3,9 @@ import Layout from "../../../layouts/Layout.astro";
 import Button from "../../../components/Button.astro";
 import Card from "../../../components/Card.astro";
 import {
+	certConfig,
 	certIntro,
+	certNoindex,
 	certStatePaths,
 	citedSourceIds,
 	// loadExtraSources,
@@ -22,6 +24,7 @@ export async function getStaticPaths() {
 
 const { cert, state } = Astro.params;
 const info = stateInfo(state);
+const config = certConfig(cert);
 const facts = await loadState(cert, state);
 // const extra = await loadExtraSources(cert, facts);
 
@@ -40,7 +43,7 @@ const validated = new Date(Date.UTC(vy, vm - 1, vd)).toLocaleDateString("en-US",
 // The LABEL has to carry the per-section gate, or a rider reads a pass into a fail.
 const sectioned = facts.exam.isExamSectioned.value === true;
 
-const examLabel = facts.exam.examName.value ?? `${info.name} exam`;
+const examLabel = facts.exam.examName.value ?? `${term} exam`;
 
 /** @param {string | null} text */
 const approx = (text) => (text === null ? null : `~${text}`);
@@ -144,8 +147,9 @@ if (cited.length !== citations.size) {
 	throw new Error(`${state}: cited source not in the registry - ${missing.join(", ")}`);
 }
 
-// Order is the progression, and the three names are proper nouns.
-const modes = [
+// Order is the progression, and the three names are proper nouns. All three prepare a rider for an
+// exam, so a cert without one offers none of them and generates none of their routes.
+const modes = !config.hasExam ? [] : [
 	{
 		href: `${base}/guide`,
 		title: "Study Guide",
@@ -196,6 +200,7 @@ const quickLinks = [
 <Layout
 	title={`${info.name} ${term}`}
 	description={`How to get your ${term} in ${info.name} - requirements, costs and exam details from ${facts.meta.agencyName}, plus free practice questions.`}
+	noindex={certNoindex(cert)}
 >
 	{/* Three full-bleed bands, alternating wash / warm / wash. */}
 	<div class="bands">
@@ -255,6 +260,7 @@ const quickLinks = [
 			</section>
 		</div>
 
+		{config.hasExam && (
 		<section class="stack band band--warm" aria-labelledby="modes-heading">
 			<h2 class="section-title band-warm-blur" id="modes-heading">
 				Prepare to <span class="text-accent">pass</span> your {examLabel}
@@ -300,6 +306,7 @@ const quickLinks = [
 				)
 			}
 		</section>
+		)}
 
 		<section class="stack band band--wash" aria-labelledby="sources-heading">
 			<h2 class="section-title" id="sources-heading">Sources and helpful links</h2>

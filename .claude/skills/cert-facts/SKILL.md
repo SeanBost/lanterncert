@@ -41,7 +41,7 @@ what you read and why it wasn't there.
 /cert-facts <cert-slug> <state> --verify-only   verify what is sourced; do not research nulls
 ```
 
-`<cert-slug>` is a key in `src/site-config.json` ▸ `testTypes`. `<state>` is a key in
+`<cert-slug>` is a key in `src/site-config.json` ▸ `certTypes`. `<state>` is a key in
 `src/content/states.json`.
 
 **`all` sweeps the whole registry, cert-wide `xx-` entries included** — it omits `--state`, so scope

@@ -4,25 +4,36 @@ import siteConfig from "../site-config.json";
 import states from "../content/states.json";
 
 export const site = siteConfig.site;
-export const certs = siteConfig.testTypes;
+export const certs = siteConfig.certTypes;
 
 // The build gate for site-config.json, which gets no Zod pass. data-handling.md ▸ Site config.
 for (const [key, config] of Object.entries(certs)) {
   for (const field of ["name", "slug", "blurb", "timeToCertify"]) {
     if (typeof config[field] !== "string" || config[field].trim() === "") {
-      throw new Error(`site-config.json ▸ testTypes ▸ ${key}: "${field}" is missing or empty`);
+      throw new Error(`site-config.json ▸ certTypes ▸ ${key}: "${field}" is missing or empty`);
     }
   }
   if (config.slug !== key) {
-    throw new Error(`site-config.json ▸ testTypes ▸ ${key}: slug "${config.slug}" does not match key`);
+    throw new Error(`site-config.json ▸ certTypes ▸ ${key}: slug "${config.slug}" does not match key`);
   }
-  if (typeof config.stateDependent !== "boolean") {
-    throw new Error(`site-config.json ▸ testTypes ▸ ${key}: "stateDependent" must be a boolean`);
+  // Absent reads as false everywhere it is gated on, so a typo would silently unpublish a cert.
+  for (const field of ["hasExam", "stateDependent", "displayOnSite"]) {
+    if (typeof config[field] !== "boolean") {
+      throw new Error(`site-config.json ▸ certTypes ▸ ${key}: "${field}" must be a boolean`);
+    }
   }
 }
 
 export function certConfig(cert) {
   return certs[cert] ?? null;
+}
+
+/** The certs a reader may be linked to. Every other cert still builds, unlinked and noindex. */
+export const displayedCerts = Object.values(certs).filter((config) => config.displayOnSite);
+
+/** Whether a cert's pages carry `noindex`, which every page under `/[cert]` has to ask. */
+export function certNoindex(cert) {
+  return certConfig(cert)?.displayOnSite !== true;
 }
 
 // Display strings for constrained token values, keyed by cert slug. The schema module guarantees
@@ -96,11 +107,16 @@ export function stateInfo(slug) {
   return states[slug] ?? null;
 }
 
-/** Every { cert, state } pair a state-dependent cert actually holds facts for. */
-export async function certStatePaths() {
+/**
+ * Every { cert, state } pair a state-dependent cert actually holds facts for.
+ * @param {{ examOnly?: boolean }} [opts] examOnly drops certs with no exam - the three study modes.
+ */
+export async function certStatePaths(opts = {}) {
+  const { examOnly = false } = opts;
   const paths = [];
   for (const [cert, config] of Object.entries(certs)) {
     if (!config.stateDependent) continue;
+    if (examOnly && !config.hasExam) continue;
     // From the facts collection, not states.json, so a state with no data can't publish an empty page.
     const facts = await getCollection(`${cert}-facts`);
     for (const entry of facts) paths.push({ params: { cert, state: entry.id } });

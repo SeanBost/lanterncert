@@ -1,10 +1,10 @@
 ---
 import Layout from "../../../../layouts/Layout.astro";
 import Button from "../../../../components/Button.astro";
-import { certStatePaths, stateInfo, loadState } from "../../../../lib/cert-data.js";
+import { certNoindex, certStatePaths, stateInfo, loadState } from "../../../../lib/cert-data.js";
 
 export async function getStaticPaths() {
-	return await certStatePaths();
+	return await certStatePaths({ examOnly: true });
 }
 
 const { cert, state } = Astro.params;
@@ -16,6 +16,7 @@ const term = facts.meta.localTerm;
 <Layout
 	title={`${info.name} ${term} Study Guide`}
 	description={`A plain-language crash course in the ${info.name} ${term} material, sorted by topic and written from ${facts.meta.agencyCode}'s own documents.`}
+	noindex={certNoindex(cert)}
 >
 	<div class="stack prose">
 		<h1 class="page-title">Study Guide</h1>
