@@ -153,24 +153,27 @@ const modes = !config.hasExam ? [] : [
 	{
 		href: `${base}/guide`,
 		title: "Study Guide",
+		emoji: "📖",
 		icon: "book",
 		blurb: "Start here. A crash course in the material, sorted by topic, with the source behind every section.",
 	},
 	{
 		href: `${base}/practice`,
 		title: "Practice Cards",
+		emoji: "🧠",
 		icon: "cards",
 		blurb: "One question at a time, untimed. Every answer comes with the reason and the source.",
 	},
 	{
 		href: `${base}/test`,
 		title: "Mock Test",
+		emoji: "📝",
 		icon: "pencil",
 		// Naming the agency's exam only where the state actually sets one - same trigger as the panel's
 		// fallback sentence, so the page never shapes a test after an exam that isn't published.
 		blurb: examUnpublished
-			? "Sit a timed test covering the essentials you need to know, scored at the end."
-			: `Sit a timed test shaped like the real ${facts.meta.agencyCode} exam, scored at the end.`,
+			? "Take a practice test covering the essentials you need to know, scored at the end."
+			: `Take a practice test shaped like the real ${facts.meta.agencyCode} exam, scored at the end.`,
 	},
 ];
 
@@ -270,7 +273,7 @@ const quickLinks = [
 				{
 					modes.map((mode) => (
 						<li>
-							<Card title={mode.title} href={mode.href} icon={mode.icon}>
+							<Card title={mode.title} emoji={mode.emoji} href={mode.href}> {/*icon={mode.icon} icons parked, replaced with emoji*/}
 								<div class="prose">
 									<p>{mode.blurb}</p>
 								</div>

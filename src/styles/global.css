@@ -123,10 +123,10 @@ img, svg {
      Roles resolve to a token above and may never introduce a hex. */
 
   /* Three fills: the page, white for anything set INTO it, and the footer's warm band. */
-  --color-page: #fff;
+  --color-page: var(--white);
   --color-surface: var(--white);
   --color-header: var(--color-lantern-yellow-nearwhite);
-  --color-footer: color-mix(in srgb, var(--color-lantern-yellow-offwhite) 95%, var(--color-lantern-yellow-nearwhite));
+  --color-footer: color-mix(in srgb, var(--color-lantern-yellow-offwhite) 60%, var(--color-lantern-yellow-nearwhite));
 
   --color-text: var(--color-ink);
   --color-border: var(--color-ink-lightester);
@@ -137,12 +137,12 @@ img, svg {
   --color-accent-ink: var(--white);
   --color-accent-hover-ink: var(--color-ink);
   --color-focus: var(--color-lantern-orange-dark);
-  /* The light beams raked across a warm band - the band's own offwhite, barely warmed. */
+  /* The light beams raked across a warm band */
   --color-beam: var(--color-lantern-yellow-nearwhite);
   /* Controls the color of the warm band's background gradient */
   --band-warm-gradient: linear-gradient(160deg,
-    color-mix(in srgb, var(--color-lantern-yellow-offwhite) 50%, var(--color-lantern-yellow-nearwhite)),
-    color-mix(in srgb, var(--color-lantern-yellow-offwhite) 95%, var(--color-lantern-yellow-nearwhite)));
+    color-mix(in srgb, var(--color-lantern-yellow-offwhite) 20%, var(--color-lantern-yellow-nearwhite)),
+    color-mix(in srgb, var(--color-lantern-yellow-offwhite) 80%, var(--color-lantern-yellow-nearwhite)));
   /* The pane set behind text that needs a busy band quieted under it. */
   --color-band-warm-blur: color-mix(in srgb, var(--color-lantern-yellow-offwhite) 20%, var(--color-lantern-yellow-nearwhite));
   /* Deliberately low contrast, the one place it is unwanted: a disabled control must not invite a click. */
@@ -164,7 +164,7 @@ img, svg {
   --band-glow-y: 18px;
   --band-glow-blur: 32px;
   /* Strength and scaling of a warm band's light beams; --color-beam carries the hue. */
-  --beam-opacity: 1;
+  --beam-opacity: .751;
   --beam-fit: 100% 100%;
   /* Alpha and edge feather of the pane; --color-band-warm-blur carries the tint. */
   --band-warm-blur-opacity: 80%;
@@ -843,7 +843,7 @@ ul.accent-edge, ol.accent-edge {
 }
 
 /* Decoration ONLY - naming interaction states on the base block re-applies every declaration at
-   (0,1,1) and outranks .autocomplete__submit's size. */
+   (0,1,1) and outranks any per-component override of them. */
 .btn:hover, .btn:focus-visible, .btn:active {
   text-decoration: none;
 }
@@ -906,7 +906,7 @@ ul.accent-edge, ol.accent-edge {
 .chip, .chip:visited {
   display: inline-block;
   padding: var(--space-0) var(--space-2);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-md);
   /* The swept-TO fill. A color has no business in the gradient, which only ever hides it. */
   --chip-fill-hover: var(--color-lantern-orange);
   background-color: var(--color-ink-light);
@@ -1317,6 +1317,22 @@ ol.source-list > li::before {
   font-weight: var(--weight-semi);
 }
 
+/* The hero's trust bullets, sitting under the state field. */
+.assurances {
+  font-size: var(--text-base);
+  color: var(--color-ink-light);
+}
+
+.assurances > li + li {
+  margin-top: var(--space-2);
+}
+
+/* Closer to the field above than .stack-lg's own step. Two classes, so it outranks that step
+   from anywhere in the file rather than relying on sitting below it. */
+.stack-lg > * + .assurances {
+  margin-top: var(--space-4);
+}
+
 /* The hero mosaic. Every knob lives here; the tile reads them so one place tunes the whole wall. */
 .source-wall {
   --tile-w: 11.5rem;
@@ -1401,10 +1417,10 @@ ul.source-wall__row {
   position: relative;
 }
 
-/* Field and submit share a size so their heights compute equal; nowrap stops the label wrapping. */
+/* Takes .btn's own size, so this submit and the mode cards' buttons are one button; nowrap stops
+   the label wrapping. */
 .autocomplete__submit {
   flex: none;
-  font-size: var(--text-xl);
   white-space: nowrap;
 }
 
@@ -1418,7 +1434,7 @@ ul.source-wall__row {
   background-color: var(--white);
   color: var(--color-ink);
   font: inherit;
-  font-size: var(--text-xl);
+  font-size: var(--text-lg);
   line-height: var(--leading-body);
 }
 
@@ -1597,12 +1613,22 @@ ul.source-wall__row {
 }
 
 .lede {
-  font-size: var(--text-xl);
+  font-size: var(--text-lg);
 }
 
 
 .caption {
   font-size: var(--text-base);
+}
+
+/* An inline mark 4px taller than a capital, clearing it 2px above the caps and 2px below the baseline.
+   display undoes the img reset in §1, which would otherwise stack this on its own line. */
+.caption__icon {
+  display: inline-block;
+  width: auto;
+  /* 0.7em is Figtree's cap height, so both overhangs hold at any font size. */
+  height: calc(0.7em + 8px);
+  vertical-align: -3px;
 }
 
 /* Same mechanism as .page-title--hero above - on the FOLLOWING element, two classes to outrank .stack. */
@@ -1808,7 +1834,7 @@ ul.source-wall__row {
   /* A fixed basis rather than 1 1 auto: the field is sized to the longest state name, not to
      whatever space is left over, so the form ends up only as wide as it needs to be. */
   .autocomplete__field {
-    flex: 0 0 17rem;
+    flex: 0 0 16rem;
   }
 }
 

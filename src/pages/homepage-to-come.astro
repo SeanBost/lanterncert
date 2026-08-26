@@ -98,8 +98,8 @@ for (const size of rowSizes) {
 						<span class="page-title__accent sweep-in">certified</span>
 					</h1>
 					<p class="lede">
-						Requirements, free practice tests, and what the certification process is like.
-            All cited and linked.
+						Requirements, exam prep, and what the certification process is like.
+            All cited and linked on-page.
 					</p>
 				</div>
 
@@ -107,6 +107,18 @@ for (const size of rowSizes) {
 					<p class="madlib">I want my <strong>{primary.name.toLowerCase()}</strong> in</p>
 					<StateAutocomplete base={`/${primary.slug}`} submitLabel="Start learning" value="Georgia" geo />
 				</div>
+
+        {/* Each mark is decorative - the sentence beside it carries the meaning on its own. */}
+        <ul class="assurances">
+          <li>
+            {/* <img class="caption__icon" src="/lanterncert-icon-mini.png" alt="" width="64" height="64" /> icons parked for emojis*/}
+            <span aria-hidden="true">🔓</span> No ads, paywalls, or signup
+          </li>
+          <li>
+            {/* <img class="caption__icon" src="/lanterncert-icon-mini.png" alt="" width="64" height="64" />*/}
+            <span aria-hidden="true">🏛️</span> Backed by {sources.length} official sources
+          </li>
+        </ul>
 			</div>
 
 			<div class="hero-art">
@@ -138,7 +150,7 @@ for (const size of rowSizes) {
 
 		<div class="split band band--warm">
 			<section class="stack band-warm-blur" aria-labelledby="trust-heading">
-        <h2 class="section-title" id="trust-heading">Everything you need to know, <span class="text-accent">cited</span></h2>
+        <h2 class="section-title" id="trust-heading">Everything you need to know, <span class="text-accent">cited 📜</span></h2>
 				<div class="prose">
 					<p>
 						AI overviews and generic prep sites will confidently omit or muddy important-to-know details, while 
