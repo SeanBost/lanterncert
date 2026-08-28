@@ -4,16 +4,15 @@ import SiteHeader from "../components/SiteHeader.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 import { site } from "../lib/cert-data.js";
 
-// fonts: extra Google Fonts specs for ONE page, e.g. "Montserrat:wght@100..900". Site-wide type is
-// Figtree alone; a page asks for another face only to reproduce a quoted source in its own.
-// schema: a JSON-LD object, rendered into <head>. A page builds it from the data it already renders.
 const {
 	title,
 	description,
 	bareTitle = false,
 	noindex = false,
 	geo = false,
+	// Extra Google Fonts specs for ONE page, e.g. "Montserrat:wght@100..900".
 	fonts = [],
+	// A JSON-LD object rendered into <head>, built from the data the page already renders.
 	schema = null,
 } = Astro.props;
 

@@ -49,7 +49,9 @@
           "text": "{stateName} doesn't require riding and road-rules training, though taking a course is usually the easier route. Courses are built on the {criteria.courseType} and listed on a {criteria.findCourse}."
         }
       ],
-      "Courses will supply you a bike to learn on. Typically, your course will involve online or classroom informational sessions followed by two days of riding exercises.",
+      "Courses will supply you with a bike to learn on. Typically, your course will involve online or classroom informational sessions followed by two days of riding exercises."
+    ],
+    [
       [
         {
           "when": { "criteria.courseRequired": false },
@@ -84,19 +86,19 @@
       [
         {
           "when": { "exam.isExamSectioned": true },
-          "text": "The {exam.examType} is {exam.questionCount} questions, with {exam.timeLimitMinutes} permitted for testing."
+          "text": "The {exam.examType} is <strong>{exam.questionCount} questions</strong>, with {exam.timeLimitMinutes} permitted for testing."
         },
         {
           "when": { "exam.isExamSectioned": true },
-          "text": "{stateName}'s {exam.examType} is {exam.questionCount} questions"
+          "text": "{stateName}'s {exam.examType} is <strong>{exam.questionCount} questions</strong>"
         },
         {
           "when": { "exam.isExamSectioned": true, "exam.examAdministration": "agency" },
           "text": "The exam to prepare for is the {exam.examType}."
         },
-        "The {exam.examType} is {exam.questionCount} questions, requires a score of {exam.passingScorePercent} to pass, and allows {exam.timeLimitMinutes} for testing.",
-        "The {exam.examType} is {exam.questionCount} questions, and requires a score of {exam.passingScorePercent} to pass.",
-        "The {exam.examType} requires a score of {exam.passingScorePercent} to pass.",
+        "The {exam.examType} is <strong>{exam.questionCount} questions</strong>, requires a score of <strong>{exam.passingScorePercent} to pass</strong>, and allows {exam.timeLimitMinutes} for testing.",
+        "The {exam.examType} is <strong>{exam.questionCount} questions</strong>, and requires a score of <strong>{exam.passingScorePercent} to pass</strong>.",
+        "The {exam.examType} requires a score of <strong>{exam.passingScorePercent} to pass</strong>.",
         {
           "when": { "exam.examAdministration": "agency" },
           "text": "The exam to prepare for is the {exam.examType}."
@@ -105,11 +107,11 @@
       [
         {
           "when": { "exam.isExamSectioned": true },
-          "text": "split into separately scored sections, {exam.examSectionNames}, and you'll need a {exam.passingScorePercent} on each section to pass."
+          "text": "split into separately scored sections, {exam.examSectionNames}, and you'll need a <strong>{exam.passingScorePercent} on each section to pass</strong>."
         },
         {
           "when": { "exam.isExamSectioned": true },
-          "text": "split into separately scored sections, and you'll need a {exam.passingScorePercent} on each section to pass."
+          "text": "split into separately scored sections, and you'll need a <strong>{exam.passingScorePercent} on each section to pass</strong>."
         },
         {
           "when": { "exam.isExamSectioned": true },

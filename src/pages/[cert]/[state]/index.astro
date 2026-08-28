@@ -8,13 +8,14 @@ import {
 	certNoindex,
 	certStatePaths,
 	citedSourceIds,
+	examUnpublished,
 	// loadExtraSources,
 	loadSourceEntries,
 	loadState,
 	stateInfo,
 	tokenDisplay,
 } from "../../../lib/cert-data.js";
-import { formatFact } from "../../../lib/format-fact.js";
+import { formatDate, formatFact } from "../../../lib/format-fact.js";
 import { sourceMetaParts } from "../../../lib/format-source.js";
 import { stateIntro } from "../../../lib/state-intro.js";
 
@@ -31,14 +32,7 @@ const facts = await loadState(cert, state);
 const term = facts.meta.localTerm;
 const base = `/${cert}/${state}`;
 
-// Parsed as UTC and formatted as UTC — a local-timezone render of a bare date lands a day early.
-const [vy, vm, vd] = facts.meta.dateVerified.split("-").map(Number);
-const validated = new Date(Date.UTC(vy, vm - 1, vd)).toLocaleDateString("en-US", {
-	year: "numeric",
-	month: "long",
-	day: "numeric",
-	timeZone: "UTC",
-});
+const validated = formatDate(facts.meta.dateVerified);
 
 // The LABEL has to carry the per-section gate, or a rider reads a pass into a fail.
 const sectioned = facts.exam.isExamSectioned.value === true;
@@ -52,7 +46,9 @@ const approx = (text) => (text === null ? null : `~${text}`);
 const rows = (list) =>
 	list.map(([label, value, fact]) => ({ label, value, sourceId: fact.source?.id ?? null }));
 
-const token = tokenDisplay(cert, facts, { stateName: info.name, stateCode: info.abbreviation });
+// One place for the state identity the display strings interpolate; the lede takes the escaping half.
+const displayOpts = { stateName: info.name, stateCode: info.abbreviation };
+const token = tokenDisplay(cert, facts, displayOpts);
 
 // A source takes its number the first time it appears, in reading order, which is also the
 // Sources list's order.
@@ -64,13 +60,12 @@ const numberSource = (id) => {
 };
 
 // One template per cert, filled from this state. src/content/intro/<cert>-intro.json ▸ _about.
-// tokenDisplay is built with asHtml because the lede renders through set:html.
 const intro = stateIntro({
 	cert,
 	facts,
 	stateName: info.name,
 	template: certIntro(cert),
-	token: tokenDisplay(cert, facts, { asHtml: true, stateName: info.name, stateCode: info.abbreviation }),
+	token: tokenDisplay(cert, facts, { ...displayOpts, asHtml: true }),
 	hrefFor: (id) => `#source-${numberSource(id)}`,
 });
 
@@ -101,12 +96,7 @@ const examRows = rows([
 ]);
 
 // A sourced null is "checked, nothing published"; an unsourced one is "nobody has looked".
-// Read off the facts, not the rows — the time limit row prints a value where its own fact is null.
-const examUnpublished = [
-	facts.exam.questionCount,
-	facts.exam.passingScorePercent,
-	facts.exam.timeLimitMinutes,
-].every((fact) => fact.value === null && fact.source !== null);
+const noExamFormat = examUnpublished(facts);
 
 // Grouped by the question a reader is asking, not by the shape of the facts file.
 const factGroups = [
@@ -134,7 +124,7 @@ const factGroups = [
 	},
 	{
 		title: "Exam details",
-		fallback: examUnpublished ? `${info.name} sets no statewide exam format.` : null,
+		fallback: noExamFormat ? `${info.name} sets no statewide exam format.` : null,
 		// The passing score is the most foundational exam property here, so its source is the one that
 		// backs a sentence standing in for the whole group. Never assume the nulls share a source.
 		fallbackSource: facts.exam.passingScorePercent.source?.id ?? null,
@@ -175,6 +165,7 @@ const modes = !config.hasExam ? [] : [
 		title: "Study Guide",
 		emoji: "📖",
 		icon: "book",
+		cta: "Get started",
 		blurb: "Start here. A crash course in the material, sorted by topic, with the source behind every section.",
 	},
 	{
@@ -182,6 +173,7 @@ const modes = !config.hasExam ? [] : [
 		title: "Practice Cards",
 		emoji: "🧠",
 		icon: "cards",
+		cta: "Start practicing",
 		blurb: "One question at a time, untimed. Every answer comes with the reason and the source.",
 	},
 	{
@@ -189,9 +181,10 @@ const modes = !config.hasExam ? [] : [
 		title: "Mock Test",
 		emoji: "📝",
 		icon: "pencil",
+		cta: "Practice testing",
 		// Naming the agency's exam only where the state actually sets one - same trigger as the panel's
 		// fallback sentence, so the page never shapes a test after an exam that isn't published.
-		blurb: examUnpublished
+		blurb: noExamFormat
 			? "Take a practice test covering the essentials you need to know, scored at the end."
 			: `Take a practice test shaped like the real ${facts.meta.agencyCode} exam, scored at the end.`,
 	},
@@ -293,14 +286,15 @@ const quickLinks = [
 				{
 					modes.map((mode) => (
 						<li>
-							<Card title={mode.title} emoji={mode.emoji} href={mode.href}> {/*icon={mode.icon} icons parked, replaced with emoji*/}
+							{/* PARKED - drawn icons swapped for emoji; restore with icon={mode.icon}. */}
+							<Card title={mode.title} emoji={mode.emoji} href={mode.href}>
 								<div class="prose">
 									<p>{mode.blurb}</p>
 								</div>
 								{/* The title links to the same place, so the mode is named for anyone hearing this alone. */}
 								<p class="card__cta">
 									<Button href={mode.href}>
-										Get started<span class="visually-hidden"> with {mode.title}</span>
+										{mode.cta}<span class="visually-hidden"> with {mode.title}</span>
 									</Button>
 								</p>
 							</Card>

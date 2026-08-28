@@ -2,11 +2,9 @@
 import Layout from "../layouts/Layout.astro";
 import StateAutocomplete from "../components/StateAutocomplete.astro";
 import { displayedCerts, loadAllSources, loadSourceEntries, loadState } from "../lib/cert-data.js";
+import { formatDate } from "../lib/format-fact.js";
 
-const list = displayedCerts;
-
-// Georgia until there is a sourced correction per state. The link and the date come from the
-// registry rather than the copy, so the homepage can never cite a stale URL.
+// Georgia until there is a sourced correction per state. The link comes from the registry, never the copy.
 const CORRECTION = { cert: "motorcycle-endorsement", state: "ga", sourceId: "ga-dds-test-exams" };
 const correctionFacts = await loadState(CORRECTION.cert, CORRECTION.state);
 const [correctionSource] = await loadSourceEntries(CORRECTION.cert, [CORRECTION.sourceId]);
@@ -18,23 +16,17 @@ if (!correctionSource) {
 // Split so the address bar can weight the host over the path, the way a real one does.
 const correctionUrl = new URL(correctionSource.url);
 
-// Parsed and formatted as UTC — a local-timezone render of a bare date lands a day early.
-const [cy, cm, cd] = correctionFacts.meta.dateVerified.split("-").map(Number);
-const correctionVerified = new Date(Date.UTC(cy, cm - 1, cd)).toLocaleDateString("en-US", {
-	year: "numeric",
-	month: "long",
-	day: "numeric",
-	timeZone: "UTC",
-});
+// Read only by the parked figcaption below; kept so restoring it stays a pure uncomment.
+const correctionVerified = formatDate(correctionFacts.meta.dateVerified);
 
 // The madlib fills its cert from the registry; at cert #2 this half becomes a control of its own.
-const [primary] = list;
+const [primary] = displayedCerts;
 // The homepage cannot name a cert it may not link to, so an all-undisplayed registry has no homepage.
 if (!primary) {
 	throw new Error("homepage: no cert has displayOnSite true - site-config.json ▸ certTypes");
 }
 
-const sources = (await Promise.all(list.map((cert) => loadAllSources(cert.slug)))).flat();
+const sources = (await Promise.all(displayedCerts.map((cert) => loadAllSources(cert.slug)))).flat();
 
 // Round-robin by scope so the top of the wall shows the mix rather than one agency's run.
 // Sorted before grouping, so each group inherits title order without a second sort.
@@ -110,17 +102,17 @@ for (const size of rowSizes) {
 					<StateAutocomplete base={`/${primary.slug}`} submitLabel="Start learning" value="Georgia" geo />
 				</div>
 
-        {/* Each mark is decorative - the sentence beside it carries the meaning on its own. */}
-        <ul class="assurances">
-          <li>
-            {/* <img class="caption__icon" src="/lanterncert-icon-mini.png" alt="" width="64" height="64" /> icons parked for emojis*/}
-            <span aria-hidden="true">🔓</span> No ads, paywalls, or signup
-          </li>
-          <li>
-            {/* <img class="caption__icon" src="/lanterncert-icon-mini.png" alt="" width="64" height="64" />*/}
-            <span aria-hidden="true">🏛️</span> Backed by {sources.length} official sources
-          </li>
-        </ul>
+				{/* Each mark is decorative - the sentence beside it carries the meaning on its own. */}
+				<ul class="assurances">
+					<li>
+						{/* <img class="caption__icon" src="/lanterncert-icon-mini.png" alt="" width="64" height="64" /> icons parked for emojis*/}
+						<span aria-hidden="true">🔓</span> No ads, paywalls, or signup
+					</li>
+					<li>
+						{/* <img class="caption__icon" src="/lanterncert-icon-mini.png" alt="" width="64" height="64" />*/}
+						<span aria-hidden="true">🏛️</span> Backed by {sources.length} official sources
+					</li>
+				</ul>
 			</div>
 
 			<div class="hero-art">
@@ -152,20 +144,17 @@ for (const size of rowSizes) {
 
 		<div class="split band band--warm">
 			<section class="stack band-warm-blur" aria-labelledby="trust-heading">
-        <h2 class="section-title section-title--lg" id="trust-heading">Everything you need to know, <span class="text-accent">cited</span></h2>
+				<h2 class="section-title section-title--lg baseline-drop" id="trust-heading">Everything you need to know, <span class="text-accent">cited</span></h2>
 				<div class="prose">
-          <p>
-            Figuring out how to get certified is tedious and confusing.
+					<p>
+						Figuring out how to get certified is tedious and confusing.
 						AI overviews will often confidently omit important-to-know details, 
-            and certification agencies overcomplicate how and where they share their requirements. 
+						and certification agencies overcomplicate how and where they share their requirements. 
 					</p>
-          <p>
+					<p>
 						LanternCert organizes <strong class="text-key">what you need to know in a single place</strong>. 
-            Every fact and practice question provided is backed by an official source that's been vetted and linked to.
-            Get the big picture at a glance, then dig into the details that matter most to you.
-          </p>
-          <p>
-						See what the certification you're working towards requires, then study and take practice tests to get exam-ready.
+						Every fact and practice question is backed by an official source that's been vetted and linked to.
+						Get the big picture at a glance, then dig into the details that matter most to you.
 					</p>
 				</div>
 			</section>
@@ -205,7 +194,7 @@ for (const size of rowSizes) {
 							pass.
 						</blockquote>
 					</div>
-          <p class="correction__label">What an AI overview claimed, searched August 23, 2026</p>
+					<p class="correction__label">What an AI overview claimed, searched August 23, 2026</p>
 				</figure>
 
 				<figure class="correction__evidence">
@@ -243,7 +232,7 @@ for (const size of rowSizes) {
 							{correctionSource.publisher}, verified {correctionVerified}
 						</span>
 					</figcaption>*/}
-          <p class="correction__label">What Georgia DDS actually publishes, verified August 14, 2026</p>
+					<p class="correction__label">What Georgia DDS actually publishes, first verified August 14, 2026</p>
 				</figure>
 			</section>
 		</div>
@@ -252,7 +241,7 @@ for (const size of rowSizes) {
 			<h2 class="section-title section-title--lg" id="certs-heading">Certifications we cover</h2>
 			<ul class="row-list accent-edge col-main">
 				{
-					list.map((cert) => (
+					displayedCerts.map((cert) => (
 						<li>
 							{/* Decorative - the cert's own name is the link text and carries it alone. */}
 							<span class="row-list__mark" aria-hidden="true">{cert.emoji}</span>
@@ -264,11 +253,11 @@ for (const size of rowSizes) {
 					))
 				}
 			</ul>
-      <div class="prose">
-        <p class="col-main">
-          Check back soon, we're always adding more.
-        </p>
-      </div>
+			<div class="prose">
+				<p class="col-main">
+					Check back soon, we're always adding more.
+				</p>
+			</div>
 		</section>
 	</div>
 </Layout>

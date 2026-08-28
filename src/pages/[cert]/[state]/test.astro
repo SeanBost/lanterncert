@@ -1,7 +1,13 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
 import Button from "../../../components/Button.astro";
-import { certNoindex, certStatePaths, stateInfo, loadState } from "../../../lib/cert-data.js";
+import {
+	certNoindex,
+	certStatePaths,
+	examUnpublished,
+	stateInfo,
+	loadState,
+} from "../../../lib/cert-data.js";
 
 export async function getStaticPaths() {
 	return await certStatePaths({ examOnly: true });
@@ -11,11 +17,16 @@ const { cert, state } = Astro.params;
 const info = stateInfo(state);
 const facts = await loadState(cert, state);
 const term = facts.meta.localTerm;
+
+// Same gate as the state page's Mock Test card: never shape a test after an exam nobody publishes.
+const shapedLike = examUnpublished(facts)
+	? "covering the essentials you need to know"
+	: `shaped like the real ${facts.meta.agencyCode} exam`;
 ---
 
 <Layout
 	title={`${info.name} ${term} Mock Test`}
-	description={`Sit a timed ${info.name} ${term} Mock Test shaped like the real ${facts.meta.agencyCode} exam, then review every question you missed.`}
+	description={`Sit a timed ${info.name} ${term} Mock Test ${shapedLike}, then review every question you missed.`}
 	noindex={certNoindex(cert)}
 >
 	<div class="stack prose">

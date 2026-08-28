@@ -12,8 +12,3 @@ export function sourceMetaParts(source) {
     source.verifiedCurrentIn ? `verified current in ${source.verifiedCurrentIn}` : null,
   ].filter(Boolean);
 }
-
-/** The same line as one string, for anywhere that cannot style the separators. */
-export function formatSourceMeta(source) {
-  return sourceMetaParts(source).join(" | ");
-}

@@ -30,12 +30,7 @@ export function scopeTokens(stateSlug, { states, facts, exams }) {
   return tokens;
 }
 
-/** True when any of a question's tokens matches the state. Plain union; overlap is allowed. */
-export function appliesTo(question, stateSlug, ctx) {
-  const tokens = scopeTokens(stateSlug, ctx);
-  return question.applies_to.some((t) => tokens.has(t));
-}
-
+/** Scope resolved once for the whole bank; a question matches on any token. Overlap is allowed. */
 export function questionsForState(questions, stateSlug, ctx) {
   const tokens = scopeTokens(stateSlug, ctx);
   return questions.filter((q) => q.applies_to.some((t) => tokens.has(t)));

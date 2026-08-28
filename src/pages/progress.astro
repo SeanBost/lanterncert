@@ -2,7 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import Button from "../components/Button.astro";
 
-// Every category the browser holds, each with its own live state.
+// Zero-state placeholders - nothing on this page reads local storage yet.
 const stored = [
 	["Question answer history", "None stored yet"],
 	["Mock Test results", "None stored yet"],
@@ -25,7 +25,7 @@ const stored = [
 
 			<div class="split">
 				<div class="stack-lg">
-          <h1 class="page-title">
+					<h1 class="page-title">
 						Progress overview
 					</h1>
 					<section class="stack" aria-labelledby="next-heading">
@@ -34,7 +34,7 @@ const stored = [
 						<div class="prose">
 							<p>
 								To get started, find the certification you want to prepare for. 
-                Once you complete any Practice Cards or Mock Tests, your results and progress will get displayed on this page.
+								Once you complete any Practice Cards or Mock Tests, your results and progress will get displayed on this page.
 							</p>
 						</div>
 						<div class="button-row">
@@ -88,12 +88,12 @@ const stored = [
 				<div class="prose prose--sm">
 					<p>
 						Progress data is exclusively stored locally by your browser and device. 
-            See the <a href="/about#privacy">privacy and usage policy</a> for details.
+						See the <a href="/about#privacy">privacy and usage policy</a> for details.
 					</p>
-          <p>
-            You can download or erase your data below if any is stored. 
-            You can also opt-out of progress tracking, however this will disable the features on this page that need it.
-          </p>
+					<p>
+						You can download or erase your data below if any is stored. 
+						You can also opt-out of progress tracking, however this will disable the features on this page that need it.
+					</p>
 				</div>
 
 				{/* A div, not a dl - a heading cannot live inside a dl, so the group brings its own. */}
@@ -118,8 +118,8 @@ const stored = [
 				</div>
 				<p class="caption" id="data-note">
 					<em>Warning: Erasing your data or disabling progress tracking will clear your existing progress permanently. 
-            Lost data cannot be recovered if re-enabled.
-          </em>
+						Lost data cannot be recovered if re-enabled.
+					</em>
 				</p>
 			</div>
 		</section>

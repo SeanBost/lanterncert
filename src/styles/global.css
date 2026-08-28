@@ -90,7 +90,7 @@ img, svg {
   /* ---- Color: decided ---------------------------------------------------
      A new hex belongs here and nowhere else. An unused color is kept on purpose. */
 
-  /* Form controls only — the page itself is never white. */
+  /* The page, form controls, and the header veil. */
   --white: #ffffff;
 
   /* Stands in for "opaque" in the hero art's mask gradients, where only the alpha is ever read. */
@@ -100,7 +100,7 @@ img, svg {
   --color-ink-med: #2e2a33;
   --color-ink-light: #4a4552;
   --color-ink-lightest: #736b80;
-  /* The ink ramp's hue and saturation at 88% lightness. Unused; kept per the unused-color rule. */
+  /* The ink ramp's hue and saturation at 88% lightness. Carries --color-border. */
   --color-ink-lightester: #9e99a7;
 
   /* Surfaces, never ink — both fail AA as type and fail the 3:1 non-text bar. */
@@ -111,7 +111,7 @@ img, svg {
   --color-lantern-yellow-nearwhite: #fffcf5;
   --color-lantern-orange-nearwhite: #fff5eb;
 
-  /* Dark enough to be ink, which the accents above are not. Yellow stays a rule or a fill only. */
+  /* Orange-dark is the palette's only warm ink; yellow-dark stays a gradient stop or a fill. */
   --color-lantern-yellow-dark: #bf8600;
   --color-lantern-orange-dark: #bf4000;
 
@@ -122,14 +122,14 @@ img, svg {
   /* ---- Color: semantic roles --------------------------------------------
      Roles resolve to a token above and may never introduce a hex. */
 
-  /* Three fills: the page, white for anything set INTO it, and the footer's warm band. */
+  /* Four fills: the page, anything set INTO it, the header band and the footer band. */
   --color-page: var(--white);
   --color-surface: var(--white);
   --color-header: var(--color-lantern-yellow-nearwhite);
   --color-footer: color-mix(in srgb, var(--color-lantern-yellow-offwhite) 60%, var(--color-lantern-yellow-nearwhite));
 
   --color-text: var(--color-ink);
-  --color-border: var(--color-ink-lightester);
+  --color-border: var(--color-ink-lightest);
   /* The two ends of the button's hover sweep, each with the type color it carries. Orange is a
      surface and never holds type, so it arrives as the sweep rather than sitting under the label. */
   --color-accent: var(--color-ink-med);
@@ -163,6 +163,9 @@ img, svg {
   /* How far the white seam glow reaches into the bands either side of a warm one. */
   --band-glow-y: 18px;
   --band-glow-blur: 32px;
+  /* The seam itself. The negative spread is what holds it at the edge instead of washing the band. */
+  --band-seam-top: inset 0 var(--band-glow-y) var(--band-glow-blur) -8px var(--white);
+  --band-seam-bottom: inset 0 calc(-1 * var(--band-glow-y)) var(--band-glow-blur) -8px var(--white);
   /* Strength and scaling of a warm band's light beams; --color-beam carries the hue. */
   --beam-opacity: .751;
   --beam-fit: 100% 100%;
@@ -183,6 +186,18 @@ img, svg {
 
   /* The frame both card types are drawn by - the homepage proof cards and the state page's prep
      cards. One place to tune, so the two can never drift apart. */
+  --frame-w: 5px;
+  /* The wedge that grows across a lit control on hover. Both controls carry the same one. */
+  --splash-fill: var(--color-accent-hover);
+  /* Every halo on the site is this hue - the strength is the only thing that changes per surface. */
+  --glow-hue: var(--color-lantern-yellow);
+  --glow-hover: color-mix(in srgb, var(--glow-hue) 80%, transparent);
+  --glow-key: color-mix(in srgb, var(--glow-hue) 25%, transparent);
+  --glow-hero: color-mix(in srgb, var(--glow-hue) 15%, transparent);
+  /* The accent line's two stops, shared by the nav underline and the panel edge. The angle is the
+     caller's, so both read these through their own linear-gradient(). */
+  --accent-line-stops: var(--color-lantern-orange-dark),
+    color-mix(in srgb, var(--color-lantern-yellow-dark) 50%, var(--color-lantern-orange));
   --frame-gradient: linear-gradient(
     135deg,
     color-mix(in srgb, var(--color-lantern-yellow) 25%, var(--color-lantern-orange-nearwhite)),
@@ -228,13 +243,7 @@ h1 {
   color: var(--color-ink-med);
 }
 
-h2 {
-  font-family: var(--font-display);
-  font-weight: var(--weight-bold);
-  color: var(--color-ink-med);
-}
-
-h3 {
+h2, h3 {
   font-family: var(--font-display);
   font-weight: var(--weight-bold);
   color: var(--color-ink-med);
@@ -299,7 +308,6 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
 
 /* A full-bleed section band, its content still on the page's own column.
    50vw counts the scrollbar, so the bleed overshoots and clips - which is what reaches both edges. */
-/* Two glow properties, not one box-shadow: box-shadow does not accumulate across the rules below. */
 .band {
   --band-glow-top: 0 0 0 transparent;
   --band-glow-bottom: 0 0 0 transparent;
@@ -328,19 +336,18 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
   background-image: var(--band-warm-gradient);
 }
 
-/* The white seam glow either side of a warm band, painted by its NEIGHBOURS rather than by it.
-   The negative spread is what holds the glow at the seam instead of washing the whole band. */
+/* The white seam glow either side of a warm band, painted by its NEIGHBOURS rather than by it. */
 .band:has(+ .band--warm) {
-  --band-glow-bottom: inset 0 calc(-1 * var(--band-glow-y)) var(--band-glow-blur) -8px var(--white);
+  --band-glow-bottom: var(--band-seam-bottom);
 }
 
 .band--warm + .band {
-  --band-glow-top: inset 0 var(--band-glow-y) var(--band-glow-blur) -8px var(--white);
+  --band-glow-top: var(--band-seam-top);
 }
 
 /* The same seam where the last band meets the footer. */
 .bands > .band:last-child {
-  --band-glow-bottom: inset 0 calc(-1 * var(--band-glow-y)) var(--band-glow-blur) -8px var(--white);
+  --band-glow-bottom: var(--band-seam-bottom);
   padding-bottom: var(--band-pad-edge);
 }
 
@@ -357,9 +364,8 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
   padding-top: calc(var(--band-pad-edge) + var(--header-clear));
 }
 
-/* Prose beside a sidebar. One column on mobile, even halves from 768, 4/3 from 1248. */
-/* minmax(0,…) is load-bearing: an auto track floors at min-content, so one nowrap descendant
-   pushes the column past the viewport, where overflow-x: clip hides the damage. */
+/* Prose beside a sidebar. One column on mobile, even halves from 768, 4/3 from 1248.
+   minmax(0,…) is load-bearing: an auto track floors at min-content and one nowrap child overruns. */
 .split {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -384,11 +390,6 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
   overflow: hidden;
   min-height: 22rem;
   margin-inline: calc(var(--gutter) * -1);
-  /* The mask below covers the element's own background too, so the panel fades out with the tiles. */
-  background-image: linear-gradient(
-    135deg,
-    var(--color-page)
-  );
   /* Two crossed fades, multiplied.
      `intersect` is load-bearing - the default `add` unions them opaque, which is how this degrades. */
   mask-image:
@@ -434,8 +435,8 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
   initial-value: 0%;
 }
 
-/* Fixed at every width; SiteHeader.astro owns the mobile scroll-to-hide toggling. */
-/* The shadow rests at its own geometry in transparent, never at none - none pops in at full strength. */
+/* Fixed at every width; SiteHeader.astro owns the mobile scroll-to-hide toggling.
+   The shadow rests at its own geometry in transparent - `none` has nothing to interpolate. */
 .site-header {
   /* The scrolled shadow's two knobs. Its color is applied by the [data-scrolled] rule below. */
   --header-shadow-tint: 8%;
@@ -635,11 +636,7 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
   right: var(--nav-pad-x);
   bottom: calc(-1 * var(--nav-underline-drop));
   height: 3px;
-  background-image: linear-gradient(
-    90deg,
-    var(--color-lantern-orange-dark),
-    color-mix(in srgb, var(--color-lantern-yellow-dark) 50%, var(--color-lantern-orange))
-  );
+  background-image: linear-gradient(90deg, var(--accent-line-stops));
   opacity: 0;
 }
 
@@ -709,13 +706,10 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
   grid-auto-rows: 1fr;
 }
 
-.card-grid--lit .card {
-  border: 5px solid transparent;
-  /* A column so the CTA can be pushed to the bottom edge and the three buttons line up. */
-  display: flex;
-  flex-direction: column;
-  /* The first layer hides the frame everywhere except the ring, so it cannot be dropped.
-     background-color repeats it, so an unsupported color-mix costs the ring and nothing else. */
+/* The gradient ring both frame types are drawn by. The first layer hides the frame everywhere except
+   the ring, so an unsupported color-mix costs the ring and nothing else. */
+.framed, .card-grid--lit .card {
+  border: var(--frame-w) solid transparent;
   background-color: var(--white);
   background-image:
     linear-gradient(var(--white) 0 0),
@@ -723,6 +717,12 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
   background-origin: padding-box, border-box;
   background-clip: padding-box, border-box;
   background-repeat: no-repeat;
+}
+
+.card-grid--lit .card {
+  /* A column so the CTA can be pushed to the bottom edge and the three buttons line up. */
+  display: flex;
+  flex-direction: column;
   /* Stacked: the gradient image is the height of all three cards plus the two gaps between them. */
   background-size: auto, 100% calc(300% + 2 * var(--space-4));
   background-position: 0 0, 0 var(--lit-stop);
@@ -780,30 +780,17 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
 
 /* The lit grid's frame on a block standing alone - the whole gradient rather than a slice of it. */
 .framed {
-  border: 5px solid transparent;
   border-radius: var(--radius-lg);
   padding: var(--space-5);
-  background-color: var(--white);
-  background-image:
-    linear-gradient(var(--white) 0 0),
-    var(--frame-gradient);
-  background-origin: padding-box, border-box;
-  background-clip: padding-box, border-box;
-  background-repeat: no-repeat;
 }
 
-/* An accent down the left edge instead of a card. Painted as a sized background rather than a
-   border, which cannot hold a gradient; unsupported color-mix drops the whole image, never the text. */
-/* Square on the left so the accent bar runs the full height instead of tapering into a corner. */
+/* An accent down the left edge instead of a card, painted as a sized background rather than a border.
+   Square on the left, or the radius tapers the bar instead of letting it run the full height. */
 .accent-edge {
   padding: 0 var(--space-5);
   border-radius: 0 var(--radius-md) var(--radius-md) 0;
   /* Dark to light as read, matching the lit grid's sweep on the state pages. */
-  background-image: linear-gradient(
-    180deg,
-    var(--color-lantern-orange-dark),
-    color-mix(in srgb, var(--color-lantern-yellow-dark) 50%, var(--color-lantern-orange))
-  );
+  background-image: linear-gradient(180deg, var(--accent-line-stops));
   background-size: 3px 100%;
   background-repeat: no-repeat;
   background-position: left top;
@@ -817,14 +804,14 @@ ul.accent-edge, ol.accent-edge {
 
 /* Registered so it can be transitioned - an unregistered custom property has no type to interpolate
    and would jump. Browsers without @property still get both end states, just no sweep between. */
-@property --btn-sweep {
+@property --splash {
   syntax: "<percentage>";
   inherits: false;
   initial-value: 0%;
 }
 
-/* One color driving the whole halo stack; registered so it can be transitioned. */
-@property --btn-glow {
+/* One color driving every halo stack on the site; registered so it can be transitioned. */
+@property --glow {
   syntax: "<color>";
   inherits: false;
   initial-value: transparent;
@@ -838,21 +825,13 @@ ul.accent-edge, ol.accent-edge {
      height. .btn--secondary paints it back, having no fill of its own to draw an edge with. */
   border: 1px solid transparent;
   border-radius: var(--radius-lg);
-  /* Splash-fade: a diagonal wedge growing across the button.
-     --btn-sweep is a percentage along the GRADIENT LINE, so it covers every corner at any size. */
   background-color: var(--color-accent);
-  background-image: linear-gradient(
-    135deg,
-    var(--color-accent-hover) calc(var(--btn-sweep) - 30%),
-    transparent var(--btn-sweep)
-  );
-  background-origin: border-box;
   color: var(--color-accent-ink);
   /* Area comes from stacking blurs; text-shadow has no spread.
      Transparent at rest, never `none` - `none` has nothing to interpolate and pops in. */
-  text-shadow: 0 0 var(--space-3) var(--btn-glow), 0 0 var(--space-4) var(--btn-glow),
-    0 0 var(--space-5) var(--btn-glow), 0 0 var(--space-6) var(--btn-glow),
-    0 0 var(--space-7) var(--btn-glow), 0 0 var(--space-8) var(--btn-glow);
+  text-shadow: 0 0 var(--space-3) var(--glow), 0 0 var(--space-4) var(--glow),
+    0 0 var(--space-5) var(--glow), 0 0 var(--space-6) var(--glow),
+    0 0 var(--space-7) var(--glow), 0 0 var(--space-8) var(--glow);
   font: inherit;
   font-size: var(--text-lg);
   font-weight: var(--weight-semi);
@@ -861,20 +840,29 @@ ul.accent-edge, ol.accent-edge {
   cursor: pointer;
 }
 
+/* The splash-fade both lit controls carry: a diagonal wedge growing across the surface.
+   --splash is a percentage along the GRADIENT LINE, so it covers every corner at any size. */
+.btn, .btn:visited, .chip, .chip:visited {
+  background-image: linear-gradient(
+    135deg,
+    var(--splash-fill) calc(var(--splash) - 30%),
+    transparent var(--splash)
+  );
+  background-origin: border-box;
+}
+
 /* Decoration ONLY - naming interaction states on the base block re-applies every declaration at
    (0,1,1) and outranks any per-component override of them. */
 .btn:hover, .btn:focus-visible, .btn:active {
   text-decoration: none;
 }
 
-/* Past 100% so the wedge's trailing fade clears the far corner instead of resting inside it. The
-   yellow halo blooms with the sweep, and lightens the ground right at the glyph edges as it goes. */
-/* The :visited half is load-bearing: a:visited:hover is (0,2,1) and outranks a lone .btn:hover,
-   so a button that has been clicked once turns the visited purple on every later hover. */
+/* Past 100% so the wedge's trailing fade clears the far corner instead of resting inside it.
+   The :visited half is load-bearing: a:visited:hover is (0,2,1) and outranks a lone .btn:hover. */
 .btn:hover, .btn:visited:hover {
-  --btn-sweep: 130%;
+  --splash: 130%;
+  --glow: var(--glow-hover);
   color: var(--color-accent-hover-ink);
-  --btn-glow: color-mix(in srgb, var(--color-lantern-yellow) 75%, transparent);
 }
 
 /* image: none is load-bearing - the splash-fade gradient would paint straight over a transparent
@@ -890,14 +878,14 @@ ul.accent-edge, ol.accent-edge {
 .btn--secondary:hover, .btn--secondary:visited:hover {
   background-color: var(--color-lantern-yellow-offwhite);
   color: var(--color-ink);
-  --btn-glow: transparent;
+  --glow: transparent;
 }
 
 .btn:disabled, .btn[aria-disabled="true"] {
   background-image: none;
   background-color: var(--color-disabled);
   color: var(--color-disabled-ink);
-  --btn-glow: transparent;
+  --glow: transparent;
   cursor: not-allowed;
 }
 
@@ -913,38 +901,16 @@ ul.accent-edge, ol.accent-edge {
   margin-top: var(--space-5);
 }
 
-/* Registered so it can be transitioned - unregistered it has no type and would snap. */
-@property --chip-sweep {
-  syntax: "<percentage>";
-  inherits: false;
-  initial-value: 0%;
-}
-
-@property --chip-glow {
-  syntax: "<color>";
-  inherits: false;
-  initial-value: transparent;
-}
-
 /* A mini button carrying .btn's splash-fade at body size. The :visited half is
    load-bearing: a:visited is (0,1,1) and outranks a lone class. */
 .chip, .chip:visited {
   display: inline-block;
   padding: var(--space-0) var(--space-2);
   border-radius: var(--radius-md);
-  /* The swept-TO fill. A color has no business in the gradient, which only ever hides it. */
-  --chip-fill-hover: var(--color-lantern-orange);
   background-color: var(--color-ink-light);
-  /* --chip-sweep is a percentage along the GRADIENT LINE, so it covers every corner at any size. */
-  background-image: linear-gradient(
-    135deg,
-    var(--chip-fill-hover) calc(var(--chip-sweep) - 30%),
-    transparent var(--chip-sweep)
-  );
-  background-origin: border-box;
   color: var(--color-accent-ink);
   /* Two passes; area comes from stacking blurs, since text-shadow has no spread. */
-  text-shadow: 0 0 var(--space-3) var(--chip-glow), 0 0 var(--space-4) var(--chip-glow), 0 0 var(--space-5) var(--chip-glow);
+  text-shadow: 0 0 var(--space-3) var(--glow), 0 0 var(--space-4) var(--glow), 0 0 var(--space-5) var(--glow);
   font-size: var(--text-base);
   font-weight: var(--weight-semi);
   text-decoration: none;
@@ -955,8 +921,8 @@ ul.accent-edge, ol.accent-edge {
 /* Past 100% so the wedge's trailing fade clears the far corner, exactly as .btn does.
    text-decoration is restated because a:hover is (0,1,1) and would underline through the fill. */
 .chip:hover, .chip:visited:hover, .chip:focus-visible, .chip:visited:focus-visible, .chip:active {
-  --chip-sweep: 130%;
-  --chip-glow: color-mix(in srgb, var(--color-lantern-yellow) 80%, transparent);
+  --splash: 130%;
+  --glow: var(--glow-hover);
   color: var(--color-accent-hover-ink);
   text-decoration: none;
 }
@@ -982,6 +948,16 @@ ul.accent-edge, ol.accent-edge {
   gap: var(--space-3) var(--space-1);
 }
 
+/* Every divided list on the site: rows separated by a rule, never bounded by one.
+   .facts scopes --color-border, so its dividers take the accent hue and the rest stay neutral. */
+.facts__row, .facts__empty, .row-list > li, .source-list > li {
+  padding-block: var(--space-2);
+}
+
+.facts__row + .facts__row, .row-list > li + li, .source-list > li + li, .faq > li + li {
+  border-top: var(--standard-border);
+}
+
 /* Label/value pairs — quick facts and anything else that pairs a name to a value.
    The role override is scoped, so the row dividers pick up the accent through --standard-border. */
 .facts {
@@ -999,13 +975,6 @@ ul.accent-edge, ol.accent-edge {
   flex-wrap: wrap;
   justify-content: space-between;
   gap: var(--space-1) var(--space-4);
-  padding-block: var(--space-2);
-  border-bottom: var(--standard-border);
-}
-
-/* Each group is its own dl, so the last row of each one closes on a clean edge under its heading. */
-.facts__row:last-child {
-  border-bottom: 0;
 }
 
 .facts__group {
@@ -1015,7 +984,6 @@ ul.accent-edge, ol.accent-edge {
 
 /* Stands in for a whole group whose every fact was checked and found unpublished. */
 .facts__empty {
-  padding-block: var(--space-2);
   color: var(--color-ink-light);
 }
 
@@ -1039,8 +1007,6 @@ ul.accent-edge, ol.accent-edge {
   display: grid;
   grid-template-columns: var(--space-6) minmax(0, 1fr);
   column-gap: var(--space-2);
-  padding-block: var(--space-4);
-  border-bottom: var(--standard-border);
 }
 
 /* Everything but the mark shares the second column, so a title and its blurb read off one edge. */
@@ -1052,10 +1018,6 @@ ul.accent-edge, ol.accent-edge {
 .row-list__mark {
   font-size: var(--text-xl);
   line-height: var(--leading-tight);
-}
-
-.row-list > li:last-child {
-  border-bottom: 0;
 }
 
 .row-list__title {
@@ -1082,13 +1044,7 @@ ul.accent-edge, ol.accent-edge {
 
 /* Entries delineated by a rule, aligned to the list's content edge. */
 .source-list > li {
-  padding-block: var(--space-3);
-  border-bottom: var(--standard-border);
   font-weight: var(--weight-semi);
-}
-
-.source-list > li:last-child {
-  border-bottom: 0;
 }
 
 /* One indent for both, doubling as the gutter off .accent-edge's bar.
@@ -1161,30 +1117,17 @@ ol.source-list > li::before {
   margin-top: var(--space-2);
 }
 
-/* Registered so the glow can be transitioned - unregistered it has no type and would snap. */
-@property --key-glow {
-  syntax: "<color>";
-  inherits: false;
-  initial-value: transparent;
-}
-
-/* The halo both accented phrases carry - area comes from stacking blurs, since text-shadow has no
-   spread. §7 darkens the correction's copy only where a script exists to light it again. */
+/* The phrase the light lands on. Area comes from stacking blurs, since text-shadow has no spread;
+   §7 darkens it only where a script exists to light it again. */
 .correction__key {
-  --key-glow: color-mix(in srgb, var(--color-lantern-yellow) 25%, transparent);
-  text-shadow: 0 0 var(--space-2) var(--key-glow), 0 0 var(--space-4) var(--key-glow);
-}
-
-/* The phrase the light lands on. */
-.correction__key {
+  --glow: var(--glow-key);
+  text-shadow: 0 0 var(--space-2) var(--glow), 0 0 var(--space-4) var(--glow);
   color: var(--color-ink);
   font-weight: var(--weight-semi);
 }
 
 /* A window onto the publisher's page. --frame-w is the edge, the seam and the air around the pill. */
 .correction__browser {
-  --frame-w: 5px;
-  --card-glow: color-mix(in srgb, var(--color-lantern-yellow) 75%, transparent);
   display: flex;
   flex-direction: column;
   gap: var(--frame-w);
@@ -1335,8 +1278,6 @@ ol.source-list > li::before {
   margin-top: var(--space-5);
 }
 
-/* PARKED - ambient light under one card, cut so it cannot compete with the certifications art. */
-
 /* Ties the lead-in to the field width so the two read as one control. Owns its own inner gap rather
    than taking .stack's, so the sentence sits close to the field it runs into. */
 .madlib-block {
@@ -1433,9 +1374,6 @@ ul.source-wall__row {
   font-weight: var(--weight-semi);
 }
 
-/* Color for all four states comes from the base link rules in §3, and so does the hover underline -
-   the tile follows the site-wide model rather than carrying a resting underline of its own. */
-
 /* Set by hero-art.js for the length of a swap - a half-faded tile is not a link you can aim at. */
 .source-tile[aria-disabled="true"] {
   pointer-events: none;
@@ -1528,11 +1466,6 @@ ul.source-wall__row {
   background-color: var(--color-lantern-yellow-offwhite);
 }
 
-/* Between two questions only - the frame around the block draws its outer edges. */
-.faq > li + li {
-  border-top: var(--standard-border);
-}
-
 .faq__item {
   padding-block: var(--space-3);
 }
@@ -1588,20 +1521,15 @@ ul.source-wall__row {
   font-size: var(--text-base);
 }
 
-.prose h2 {
-  font-size: var(--text-2xl);
-  line-height: var(--leading-tight);
-}
-
 /* The element in the selector is what outranks .prose > * + * on specificity. */
 .prose > * + h2 {
   margin-top: var(--space-5);
 }
 
-/* Weight is presentation; the ELEMENT carries the meaning, so semibold is set here rather than by
+/* Weight is presentation; the ELEMENT carries the meaning, so the weight is set here rather than by
    swapping <strong> for something lighter. <b> draws the eye, <strong> says it matters. */
 .prose strong, .prose b {
-  font-weight: var(--weight-semi);
+  font-weight: var(--weight-bold);
 }
 
 .prose ul, .prose ol {
@@ -1629,7 +1557,7 @@ ul.source-wall__row {
 .page-title__accent {
   --sweep-ink: var(--color-lantern-orange-dark);
   --sweep-from: var(--color-ink-med);
-  --sweep-glow: color-mix(in srgb, var(--color-lantern-yellow) 15%, transparent);
+  --glow: var(--glow-hero);
   color: var(--sweep-ink);
   font-weight: var(--weight-extrabold);
 }
@@ -1638,14 +1566,6 @@ ul.source-wall__row {
    Two classes, so it outranks .stack > * + * on specificity rather than on where it sits. */
 .stack > .page-title--hero + * {
   margin-top: var(--space-6);
-}
-
-/* Registered for the same reason as --btn-glow: an unregistered custom property has no type to
-   interpolate, so the halo would snap at the midpoint instead of blooming with the sweep. */
-@property --sweep-glow {
-  syntax: "<color>";
-  inherits: false;
-  initial-value: transparent;
 }
 
 /* The background-color, the padding pair and the drop-shadow filter are each load-bearing below. */
@@ -1667,13 +1587,14 @@ ul.source-wall__row {
     margin-right: -0.12em;
     /* The halo cast from the glyph: a text-shadow paints ON TOP of a background-clip fill and smears.
        Chained drop-shadows compound, so three reach what a text-shadow needs six passes for. */
-    filter: drop-shadow(0 0 var(--space-2) var(--sweep-glow))
-      drop-shadow(0 0 var(--space-4) var(--sweep-glow))
-      drop-shadow(0 0 var(--space-6) var(--sweep-glow));
+    filter: drop-shadow(0 0 var(--space-2) var(--glow))
+      drop-shadow(0 0 var(--space-4) var(--glow))
+      drop-shadow(0 0 var(--space-6) var(--glow));
   }
 }
 
-.section-title {
+/* .prose h2 is the state page intro's headings, which carry no class of their own. */
+.section-title, .prose h2 {
   font-size: var(--text-2xl);
   line-height: var(--leading-tight);
 }
@@ -1732,20 +1653,6 @@ ul.source-wall__row {
 /* Three classes, so it outranks .stack > .caption + * on specificity, not on where it sits. */
 .stack > .caption.quick-links + * {
   margin-top: var(--space-6);
-}
-
-/* An inline label, not emphasis - so it carries weight without <strong>'s semantics. */
-.label {
-  font-weight: var(--weight-semi);
-}
-
-.badge {
-  display: inline-block;
-  padding: var(--space-1) var(--space-3);
-  border: var(--standard-border);
-  border-radius: var(--radius-pill);
-  background-color: var(--color-surface);
-  font-size: var(--text-sm);
 }
 
 /* Quiets a textured band under a block of text. Sits on any block inside one, heading and all. */
@@ -1827,12 +1734,6 @@ ul.source-wall__row {
 
   .link-columns {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  /* Scrolls a long activity list in its own box rather than stretching the row it sits in. */
-  .feed {
-    max-height: 26rem;
-    overflow-y: auto;
   }
 
   /* PLACEHOLDER HEIGHT — holds the empty activity panel roughly square until it holds real rows. */
@@ -2026,11 +1927,11 @@ ul.source-wall__row {
     transition: transform 160ms ease-out, opacity 160ms ease-out;
   }
 
-  /* The splash-fade is --btn-sweep alone. color runs SHORTER on purpose: the label flips light to
+  /* The splash-fade is --splash alone. color runs SHORTER on purpose: the label flips light to
      dark across the sweep, and matching the durations parks a mid-gray over a mid-brown. */
   .btn {
-    transition: --btn-sweep 160ms ease-out, background-color 120ms ease-out, color 70ms ease-out,
-      --btn-glow 160ms ease-out;
+    transition: --splash 160ms ease-out, background-color 120ms ease-out, color 70ms ease-out,
+      --glow 160ms ease-out;
   }
 
   /* The same 160ms the chrome turns on, so the disclosure reads as one family with it. */
@@ -2040,7 +1941,7 @@ ul.source-wall__row {
 
   /* Same 160ms as the button above, so every hover on the page reads as one gesture. */
   .chip {
-    transition: --chip-sweep 160ms ease-out, color 70ms ease-out, --chip-glow 160ms ease-out;
+    transition: --splash 160ms ease-out, color 70ms ease-out, --glow 160ms ease-out;
   }
 
   /* `backwards` holds the hidden frame through the delay; no `forwards`, so nothing stays latched. */
@@ -2059,22 +1960,22 @@ ul.source-wall__row {
     /* A :not() so lit is the ABSENCE of a rule - declaring transparent on .correction__key itself
        would make that the resting value, and the transition would run toward it. */
     .correction:not(.correction--typed) .correction__key {
-      --key-glow: transparent;
+      --glow: transparent;
     }
 
     /* Keyed to typing finishing, not to scroll - src/scripts/correction.js adds the class. */
     .correction__key {
-      transition: --key-glow 700ms ease-out;
+      transition: --glow 700ms ease-out;
     }
   }
 }
 
 /* Only `from` is declared — the implicit `to` is the resting state in §6. The halo blooms over the
-   same 400ms, so it arrives as the word turns; an element that sets no --sweep-glow animates nothing. */
+   same 400ms, so it arrives as the word turns; an element that sets no --glow animates nothing. */
 @keyframes sweep-in {
   from {
     background-position: 100% 0;
-    --sweep-glow: transparent;
+    --glow: transparent;
   }
 }
 

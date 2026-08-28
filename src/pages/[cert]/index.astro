@@ -37,7 +37,7 @@ const states = config.stateDependent ? await certStates(cert) : [];
 						<StateAutocomplete base={`/${cert}`} value="Georgia" geo />
 						{/* The mark is decorative - the sentence beside it carries the meaning on its own. */}
 						<p class="assurances">
-							<span aria-hidden="true">{config.emoji}</span> {sources.length} official {config.name} sources
+							<span aria-hidden="true">{config.emoji}</span> {sources.length} official {config.name.toLowerCase()} sources
 						</p>
 					</section>
 				)

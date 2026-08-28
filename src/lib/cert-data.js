@@ -124,8 +124,10 @@ export async function certStatePaths(opts = {}) {
   return paths;
 }
 
-/** The states a cert holds facts for, alphabetical by name - collection order is by slug, not name. */
-/** @returns {Promise<{ slug: string, name: string, abbreviation: string }[]>} */
+/**
+ * The states a cert holds facts for, alphabetical by name - collection order is by slug, not name.
+ * @returns {Promise<{ slug: string, name: string, abbreviation: string }[]>}
+ */
 export async function certStates(cert) {
   const entries = await getCollection(`${cert}-facts`);
   return entries
@@ -145,18 +147,34 @@ export async function loadState(cert, state) {
   return entry?.data ?? null;
 }
 
-/** Hydrates registry keys into entries, preserving the order they were asked for. */
-/** @returns {Promise<any[]>} */
+/**
+ * Hydrates registry keys into entries, preserving the order they were asked for.
+ * @returns {Promise<any[]>}
+ */
 export async function loadSourceEntries(cert, ids) {
   const entries = await Promise.all(ids.map((id) => getEntry(`${cert}-sources`, id)));
   return entries.filter(Boolean).map((e) => ({ id: e.id, ...e.data }));
 }
 
-/** The whole registry for a cert, cited or not. */
-/** @returns {Promise<any[]>} */
+/**
+ * The whole registry for a cert, cited or not.
+ * @returns {Promise<any[]>}
+ */
 export async function loadAllSources(cert) {
   const entries = await getCollection(`${cert}-sources`);
   return entries.map((e) => ({ id: e.id, ...e.data }));
+}
+
+/**
+ * True where a state publishes no exam format at all - every spec null AND sourced.
+ * Read off the facts, never the rendered rows: a row can print a stand-in where its own fact is null.
+ */
+export function examUnpublished(facts) {
+  return [
+    facts.exam.questionCount,
+    facts.exam.passingScorePercent,
+    facts.exam.timeLimitMinutes,
+  ].every((fact) => fact.value === null && fact.source !== null);
 }
 
 /** Every registry key backing a fact in this state, in the order the fact groups declare them. */
@@ -170,8 +188,10 @@ export function citedSourceIds(facts) {
   return ids;
 }
 
-/** Extra reading no fact cites, sorted by title since nothing numbers these. */
-/** @returns {Promise<any[]>} */
+/**
+ * Extra reading no fact cites, sorted by title since nothing numbers these.
+ * @returns {Promise<any[]>}
+ */
 export async function loadExtraSources(cert, facts) {
   const entries = await loadSourceEntries(
     cert,

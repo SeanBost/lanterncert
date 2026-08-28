@@ -1,4 +1,5 @@
-// The one place a fact `value` becomes display text. data-handling.md ▸ Cert facts ▸ Contract.
+// The one place a fact `value` or a meta date becomes display text.
+// data-handling.md ▸ Cert facts ▸ Contract.
 
 const NUMBER = new Intl.NumberFormat("en-US", { maximumFractionDigits: 2 });
 const USD = new Intl.NumberFormat("en-US", {
@@ -30,6 +31,17 @@ function one(value, unit) {
     default:
       return NUMBER.format(value);
   }
+}
+
+/** A bare ISO date in US long form. Built and read in UTC - a local-timezone render lands a day early. */
+export function formatDate(iso) {
+  const [y, m, d] = iso.split("-").map(Number);
+  return new Date(Date.UTC(y, m - 1, d)).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    timeZone: "UTC",
+  });
 }
 
 /** Returns null for an absent value — only the caller can say what "we don't know" looks like. */

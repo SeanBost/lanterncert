@@ -1,13 +1,12 @@
 {
   "site": {
     "name": "LanternCert",
-    "url": "https://lanterncert.com",
-    "defaultState": "fl"
+    "url": "https://lanterncert.com"
   },
 
   "certTypes": {
     "motorcycle-endorsement": {
-      "name": "Motorcycle Endorsement",
+      "name": "Motorcycle endorsement",
       "slug": "motorcycle-endorsement",
       "emoji": "🏍️",
       "blurb": "Requirements, costs, course and exam details, plus practice questions derived from each state's own manual.",
