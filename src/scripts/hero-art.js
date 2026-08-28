@@ -96,7 +96,7 @@ function wave() {
   return (t) => 0.6 * Math.sin(a.w * t + a.phase) + 0.4 * Math.sin(b.w * t + b.phase);
 }
 
-/** Committed and cancelled rather than left filling, so the passes can't stack up over a long visit. */
+/** Committed and canceled rather than left filling, so the passes can't stack up over a long visit. */
 async function fade(el, from, to) {
   const anim = el.animate([{ opacity: from }, { opacity: to }], {
     duration: FADE_MS,

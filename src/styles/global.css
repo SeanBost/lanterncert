@@ -778,8 +778,7 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
   display: grid;
 }
 
-/* The lit grid's frame on a block standing alone - the whole gradient rather than a slice of it.
-   The first layer hides the frame everywhere except the ring, so it cannot be dropped. */
+/* The lit grid's frame on a block standing alone - the whole gradient rather than a slice of it. */
 .framed {
   border: 5px solid transparent;
   border-radius: var(--radius-lg);
@@ -906,6 +905,12 @@ ul.accent-edge, ol.accent-edge {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-3);
+}
+
+/* A step of air above a row of controls. Two classes, so it outranks .stack's own step from
+   anywhere in the file rather than relying on sitting below it. */
+.stack > * + .button-row {
+  margin-top: var(--space-5);
 }
 
 /* Registered so it can be transitioned - unregistered it has no type and would snap. */
@@ -1532,8 +1537,8 @@ ul.source-wall__row {
   padding-block: var(--space-3);
 }
 
-/* display: flex is what drops Chrome's own triangle; the other two cover Firefox and Safari. */
-/* The chevron below is sized in em, so it grows with this font-size rather than needing its own. */
+/* display: flex is what drops Chrome's own triangle; the other two cover Firefox and Safari.
+   The chevron below is sized in em, so this font-size is what scales it. */
 .faq__item summary {
   display: flex;
   align-items: center;
@@ -1825,6 +1830,22 @@ ul.source-wall__row {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
+  /* Scrolls a long activity list in its own box rather than stretching the row it sits in. */
+  .feed {
+    max-height: 26rem;
+    overflow-y: auto;
+  }
+
+  /* PLACEHOLDER HEIGHT — holds the empty activity panel roughly square until it holds real rows. */
+  .activity-panel {
+    min-height: 16rem;
+  }
+
+  /* Starts a block on .col-center's left edge — 15% is that column's 70% centered, so the two track. */
+  .col-center-start {
+    margin-left: 15%;
+  }
+
   /* Drops a right column onto the left column's first baseline. Margin, so a fill moves with it. */
   .baseline-drop {
     margin-top: var(--space-4);
@@ -2007,7 +2028,7 @@ ul.source-wall__row {
   }
 
   /* The splash-fade is --btn-sweep alone. color runs SHORTER on purpose: the label flips light to
-     dark across the sweep, and matching the durations parks a mid-grey over a mid-brown. */
+     dark across the sweep, and matching the durations parks a mid-gray over a mid-brown. */
   .btn {
     transition: --btn-sweep 160ms ease-out, background-color 120ms ease-out, color 70ms ease-out,
       --btn-glow 160ms ease-out;

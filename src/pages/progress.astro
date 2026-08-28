@@ -1,66 +1,127 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Card from "../components/Card.astro";
+import Button from "../components/Button.astro";
 
-// Static placeholders; the real page reads local storage.
-const sections = [
-	{
-		title: "Study and practice",
-		blurb: "Which topics you have worked through, and how recently.",
-	},
-	{
-		title: "Test results",
-		blurb: "Every mock test you have taken, with your score and what you missed.",
-	},
-	{
-		title: "Starred certifications",
-		blurb: "The certifications and states you have saved to come back to.",
-	},
+// Every category the browser holds, each with its own live state.
+const stored = [
+	["Question answer history", "None stored yet"],
+	["Mock Test results", "None stored yet"],
+	["Preferred certification", "None stored yet"],
+	["Preferred state", "None stored yet"],
+	["Progress tracking", "Enabled"],
+	["Format version", "Version 1.1"],
 ];
 ---
 
+{/* noindex is PERMANENT here - this page is per-device and must never be indexed, launch included. */}
 <Layout
-	title="My Progress"
-	description="See how far you have got, review your past test results, and manage the study data your browser is keeping for you."
+	title="Progress overview"
+	description="See how far along you are, review past Mock Test scores, and manage the study data this browser keeps on your device."
+	noindex
 >
-	<div class="stack-lg">
-		<div class="stack">
-			<h1 class="page-title">My progress</h1>
-			<p class="lede">
-				Everything on this page is stored only on this device, in this browser. It is never sent to
-				us, and we never see it. <a href="/about#privacy">Read the privacy policy</a>.
-			</p>
+	{/* Three full-bleed bands, alternating wash / warm / wash. */}
+	<div class="bands">
+		<div class="stack-lg band band--wash">
+
+			<div class="split">
+				<div class="stack-lg">
+          <h1 class="page-title">
+						Progress overview
+					</h1>
+					<section class="stack" aria-labelledby="next-heading">
+						<p class="caption"><em>Nothing here yet - run through some Practice Cards or a Mock Test first.</em></p>
+						<h2 class="section-title" id="next-heading">Your <strong class="text-accent">next steps</strong></h2>
+						<div class="prose">
+							<p>
+								To get started, find the certification you want to prepare for. 
+                Once you complete any Practice Cards or Mock Tests, your results and progress will get displayed on this page.
+							</p>
+						</div>
+						<div class="button-row">
+							<Button href="/#certifications">Find a certification</Button>
+						</div>
+					</section>
+				</div>
+
+				<section class="stack baseline-drop" aria-labelledby="activity-heading">
+					<h2 class="section-title" id="activity-heading">Recent activity</h2>
+					<div class="stack framed activity-panel">
+						<div class="prose prose--sm">
+							<p>
+								<em>Your Mock Test results and Practice Cards sessions will be displayed here.</em>
+							</p>
+						</div>
+					</div>
+				</section>
+			</div>
 		</div>
 
-		<section class="stack" aria-labelledby="progress-heading">
-			<h2 class="section-title" id="progress-heading">Your activity</h2>
-			<ul class="card-grid">
-				{sections.map((section) => (
-					<li>
-						<Card title={section.title}>
-							<p>{section.blurb}</p>
-							<p><span class="badge">Nothing recorded yet</span></p>
-						</Card>
-					</li>
-				))}
-			</ul>
-		</section>
+		<div class="band band--warm">
+			<div class="stack-lg col-center">
+				<section class="stack framed" aria-labelledby="mastery-heading">
+					{/* Decorative - the heading beside it says everything the mark does. */}
+					<h2 class="section-title" id="mastery-heading"><span aria-hidden="true">🎓</span> Topic mastery</h2>
+					<div class="prose prose--sm">
+						<p>
+							<em>Once you've completed a variety of practice questions, see which topics you demonstrate mastery of, and which you need to shore up.</em>
+						</p>
+					</div>
+				</section>
 
-		<section class="stack" aria-labelledby="data-heading">
-			<h2 class="section-title" id="data-heading">Your data</h2>
-			<div class="prose">
-				<p>
-					Browsers keep local storage until something clears it, so your progress should stay put
-					indefinitely on this device - but clearing your browsing data, using private browsing, or
-					switching to another device or browser will lose it. Download a copy if you want to keep
-					it.
+				<section class="stack framed" aria-labelledby="missed-heading">
+					<h2 class="section-title" id="missed-heading"><span aria-hidden="true">🔍</span> Missed questions</h2>
+					<div class="prose prose--sm">
+						<p>
+							<em>Once you miss some practice questions, you'll be able to review them here.</em>
+						</p>
+					</div>
+				</section>
+
+			</div>
+		</div>
+
+		{/* id is a link target - /about's privacy copy points at this section by name. */}
+		<section class="band band--wash" aria-labelledby="data-heading" id="data">
+			{/* The heading rides inside the column so the whole row shares one left edge. */}
+			<div class="stack col-split-main col-center-start">
+				<h2 class="section-title" id="data-heading">Your progress data</h2>
+				<div class="prose prose--sm">
+					<p>
+						Progress data is exclusively stored locally by your browser and device. 
+            See the <a href="/about#privacy">privacy and usage policy</a> for details.
+					</p>
+          <p>
+            You can download or erase your data below if any is stored. 
+            You can also opt-out of progress tracking, however this will disable the features on this page that need it.
+          </p>
+				</div>
+
+				{/* A div, not a dl - a heading cannot live inside a dl, so the group brings its own. */}
+				<div class="facts accent-edge">
+					<h3 class="facts__group">What's currently stored</h3>
+					<dl>
+						{
+							stored.map(([label, value]) => (
+								<div class="facts__row">
+									<dt>{label}</dt>
+									<dd class="facts__value">{value}</dd>
+								</div>
+							))
+						}
+					</dl>
+				</div>
+
+				<div class="button-row">
+					<Button variant="secondary" disabled aria-describedby="data-note">Download data</Button>
+					<Button variant="secondary" disabled aria-describedby="data-note">Erase data</Button>
+					<Button variant="secondary" disabled aria-describedby="data-note">Disable tracking</Button>
+				</div>
+				<p class="caption" id="data-note">
+					<em>Warning: Erasing your data or disabling progress tracking will clear your existing progress permanently. 
+            Lost data cannot be recovered if re-enabled.
+          </em>
 				</p>
 			</div>
-			<div class="button-row">
-				<button class="btn btn--secondary" type="button" disabled>Download my data</button>
-				<button class="btn btn--secondary" type="button" disabled>Erase my data</button>
-			</div>
-			<p class="caption">These controls turn on once there is something stored to act on.</p>
 		</section>
 	</div>
 </Layout>

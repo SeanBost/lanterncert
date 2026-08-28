@@ -6,7 +6,16 @@ import { site } from "../lib/cert-data.js";
 
 // fonts: extra Google Fonts specs for ONE page, e.g. "Montserrat:wght@100..900". Site-wide type is
 // Figtree alone; a page asks for another face only to reproduce a quoted source in its own.
-const { title, description, bareTitle = false, noindex = false, geo = false, fonts = [] } = Astro.props;
+// schema: a JSON-LD object, rendered into <head>. A page builds it from the data it already renders.
+const {
+	title,
+	description,
+	bareTitle = false,
+	noindex = false,
+	geo = false,
+	fonts = [],
+	schema = null,
+} = Astro.props;
 
 // Title standard: "[brief self-describing title] - LanternCert", homepage excepted.
 const pageTitle = bareTitle ? title : `${title} - ${site.name}`;
@@ -38,6 +47,11 @@ const canonical = new URL(path, site.url).href;
 		<meta name="description" content={description} />
 		<link rel="canonical" href={canonical} />
 		{noindex && <meta name="robots" content="noindex" />}
+
+		{/* is:inline keeps Astro's bundler off it; the escape stops a "<" in the data closing the tag. */}
+		{schema && (
+			<script type="application/ld+json" is:inline set:html={JSON.stringify(schema).replaceAll("<", "\\u003c")} />
+		)}
 
 		<meta property="og:type" content="website" />
 		<meta property="og:title" content={pageTitle} />

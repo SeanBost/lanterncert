@@ -1,55 +1,76 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { displayedCerts, loadAllSources } from "../lib/cert-data.js";
+
+// Every entry in the registry, cited or not - the same count the homepage claims.
+const sources = (await Promise.all(displayedCerts.map((cert) => loadAllSources(cert.slug)))).flat();
 
 const faqs = [
 	{
 		q: "Is LanternCert completely free?",
-		a: `Yes! <strong class="text-key">Every overview, guide, and practice question is free</strong>. There is no paid tier waiting behind the free one.`,
+		a: `Yes! <strong class="text-key">Every overview, guide, and practice question is free</strong>. There's no paid tier waiting behind the free one.`,
 	},
 	{
 		q: "Do I need to sign up for anything?",
-		a: `No. <strong class="text-key">You do not need an account to use any feature</strong>. Some features, like storing and viewing your previous Mock Test scores, do require localStorage enabled on your device.`,
+		a: `No. <strong class="text-key">You do not need an account to use any feature</strong>. Some features, like storing and viewing your previous Mock Test scores, do require browser storage enabled on your device.`,
 	},
 	{
 		q: "Where does your info come from?",
-		a: `<strong class="text-key">From the official agencies that authorize and oversee certifications</strong>. This typically means your state's government, authorized third parties, and their publications and statutes. Every fact and question answer links to the document backing it up.`,
+		a: `<strong class="text-key">From the official agencies that authorize and oversee certifications</strong>. This typically means your state's government, authorized third parties, and their publications and statutes. Every fact and question answer links to an authoritative document backing it up; ${sources.length} vetted and included so far.`,
 	},
 	{
 		q: "How do I know your info is current?",
-		a: `<strong class="text-key">State-specific certification pages each show the date their facts were last validated</strong> against their sources. We automatically check to see when a source gets updated, then personally review what's changed.`,
+		a: `<strong class="text-key">State-specific certification pages each show the date their facts were last validated</strong> against their sources. Sources get automatically checked frequently to catch when they're updated, then personally reviewed to identify what's changed and what that means for getting certified.`,
 	},
 	{
 		q: "Are the practice questions real exam questions?",
-		a: `No. <strong class="text-key">No legitimate prep site has the real question bank</strong>. Ours are written fresh from each state's own material to cover the same ground the real exam covers. If an official practice test does exist, we ensure we link to it in addition to providing our own.`,
+		a: `No. <strong class="text-key">No legitimate prep site has the real question bank</strong>. LanternCert creates fresh questions rooted in each state's own material to cover the same ground the real exam covers. If an official practice test does exist, LanternCert links to it.`,
 	},
 ];
+
+// Built by walking the array the page renders, so editing a question can never leave this behind.
+// Tags come out here; putting them back publishes class attributes into structured data.
+const faqSchema = {
+	"@context": "https://schema.org",
+	"@type": "FAQPage",
+	mainEntity: faqs.map((faq) => ({
+		"@type": "Question",
+		name: faq.q,
+		acceptedAnswer: { "@type": "Answer", text: faq.a.replace(/<[^>]+>/g, "") },
+	})),
+};
 ---
 
 <Layout
 	title="About"
-	description="What LanternCert is, how our study material is sourced and kept current, and how we handle your data."
+	description="What LanternCert is, how its study material is sourced and kept current, and what happens to your data."
+	schema={faqSchema}
 >
 	<div class="stack-lg col-center">
 		<div class="stack">
 			<h1 class="page-title">About LanternCert</h1>
 			<p class="lede">
-				LanternCert puts together need-to-know certification info in a single place. 
-        All of our facts and study materials originate from, cite,
-				and link to primary sources published by topical authorities.
+				So you're interested in getting certified! 
+        Getting started usually means digging through endless searches and websites to figure out what's ahead of you, 
+        dealing with conflicting and complicated claims, and not knowing who to trust or what the complete process actually looks like.
+        LanternCert organizes all of that need-to-know info in a single place.
 			</p>
 			<div class="prose">
 				<p>
-					LanternCert's mission is to validate and simplify every certification process in every
-					state, one at a time. All without any ads, paywalls, or required signups, so you can focus
-					on what matters most: getting certified.
+          LanternCert's mission is to validate and simplify every certification process in every state, one at a time. 
+          Get the full picture on what getting a particular certification in your state entails, 
+          then review prep materials and activities to get exam-ready. 
+          Rest easy knowing what you're reading is the real-deal too:
+          every fact and practice question originates from, cites,
+				  and links to a primary source published by an official topical authority.
 				</p>
-				<p>
+				{/*<p>
 					Preparing for a certification can sometimes be done with a few quick searches, and other
-					times requires purchasing an expensive course; LanternCert exists to fill the gap. The idea
-					was inspired by my time working in the education sector, as well as my frustration with
-					learning about how to get (and later transfer) my motorcycle endorsement. I felt I could
-					make something more helpful and beginner-friendly than what was out there, so I did.
-				</p>
+					times requires purchasing an expensive course; LanternCert exists to fill the gap. 
+          The idea was inspired by my time working in the professional education sector, 
+          as well as my personal frustrations with learning about how to get (and later transfer) my motorcycle endorsement. 
+          I felt that I could put together something more helpful and beginner-friendly than what was already out there, so I did.
+				</p>*/}
 			</div>
 		</div>
 
@@ -57,9 +78,9 @@ const faqs = [
 			<h2 class="section-title" id="faq-heading">Important questions / FAQ</h2>
 			<ul class="faq">
 				{
-					faqs.map((faq) => (
+					faqs.map((faq, i) => (
 						<li>
-							<details class="faq__item">
+							<details class="faq__item" open={i === 0}>
 								<summary>{faq.q}</summary>
 								{/* set:html because an answer is authored copy carrying its own markup. */}
 								<p set:html={faq.a} />
@@ -72,22 +93,24 @@ const faqs = [
 
 		<section class="stack" aria-labelledby="privacy-heading" id="privacy">
 			<h2 class="section-title" id="privacy-heading">Privacy and usage</h2>
+			{/* Hardcoded - the policy changes only by hand, so nothing should be able to move this. */}
+			<p class="caption"><em>Last updated <time datetime="2026-08-27">August 27, 2026</time></em></p>
 			<div class="prose prose--sm">
 				<p>
 					<strong class="text-key">
-						We do not ask for, collect, or store your name, email, or any other personal information.
+						LanternCert does not ask for, collect, or store your name, email, or any other personal information.
 					</strong>
 				</p>
 				<p>
-					Anything you do on this site that is recorded specific to you, including your test results
+					Anything you do on this site that is recorded specific to you, including Mock Test results
 					and preferences, is saved only on the device and browser you are using, is never sent to
-					us, and is never sold or shared with anyone. You can download, opt out of, or erase this
-					data yourself at any time from your <a href="/progress">progress page</a>, and clearing
+					LanternCert, and is never sold or shared with anyone. You can download, opt out of, or erase this
+					data yourself at any time from your <a href="/progress#data">progress page</a>, and clearing
 					your browser data will immediately and permanently remove any locally tracked data as well.
 				</p>
 				<p>
 					Google Analytics is used sitewide to collect aggregate usage statistics, such as which
-					pages and questions get used and how, which helps to determine what is and isn't working.
+					pages and questions get used and how, which helps to determine what content is and isn't helpful.
 					That measurement is anonymous and is never tied to any individual person.
 				</p>
 				<p>
@@ -97,9 +120,19 @@ const faqs = [
 					never reads, stores, or is passed your IP address.
 				</p>
 				<p>
+					The facts listed on this site, including requirements, fees, and exam details, 
+          are summarizations originating from publicly available agency documents published online, 
+          which are not owned nor maintained by LanternCert. 
+          LanternCert builds original content on top of this publicly available information, and reserves all
+					rights and ownership of the content it creates, such as 
+					practice questions and written explanatory guides. Website design, functionality, metadata, and code are original
+					works belonging to LanternCert. You're welcome to use the site; you're not welcome to
+					republish it without written permission.
+				</p>
+				<p>
 					By using this site, you acknowledge that LanternCert is free certification and exam prep
 					material, not legal advice. Always confirm requirements with your state's official
-					certification agencies or authorized third parties (which we cite; click the links!).
+					certification agencies or authorized third parties (which are cited; click the links!).
 				</p>
 			</div>
 		</section>
