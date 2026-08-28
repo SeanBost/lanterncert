@@ -150,7 +150,7 @@ for (const size of rowSizes) {
 
 		<div class="split band band--warm">
 			<section class="stack band-warm-blur" aria-labelledby="trust-heading">
-        <h2 class="section-title" id="trust-heading">Everything you need to know, <span class="text-accent">cited 📜</span></h2>
+        <h2 class="section-title" id="trust-heading">Everything you need to know, <span class="text-accent">cited</span></h2>
 				<div class="prose">
 					<p>
 						AI overviews and generic prep sites will confidently omit or muddy important-to-know details, while 
@@ -159,8 +159,6 @@ for (const size of rowSizes) {
           <p>
 						LanternCert organizes everything you need to know to get certified in a single place. 
             Every fact and answer provided is to-the-point and backed by an official source that's been vetted and linked to.
-            {/*Our mission is to validate and simplify every certification process in each state.*/}
-            {/*All with no ads or signups, so you can focus on what matters most: getting certified.*/}
           </p>
           <p>
 						See what the certification you're working towards requires, then study and take practice tests to get exam-ready.
@@ -252,6 +250,8 @@ for (const size of rowSizes) {
 				{
 					list.map((cert) => (
 						<li>
+							{/* Decorative - the cert's own name is the link text and carries it alone. */}
+							<span class="row-list__mark" aria-hidden="true">{cert.emoji}</span>
 							<h3 class="row-list__title">
 								<a href={`/${cert.slug}`}>{cert.name}</a>
 							</h3>

@@ -5,11 +5,14 @@ const year = new Date().getFullYear();
 <footer class="site-footer">
 	<div class="site-footer__inner">
 		<p class="site-footer__legal">
-			LanternCert is free study material, not legal advice. Always confirm requirements with your
-			state's licensing agency.
+			LanternCert is free supporting material, not legal advice. Always confirm requirements with your
+			state's official agencies.
 		</p>
 		<div class="site-footer__meta">
-			<p>&copy; {year} LanternCert</p>
+			<p>
+				&copy; {year} LanternCert <span class="sep">|</span>
+				<a href="/about#privacy">Privacy and usage policy</a>
+			</p>
 			{/* Hidden by default so a short page never renders it, then revealed if the page scrolls. */}
 			<p class="site-footer__top" hidden><a href="#main">Back to top</a></p>
 		</div>

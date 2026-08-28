@@ -52,13 +52,29 @@
         "what": "What the agency actually calls this exam, in the agency's own capitalization — Georgia's 'Motorcycle Knowledge Exam'. Null where the documents only ever describe it generically.",
         "why": "Same job as meta.agencyName: it lets the page name the thing the way a rider will see it named. It also removes the reason to enumerate one display string per state — a state-specific examType builds its label from this plus agencyCode, so adding a state that runs its own exam costs no copy. Null is a researched answer, not a gap: 'we read the document and it just says knowledge test' is what makes the generic phrasing correct rather than lazy. Verify the capitalization, since a lowercase description is exactly the signal that the value should be null."
       },
+      "examAdministration": {
+        "what": "Who actually runs the knowledge exam named by examType — the issuing agency at its own offices, or the required course.",
+        "why": "The time limit question has no numeric answer in most states, and this is the honest one: nobody publishes a duration for an exam a course instructor paces by hand. It exists so the quick-facts time limit row can say something true instead of 'Not published' four times, and it is what lets one sentence be right for Florida and Texas without being wrong for Georgia and California.\n\nA SOURCED NULL MEANS THE STATE HAS NO KNOWLEDGE EXAM AT ALL, which is this field's deviation from the usual contract — site-config's hasExam is per cert, so a per-state absence has nowhere else to live. The cost is that 'there is an exam and we could not tell who runs it' has no expression here; that was accepted, because the administrator is the easiest fact about a test to establish. Never cite this to another fact: who administers an exam says nothing about its format.",
+        "values": {
+          "agency": "The credential issuer administers it, at its own service centers. Georgia and California. Neither publishes a duration — both publish a closing-time buffer instead, which is a scheduling rule and never a time limit.",
+          "course": "The required course administers it and the state administers nothing of its own. Florida and Texas. MSF's handbook says only 'Follow RiderCoach instructions to complete the test', and TDLR requires a knowledge examination without setting one parameter of it."
+        }
+      },
+      "courseWaivesAgencyExam": {
+        "what": "Whether finishing the training course waives the agency's knowledge exam, so a rider who takes the course never sits it.",
+        "why": "Only asked where examAdministration is `agency`; where the course already IS the exam there is nothing to waive, and a sourced null says so. It exists because the skills half of this question was already recorded and the knowledge half was not: ridingSkillsTest told us Georgia and California both let the course waive the riding test, and nothing anywhere said that Georgia's waives the written exam too while California's does not. The lede consequently told Georgians to sit an exam their course exempts them from.\n\nDELIBERATELY INDEPENDENT OF ridingSkillsTest. The two booleans cross freely — waives both (Georgia), waives skills only (California), waives knowledge only (a state we have not met yet) — and collapsing them into one 'what the course waives' token would have to be torn apart the first time a state took the fourth corner.",
+        "values": {
+          "true": "Course completion exempts a rider from the agency's knowledge exam. Georgia, whose 90-day GMSP waiver covers the written and on-cycle tests both.",
+          "false": "The agency's knowledge exam is required whether or not a rider takes the course. California, whose DL 389 certificate waives the skills test alone."
+        }
+      },
       "questionCount": {
         "what": "Number of questions on the knowledge exam named by examType.",
         "why": "Where a state administers no test of its own, this describes the knowledge test inside the required course — examType records which, and meta.note carries the detail. Without examType this field silently implied a DMV exam that does not exist."
       },
       "timeLimitMinutes": {
         "what": "Minutes allowed for the knowledge exam.",
-        "why": "Frequently unpublished. When an agency genuinely states no limit, the honest record is value null with a source attached, not an unresearched null."
+        "why": "Frequently unpublished. When an agency genuinely states no limit, the honest record is value null with a source attached, not an unresearched null. A source is earned by reading the document where a duration WOULD appear and finding none — an agency's own testing page, not a licensing overview.\n\nUnpublished is not the same as untimed, and the field must never be filled by inference: DC's DMV publishes a 60-minute motorcycle limit and fails you at it, so silence elsewhere is silence, not proof of an absence. Where this is null, examAdministration is what the quick-facts row falls back to."
       },
       "passingScorePercent": {
         "what": "Percentage of questions that must be correct to pass.",
@@ -112,6 +128,19 @@
           "none": "Accepts no out-of-state credential in place of retesting. Every applicant tests in-state regardless of what they hold elsewhere — California is the case.",
           "non-Alabama": "Accepts every other US jurisdiction outright. An Alabama credential is accepted only when presented with an MSF Basic RiderCourse completion card — the token names the exception, and copy carries the condition."
         }
+      },
+      "courseRequired": {
+        "what": "Whether this state requires rider training of anyone at all, before it issues the credential.",
+        "why": "THE ONE FIELD THAT OWNS THE REQUIREMENT CLAIM. Nothing else in the tree — no display string, no template sentence, no panel label — may assert that a course is required, because that is exactly how the lede came to tell Georgians and Californians their optional course was mandatory. The four MVP states gave three different answers to the most consequential question a rider asks, which is why this cannot be a constant in prose.\n\nExpect it to look redundant beside courseType and classCost. It is not: those describe a course that may or may not be compulsory, and neither can say which.",
+        "values": {
+          "true": "Somebody must take a course. Whether that is everybody or only riders under an age is what courseRequiredUnderAge narrows. Florida and Texas require it of every applicant; California only of riders under 21.",
+          "false": "Nobody is required to take a course, though one is normally still available and usually the easier route. Georgia, where the GMSP course and testing directly at a DDS service center are two independent paths to the same license."
+        }
+      },
+      "courseRequiredUnderAge": {
+        "what": "The age below which courseRequired applies. Null means the answer it gives is not narrowed by age.",
+        "why": "An integer rather than a token because the values are ordinal and a new cutoff should cost no vocabulary entry — 18 and 21 are both common, and 50 states will supply others.\n\nNULL HERE IS NOT A SENTINEL FOR 'EVERYONE'. It means courseRequired stands unqualified: with true, required of all ages; with false, required of nobody. A single integer was weighed for the whole job and could not carry it — 'everyone' is not an age, and spelling it as a magic number or as null would make an unresearched state render as 'required for everyone', which is worse than the bug this replaced. The intro template reads it as a placeholder rather than a gate, so the age-bounded sentence drops itself wherever this is null.",
+        "example": "21 in California: the CMSP course is mandatory under 21 and optional at 21 and older."
       },
       "courseType": {
         "what": "The rider-training curriculum this state's course is built on. What the rider was TAUGHT — exam.examType is what they are TESTED on, and the two do not always match.",

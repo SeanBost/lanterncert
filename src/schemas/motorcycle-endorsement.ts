@@ -20,6 +20,7 @@ const vocab: Record<string, [string, ...string[]]> = {
   courseType: ["MSFBRC", "MNS2011", "CA"],
   findCourse: ["stateLocator", "stateProgram"],
   ridingSkillsTest: ["course", "agencyWaivable", "agencyUnlessLicensed"],
+  examAdministration: ["agency", "course"],
   requirementType: ["50ccUp", "all"],
   examType: examTypes,
 };
@@ -28,6 +29,7 @@ const vocab: Record<string, [string, ...string[]]> = {
 // so the display file has to cover both values. Kept out of `vocab`, which feeds z.enum().
 const boolVocab: Record<string, [string, ...string[]]> = {
   isExamSectioned: ["true", "false"],
+  courseRequired: ["true", "false"],
 };
 
 export function collections(kit: any) {
@@ -116,6 +118,11 @@ export function collections(kit: any) {
           examType: fact(z.enum(examTypes)),
           // What the agency calls its exam. Null where the documents only describe it generically.
           examName: fact(z.string().min(1)),
+          // Who runs the exam; a SOURCED null means the state has none. data-handling.md ▸ Cert facts.
+          examAdministration: fact(z.enum(vocab.examAdministration)),
+          // Whether the course waives the agency exam; asked only where examAdministration is
+          // `agency`, and a sourced null elsewhere means the course IS the exam.
+          courseWaivesAgencyExam: fact(z.boolean()),
           questionCount: fact(z.number().int().positive()),
           timeLimitMinutes: fact(z.number().int().positive()),
           passingScorePercent: fact(z.number().min(0).max(100)),
@@ -133,6 +140,10 @@ export function collections(kit: any) {
           minAge: fact(z.number().int().positive()),
           minLicense: fact(z.enum(vocab.minLicense)),
           transferOutOfStateEndorsement: fact(z.enum(vocab.transferOutOfStateEndorsement)),
+          // Whether training is required of anyone at all. The one field that owns that claim.
+          courseRequired: fact(z.boolean()),
+          // The age below which courseRequired applies; null means the answer is not narrowed.
+          courseRequiredUnderAge: fact(z.number().int().positive()),
           courseType: fact(z.enum(vocab.courseType)),
           findCourse: fact(z.enum(vocab.findCourse)),
           // Who administers the riding test, and whether the required course waives it.

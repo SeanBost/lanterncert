@@ -1,35 +1,26 @@
 ---
 import Layout from "../layouts/Layout.astro";
 
-// Boilerplate copy; the wording gets a proper pass with the SEO work.
 const faqs = [
 	{
-		q: "Is LanternCert really free?",
-		a: "Yes. Every question, guide and practice test is free, with no account, no paywall and no ads. There is no paid tier waiting behind the free one.",
+		q: "Is LanternCert completely free?",
+		a: `Yes! <strong class="text-key">Every overview, guide, and practice question is free</strong>. There is no paid tier waiting behind the free one.`,
 	},
 	{
-		q: "Do I need to sign up?",
-		a: "No. There is nothing to sign up for. You can start a practice test the moment you land on your state's page.",
+		q: "Do I need to sign up for anything?",
+		a: `No. <strong class="text-key">You do not need an account to use any feature</strong>. Some features, like storing and viewing your previous Mock Test scores, do require localStorage enabled on your device.`,
 	},
 	{
-		q: "Where does your information come from?",
-		a: "From the agency that publishes it - your state's licensing agency, its handbook, or the statute itself. Every fact on a state page links to the document it came from, and we record the date we last checked it.",
+		q: "Where does your info come from?",
+		a: `<strong class="text-key">From the official agencies that authorize and oversee certifications</strong>. This typically means your state's government, authorized third parties, and their publications and statutes. Every fact and question answer links to the document backing it up.`,
 	},
 	{
-		q: "How do I know it is still current?",
-		a: "Each state page shows the date its facts were last validated against their sources, and each source shows the year it was published and the year we last confirmed it is still the operative version.",
+		q: "How do I know your info is current?",
+		a: `<strong class="text-key">State-specific certification pages each show the date their facts were last validated</strong> against their sources. We automatically check to see when a source gets updated, then personally review what's changed.`,
 	},
 	{
-		q: "Are your practice questions the real exam questions?",
-		a: "No. No legitimate site has the real question bank. Ours are written fresh from each state's own material to cover the same ground the real exam covers.",
-	},
-	{
-		q: "Which states do you cover?",
-		a: "Florida, Georgia, Texas and California to start. More states are being added, and the site is built so a new one drops in without rework.",
-	},
-	{
-		q: "Can I use this instead of my state's rider course?",
-		a: "No. LanternCert is study material, not a substitute for any required course, and it is not legal advice. Always confirm what your state requires with your state's licensing agency.",
+		q: "Are the practice questions real exam questions?",
+		a: `No. <strong class="text-key">No legitimate prep site has the real question bank</strong>. Ours are written fresh from each state's own material to cover the same ground the real exam covers. If an official practice test does exist, we ensure we link to it in addition to providing our own.`,
 	},
 ];
 ---
@@ -38,59 +29,77 @@ const faqs = [
 	title="About"
 	description="What LanternCert is, how our study material is sourced and kept current, and how we handle your data."
 >
-	<div class="stack-lg">
+	<div class="stack-lg col-center">
 		<div class="stack">
 			<h1 class="page-title">About LanternCert</h1>
 			<p class="lede">
-				LanternCert is a free, no-signup place to learn everything you need to pass a certification
-				exam - starting with motorcycle endorsements.
+				LanternCert puts together need-to-know certification info in a single place. 
+        All of our facts and study materials originate from, cite,
+				and link to primary sources published by topical authorities.
 			</p>
 			<div class="prose">
 				<p>
-					Most study sites for exams like these are either covered in ads or hidden behind a
-					subscription, and almost none of them tell you where their information came from. That is a
-					problem when the answer changes by state, and changes again when an agency updates a fee or
-					a handbook.
+					LanternCert's mission is to validate and simplify every certification process in every
+					state, one at a time. All without any ads, paywalls, or required signups, so you can focus
+					on what matters most: getting certified.
 				</p>
 				<p>
-					So we do it differently. Every requirement, cost and exam detail on this site is tied to
-					the document it came from - a state handbook, an agency page, or the statute itself - and
-					every one of those links is on the page for you to follow. We record the year each document
-					was published, the year we last confirmed it is still the current version, and the date we
-					last checked our own facts against it.
-				</p>
-				<p>
-					The practice questions are written from those same documents, question by question, so what
-					you study is what your state actually tests. No ads, no signups, no upsell.
+					Preparing for a certification can sometimes be done with a few quick searches, and other
+					times requires purchasing an expensive course; LanternCert exists to fill the gap. The idea
+					was inspired by my time working in the education sector, as well as my frustration with
+					learning about how to get (and later transfer) my motorcycle endorsement. I felt I could
+					make something more helpful and beginner-friendly than what was out there, so I did.
 				</p>
 			</div>
 		</div>
 
-		<section class="stack" aria-labelledby="faq-heading">
-			<h2 class="section-title" id="faq-heading">Common questions</h2>
-			<div class="faq">
-				{faqs.map((faq) => (
-					<details class="faq__item">
-						<summary>{faq.q}</summary>
-						<p>{faq.a}</p>
-					</details>
-				))}
-			</div>
+		<section class="stack framed" aria-labelledby="faq-heading">
+			<h2 class="section-title" id="faq-heading">Important questions / FAQ</h2>
+			<ul class="faq">
+				{
+					faqs.map((faq) => (
+						<li>
+							<details class="faq__item">
+								<summary>{faq.q}</summary>
+								{/* set:html because an answer is authored copy carrying its own markup. */}
+								<p set:html={faq.a} />
+							</details>
+						</li>
+					))
+				}
+			</ul>
 		</section>
 
 		<section class="stack" aria-labelledby="privacy-heading" id="privacy">
-			<h2 class="section-title" id="privacy-heading">Privacy</h2>
-			<div class="prose">
+			<h2 class="section-title" id="privacy-heading">Privacy and usage</h2>
+			<div class="prose prose--sm">
 				<p>
-					We do not ask for your name, your email or any other personal information, because there is
-					nothing here to sign up for. Anything you do on the site - the questions you have answered,
-					your test results, the certifications you have starred - is saved only in your own
-					browser's local storage on the device you are using, never sent to us, and never sold or
-					shared with anyone. You can download or erase it yourself at any time from your
-					<a href="/progress">progress page</a>, and clearing your browser data removes it as well.
-					We use Google Analytics to see which
-					pages and questions get used, which tells us what to fix and what to write next; that
-					measurement is anonymous and is never tied to an individual person.
+					<strong class="text-key">
+						We do not ask for, collect, or store your name, email, or any other personal information.
+					</strong>
+				</p>
+				<p>
+					Anything you do on this site that is recorded specific to you, including your test results
+					and preferences, is saved only on the device and browser you are using, is never sent to
+					us, and is never sold or shared with anyone. You can download, opt out of, or erase this
+					data yourself at any time from your <a href="/progress">progress page</a>, and clearing
+					your browser data will immediately and permanently remove any locally tracked data as well.
+				</p>
+				<p>
+					Google Analytics is used sitewide to collect aggregate usage statistics, such as which
+					pages and questions get used and how, which helps to determine what is and isn't working.
+					That measurement is anonymous and is never tied to any individual person.
+				</p>
+				<p>
+					Pages with a state selector guess your state so the field is more likely to start on the right
+					one. That guess is provided to LanternCert from Cloudflare, which hosts this site and can
+					see roughly where a connection comes from based on the requestor's IP address. LanternCert
+					never reads, stores, or is passed your IP address.
+				</p>
+				<p>
+					By using this site, you acknowledge that LanternCert is free certification and exam prep
+					material, not legal advice. Always confirm requirements with your state's official
+					certification agencies or authorized third parties (which we cite; click the links!).
 				</p>
 			</div>
 		</section>

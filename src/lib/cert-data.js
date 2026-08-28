@@ -8,7 +8,7 @@ export const certs = siteConfig.certTypes;
 
 // The build gate for site-config.json, which gets no Zod pass. data-handling.md ▸ Site config.
 for (const [key, config] of Object.entries(certs)) {
-  for (const field of ["name", "slug", "blurb", "timeToCertify"]) {
+  for (const field of ["name", "slug", "emoji", "blurb", "timeToCertify"]) {
     if (typeof config[field] !== "string" || config[field].trim() === "") {
       throw new Error(`site-config.json ▸ certTypes ▸ ${key}: "${field}" is missing or empty`);
     }
@@ -122,6 +122,20 @@ export async function certStatePaths(opts = {}) {
     for (const entry of facts) paths.push({ params: { cert, state: entry.id } });
   }
   return paths;
+}
+
+/** The states a cert holds facts for, alphabetical by name - collection order is by slug, not name. */
+/** @returns {Promise<{ slug: string, name: string, abbreviation: string }[]>} */
+export async function certStates(cert) {
+  const entries = await getCollection(`${cert}-facts`);
+  return entries
+    .map((entry) => {
+      const info = states[entry.id];
+      // A facts file names its own states, so an unknown one would render a nameless link.
+      if (!info) throw new Error(`${cert}-facts ▸ ${entry.id}: not a state in states.json`);
+      return { slug: entry.id, ...info };
+    })
+    .sort((a, b) => a.name.localeCompare(b.name));
 }
 
 // any: a slug-built collection name infers as a union of every collection; Zod guarantees the shape.

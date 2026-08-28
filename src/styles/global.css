@@ -196,15 +196,12 @@ html {
   -webkit-text-size-adjust: 100%;
   /* Where an in-page anchor lands under the fixed header. */
   scroll-padding-top: calc(var(--header-clear) + var(--space-7));
-  /* Reserves the scrollbar's width whether or not the page scrolls, so centered content sits at the
-     same x on every page. Without it a short page is offset from a tall one by half a scrollbar. */
-  scrollbar-gutter: stable;
   /* The hero art overhangs its column on purpose; this stops the overhang scrolling the document.
      Needed on BOTH html and body — either one alone still scrolls. */
   overflow-x: clip;
-  /* The canvas behind the document, which is what an iOS overscroll reveals. Declaring it here is
-     also what stops body's background propagating to the canvas, so body paints only its own box. */
-  background-color: var(--color-footer);
+  /* The canvas behind the document. Declaring it here stops body's background propagating, so body
+     paints only its own box. */
+  background-color: var(--color-page);
 }
 
 body {
@@ -301,7 +298,7 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
 }
 
 /* A full-bleed section band, its content still on the page's own column.
-   The 50vw arithmetic is exact only while html keeps scrollbar-gutter: stable. */
+   50vw counts the scrollbar, so the bleed overshoots and clips - which is what reaches both edges. */
 /* Two glow properties, not one box-shadow: box-shadow does not accumulate across the rules below. */
 .band {
   --band-glow-top: 0 0 0 transparent;
@@ -367,6 +364,14 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: var(--space-6);
+}
+
+/* A short list of links across columns - two on mobile, three from 768, four from 1248. */
+.link-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2) var(--space-4);
+  font-size: var(--text-lg);
 }
 
 /* Bleeds out to the viewport edges and clips there, so the wall runs off both sides equally rather
@@ -773,6 +778,21 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
   display: grid;
 }
 
+/* The lit grid's frame on a block standing alone - the whole gradient rather than a slice of it.
+   The first layer hides the frame everywhere except the ring, so it cannot be dropped. */
+.framed {
+  border: 5px solid transparent;
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  background-color: var(--white);
+  background-image:
+    linear-gradient(var(--white) 0 0),
+    var(--frame-gradient);
+  background-origin: padding-box, border-box;
+  background-clip: padding-box, border-box;
+  background-repeat: no-repeat;
+}
+
 /* An accent down the left edge instead of a card. Painted as a sized background rather than a
    border, which cannot hold a gradient; unsupported color-mix drops the whole image, never the text. */
 /* Square on the left so the accent bar runs the full height instead of tapering into a corner. */
@@ -1008,10 +1028,25 @@ ul.accent-edge, ol.accent-edge {
   font-weight: var(--weight-semi);
 }
 
-/* A list of things rather than label/value pairs. The surface is .accent-edge's job now. */
+/* A list of things rather than label/value pairs. The surface is .accent-edge's job now.
+   The fixed mark column is what lands every row's text edge identically - keep it off `auto`. */
 .row-list > li {
+  display: grid;
+  grid-template-columns: var(--space-6) minmax(0, 1fr);
+  column-gap: var(--space-2);
   padding-block: var(--space-4);
   border-bottom: var(--standard-border);
+}
+
+/* Everything but the mark shares the second column, so a title and its blurb read off one edge. */
+.row-list > li > *:not(.row-list__mark) {
+  grid-column: 2;
+}
+
+/* .row-list__title's own metrics, so the mark sits on the title's first line box. */
+.row-list__mark {
+  font-size: var(--text-lg);
+  line-height: var(--leading-tight);
 }
 
 .row-list > li:last-child {
@@ -1320,7 +1355,7 @@ ol.source-list > li::before {
 /* The hero's trust bullets, sitting under the state field. */
 .assurances {
   font-size: var(--text-base);
-  color: var(--color-ink-light);
+  color: var(--color-ink-lightest);
 }
 
 .assurances > li + li {
@@ -1406,7 +1441,8 @@ ul.source-wall__row {
   max-width: 30rem;
 }
 
-/* Stacked on mobile, side by side from the desktop breakpoint. */
+/* Stacked through tablet, side by side from 1248 - at 768 a fixed field plus a nowrap button
+   overruns half a page, and neither flex item can shrink. */
 .autocomplete__row {
   display: flex;
   flex-direction: column;
@@ -1487,18 +1523,44 @@ ul.source-wall__row {
   background-color: var(--color-lantern-yellow-offwhite);
 }
 
-.faq__item {
-  border-bottom: var(--standard-border);
-  padding-block: var(--space-3);
-}
-
-.faq__item:first-child {
+/* Between two questions only - the frame around the block draws its outer edges. */
+.faq > li + li {
   border-top: var(--standard-border);
 }
 
+.faq__item {
+  padding-block: var(--space-3);
+}
+
+/* display: flex is what drops Chrome's own triangle; the other two cover Firefox and Safari. */
+/* The chevron below is sized in em, so it grows with this font-size rather than needing its own. */
 .faq__item summary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
   cursor: pointer;
+  font-size: var(--text-lg);
   font-weight: var(--weight-semi);
+  list-style: none;
+}
+
+.faq__item summary::-webkit-details-marker {
+  display: none;
+}
+
+/* The disclosure mark - two borders rotated into a chevron, pointing right until the item opens. */
+.faq__item summary::before {
+  content: "";
+  flex: none;
+  width: 0.45em;
+  height: 0.45em;
+  border-right: 2px solid var(--color-lantern-orange-dark);
+  border-bottom: 2px solid var(--color-lantern-orange-dark);
+  transform: rotate(-45deg);
+}
+
+.faq__item[open] summary::before {
+  transform: rotate(45deg);
 }
 
 .faq__item p {
@@ -1514,6 +1576,11 @@ ul.source-wall__row {
 
 .prose p {
   font-size: var(--text-lg);
+}
+
+/* A block that is reference rather than argument. Two classes, so it outranks .prose p. */
+.prose.prose--sm p {
+  font-size: var(--text-base);
 }
 
 .prose h2 {
@@ -1610,6 +1677,18 @@ ul.source-wall__row {
 .text-accent {
   color: var(--color-lantern-orange-dark);
   font-weight: var(--weight-extrabold);
+}
+
+/* The same accent inside body copy, one weight step up rather than a heading's.
+   Two classes, so the weight outranks .prose strong rather than losing to it at (0,1,1). */
+.text-key, .prose .text-key {
+  color: var(--color-lantern-orange-dark);
+  font-weight: var(--weight-semi);
+}
+
+/* An inline separator, topping up the space the markup already keeps either side of it. */
+.sep {
+  margin-inline: var(--sep-gap);
 }
 
 .lede {
@@ -1742,6 +1821,10 @@ ul.source-wall__row {
     column-gap: var(--space-6);
   }
 
+  .link-columns {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
   /* Drops a right column onto the left column's first baseline. Margin, so a fill moves with it. */
   .baseline-drop {
     margin-top: var(--space-4);
@@ -1767,6 +1850,12 @@ ul.source-wall__row {
      Held at its pre-widening pixel width, so the extra page width never lengthens a line of copy. */
   .col-main {
     width: 45%;
+  }
+
+  /* A single centered column, for a page with no sidebar to hand the leftover width to. */
+  .col-center {
+    width: 70%;
+    margin-inline: auto;
   }
 
   .page-title--hero {
@@ -1804,7 +1893,7 @@ ul.source-wall__row {
   /* Desktop nav metrics.
      margin-right cancels the last label's trailing padding, which otherwise holds it off the gutter. */
   .site-nav__list {
-    --nav-pad-x: var(--space-3);
+    --nav-pad-x: var(--space-4);
     /* Drops the bar onto the header's bottom edge. It equals --header-drop only because .site-nav's
        optical offset below consumes the item's other free space - re-measure if that offset moves. */
     --nav-underline-drop: var(--header-drop);
@@ -1824,17 +1913,6 @@ ul.source-wall__row {
 
   .site-nav__list a {
     padding: var(--space-2) var(--nav-pad-x);
-  }
-
-  .autocomplete__row {
-    flex-direction: row;
-    align-items: flex-start;
-  }
-
-  /* A fixed basis rather than 1 1 auto: the field is sized to the longest state name, not to
-     whatever space is left over, so the form ends up only as wide as it needs to be. */
-  .autocomplete__field {
-    flex: 0 0 16rem;
   }
 }
 
@@ -1862,9 +1940,24 @@ ul.source-wall__row {
     column-gap: var(--space-10);
   }
 
-  /* .split's main column, for a block sitting BELOW a split rather than inside one. */
+  /* .split's main column width, for a block standing outside a split rather than inside one. */
   .col-split-main {
     width: calc((100% - var(--space-10)) * 4 / 7);
+  }
+
+  .link-columns {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .autocomplete__row {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  /* A fixed basis rather than 1 1 auto: the field is sized to the longest state name, not to
+     whatever space is left over, so the form ends up only as wide as it needs to be. */
+  .autocomplete__field {
+    flex: 0 0 16rem;
   }
 
   /* Only needed here: the narrow band splits evenly already, so this rides on that. It must also sit
@@ -1918,6 +2011,11 @@ ul.source-wall__row {
   .btn {
     transition: --btn-sweep 160ms ease-out, background-color 120ms ease-out, color 70ms ease-out,
       --btn-glow 160ms ease-out;
+  }
+
+  /* The same 160ms the chrome turns on, so the disclosure reads as one family with it. */
+  .faq__item summary::before {
+    transition: transform 160ms ease-out;
   }
 
   /* Same 160ms as the button above, so every hover on the page reads as one gesture. */

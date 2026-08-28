@@ -31,6 +31,17 @@
     }
   },
 
+  "courseRequired": {
+    "true": {
+      "short": "Required",
+      "long": "required training course"
+    },
+    "false": {
+      "short": "Optional",
+      "long": "voluntary training course"
+    }
+  },
+
   "courseType": {
     "MSFBRC": {
       "short": "MSF Basic RiderCourse",
@@ -60,15 +71,26 @@
   "ridingSkillsTest": {
     "course": {
       "short": "Inside the course",
-      "long": "riding evaluation held inside the required course"
+      "long": "riding evaluation held inside the course"
     },
     "agencyWaivable": {
       "short": "Agency test, course waives",
-      "long": "riding skills test the required course waives"
+      "long": "riding skills test the course waives"
     },
     "agencyUnlessLicensed": {
       "short": "Agency test, some waivers",
       "long": "riding skills test waived for already-licensed adults"
+    }
+  },
+
+  "examAdministration": {
+    "agency": {
+      "short": "No limit set",
+      "long": "knowledge test administered by {agencyCode}"
+    },
+    "course": {
+      "short": "Instructor's discretion",
+      "long": "knowledge test administered by the course provider"
     }
   },
 
@@ -101,7 +123,7 @@
     },
     "MNS2011": {
       "short": "Provider test",
-      "long": "knowledge test set by a state-approved provider"
+      "long": "knowledge test set by a {stateName}-approved provider"
     }
   }
 }

@@ -1,7 +1,7 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import StateAutocomplete from "../../components/StateAutocomplete.astro";
-import { certs, certConfig, certNoindex } from "../../lib/cert-data.js";
+import { certs, certConfig, certNoindex, certStates, loadAllSources } from "../../lib/cert-data.js";
 
 export async function getStaticPaths() {
 	return Object.keys(certs).map((cert) => ({ params: { cert } }));
@@ -9,26 +9,54 @@ export async function getStaticPaths() {
 
 const { cert } = Astro.params;
 const config = certConfig(cert);
+
+// The whole registry, not the subset a page cites - the count is a brand claim.
+const sources = await loadAllSources(cert);
+const states = config.stateDependent ? await certStates(cert) : [];
 ---
 
 <Layout
 	title={config.name}
 	description={`Free ${config.name.toLowerCase()} practice tests and study guides, with requirements broken down state by state and every fact cited to its agency.`}
 	noindex={certNoindex(cert)}
+	geo
 >
-	<div class="stack-lg">
-		<div class="stack">
-			<h1 class="page-title">{config.name}</h1>
-			<p class="lede">{config.blurb}</p>
+	<div class="split split--even">
+		<div class="stack-lg">
+			<div class="stack">
+				<h1 class="page-title text-accent">{config.name}</h1>
+				<p class="lede">{config.blurb}</p>
+			</div>
+
+			{
+				config.stateDependent && (
+					<section class="stack" aria-labelledby="pick-heading">
+						<h2 class="section-title" id="pick-heading">
+							Where are you getting certified?
+						</h2>
+						<StateAutocomplete base={`/${cert}`} value="Georgia" geo />
+						{/* The mark is decorative - the sentence beside it carries the meaning on its own. */}
+						<p class="assurances">
+							<span aria-hidden="true">{config.emoji}</span> {sources.length} official {config.name} sources
+						</p>
+					</section>
+				)
+			}
 		</div>
 
 		{
-			config.stateDependent && (
-				<section class="stack" aria-labelledby="pick-heading">
-					<h2 class="section-title" id="pick-heading">
-						Where are you getting certified?
+			states.length > 0 && (
+				<section class="stack baseline-drop" aria-labelledby="states-heading">
+					<h2 class="section-title" id="states-heading">
+						States we cover
 					</h2>
-					<StateAutocomplete base={`/${cert}`} />
+					<ul class="link-columns">
+						{states.map((state) => (
+							<li>
+								<a href={`/${cert}/${state.slug}`}>{state.name}</a>
+							</li>
+						))}
+					</ul>
 				</section>
 			)
 		}

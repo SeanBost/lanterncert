@@ -74,6 +74,22 @@ const intro = stateIntro({
 	hrefFor: (id) => `#source-${numberSource(id)}`,
 });
 
+// Minutes where a state publishes them, otherwise who sets the clock. The paired fact is what the
+// row cites, so a stand-in value never cites the time-limit source that came up empty.
+const timeLimit =
+	facts.exam.timeLimitMinutes.value === null
+		? [token("examAdministration", facts.exam.examAdministration), facts.exam.examAdministration]
+		: [formatFact(facts.exam.timeLimitMinutes.value, "minutes"), facts.exam.timeLimitMinutes];
+
+// The age narrows the boolean where a state has one, so the row cites whichever fact wrote its text.
+const trainingCourse =
+	facts.criteria.courseRequiredUnderAge.value === null
+		? [token("courseRequired", facts.criteria.courseRequired), facts.criteria.courseRequired]
+		: [
+				`Required under ${formatFact(facts.criteria.courseRequiredUnderAge.value)}`,
+				facts.criteria.courseRequiredUnderAge,
+			];
+
 const examRows = rows([
 	["Questions in total", formatFact(facts.exam.questionCount.value), facts.exam.questionCount],
 	[
@@ -81,12 +97,16 @@ const examRows = rows([
 		formatFact(facts.exam.passingScorePercent.value, "percent"),
 		facts.exam.passingScorePercent,
 	],
-	["Time limit", formatFact(facts.exam.timeLimitMinutes.value, "minutes"), facts.exam.timeLimitMinutes],
+	["Time limit", ...timeLimit],
 ]);
 
-// A sourced null is "checked, nothing published"; an unsourced one is "nobody has looked". Only the
-// first earns the sentence — the second would assert something about the state that we never verified.
-const examUnpublished = examRows.every((row) => row.value === null && row.sourceId !== null);
+// A sourced null is "checked, nothing published"; an unsourced one is "nobody has looked".
+// Read off the facts, not the rows — the time limit row prints a value where its own fact is null.
+const examUnpublished = [
+	facts.exam.questionCount,
+	facts.exam.passingScorePercent,
+	facts.exam.timeLimitMinutes,
+].every((fact) => fact.value === null && fact.source !== null);
 
 // Grouped by the question a reader is asking, not by the shape of the facts file.
 const factGroups = [
@@ -106,6 +126,8 @@ const factGroups = [
 				formatFact(facts.criteria.dmvCost.value, "usd"),
 				facts.criteria.dmvCost,
 			],
+			// Sits directly above the cost it qualifies - no other row may restate the requirement.
+			["Training course", ...trainingCourse],
 			// Providers set their own tuition, so the figure is approximate however precise the range looks.
 			["Course cost", approx(formatFact(facts.criteria.classCost.value, "usd")), facts.criteria.classCost],
 		]),
@@ -120,15 +142,13 @@ const factGroups = [
 	},
 ];
 
-// Continues the numbering the lede started. A null value burns no number, and a fallback sentence
-// is itself a claim, so it takes one.
+// Continues the numbering the lede started. Every row with a source is cited, sourced nulls too.
 for (const group of factGroups) {
 	if (group.fallback) {
 		numberSource(group.fallbackSource);
 		continue;
 	}
 	for (const fact of group.facts) {
-		if (fact.value === null) continue;
 		numberSource(fact.sourceId);
 	}
 }
@@ -243,7 +263,7 @@ const quickLinks = [
 								) : (
 									<dl>
 										{group.facts.map((fact) => {
-											const number = fact.value === null ? null : citations.get(fact.sourceId);
+											const number = citations.get(fact.sourceId) ?? null;
 											return (
 												<div class="facts__row">
 													<dt>{fact.label}</dt>
