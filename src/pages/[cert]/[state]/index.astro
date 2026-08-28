@@ -111,7 +111,7 @@ const examUnpublished = [
 // Grouped by the question a reader is asking, not by the shape of the facts file.
 const factGroups = [
 	{
-		title: "Certification Requirements",
+		title: "Certification requirements",
 		fallback: null,
 		facts: rows([
 			["Minimum age", formatFact(facts.criteria.minAge.value, "years"), facts.criteria.minAge],
@@ -133,7 +133,7 @@ const factGroups = [
 		]),
 	},
 	{
-		title: "Exam Details",
+		title: "Exam details",
 		fallback: examUnpublished ? `${info.name} sets no statewide exam format.` : null,
 		// The passing score is the most foundational exam property here, so its source is the one that
 		// backs a sentence standing in for the whole group. Never assume the nulls share a source.
@@ -285,7 +285,7 @@ const quickLinks = [
 
 		{config.hasExam && (
 		<section class="stack band band--warm" aria-labelledby="modes-heading">
-			<h2 class="section-title band-warm-blur" id="modes-heading">
+			<h2 class="section-title section-title--lg band-warm-blur" id="modes-heading">
 				Prepare to <span class="text-accent">pass</span> your {examLabel}
 			</h2>
 			{/* An ordered list - the three are a progression, not a menu. --lit expects exactly three. */}
@@ -332,7 +332,7 @@ const quickLinks = [
 		)}
 
 		<section class="stack band band--wash" aria-labelledby="sources-heading">
-			<h2 class="section-title" id="sources-heading">Sources and helpful links</h2>
+			<h2 class="section-title section-title--lg" id="sources-heading">Sources and helpful links</h2>
 			{/* role="list" restores the semantics Safari drops from a list-style: none list. */}
 			<ol class="source-list accent-edge col-split-main" role="list">
 				{

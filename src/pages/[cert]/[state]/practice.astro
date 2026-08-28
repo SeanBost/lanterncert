@@ -14,13 +14,13 @@ const term = facts.meta.localTerm;
 ---
 
 <Layout
-	title={`${info.name} ${term} practice test`}
+	title={`${info.name} ${term} Practice Cards`}
 	description={`Free ${info.name} ${term} practice questions with instant feedback and an explanation for every answer.`}
 	noindex={certNoindex(cert)}
 >
 	<div class="stack prose">
-		<h1 class="page-title">Practice test</h1>
-		<p class="lede">{info.name} {term}</p>
+		<h1 class="page-title">Practice Cards</h1>
+		<p>{info.name} {term}</p>
 		<p>Practice questions land in Sprint 4, once the bank is authored in Sprint 3.</p>
 		<p><Button href={`/${cert}/${state}`} variant="secondary">Back to {info.name}</Button></p>
 	</div>

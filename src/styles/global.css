@@ -104,15 +104,15 @@ img, svg {
   --color-ink-lightester: #9e99a7;
 
   /* Surfaces, never ink — both fail AA as type and fail the 3:1 non-text bar. */
-  --color-lantern-yellow: #f2a830;
+  --color-lantern-yellow: #f2b424;
   --color-lantern-orange: #f47030;
-  --color-lantern-yellow-offwhite: #fceed6;
+  --color-lantern-yellow-offwhite: #fff3d6;
   --color-lantern-orange-offwhite: #fde2d6;
-  --color-lantern-yellow-nearwhite: #fffcf7;
+  --color-lantern-yellow-nearwhite: #fffcf5;
   --color-lantern-orange-nearwhite: #fff5eb;
 
   /* Dark enough to be ink, which the accents above are not. Yellow stays a rule or a fill only. */
-  --color-lantern-yellow-dark: #bf7600;
+  --color-lantern-yellow-dark: #bf8600;
   --color-lantern-orange-dark: #bf4000;
 
   /* GA DDS's own body ink - a quoted artifact only, never part of the palette.
@@ -1050,7 +1050,7 @@ ul.accent-edge, ol.accent-edge {
 
 /* .row-list__title's own metrics, so the mark sits on the title's first line box. */
 .row-list__mark {
-  font-size: var(--text-lg);
+  font-size: var(--text-xl);
   line-height: var(--leading-tight);
 }
 
@@ -1059,7 +1059,7 @@ ul.accent-edge, ol.accent-edge {
 }
 
 .row-list__title {
-  font-size: var(--text-lg);
+  font-size: var(--text-xl);
   line-height: var(--leading-tight);
   margin-bottom: var(--space-1);
 }
@@ -1589,7 +1589,7 @@ ul.source-wall__row {
 }
 
 .prose h2 {
-  font-size: var(--text-xl);
+  font-size: var(--text-2xl);
   line-height: var(--leading-tight);
 }
 
@@ -1678,28 +1678,27 @@ ul.source-wall__row {
   line-height: var(--leading-tight);
 }
 
+/* For a heading labeling a whole band; one inside a column or a panel keeps the base size. */
+.section-title--lg {
+  font-size: var(--text-3xl);
+}
+
 /* The one word an accent lands on, where the hero's sweep is not wanted. */
 .text-accent {
   color: var(--color-lantern-orange-dark);
   font-weight: var(--weight-extrabold);
 }
 
-/* The same accent inside body copy, one weight step up rather than a heading's.
-   Two classes, so the weight outranks .prose strong rather than losing to it at (0,1,1). */
+/* The same accent inside body copy bolded. Two classes, so the weight outranks .prose strong rather than losing to it at (0,1,1). */
 .text-key, .prose .text-key {
   color: var(--color-lantern-orange-dark);
-  font-weight: var(--weight-semi);
+  font-weight: var(--weight-bold);
 }
 
 /* An inline separator, topping up the space the markup already keeps either side of it. */
 .sep {
   margin-inline: var(--sep-gap);
 }
-
-.lede {
-  font-size: var(--text-lg);
-}
-
 
 .caption {
   font-size: var(--text-base);

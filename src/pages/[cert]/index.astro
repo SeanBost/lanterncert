@@ -25,7 +25,7 @@ const states = config.stateDependent ? await certStates(cert) : [];
 		<div class="stack-lg">
 			<div class="stack">
 				<h1 class="page-title text-accent">{config.name}</h1>
-				<p class="lede">{config.blurb}</p>
+				<div class="prose"><p>{config.blurb}</p></div>
 			</div>
 
 			{

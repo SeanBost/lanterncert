@@ -97,10 +97,12 @@ for (const size of rowSizes) {
 						Learn <em>exactly</em> what gets you
 						<span class="page-title__accent sweep-in">certified</span>
 					</h1>
-					<p class="lede">
-						Requirements, exam prep, and what the certification process is like.
-            All cited and linked on-page.
-					</p>
+					<div class="prose">
+						<p>
+							Requirements, exam prep, and what the certification process is like.
+							All cited and linked on-page.
+						</p>
+					</div>
 				</div>
 
 				<div class="madlib-block">
@@ -150,15 +152,17 @@ for (const size of rowSizes) {
 
 		<div class="split band band--warm">
 			<section class="stack band-warm-blur" aria-labelledby="trust-heading">
-        <h2 class="section-title" id="trust-heading">Everything you need to know, <span class="text-accent">cited</span></h2>
+        <h2 class="section-title section-title--lg" id="trust-heading">Everything you need to know, <span class="text-accent">cited</span></h2>
 				<div class="prose">
-					<p>
-						AI overviews and generic prep sites will confidently omit or muddy important-to-know details, while 
-            certification agencies overcomplicate how they share requirements. 
+          <p>
+            Figuring out how to get certified is tedious and confusing.
+						AI overviews will often confidently omit important-to-know details, 
+            and certification agencies overcomplicate how and where they share their requirements. 
 					</p>
           <p>
-						LanternCert organizes everything you need to know to get certified in a single place. 
-            Every fact and answer provided is to-the-point and backed by an official source that's been vetted and linked to.
+						LanternCert organizes <strong class="text-key">what you need to know in a single place</strong>. 
+            Every fact and practice question provided is backed by an official source that's been vetted and linked to.
+            Get the big picture at a glance, then dig into the details that matter most to you.
           </p>
           <p>
 						See what the certification you're working towards requires, then study and take practice tests to get exam-ready.
@@ -168,7 +172,7 @@ for (const size of rowSizes) {
 
 			{/* The label sits OUTSIDE the struck line on purpose: text-decoration propagates to
 			    descendants and a child cannot turn an ancestor's line off. */}
-			<section class="stack correction" aria-labelledby="correction-heading">
+			<section class="stack correction" aria-label="A claim about Georgia's exam, beside what Georgia DDS publishes">
 				{/*<h3 class="correction__title" id="correction-heading"><em>Don't settle for sorta</em></h3>*/}
 
 				{/* <p>Others often muddy important details, like with Georgia's Knowledge Exam.</p> */}
@@ -245,7 +249,7 @@ for (const size of rowSizes) {
 		</div>
 
 		<section class="stack band band--wash" aria-labelledby="certs-heading" id="certifications">
-			<h2 class="section-title" id="certs-heading">Certifications we cover</h2>
+			<h2 class="section-title section-title--lg" id="certs-heading">Certifications we cover</h2>
 			<ul class="row-list accent-edge col-main">
 				{
 					list.map((cert) => (
