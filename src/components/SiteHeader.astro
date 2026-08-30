@@ -13,23 +13,13 @@ const isCurrent = (href) => (href.split("#")[0].replace(/\/+$/, "") || "/") === 
 <header class="site-header">
 	<div class="site-header__inner">
 		<a class="site-header__brand" href="/">
-			<span class="site-header__mark">
-				<img
-					class="site-header__logo"
-					src="/lanterncert-logo.png"
-					alt="LanternCert"
-					width="820"
-					height="138"
-				/>
-				{/* Decorative twin, crossfaded in on hover. Empty alt so the mark is announced once. */}
-				<img
-					class="site-header__logo site-header__logo--glow"
-					src="/lanterncert-logo-glow.png"
-					alt=""
-					width="820"
-					height="138"
-				/>
-			</span>
+			<img
+				class="site-header__logo"
+				src="/lanterncert-logo.png"
+				alt="LanternCert"
+				width="1240"
+				height="160"
+			/>
 		</a>
 		<button
 			class="site-header__toggle"
@@ -84,14 +74,13 @@ const isCurrent = (href) => (href.split("#")[0].replace(/\/+$/, "") || "/") === 
 		toggle?.focus();
 	});
 
-	// Mobile only: hides on the way down, returns on the way up. Desktop keeps it always visible.
+	// Hides on the way down, returns on the way up, at every width.
 	let last = window.scrollY;
 	window.addEventListener(
 		"scroll",
 		() => {
 			const y = window.scrollY;
-			const menuOpen = header?.classList.contains("site-header--open");
-			if (!desktop.matches && !menuOpen) {
+			if (!isOpen()) {
 				// The 80px floor stops the header flickering away during a short bounce at the top.
 				header?.classList.toggle("site-header--hidden", y > last && y > 80);
 			}
@@ -100,6 +89,12 @@ const isCurrent = (href) => (href.split("#")[0].replace(/\/+$/, "") || "/") === 
 		{ passive: true },
 	);
 
-	// Crossing into desktop mid-session leaves the mobile state behind otherwise.
-	desktop.addEventListener("change", () => header?.classList.remove("site-header--hidden"));
+	// A hidden band must never swallow keyboard focus; tabbing into it brings it back.
+	header?.addEventListener("focusin", () => header.classList.remove("site-header--hidden"));
+
+	// The toggle is display:none from 768, so a panel left open on mobile would latch --open there.
+	desktop.addEventListener("change", () => {
+		setOpen(false);
+		header?.classList.remove("site-header--hidden");
+	});
 </script>

@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 43.74 43.74" role="img" aria-label="LanternCert">
+  <style>
+    @media (prefers-color-scheme: dark) {
+      .m-0s0 { stop-color: #4a4552; }
+      .m-0s1 { stop-color: #494451; }
+      .m-0s2 { stop-color: #46414e; }
+      .m-0s3 { stop-color: #423d49; }
+      .m-0s4 { stop-color: #3c3843; }
+      .m-0s5 { stop-color: #36313b; }
+      .m-0s6 { stop-color: #2e2a33; }
+    }
+  </style>
+  <defs>
+    <linearGradient id="m-0" gradientUnits="userSpaceOnUse" x1="0.75" y1="-0.75" x2="11.25" y2="9.75">
+      <stop offset="0" class="m-0s0" stop-color="#2e2a33"/>
+      <stop offset="0.167" class="m-0s1" stop-color="#2d2932"/>
+      <stop offset="0.333" class="m-0s2" stop-color="#2b2830"/>
+      <stop offset="0.5" class="m-0s3" stop-color="#29252d"/>
+      <stop offset="0.667" class="m-0s4" stop-color="#252229"/>
+      <stop offset="0.833" class="m-0s5" stop-color="#211e24"/>
+      <stop offset="1" class="m-0s6" stop-color="#1c1a1f"/>
+    </linearGradient>
+    <rect id="m-0-t" width="12" height="9" rx="1" fill="url(#m-0)"/>
+    <linearGradient id="m-1" gradientUnits="userSpaceOnUse" x1="0.75" y1="-0.75" x2="11.25" y2="9.75">
+      <stop offset="0" stop-color="#f47030"/>
+      <stop offset="0.167" stop-color="#f26e2e"/>
+      <stop offset="0.333" stop-color="#ed692b"/>
+      <stop offset="0.5" stop-color="#e56225"/>
+      <stop offset="0.667" stop-color="#da591d"/>
+      <stop offset="0.833" stop-color="#ce4e11"/>
+      <stop offset="1" stop-color="#bf4000"/>
+    </linearGradient>
+    <rect id="m-1-t" width="12" height="9" rx="1" fill="url(#m-1)"/>
+    <linearGradient id="m-2" gradientUnits="userSpaceOnUse" x1="0.75" y1="-0.75" x2="11.25" y2="9.75">
+      <stop offset="0" stop-color="#fde2d6"/>
+      <stop offset="0.167" stop-color="#fdded0"/>
+      <stop offset="0.333" stop-color="#fed3c1"/>
+      <stop offset="0.5" stop-color="#fec3aa"/>
+      <stop offset="0.667" stop-color="#fcae8c"/>
+      <stop offset="0.833" stop-color="#f99266"/>
+      <stop offset="1" stop-color="#f47030"/>
+    </linearGradient>
+    <rect id="m-2-t" width="12" height="9" rx="1" fill="url(#m-2)"/>
+  </defs>
+  <use href="#m-0-t" x="2.37" y="1.62"/>
+  <use href="#m-1-t" x="15.87" y="1.62"/>
+  <use href="#m-1-t" x="29.37" y="1.62"/>
+  <use href="#m-0-t" x="2.37" y="12.12"/>
+  <use href="#m-1-t" x="15.87" y="12.12"/>
+  <use href="#m-2-t" x="29.37" y="12.12"/>
+  <use href="#m-0-t" x="2.37" y="22.62"/>
+  <use href="#m-1-t" x="15.87" y="22.62"/>
+  <use href="#m-1-t" x="29.37" y="22.62"/>
+  <use href="#m-0-t" x="2.37" y="33.12"/>
+  <use href="#m-0-t" x="15.87" y="33.12"/>
+  <use href="#m-0-t" x="29.37" y="33.12"/>
+</svg>

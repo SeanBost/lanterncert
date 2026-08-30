@@ -435,7 +435,7 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
   initial-value: 0%;
 }
 
-/* Fixed at every width; SiteHeader.astro owns the mobile scroll-to-hide toggling.
+/* Fixed at every width; SiteHeader.astro owns the scroll-to-hide toggling.
    The shadow rests at its own geometry in transparent - `none` has nothing to interpolate. */
 .site-header {
   /* The scrolled shadow's two knobs. Its color is applied by the [data-scrolled] rule below. */
@@ -512,7 +512,7 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
   text-decoration: none;
 }
 
-/* Decoration only - the glow is this link's cue, not an underline. See the note on .btn's twin. */
+/* Decoration only; the focus ring is this link's one cue. See the note on .btn's twin. */
 .site-header__brand:hover, .site-header__brand:focus-visible, .site-header__brand:active {
   text-decoration: none;
 }
@@ -520,25 +520,6 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
 .site-header__logo {
   height: 1.75rem;
   width: auto;
-}
-
-/* Positioning context for the glow twin, which stacks on the base rather than replacing its src. */
-.site-header__mark {
-  position: relative;
-  display: block;
-}
-
-/* Same intrinsic size as the base, so top/left alone registers the two exactly. */
-.site-header__logo--glow {
-  position: absolute;
-  top: 0;
-  left: 0;
-  opacity: 0;
-}
-
-.site-header__brand:hover .site-header__logo--glow,
-.site-header__brand:focus-visible .site-header__logo--glow {
-  opacity: 1;
 }
 
 /* margin-right pulls the target in off the gutter without shrinking it. The full bar height is
@@ -1908,7 +1889,7 @@ ul.source-wall__row {
       box-shadow 200ms ease-out, --header-veil 200ms ease-out;
   }
 
-  /* Matches the logo glow, so the chrome's motions agree. */
+  /* The chrome's shared 160ms, so its motions agree. */
   .site-nav__list a::after {
     transition: opacity 160ms ease-out;
   }
@@ -1917,12 +1898,7 @@ ul.source-wall__row {
     transition: background-color 120ms ease-out, color 120ms ease-out;
   }
 
-  /* Matches the button's sweep, so the two hover effects in the chrome read as one gesture. */
-  .site-header__logo--glow {
-    transition: opacity 160ms ease-out;
-  }
-
-  /* The hamburger's X morph, on the same 160ms as the glow above. */
+  /* The hamburger's X morph, on the chrome's shared 160ms. */
   .site-header__toggle span {
     transition: transform 160ms ease-out, opacity 160ms ease-out;
   }

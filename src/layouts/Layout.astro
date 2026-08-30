@@ -40,7 +40,9 @@ const canonical = new URL(path, site.url).href;
 		)}
 
 		<meta name="generator" content={Astro.generator} />
-		<link rel="icon" href="/favicon.ico" />
+		{/* Every browser but Safari prefers the vector; the .ico is the fallback, not a duplicate. */}
+		<link rel="icon" href="/favicon.ico" sizes="32x32" />
+		<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 
 		<title>{pageTitle}</title>
 		<meta name="description" content={description} />
