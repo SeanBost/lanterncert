@@ -39,7 +39,16 @@ function initScrollSettled() {
   else window.addEventListener("load", arm, { once: true });
 }
 
+/** Publishes the rendering engine on <html>, which global.css's engine fallback block keys off. */
+function initEngine() {
+  // "Gecko/<digits>" is Firefox alone - Blink and WebKit both say "like Gecko" with no version.
+  if (/Gecko\/\d/.test(navigator.userAgent)) {
+    document.documentElement.setAttribute("data-engine", "gecko");
+  }
+}
+
 export function initGlobal() {
+  initEngine();
   initScrollState();
   initScrollSettled();
 }

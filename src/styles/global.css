@@ -104,16 +104,16 @@ img, svg {
   --color-ink-lightester: #9e99a7;
 
   /* Surfaces, never ink — both fail AA as type and fail the 3:1 non-text bar. */
-  --color-lantern-yellow: #f2b424;
-  --color-lantern-orange: #f47030;
-  --color-lantern-yellow-offwhite: #fff3d6;
-  --color-lantern-orange-offwhite: #fde2d6;
-  --color-lantern-yellow-nearwhite: #fffcf5;
-  --color-lantern-orange-nearwhite: #fff5eb;
+  --color-yellow: #f2b424;
+  --color-orange: #f47030;
+  --color-yellow-offwhite: #fff3d6;
+  --color-orange-offwhite: #fde2d6;
+  --color-yellow-nearwhite: #fffcf5;
+  --color-orange-nearwhite: #fff5eb;
 
   /* Orange-dark is the palette's only warm ink; yellow-dark stays a gradient stop or a fill. */
-  --color-lantern-yellow-dark: #bf8600;
-  --color-lantern-orange-dark: #bf4000;
+  --color-yellow-dark: #bf8600;
+  --color-orange-dark: #bf4000;
 
   /* GA DDS's own body ink - a quoted artifact only, never part of the palette.
      A second publisher gets a second token, never this one. */
@@ -125,26 +125,29 @@ img, svg {
   /* Four fills: the page, anything set INTO it, the header band and the footer band. */
   --color-page: var(--white);
   --color-surface: var(--white);
-  --color-header: var(--color-lantern-yellow-nearwhite);
-  --color-footer: color-mix(in srgb, var(--color-lantern-yellow-offwhite) 60%, var(--color-lantern-yellow-nearwhite));
+  --color-header: var(--color-yellow-nearwhite);
+  --color-footer: color-mix(in srgb, var(--color-yellow-offwhite) 60%, var(--color-yellow-nearwhite));
 
   --color-text: var(--color-ink);
   --color-border: var(--color-ink-lightest);
   /* The two ends of the button's hover sweep, each with the type color it carries. Orange is a
      surface and never holds type, so it arrives as the sweep rather than sitting under the label. */
   --color-accent: var(--color-ink-med);
-  --color-accent-hover: var(--color-lantern-orange);
+  --color-accent-hover: var(--color-orange);
   --color-accent-ink: var(--white);
   --color-accent-hover-ink: var(--color-ink);
-  --color-focus: var(--color-lantern-orange-dark);
+  --color-focus: var(--color-orange-dark);
   /* The light beams raked across a warm band */
-  --color-beam: var(--color-lantern-yellow-nearwhite);
+  --color-beam: var(--color-yellow-nearwhite);
   /* Controls the color of the warm band's background gradient */
   --band-warm-gradient: linear-gradient(160deg,
-    color-mix(in srgb, var(--color-lantern-yellow-offwhite) 20%, var(--color-lantern-yellow-nearwhite)),
-    color-mix(in srgb, var(--color-lantern-yellow-offwhite) 80%, var(--color-lantern-yellow-nearwhite)));
+    color-mix(in srgb, var(--color-yellow-offwhite) 20%, var(--color-yellow-nearwhite)),
+    color-mix(in srgb, var(--color-yellow-offwhite) 80%, var(--color-yellow-nearwhite)));
   /* The pane set behind text that needs a busy band quieted under it. */
-  --color-band-warm-blur: color-mix(in srgb, var(--color-lantern-yellow-offwhite) 20%, var(--color-lantern-yellow-nearwhite));
+  --color-band-warm-blur: color-mix(in srgb, var(--color-yellow-offwhite) 20%, var(--color-yellow-nearwhite));
+  /* A tint of the hover fill, so a resting chip reads as the quiet end of the same control. */
+  --color-chip: color-mix(in srgb, var(--color-orange-offwhite) 90%, var(--color-orange));
+
   /* Deliberately low contrast, the one place it is unwanted: a disabled control must not invite a click. */
   --color-disabled: var(--color-ink-light);
   --color-disabled-ink: var(--color-ink-lightest);
@@ -160,12 +163,6 @@ img, svg {
   /* The outer edge only - against the header and the footer, never between two bands.
      Must be redeclared wherever --band-pad is, or this var() picks up the new value. */
   --band-pad-edge: var(--band-pad);
-  /* How far the white seam glow reaches into the bands either side of a warm one. */
-  --band-glow-y: 18px;
-  --band-glow-blur: 32px;
-  /* The seam itself. The negative spread is what holds it at the edge instead of washing the band. */
-  --band-seam-top: inset 0 var(--band-glow-y) var(--band-glow-blur) -8px var(--white);
-  --band-seam-bottom: inset 0 calc(-1 * var(--band-glow-y)) var(--band-glow-blur) -8px var(--white);
   /* Strength and scaling of a warm band's light beams; --color-beam carries the hue. */
   --beam-opacity: .751;
   --beam-fit: 100% 100%;
@@ -190,18 +187,18 @@ img, svg {
   /* The wedge that grows across a lit control on hover. Both controls carry the same one. */
   --splash-fill: var(--color-accent-hover);
   /* Every halo on the site is this hue - the strength is the only thing that changes per surface. */
-  --glow-hue: var(--color-lantern-yellow);
+  --glow-hue: var(--color-yellow);
   --glow-hover: color-mix(in srgb, var(--glow-hue) 80%, transparent);
   --glow-key: color-mix(in srgb, var(--glow-hue) 25%, transparent);
   --glow-hero: color-mix(in srgb, var(--glow-hue) 15%, transparent);
   /* The accent line's two stops, shared by the nav underline and the panel edge. The angle is the
      caller's, so both read these through their own linear-gradient(). */
-  --accent-line-stops: var(--color-lantern-orange-dark),
-    color-mix(in srgb, var(--color-lantern-yellow-dark) 50%, var(--color-lantern-orange));
+  --accent-line-stops: var(--color-orange-dark),
+    color-mix(in srgb, var(--color-yellow-dark) 50%, var(--color-orange));
   --frame-gradient: linear-gradient(
     135deg,
-    color-mix(in srgb, var(--color-lantern-yellow) 25%, var(--color-lantern-orange-nearwhite)),
-    color-mix(in srgb, var(--color-lantern-orange) 25%, var(--color-lantern-orange-nearwhite))
+    color-mix(in srgb, var(--color-yellow) 25%, var(--color-orange-nearwhite)),
+    color-mix(in srgb, var(--color-orange) 25%, var(--color-orange-nearwhite))
   );
 }
 
@@ -309,11 +306,8 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
 /* A full-bleed section band, its content still on the page's own column.
    50vw counts the scrollbar, so the bleed overshoots and clips - which is what reaches both edges. */
 .band {
-  --band-glow-top: 0 0 0 transparent;
-  --band-glow-bottom: 0 0 0 transparent;
   margin-inline: calc(50% - 50vw);
   padding: var(--band-pad) calc(50vw - 50%);
-  box-shadow: var(--band-glow-top), var(--band-glow-bottom);
 }
 
 /* Diagonal, light arriving from the top left and falling to page color at the bottom right. */
@@ -336,18 +330,7 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
   background-image: var(--band-warm-gradient);
 }
 
-/* The white seam glow either side of a warm band, painted by its NEIGHBOURS rather than by it. */
-.band:has(+ .band--warm) {
-  --band-glow-bottom: var(--band-seam-bottom);
-}
-
-.band--warm + .band {
-  --band-glow-top: var(--band-seam-top);
-}
-
-/* The same seam where the last band meets the footer. */
 .bands > .band:last-child {
-  --band-glow-bottom: var(--band-seam-bottom);
   padding-bottom: var(--band-pad-edge);
 }
 
@@ -443,6 +426,8 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
   --header-shadow-geometry: 0 3px 6px;
   /* How white the band goes once scrolled, over the blur. The dial for legibility. */
   --header-veil-max: 33%;
+  /* Backdrop blur radius, kept low: raising it costs Firefox scroll frames and costs Chrome nothing. */
+  --header-blur: 8px;
   position: fixed;
   top: 0;
   left: 0;
@@ -463,8 +448,8 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
       color-mix(in srgb, var(--white) var(--header-veil), transparent),
       color-mix(in srgb, var(--white) var(--header-veil), transparent)
     );
-    -webkit-backdrop-filter: blur(12px) saturate(1.6);
-    backdrop-filter: blur(12px) saturate(1.6);
+    -webkit-backdrop-filter: blur(var(--header-blur));
+    backdrop-filter: blur(var(--header-blur));
   }
 
   /* Nothing has passed under the band yet at the top of the page, so the blur has nothing to say. */
@@ -659,7 +644,7 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
 .card {
   border-radius: var(--radius-lg);
   padding: var(--space-5);
-  background-color: var(--color-lantern-orange-nearwhite);
+  background-color: var(--color-orange-nearwhite);
 }
 
 .card__title, .correction__title {
@@ -857,7 +842,7 @@ ul.accent-edge, ol.accent-edge {
 
 /* Both of these also match .btn:hover, so each has to put the halo back out. */
 .btn--secondary:hover, .btn--secondary:visited:hover {
-  background-color: var(--color-lantern-yellow-offwhite);
+  background-color: var(--color-yellow-offwhite);
   color: var(--color-ink);
   --glow: transparent;
 }
@@ -888,8 +873,8 @@ ul.accent-edge, ol.accent-edge {
   display: inline-block;
   padding: var(--space-0) var(--space-2);
   border-radius: var(--radius-md);
-  background-color: var(--color-ink-light);
-  color: var(--color-accent-ink);
+  background-color: var(--color-chip);
+  color: var(--color-text);
   /* Two passes; area comes from stacking blurs, since text-shadow has no spread. */
   text-shadow: 0 0 var(--space-3) var(--glow), 0 0 var(--space-4) var(--glow), 0 0 var(--space-5) var(--glow);
   font-size: var(--text-base);
@@ -942,7 +927,7 @@ ul.accent-edge, ol.accent-edge {
 /* Label/value pairs — quick facts and anything else that pairs a name to a value.
    The role override is scoped, so the row dividers pick up the accent through --standard-border. */
 .facts {
-  --color-border: var(--color-lantern-orange-dark);
+  --color-border: var(--color-orange-dark);
 }
 
 /* Two classes, so it outranks .stack > * + * wherever either rule sits in the file. The accent line
@@ -960,7 +945,7 @@ ul.accent-edge, ol.accent-edge {
 
 .facts__group {
   margin-bottom: var(--space-1);
-  color: var(--color-lantern-orange-dark);
+  color: var(--color-orange-dark);
 }
 
 /* Stands in for a whole group whose every fact was checked and found unpublished. */
@@ -1055,8 +1040,8 @@ ol.source-list > li::before {
    reduced-motion reader still gets the cue. */
 @keyframes source-hit {
   0% { background-color: transparent; }
-  17% { background-color: var(--color-lantern-yellow-offwhite); }
-  67% { background-color: var(--color-lantern-yellow-offwhite); }
+  17% { background-color: var(--color-yellow-offwhite); }
+  67% { background-color: var(--color-yellow-offwhite); }
   100% { background-color: transparent; }
 }
 
@@ -1114,7 +1099,7 @@ ol.source-list > li::before {
   gap: var(--frame-w);
   padding: var(--frame-w);
   border-radius: var(--radius-md);
-  background-color: var(--color-lantern-yellow-offwhite);
+  background-color: var(--color-yellow-offwhite);
   background-image: var(--frame-gradient);
 }
 
@@ -1163,17 +1148,17 @@ ol.source-list > li::before {
   height: 10px;
   background-image: radial-gradient(
       circle 5px at 5px 5px,
-      color-mix(in srgb, var(--color-lantern-orange) 50%, var(--color-lantern-orange-nearwhite)) 99%,
+      color-mix(in srgb, var(--color-orange) 50%, var(--color-orange-nearwhite)) 99%,
       transparent 100%
     ),
     radial-gradient(
       circle 5px at 5px 5px,
-      color-mix(in srgb, var(--color-lantern-yellow) 67%, var(--color-lantern-yellow-nearwhite)) 99%,
+      color-mix(in srgb, var(--color-yellow) 67%, var(--color-yellow-nearwhite)) 99%,
       transparent 100%
     ),
     radial-gradient(
       circle 5px at 5px 5px,
-      color-mix(in srgb, var(--color-lantern-orange) 50%, var(--color-lantern-yellow-nearwhite)) 99%,
+      color-mix(in srgb, var(--color-orange) 50%, var(--color-yellow-nearwhite)) 99%,
       transparent 100%
     );
   background-position: 0 0, 15px 0, 30px 0;
@@ -1319,6 +1304,8 @@ ul.source-wall__row {
 /* One brick. The box is fixed so a swapped-in source can never reflow the wall.
    Its width and font size move together, or the ellipsis stops cutting at the same character. */
 .source-tile {
+  /* Its own layer, so a drifting tile cannot dirty the masked .hero-art around it. */
+  will-change: transform;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -1444,7 +1431,7 @@ ul.source-wall__row {
 }
 
 .autocomplete__option[aria-selected="true"] {
-  background-color: var(--color-lantern-yellow-offwhite);
+  background-color: var(--color-yellow-offwhite);
 }
 
 .faq__item {
@@ -1473,8 +1460,8 @@ ul.source-wall__row {
   flex: none;
   width: 0.45em;
   height: 0.45em;
-  border-right: 2px solid var(--color-lantern-orange-dark);
-  border-bottom: 2px solid var(--color-lantern-orange-dark);
+  border-right: 2px solid var(--color-orange-dark);
+  border-bottom: 2px solid var(--color-orange-dark);
   transform: rotate(-45deg);
 }
 
@@ -1536,7 +1523,7 @@ ul.source-wall__row {
 
 /* The dark orange, not the accent - both accents are surfaces and never carry type. */
 .page-title__accent {
-  --sweep-ink: var(--color-lantern-orange-dark);
+  --sweep-ink: var(--color-orange-dark);
   --sweep-from: var(--color-ink-med);
   --glow: var(--glow-hero);
   color: var(--sweep-ink);
@@ -1587,13 +1574,13 @@ ul.source-wall__row {
 
 /* The one word an accent lands on, where the hero's sweep is not wanted. */
 .text-accent {
-  color: var(--color-lantern-orange-dark);
+  color: var(--color-orange-dark);
   font-weight: var(--weight-extrabold);
 }
 
 /* The same accent inside body copy bolded. Two classes, so the weight outranks .prose strong rather than losing to it at (0,1,1). */
 .text-key, .prose .text-key {
-  color: var(--color-lantern-orange-dark);
+  color: var(--color-orange-dark);
   font-weight: var(--weight-bold);
 }
 
@@ -1642,15 +1629,30 @@ ul.source-wall__row {
   isolation: isolate;
 }
 
-/* The pane, blurred to nothing at its edges so it dissolves into the band instead of drawing a box. */
+/* The pane, feathered to nothing at its edges so it dissolves into the band instead of drawing a box.
+   One gradient per axis and their alphas multiply - drop either and the other edge turns into a line. */
 .band-warm-blur::before {
+  --pane-tint: color-mix(in srgb, var(--color-band-warm-blur) var(--band-warm-blur-opacity), transparent);
+  --pane-feather: calc(var(--band-warm-blur-radius) * 2);
   content: "";
   position: absolute;
   inset: calc(var(--band-warm-blur-radius) * -1);
   z-index: -1;
-  border-radius: var(--radius-xl);
-  background-color: color-mix(in srgb, var(--color-band-warm-blur) var(--band-warm-blur-opacity), transparent);
-  filter: blur(var(--band-warm-blur-radius));
+  background-image: linear-gradient(
+    to right,
+    transparent,
+    var(--pane-tint) var(--pane-feather),
+    var(--pane-tint) calc(100% - var(--pane-feather)),
+    transparent
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    var(--black) var(--pane-feather),
+    var(--black) calc(100% - var(--pane-feather)),
+    transparent
+  );
+  mask-repeat: no-repeat;
   pointer-events: none;
 }
 
@@ -1691,7 +1693,7 @@ ul.source-wall__row {
     z-index: -1;
     background-color: var(--color-beam);
     opacity: var(--beam-opacity);
-    mask-image: url("/assets/band-beams.svg");
+    mask-image: url("/assets/band-beams.png");
     mask-size: var(--beam-fit);
     mask-position: top left;
     mask-repeat: no-repeat;
@@ -1966,3 +1968,94 @@ ul.source-wall__row {
 .site-header--hidden {
   transform: translateY(-100%);
 }
+
+
+/* ===========================================================================
+   GECKO PERFORMANCE FALLBACK - DELETE THIS BLOCK, NOT PIECES OF IT
+
+   Firefox composites these layers per scroll frame where Blink and WebKit cache
+   them, which drops the composed pages to a few frames a second. Everything here
+   is a measured cost, not a guess, and every rule is a REMOVAL - nothing below
+   changes how a layer looks, only whether it exists.
+
+   Measure before adding a rule here, and delete the whole block the day Gecko
+   composites these cheaply.
+   =========================================================================== */
+
+/* The beams: a full-bleed masked layer repainted behind every scrolling band. */
+:root[data-engine="gecko"] .band--warm::before {
+  display: none;
+}
+
+/* No blur means the band must go opaque - see-through chrome with nothing behind it reads worse. */
+:root[data-engine="gecko"] .site-header {
+  background-color: var(--color-header);
+  background-image: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+/* The band is opaque above, so the veil it lit has nothing left to do. */
+:root[data-engine="gecko"][data-at-top] .site-header:not(.site-header--open) {
+  background-color: transparent;
+}
+
+
+/* ===========================================================================
+   PARKED - THE WARM BAND'S PREVIOUS IMPLEMENTATION
+
+   All of this was replaced on 2026-08-31 for Firefox scroll performance, and
+   all of it looked right. Kept whole so a later tweak starts from working code
+   rather than a reconstruction. Nothing below is live.
+
+   1. The blur pane. Replaced by the two crossed gradients in .band-warm-blur
+      ::before above. Restoring it means deleting that rule's background-image,
+      mask-image and mask-repeat and pasting this back.
+
+.band-warm-blur::before {
+  content: "";
+  position: absolute;
+  inset: calc(var(--band-warm-blur-radius) * -1);
+  z-index: -1;
+  border-radius: var(--radius-xl);
+  background-color: color-mix(in srgb, var(--color-band-warm-blur) var(--band-warm-blur-opacity), transparent);
+  filter: blur(var(--band-warm-blur-radius));
+  pointer-events: none;
+}
+
+   2. The vector beam mask. The PNG beside it is rasterized from this same SVG,
+      so the artwork is identical - the SVG carries an feGaussianBlur inside an
+      SVG <mask> that Gecko runs on the CPU. The file is no longer in
+      public/assets; the generator holds it.
+
+    mask-image: url("/assets/band-beams.svg");
+
+   3. The white seam glow, cast by a warm band's NEIGHBOURS onto their facing
+      edges. It lightened them toward white, so it went dark the day
+      --color-page resolved to --white and has painted nothing since. It needs a
+      page color that is not white before it does anything at all.
+
+  --band-glow-y: 18px;
+  --band-glow-blur: 32px;
+  --band-seam-top: inset 0 var(--band-glow-y) var(--band-glow-blur) -8px var(--white);
+  --band-seam-bottom: inset 0 calc(-1 * var(--band-glow-y)) var(--band-glow-blur) -8px var(--white);
+
+.band {
+  --band-glow-top: 0 0 0 transparent;
+  --band-glow-bottom: 0 0 0 transparent;
+  box-shadow: var(--band-glow-top), var(--band-glow-bottom);
+}
+
+.band:has(+ .band--warm) {
+  --band-glow-bottom: var(--band-seam-bottom);
+}
+
+.band--warm + .band {
+  --band-glow-top: var(--band-seam-top);
+}
+
+.bands > .band:last-child {
+  --band-glow-bottom: var(--band-seam-bottom);
+}
+
+   =========================================================================== */

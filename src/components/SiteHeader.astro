@@ -1,6 +1,7 @@
 ---
 const links = [
-	{ href: "/#certifications", label: "Certifications" },
+	// Temporary: points at the parked homepage until it takes over "/".
+	{ href: "/homepage-to-come#certifications", label: "Certifications" },
 	{ href: "/about", label: "About" },
 	{ href: "/progress", label: "My Progress" },
 ];
@@ -12,7 +13,8 @@ const isCurrent = (href) => (href.split("#")[0].replace(/\/+$/, "") || "/") === 
 
 <header class="site-header">
 	<div class="site-header__inner">
-		<a class="site-header__brand" href="/">
+		{/* Temporary: points at the parked homepage until it takes over "/". */}
+		<a class="site-header__brand" href="/homepage-to-come">
 			<img
 				class="site-header__logo"
 				src="/lanterncert-logo.png"

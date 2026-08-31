@@ -1,5 +1,6 @@
 // Fills a cert's lede template from one state's facts. src/content/intro/<cert>-intro.json ▸ _about.
 // Returns an HTML string: authored copy may carry markup, facts-file values are escaped.
+import { fixArticles } from "./articles.js";
 import { escapeHtml } from "./cert-data.js";
 import { formatFact } from "./format-fact.js";
 
@@ -111,7 +112,8 @@ export function stateIntro({ cert, facts, stateName, template, token, hrefFor })
           throw new Error(`${cert}-intro.json: a block is neither a slot list nor a { heading }`);
         }
         const picked = pickVariant(entry.heading, ctx);
-        return { heading: picked ? picked.segments.map(({ copy }) => copy).join("") : "" };
+        const filled = picked ? picked.segments.map(({ copy }) => copy).join("") : "";
+        return { heading: fixArticles(filled) };
       }
 
       const parts = [];
@@ -135,7 +137,8 @@ export function stateIntro({ cert, facts, stateName, template, token, hrefFor })
           .join("");
         parts.push(text + markers);
       }
-      return { html: parts.join(" ") };
+      // Runs last: an article has to agree with the word the CHOSEN variant put after it.
+      return { html: fixArticles(parts.join(" ")) };
     })
     .filter((block) => (block.heading ?? block.html) !== "");
 }

@@ -1,24 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 43.74 43.74" role="img" aria-label="LanternCert">
-  <style>
-    @media (prefers-color-scheme: dark) {
-      .m-0s0 { stop-color: #4a4552; }
-      .m-0s1 { stop-color: #494451; }
-      .m-0s2 { stop-color: #46414e; }
-      .m-0s3 { stop-color: #423d49; }
-      .m-0s4 { stop-color: #3c3843; }
-      .m-0s5 { stop-color: #36313b; }
-      .m-0s6 { stop-color: #2e2a33; }
-    }
-  </style>
   <defs>
     <linearGradient id="m-0" gradientUnits="userSpaceOnUse" x1="0.75" y1="-0.75" x2="11.25" y2="9.75">
-      <stop offset="0" class="m-0s0" stop-color="#2e2a33"/>
-      <stop offset="0.167" class="m-0s1" stop-color="#2d2932"/>
-      <stop offset="0.333" class="m-0s2" stop-color="#2b2830"/>
-      <stop offset="0.5" class="m-0s3" stop-color="#29252d"/>
-      <stop offset="0.667" class="m-0s4" stop-color="#252229"/>
-      <stop offset="0.833" class="m-0s5" stop-color="#211e24"/>
-      <stop offset="1" class="m-0s6" stop-color="#1c1a1f"/>
+      <stop offset="0" stop-color="#2e2a33"/>
+      <stop offset="0.167" stop-color="#2d2932"/>
+      <stop offset="0.333" stop-color="#2b2830"/>
+      <stop offset="0.5" stop-color="#29252d"/>
+      <stop offset="0.667" stop-color="#252229"/>
+      <stop offset="0.833" stop-color="#211e24"/>
+      <stop offset="1" stop-color="#1c1a1f"/>
     </linearGradient>
     <rect id="m-0-t" width="12" height="9" rx="1" fill="url(#m-0)"/>
     <linearGradient id="m-1" gradientUnits="userSpaceOnUse" x1="0.75" y1="-0.75" x2="11.25" y2="9.75">
