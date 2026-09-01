@@ -1,0 +1,74 @@
+{
+  "licensing-and-law": {
+    "num": 1,
+    "name": "Licensing & the law",
+    "description": "License classes, permits, age limits, course waivers, registration and insurance.",
+    "catchAll": false
+  },
+  "protective-gear": {
+    "num": 2,
+    "name": "Protective gear",
+    "description": "Helmets and the DOT standard, eye and face protection, jackets, boots, gloves, hearing protection and weather layering.",
+    "catchAll": false
+  },
+  "controls-and-inspection": {
+    "num": 3,
+    "name": "Controls & inspection",
+    "description": "The controls and the gear pattern, the pre-ride inspection, choosing a bike that fits, and borrowing an unfamiliar one.",
+    "catchAll": false
+  },
+  "basic-control": {
+    "num": 4,
+    "name": "Basic control",
+    "description": "Body position, the friction zone, shifting, braking, turning, counter-steering and tight U-turns.",
+    "catchAll": false
+  },
+  "visibility-and-communication": {
+    "num": 5,
+    "name": "Visibility & communication",
+    "description": "Being seen and saying what you intend: conspicuity, headlight, signals, brake light, horn, mirrors, head checks and blind spots.",
+    "catchAll": false
+  },
+  "space-management": {
+    "num": 6,
+    "name": "Space management",
+    "description": "Lane position, following distance, being followed too closely, passing, merging and riding in a group.",
+    "catchAll": false
+  },
+  "search-and-strategy": {
+    "num": 7,
+    "name": "Search & strategy",
+    "description": "Scanning ahead and deciding early: intersections, prioritizing hazards and keeping an escape route.",
+    "catchAll": false
+  },
+  "hazards-and-surfaces": {
+    "num": 8,
+    "name": "Hazards & surfaces",
+    "description": "Slippery surfaces, obstacles, tracks and gratings, night riding, wind, animals, and what to do when the bike itself fails.",
+    "catchAll": false
+  },
+  "impairment-and-fitness": {
+    "num": 9,
+    "name": "Impairment & fitness",
+    "description": "Alcohol and blood alcohol limits, drugs, fatigue, emotional state, the penalties, and stepping in when someone else is impaired.",
+    "catchAll": false
+  },
+  "passengers-and-cargo": {
+    "num": 10,
+    "name": "Passengers & cargo",
+    "description": "Carrying a passenger and a load: instructions before the ride, the equipment required, where weight goes, and how both change the handling.",
+    "catchAll": false
+  },
+  "signs-and-markings": {
+    "num": 11,
+    "name": "Signs & road markings",
+    "description": "Sign shapes, colors and meanings, traffic signals, pavement markings, and what each one requires of a rider.",
+    "catchAll": false
+  },
+  "additional-information": {
+    "num": 99,
+    "name": "Additional information",
+    "description": "Material a rider's own state tests that sits outside the topics above.",
+    "catchAll": true
+  }
+}

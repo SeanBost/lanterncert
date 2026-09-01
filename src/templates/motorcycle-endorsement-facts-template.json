@@ -9,6 +9,10 @@
   },
 
   "<state-code>": {
+    "displayOnSite": {
+      "what": "Boolean, not a { value, source } fact. Whether a reader may be linked to this state.",
+      "why": "False still builds every page at its real URL so work in progress is viewable, but the cert hub omits the state and all its pages carry noindex. A new state starts false and is published by a separate deliberate edit. The cert-level displayOnSite in site-config.json trumps it."
+    },
     "meta": {
       "dateVerified": {
         "what": "Date every fact in this state object was last verified, as YYYY-MM-DD.",
@@ -44,7 +48,7 @@
           "MSFBRC": "The Motorcycle Safety Foundation Basic RiderCourse end-of-course knowledge test. The state administers no motorcycle knowledge exam of its own.",
           "MNS2011": "A knowledge test set by a provider approved against the 2011 Model National Standards. The state mandates that a test exist but not its form, so it varies by school and no single count or score is honest.",
           "GA": "Georgia DDS's own Knowledge Exam, administered by the agency.",
-          "CA": "California DMV's own motorcycle knowledge test, administered by the agency. Distinct from the CMSP course's written evaluation, which is a different exam that happens to share a passing score.",
+          "CA": "California DMV's own motorcycle knowledge test, administered by the agency. Distinct from the CMSP course's written evaluation, which is a different exam that happens to share a passing score.", "NY": "New York DMV's own motorcycle knowledge test, administered by the agency. The test that issues the class M learner permit, which New York requires before the license.",
           "_naming": "Same convention as courseType: an exam belonging to exactly one state takes that state's code, and only exams spanning states get a broad name. A state code here means content that travels nowhere else."
         }
       },
@@ -173,7 +177,7 @@
         "why": "Constrained because it decides who the page is even for — a rider on a 49cc scooter needs a different answer than one on a 650.",
         "values": {
           "50ccUp": "Required for any motorcycle above 50cc; 50cc and under is treated as a moped.",
-          "all": "Required at every engine size, with no moped exemption. California is the case: a moped or motorized bicycle needs a Class M2 and a motorcycle needs an M1, so there is no unlicensed tier at all."
+          "all": "Required at every engine size, with no moped exemption. California is the case: a moped or motorized bicycle needs a Class M2 and a motorcycle needs an M1, so there is no unlicensed tier at all.", "30mphUp": "Required for any motorcycle able to exceed 30 mph, with no displacement test at all. New York is the case: it classes a limited use motorcycle by maximum performance speed, so a class A (over 30 mph) needs a Class M while a class B or C (30 mph and under) rides on an ordinary Class D. Never substitute 50ccUp here - a 49cc scooter that does 35 mph is a class A and does need the license."
         }
       },
       "renewalYears": {

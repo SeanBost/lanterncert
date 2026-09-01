@@ -56,6 +56,19 @@ function keysForIntro(cert) {
   return keys;
 }
 
+// Every question cites a source, and a sign question also credits its image to one.
+// Without this a source cited only by the bank reads as ORPHANED no matter how many questions use it.
+function keysForQuestions(cert) {
+  const path = join(ROOT, "src", "content", "questions", `${cert}-questions.json`);
+  if (!existsSync(path)) return new Set();
+  const keys = new Set();
+  for (const q of Object.values(JSON.parse(readFileSync(path, "utf8")))) {
+    if (q?.meta?.source) keys.add(q.meta.source);
+    if (q?.content?.media?.imageCredit) keys.add(q.content.media.imageCredit);
+  }
+  return keys;
+}
+
 const args = process.argv.slice(2);
 const cert = args.find((a) => !a.startsWith("--"));
 const stateArg = args.indexOf("--state");
@@ -86,6 +99,7 @@ if (!cert) {
   process.exit(1);
 }
 
+const states = loadJson(join(ROOT, "src", "content", "states.json"));
 const sources = loadJson(join(ROOT, "src", "content", "sources", `${cert}-sources.json`));
 const facts = loadJson(join(ROOT, "src", "content", "facts", `${cert}-facts.json`));
 
@@ -99,9 +113,10 @@ for (const [code, state] of Object.entries(facts)) {
 }
 const introKeys = keysForIntro(cert);
 for (const key of introKeys) note(key, "intro");
+for (const key of keysForQuestions(cert)) note(key, "questions");
 
 // ===================== TEMPORARY HARDCODE — DELETE THIS =====================
-// Twin of the list in src/content.config.ts; keep them identical until both go.
+// Exempts states with no facts yet from ORPHANED, since nothing can cite them.
 // Delete this const, the filter and the wallOnly line the moment these states get facts.
 const WALL_ONLY_STATES = new Set(["AZ", "HI", "IL", "MA", "MO", "NJ", "OH", "WA"]);
 // Listed by key, not by state: scope `multi` is shared with cited entries, so exempting the whole
@@ -129,6 +144,11 @@ if (applying.size) {
 } else if (stateCode === CERT_WIDE) {
   scope = Object.keys(sources).filter((k) => sources[k].state === "multi");
 } else if (stateCode) {
+  // A real state with no facts yet has nothing to sweep, which is the normal cold start, not a fault.
+  if (!facts[stateCode] && states[stateCode]) {
+    console.log(`audit-sources: ${cert} · ${stateCode} · no facts yet, so no sources to sweep`);
+    process.exit(0);
+  }
   if (!facts[stateCode]) {
     console.error(
       `audit-sources: no state "${stateCode}" in ${cert}-facts.json (use "${CERT_WIDE}" for the cert-wide sources)`

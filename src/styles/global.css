@@ -129,6 +129,9 @@ img, svg {
   --color-footer: color-mix(in srgb, var(--color-yellow-offwhite) 60%, var(--color-yellow-nearwhite));
 
   --color-text: var(--color-ink);
+  /* One dial for every ink link's hover - the chrome's and the heading links' alike. */
+  --color-ink-hover: var(--color-ink-light);
+
   --color-border: var(--color-ink-lightest);
   /* The two ends of the button's hover sweep, each with the type color it carries. Orange is a
      surface and never holds type, so it arrives as the sweep rather than sitting under the label. */
@@ -197,8 +200,8 @@ img, svg {
     color-mix(in srgb, var(--color-yellow-dark) 50%, var(--color-orange));
   --frame-gradient: linear-gradient(
     135deg,
-    color-mix(in srgb, var(--color-yellow) 25%, var(--color-orange-nearwhite)),
-    color-mix(in srgb, var(--color-orange) 25%, var(--color-orange-nearwhite))
+    color-mix(in srgb, var(--color-yellow-offwhite) 85%, var(--color-yellow)),
+    color-mix(in srgb, var(--color-orange-offwhite) 85%, var(--color-orange))
   );
 }
 
@@ -325,9 +328,13 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
   --band-to: var(--white);
 }
 
+/* A hairline of the frame gradient on both edges, drawn under a transparent border like .framed. */
 .band--warm {
+  border-block: 1px solid transparent;
   background-color: var(--color-ink-med);
-  background-image: var(--band-warm-gradient);
+  background-image: var(--band-warm-gradient), var(--frame-gradient);
+  background-origin: padding-box, border-box;
+  background-clip: padding-box, border-box;
 }
 
 .bands > .band:last-child {
@@ -603,19 +610,24 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
   bottom: calc(-1 * var(--nav-underline-drop));
   height: 3px;
   background-image: linear-gradient(90deg, var(--accent-line-stops));
-  opacity: 0;
+  clip-path: inset(0 50% 0 50%);
 }
 
-/* Fades in at full width. The chrome links keep their ink color rather than taking a hover hue. */
+/* Swipes open to full width, alongside the color step the rule above applies. */
 .site-nav__list a:hover::after, .site-nav__list a:focus-visible::after {
-  opacity: 1;
+  clip-path: inset(0 0 0 0);
 }
 
+/* The warm band's frame-gradient hairline, drawn under a transparent border the same way. */
 .site-footer {
+  border-top: 1px solid transparent;
   background-color: var(--color-footer);
-  /* border-top: var(--standard-border); */
+  background-image: linear-gradient(var(--color-footer) 0 0), var(--frame-gradient);
+  background-origin: padding-box, border-box;
+  background-clip: padding-box, border-box;
   font-size: var(--text-sm);
 }
+
 
 .site-footer__inner {
   max-width: var(--page-max);
@@ -634,11 +646,22 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
   gap: var(--space-2) var(--space-4);
 }
 
-/* Suppresses a:hover by SOURCE ORDER, not specificity — keep it below the base link rules. */
+/* The chrome's links carry the page's ink rather than a link hue. */
 .site-nav__list a, .site-nav__list a:visited, .site-footer a, .site-footer a:visited {
   color: var(--color-ink);
+}
+
+/* Nav only - the accent bar is its underline, where a footer link takes the browser's.
+   Suppresses a:hover by SOURCE ORDER, not specificity — keep it below the base link rules. */
+.site-nav__list a, .site-nav__list a:visited {
   text-decoration: none;
 }
+
+/* The same step up the ramp the heading links take. */
+.site-nav__list a:hover, .site-nav__list a:focus-visible, .site-footer a:hover, .site-footer a:focus-visible {
+  color: var(--color-ink-hover);
+}
+
 
 /* No border, so the warm fill is the only thing drawing the card. */
 .card {
@@ -653,12 +676,18 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
   margin-bottom: var(--space-2);
 }
 
-/* A heading that happens to be a link: it keeps the h3's own ink and gains nothing else, because the
-   card's button is the affordance. Must stay BELOW the base link rules, which it ties at (0,1,1). */
-.card__title a, .card__title a:visited, .card__title a:hover {
+/* A heading that happens to be a link: it keeps the h3's own ink rather than taking a link hue.
+   Must stay BELOW the base link rules, which it ties at (0,1,1). */
+.card__title a, .card__title a:visited, .row-list__title a, .row-list__title a:visited {
   color: inherit;
-  text-decoration: none;
 }
+
+/* The cue both carry: a step up the ink ramp, over the underline the base link rules already add. */
+.card__title a:hover, .card__title a:focus-visible, .row-list__title a:hover, .row-list__title a:focus-visible {
+  color: var(--color-ink-hover);
+}
+
+
 
 .card-grid {
   display: grid;
@@ -757,7 +786,7 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
   border-radius: 0 var(--radius-md) var(--radius-md) 0;
   /* Dark to light as read, matching the lit grid's sweep on the state pages. */
   background-image: linear-gradient(180deg, var(--accent-line-stops));
-  background-size: 3px 100%;
+  background-size: 5px 100%;
   background-repeat: no-repeat;
   background-position: left top;
 }
@@ -1818,6 +1847,11 @@ ul.source-wall__row {
   .site-nav__list a {
     padding: var(--space-2) var(--nav-pad-x);
   }
+
+  /* Opens left to right on the inline nav, where the stacked mobile panel opens from its center. */
+  .site-nav__list a::after {
+    clip-path: inset(0 100% 0 0);
+  }
 }
 
 /* Wide - the width at which .page reaches --page-max. Only what the tablet band gets wrong belongs here.
@@ -1891,9 +1925,9 @@ ul.source-wall__row {
       box-shadow 200ms ease-out, --header-veil 200ms ease-out;
   }
 
-  /* The chrome's shared 160ms, so its motions agree. */
+  /* The label's own 120ms rather than the chrome's 160ms, pairing the bar with the color step. */
   .site-nav__list a::after {
-    transition: opacity 160ms ease-out;
+    transition: clip-path 120ms ease-out;
   }
 
   a {

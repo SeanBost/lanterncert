@@ -8,13 +8,21 @@ export const certs = siteConfig.certTypes;
 
 // The build gate for site-config.json, which gets no Zod pass. data-handling.md ▸ Site config.
 for (const [key, config] of Object.entries(certs)) {
-  for (const field of ["name", "slug", "emoji", "blurb", "timeToCertify"]) {
+  for (const field of ["name", "slug", "slugShort", "emoji", "blurb", "timeToCertify"]) {
     if (typeof config[field] !== "string" || config[field].trim() === "") {
       throw new Error(`site-config.json ▸ certTypes ▸ ${key}: "${field}" is missing or empty`);
     }
   }
   if (config.slug !== key) {
     throw new Error(`site-config.json ▸ certTypes ▸ ${key}: slug "${config.slug}" does not match key`);
+  }
+  // slugShort leads every question id, so a change to one rewrites the whole bank's ids.
+  if (!/^[a-z]{2,4}$/.test(config.slugShort)) {
+    throw new Error(`site-config.json ▸ certTypes ▸ ${key}: "slugShort" must be 2-4 lowercase letters`);
+  }
+  const twin = Object.keys(certs).find((k) => k !== key && certs[k].slugShort === config.slugShort);
+  if (twin) {
+    throw new Error(`site-config.json ▸ certTypes ▸ ${key}: slugShort "${config.slugShort}" is already used by ${twin}`);
   }
   // Absent reads as false everywhere it is gated on, so a typo would silently unpublish a cert.
   for (const field of ["hasExam", "stateDependent", "displayOnSite"]) {
@@ -31,9 +39,14 @@ export function certConfig(cert) {
 /** The certs a reader may be linked to. Every other cert still builds, unlinked and noindex. */
 export const displayedCerts = Object.values(certs).filter((config) => config.displayOnSite);
 
-/** Whether a cert's pages carry `noindex`, which every page under `/[cert]` has to ask. */
-export function certNoindex(cert) {
-  return certConfig(cert)?.displayOnSite !== true;
+/**
+ * Whether a page carries `noindex`, which every page under `/[cert]` has to ask.
+ * A route under `/[cert]/[state]` must pass its facts, or a held state is indexed silently.
+ * @param {any} [stateFacts] the state's facts, for a route that has them
+ */
+export function certNoindex(cert, stateFacts = null) {
+  if (certConfig(cert)?.displayOnSite !== true) return true;
+  return stateFacts !== null && stateFacts.displayOnSite !== true;
 }
 
 // Display strings for constrained token values, keyed by cert slug. The schema module guarantees
@@ -118,6 +131,7 @@ export async function certStatePaths(opts = {}) {
     if (!config.stateDependent) continue;
     if (examOnly && !config.hasExam) continue;
     // From the facts collection, not states.json, so a state with no data can't publish an empty page.
+    // displayOnSite is deliberately NOT filtered here - a held state still builds at its real URL.
     const facts = await getCollection(`${cert}-facts`);
     for (const entry of facts) paths.push({ params: { cert, state: entry.id } });
   }
@@ -125,12 +139,13 @@ export async function certStatePaths(opts = {}) {
 }
 
 /**
- * The states a cert holds facts for, alphabetical by name - collection order is by slug, not name.
+ * The states a reader may be LINKED to, alphabetical by name - collection order is by slug, not name.
  * @returns {Promise<{ slug: string, name: string, abbreviation: string }[]>}
  */
 export async function certStates(cert) {
   const entries = await getCollection(`${cert}-facts`);
   return entries
+    .filter((entry) => entry.data.displayOnSite)
     .map((entry) => {
       const info = states[entry.id];
       // A facts file names its own states, so an unknown one would render a nameless link.

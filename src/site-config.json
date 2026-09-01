@@ -3,11 +3,11 @@
     "name": "LanternCert",
     "url": "https://lanterncert.com"
   },
-
   "certTypes": {
     "motorcycle-endorsement": {
       "name": "Motorcycle endorsement",
       "slug": "motorcycle-endorsement",
+      "slugShort": "mot",
       "emoji": "🏍️",
       "blurb": "Requirements, costs, course and exam details, plus practice questions derived from each state's own manual.",
       "timeToCertify": "Under a week",

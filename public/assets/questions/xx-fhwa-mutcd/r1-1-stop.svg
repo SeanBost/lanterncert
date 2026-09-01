@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240">
+  <polygon points="70.29,0 169.71,0 240,70.29 240,169.71 169.71,240 70.29,240 0,169.71 0,70.29" fill="#ffffff"/>
+  <polygon points="72.78,6 167.22,6 234,72.78 234,167.22 167.22,234 72.78,234 6,167.22 6,72.78" fill="#c0311a"/>
+  <text x="120" y="160" text-anchor="middle" textLength="192" lengthAdjust="spacingAndGlyphs"
+        font-family="'Arial Narrow', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-weight="700"
+        font-size="111.7" fill="#ffffff">STOP</text>
+</svg>

@@ -16,7 +16,7 @@ const term = facts.meta.localTerm;
 <Layout
 	title={`${info.name} ${term} Study Guide`}
 	description={`A plain-language crash course in the ${info.name} ${term} material, sorted by topic and written from ${facts.meta.agencyCode}'s own documents.`}
-	noindex={certNoindex(cert)}
+	noindex={certNoindex(cert, facts)}
 >
 	<div class="stack prose">
 		<h1 class="page-title">Study Guide</h1>

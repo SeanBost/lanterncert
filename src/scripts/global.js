@@ -2,7 +2,7 @@
 // Anything added here ships on all routes, so it must be small and cross-cutting.
 
 // Past this the page counts as scrolled. Low, so the chrome reacts to the first wheel notch.
-const SCROLLED_PX = 4;
+export const SCROLLED_PX = 4;
 
 /** Publishes "the page has scrolled" on <html>, so CSS anywhere can key off it with [data-scrolled]. */
 function initScrollState() {

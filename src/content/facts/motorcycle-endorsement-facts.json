@@ -1,5 +1,6 @@
 {
   "fl": {
+    "displayOnSite": true,
     "meta": {
       "dateVerified": "2026-08-13",
       "agencyCode": "FLHSMV",
@@ -46,6 +47,7 @@
   },
 
   "ga": {
+    "displayOnSite": true,
     "meta": {
       "dateVerified": "2026-08-13",
       "agencyCode": "GA DDS",
@@ -88,6 +90,7 @@
   },
 
   "tx": {
+    "displayOnSite": true,
     "meta": {
       "dateVerified": "2026-08-13",
       "agencyCode": "TX DPS",
@@ -132,6 +135,7 @@
   },
 
   "ca": {
+    "displayOnSite": true,
     "meta": {
       "dateVerified": "2026-08-13",
       "agencyCode": "CA DMV",

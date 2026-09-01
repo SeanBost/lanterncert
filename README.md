@@ -6,8 +6,8 @@ A static Astro build: no backend, no database, no accounts. Pages are generated 
 JSON content files, and what deploys is HTML, CSS, and a small amount of client JS for the study
 modes.
 
-**Status: pre-alpha.** Scaffold and content pipeline are in place, and the deploy pipeline is live —
-what's published is a placeholder page, not a completed product. A WIP version as I build is at [lanterncert.com/homepage-to-come](https://lanterncert.com/homepage-to-come/)
+**Status: pre-alpha.** Scaffold and content pipeline are in place, and the deploy pipeline is live -- 
+what's published is a placeholder page, not a completed product. A WIP version as I build is live at [lanterncert.com/homepage-to-come](https://lanterncert.com/homepage-to-come/)
 
 ## Stack
 - **Astro**, a static site generator with built-in validation, builds to `/dist`
@@ -37,6 +37,7 @@ src/
     states.json      state identity, keyed by slug — cert-independent
     facts/           per-state jurisdictional facts, one file per cert
     sources/         registry of cited documents (metadata, not the documents)
+    topics/          the subject taxonomy each question is classified against
     questions/       the question bank
   templates/         each cert's data shape, annotated — the vocabulary reference
   pages/             routes

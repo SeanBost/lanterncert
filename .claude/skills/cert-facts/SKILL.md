@@ -144,7 +144,9 @@ Before assembling, run the *Pre-assembly checks*.
 **5 · REVIEW GATE. Write nothing.** Present the report and the proposed JSON. Wait.
 
 **6 · Apply** — only after approval. Write the facts file, the registry, any approved template
-vocabulary, and any snapshots. Bump `meta.dateVerified` to the run date if every sourced fact in
+vocabulary, and any snapshots. A state the facts file does not already hold is written with
+`displayOnSite: false`, and an existing state keeps the value it has — publishing a state is a
+separate, deliberate edit and never part of a research run. Bump `meta.dateVerified` to the run date if every sourced fact in
 that state was confirmed still accurate to its source this run — reading a snapshot under 21 days
 old counts, so a clean sweep over an untouched state qualifies. A partial pass, or any page that
 changed and was not re-read against the fact it backs, leaves the date alone.
@@ -200,6 +202,10 @@ Identity checks, binary handling, snapshot rules and survey keys are in `data-ha
   referring source's note.
 - **A zero-hit search across a whole authority is evidence.** If a complete statute chapter never
   mentions a term, that silence is a finding worth reporting, not a failed search.
+- **A blocked document is handed over, not retried.** Where a PDF looks likely to support at least
+  one fact or question and no path reaches it, name the URL and a `temp-` filename and move on with
+  the run - `data-handling.md` §3 rule 14 carries the procedure. **Retrying a challenge is what gets
+  a whole domain blocked**, so a refusal is a finding to report, never something to work around.
 
 ## Verdicts
 

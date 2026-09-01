@@ -1,1 +1,33 @@
-[]
+{
+  "mot-all-11-1": {
+    "meta": {
+      "applies_to": "ALL",
+      "variantGroup": null,
+      "topic": "signs-and-markings",
+      "source": "xx-fhwa-mutcd",
+      "sourceSection": "Table 2A-1, sign shapes; Section 2B.04, STOP signs.",
+      "note": "Deliberately the easiest question in the bank and scoped ALL so it can carry the onboarding walkthrough; one freebie costs no state's test anything. The MUTCD states when an agency installs a STOP sign rather than what a rider must do, so the explanation reads the converse of an installation warrant - defensible, but the weakest inferential step of any question here. The stop line, crosswalk and best-view hierarchy is state statute, carried by Georgia's manual and not by the MUTCD, so it stays out of the explanation rather than being cited to the wrong document.",
+      "dateCreated": "2026-08-31",
+      "lastEdited": "2026-09-01",
+      "lastVerified": "2026-08-31"
+    },
+    "content": {
+      "question": "You are riding up to an intersection and see this sign. Nothing is coming from either direction. What are you required to do?",
+      "media": {
+        "type": "image",
+        "src": "/assets/questions/xx-fhwa-mutcd/r1-1-stop.svg",
+        "alt": "A red eight-sided road sign with a white border and white letters reading STOP.",
+        "neededForQ": true,
+        "imageCredit": "xx-fhwa-mutcd"
+      },
+      "choices": [
+        { "id": "a", "text": "Come to a complete stop before entering the intersection" },
+        { "id": "b", "text": "Slow to walking pace and roll through, since the way is clear" },
+        { "id": "c", "text": "Stop only if a stop line is painted on the pavement" },
+        { "id": "d", "text": "Stop only when another vehicle or a pedestrian is approaching" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "The octagon is reserved for one sign in the national standard, and that sign goes up only where a full stop is always required. The stop is not conditional on what you can see, so an empty intersection changes nothing and a missing stop line does not turn the sign into a yield."
+    }
+  }
+}

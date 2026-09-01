@@ -5,14 +5,8 @@ import * as motorcycleEndorsement from "./schemas/motorcycle-endorsement";
 
 const stateCodes = Object.values(states).map((s) => s.abbreviation);
 
-// ===================== TEMPORARY HARDCODE — DELETE THIS =====================
-// Widens the REGISTRY scope only, for wall-only states. data-handling.md §2 ▸ TEMPORARY deviation.
-// Twin of the list in scripts/audit-sources.mjs - delete both the moment these states get facts.
-const WALL_ONLY_STATES = ["AZ", "HI", "IL", "MA", "MO", "NJ", "OH", "WA"];
-// ============================================================================
-
 // Registry scope is any state in states.json, or `multi` for xx- keys. data-handling.md ▸ Sources §2.
-const scopeEnum = z.enum(["multi", ...stateCodes, ...WALL_ONLY_STATES] as [string, ...string[]]);
+const scopeEnum = z.enum(["multi", ...stateCodes] as [string, ...string[]]);
 
 // applies_to takes a state code, ALL, or an exam token. data-handling.md ▸ Questions §3.
 const appliesToEnum = (examTypes: string[]) =>

@@ -216,7 +216,7 @@ const quickLinks = [
 <Layout
 	title={`${info.name} ${term}`}
 	description={`How to get your ${term} in ${info.name} - requirements, costs and exam details from ${facts.meta.agencyName}, plus free practice questions.`}
-	noindex={certNoindex(cert)}
+	noindex={certNoindex(cert, facts)}
 >
 	{/* Three full-bleed bands, alternating wash / warm / wash. */}
 	<div class="bands">

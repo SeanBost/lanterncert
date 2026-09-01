@@ -3,6 +3,7 @@ import "../styles/global.css";
 import SiteHeader from "../components/SiteHeader.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 import { site } from "../lib/cert-data.js";
+import { SCROLLED_PX } from "../scripts/global.js";
 
 const {
 	title,
@@ -38,6 +39,13 @@ const canonical = new URL(path, site.url).href;
 					.catch(() => null);
 			</script>
 		)}
+
+		{/* Sets the chrome's scroll state before first paint. src/scripts/global.js owns it from there. */}
+		<script define:vars={{ scrolledPx: SCROLLED_PX }}>
+			const atTop = window.scrollY <= scrolledPx;
+			document.documentElement.toggleAttribute("data-scrolled", !atTop);
+			document.documentElement.toggleAttribute("data-at-top", atTop);
+		</script>
 
 		<meta name="generator" content={Astro.generator} />
 		{/* Every browser but Safari prefers the vector; the .ico is the fallback, not a duplicate. */}

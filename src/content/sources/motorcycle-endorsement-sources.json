@@ -549,6 +549,17 @@
     "published": null,
     "verifiedCurrentIn": 2026
   },
+  "xx-fhwa-mutcd": {
+    "state": "multi",
+    "sourceID": "0059",
+    "title": "FHWA Manual on Uniform Traffic Control Devices",
+    "description": "The national standard that fixes what every road sign shape and color mean.",
+    "publisher": "Federal Highway Administration",
+    "url": "https://mutcd.fhwa.dot.gov/pdfs/11th_Editionr1/mutcd11theditionr1hl.pdf",
+    "access": "public",
+    "published": 2025,
+    "verifiedCurrentIn": 2026
+  },
   "xx-msf-brc-handbook": {
     "state": "multi",
     "sourceID": "0008",

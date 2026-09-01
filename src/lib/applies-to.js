@@ -1,20 +1,21 @@
 // Resolves a question's applies_to against a state, via exam.examType and never courseType.
 // data-handling.md ▸ Questions §3.
 
-/** Exam tokens a state's exam satisfies, walking `conformsTo` upward - content inherits downward. */
-function satisfiedBy(examType, exams) {
-  const seen = new Set();
-  const queue = [examType];
-  while (queue.length) {
-    const token = queue.shift();
-    if (!token || seen.has(token)) continue; // the seen check also makes a bad cycle harmless
-    seen.add(token);
-    queue.push(...(exams[token]?.conformsTo ?? []));
+/** Umbrellas reaching any token already held, applied until nothing new is added. */
+function withUmbrellas(tokens, exams) {
+  for (let added = true; added; ) {
+    added = false;
+    for (const [token, exam] of Object.entries(exams)) {
+      if (tokens.has(token)) continue;
+      if (!(exam?.covers ?? []).some((t) => tokens.has(t))) continue;
+      tokens.add(token); // adding once makes a covers cycle harmless
+      added = true;
+    }
   }
-  return seen;
+  return tokens;
 }
 
-/** Every applies_to token that matches this state: ALL, its code, its exam, and that exam's standards. */
+/** Every applies_to token matching this state: ALL, its code, its exam, and whatever covers those. */
 export function scopeTokens(stateSlug, { states, facts, exams }) {
   const state = states[stateSlug];
   const stateFacts = facts[stateSlug];
@@ -25,13 +26,13 @@ export function scopeTokens(stateSlug, { states, facts, exams }) {
 
   // Null where the exam is unresearched: no exam-derived content reaches a rider we can't scope.
   const examType = stateFacts.exam?.examType?.value;
-  if (examType) for (const t of satisfiedBy(examType, exams)) tokens.add(t);
+  if (examType) tokens.add(examType);
 
-  return tokens;
+  return withUmbrellas(tokens, exams);
 }
 
-/** Scope resolved once for the whole bank; a question matches on any token. Overlap is allowed. */
+/** Scope resolved once for the whole bank; a question carries exactly one token. */
 export function questionsForState(questions, stateSlug, ctx) {
   const tokens = scopeTokens(stateSlug, ctx);
-  return questions.filter((q) => q.applies_to.some((t) => tokens.has(t)));
+  return questions.filter((q) => tokens.has(q.applies_to));
 }

@@ -1,6 +1,24 @@
 {
-  "CA": { "conformsTo": [], "source": null },
-  "GA": { "conformsTo": [], "source": null },
-  "MNS2011": { "conformsTo": [], "source": null },
-  "MSFBRC": { "conformsTo": ["MNS2011"], "source": "tx-tdlr-curriculum" }
+  "CA": {
+    "covers": [],
+    "source": null
+  },
+  "GA": {
+    "covers": [],
+    "source": null
+  },
+  "MNS2011": {
+    "covers": [
+      "MSFBRC"
+    ],
+    "source": "tx-tdlr-curriculum"
+  },
+  "MSFBRC": {
+    "covers": [],
+    "source": null
+  },
+  "NY": {
+    "covers": [],
+    "source": null
+  }
 }

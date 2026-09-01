@@ -27,7 +27,7 @@ const shapedLike = examUnpublished(facts)
 <Layout
 	title={`${info.name} ${term} Mock Test`}
 	description={`Sit a timed ${info.name} ${term} Mock Test ${shapedLike}, then review every question you missed.`}
-	noindex={certNoindex(cert)}
+	noindex={certNoindex(cert, facts)}
 >
 	<div class="stack prose">
 		<h1 class="page-title">Mock Test</h1>

@@ -13,6 +13,10 @@
     "all": {
       "short": "Every engine size",
       "long": "motorcycles of every engine size"
+    },
+    "30mphUp": {
+      "short": "Over 30 mph",
+      "long": "any motorcycle able to exceed 30 mph"
     }
   },
 
