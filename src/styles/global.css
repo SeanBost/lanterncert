@@ -632,7 +632,7 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
 .site-footer__inner {
   max-width: var(--page-max);
   margin-inline: auto;
-  padding: var(--space-5) var(--gutter);
+  padding: var(--space-6) var(--gutter);
 }
 
 .site-footer__legal {
@@ -670,9 +670,12 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
   background-color: var(--color-orange-nearwhite);
 }
 
-.card__title, .correction__title {
-  font-size: var(--text-2xl);
-  line-height: var(--leading-tight);
+/* A title carrying a mark beside it. center, not baseline: a baseline-aligned icon claims its whole
+   height above the baseline. Keep .mode-icon no taller than --leading-tight or the title drops. */
+.card__title, .correction__title, .row-list__title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
   margin-bottom: var(--space-2);
 }
 
@@ -721,14 +724,6 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
   /* Stacked: the gradient image is the height of all three cards plus the two gaps between them. */
   background-size: auto, 100% calc(300% + 2 * var(--space-4));
   background-position: 0 0, 0 var(--lit-stop);
-}
-
-/* center, not baseline: a baseline-aligned icon claims its whole height above the baseline.
-   Keep .mode-icon no taller than --leading-tight, or this row grows and the title drops. */
-.card-grid--lit .card__title {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
 }
 
 /* The gradient is declared per icon in ModeIcon.astro, so no fill is set here. */
@@ -961,10 +956,12 @@ ul.accent-edge, ol.accent-edge {
   --color-border: var(--color-orange-dark);
 }
 
-/* Two classes, so it outranks .stack > * + * wherever either rule sits in the file. The accent line
-   is the panel's own background, so this drops the line with the content rather than just the text. */
-.stack > * + .facts {
-  margin-top: var(--space-5);
+/* A divided list stands a step clear of its neighbours either side. Two classes, so it outranks
+   .stack's own step from anywhere in the file; the last selector needs three to outrank .button-row. */
+.stack > * + .facts, .stack > * + .row-list, .stack > * + .source-list,
+.stack > .facts + *, .stack > .row-list + *, .stack > .source-list + *,
+.stack > .facts + .button-row {
+  margin-top: var(--space-6);
 }
 
 .facts__row {
@@ -997,28 +994,12 @@ ul.accent-edge, ol.accent-edge {
   font-weight: var(--weight-semi);
 }
 
-/* A list of things rather than label/value pairs. The surface is .accent-edge's job now.
-   The fixed mark column is what lands every row's text edge identically - keep it off `auto`. */
-.row-list > li {
-  display: grid;
-  grid-template-columns: var(--space-6) minmax(0, 1fr);
-  column-gap: var(--space-2);
+.row-list {
+  font-size: var(--text-lg);
 }
 
-/* Everything but the mark shares the second column, so a title and its blurb read off one edge. */
-.row-list > li > *:not(.row-list__mark) {
-  grid-column: 2;
-}
-
-/* .row-list__title's own metrics, so the mark sits on the title's first line box. */
-.row-list__mark {
-  font-size: var(--text-xl);
-  line-height: var(--leading-tight);
-}
-
-.row-list__title {
-  font-size: var(--text-xl);
-  line-height: var(--leading-tight);
+/* Air off the divider below it, so the blurb is not pinned against the next row. */
+.row-list > li > p {
   margin-bottom: var(--space-1);
 }
 
@@ -1457,7 +1438,7 @@ ul.source-wall__row {
 }
 
 .faq__item {
-  padding-block: var(--space-3);
+  padding-block: var(--space-4);
 }
 
 /* display: flex is what drops Chrome's own triangle; the other two cover Firefox and Safari.
@@ -1492,7 +1473,8 @@ ul.source-wall__row {
 }
 
 .faq__item p {
-  margin-top: var(--space-2);
+  margin-top: var(--space-3);
+  font-size: var(--text-lg);
 }
 
 /* The preview wraps to its own line under the label. */
@@ -1538,11 +1520,6 @@ ul.source-wall__row {
 
 .prose p {
   font-size: var(--text-lg);
-}
-
-/* A block that is reference rather than argument. Two classes, so it outranks .prose p. */
-.prose.prose--sm p {
-  font-size: var(--text-base);
 }
 
 /* The element in the selector is what outranks .prose > * + * on specificity. */
@@ -1622,7 +1599,8 @@ ul.source-wall__row {
   }
 }
 
-.section-title {
+/* The section tier - a heading over a band's column, a panel, a card or a row. */
+.section-title, .card__title, .correction__title, .row-list__title {
   font-size: var(--text-2xl);
   line-height: var(--leading-tight);
 }
@@ -1817,12 +1795,6 @@ ul.source-wall__row {
     justify-content: flex-start;
     min-width: 125%;
     margin-inline: -10% 0;
-  }
-
-  /* The main column's width for a block that stands alone on a page rather than inside a .split.
-     Held at its pre-widening pixel width, so the extra page width never lengthens a line of copy. */
-  .col-main {
-    width: 45%;
   }
 
   /* A single centered column, for a page with no sidebar to hand the leftover width to. */

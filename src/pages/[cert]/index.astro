@@ -24,7 +24,7 @@ const states = config.stateDependent ? await certStates(cert) : [];
 	<div class="split split--even">
 		<div class="stack-lg">
 			<div class="stack">
-				<h1 class="page-title text-accent">{config.name}</h1>
+				<h1 class="page-title">{config.name}</h1>
 				<div class="prose"><p>{config.blurb}</p></div>
 			</div>
 
@@ -48,7 +48,7 @@ const states = config.stateDependent ? await certStates(cert) : [];
 			states.length > 0 && (
 				<section class="stack baseline-drop" aria-labelledby="states-heading">
 					<h2 class="section-title" id="states-heading">
-						States we cover
+						States covered
 					</h2>
 					<ul class="link-columns">
 						{states.map((state) => (

@@ -21,47 +21,46 @@ const stored = [
 >
 	{/* Three full-bleed bands, alternating wash / warm / wash. */}
 	<div class="bands">
-		<div class="stack-lg band band--wash">
-
-			<div class="split">
-				<div class="stack-lg">
+		<div class="split band band--wash">
+			<div class="stack-lg">
+				<div class="stack">
 					<h1 class="page-title">
 						Progress overview
 					</h1>
-					<section class="stack" aria-labelledby="next-heading">
-						<p class="caption"><em>Nothing here yet - run through some Practice Cards or a Mock Test first.</em></p>
-						<h2 class="section-title" id="next-heading">Your <strong class="text-accent">next steps</strong></h2>
-						<div class="prose">
-							<p>
-								To get started, find the certification you want to prepare for. 
-								Once you complete any Practice Cards or Mock Tests, your results and progress will get displayed on this page.
-							</p>
-						</div>
-						<div class="button-row">
-							<Button href="/#certifications">Find a certification</Button>
-						</div>
-					</section>
+					<p class="caption"><em>Nothing here yet - run through some Practice Cards or a Mock Test first.</em></p>
 				</div>
-
-				<section class="stack baseline-drop" aria-labelledby="activity-heading">
-					<h2 class="section-title" id="activity-heading">Recent activity</h2>
-					<div class="stack framed activity-panel">
-						<div class="prose prose--sm">
-							<p>
-								<em>Your Mock Test results and Practice Cards sessions will be displayed here.</em>
-							</p>
-						</div>
+				<section class="stack" aria-labelledby="next-heading">
+					<h2 class="section-title" id="next-heading">Your <strong class="text-accent">next steps</strong></h2>
+					<div class="prose">
+						<p>
+							To get started, find the certification you want to prepare for. 
+							Once you complete any Practice Cards or Mock Tests, your results and progress will get displayed on this page.
+						</p>
+					</div>
+					<div class="button-row">
+						<Button href="/#certifications">Find a certification</Button>
 					</div>
 				</section>
 			</div>
+
+			<section class="stack baseline-drop" aria-labelledby="activity-heading">
+				<h2 class="section-title" id="activity-heading">Recent activity</h2>
+				<div class="stack framed activity-panel">
+					<div class="prose">
+						<p>
+							<em>Your Mock Test results and Practice Cards sessions will be displayed here.</em>
+						</p>
+					</div>
+				</div>
+			</section>
 		</div>
 
 		<div class="band band--warm">
 			<div class="stack-lg col-center">
 				<section class="stack framed" aria-labelledby="mastery-heading">
 					{/* Decorative - the heading beside it says everything the mark does. */}
-					<h2 class="section-title section-title--lg" id="mastery-heading"><span aria-hidden="true">🎓</span> Topic mastery</h2>
-					<div class="prose prose--sm">
+					<h2 class="section-title" id="mastery-heading"><span aria-hidden="true">🎓</span> Topic mastery</h2>
+					<div class="prose">
 						<p>
 							<em>Once you've completed a variety of practice questions, see which topics you demonstrate mastery of, and which you need to shore up.</em>
 						</p>
@@ -69,8 +68,8 @@ const stored = [
 				</section>
 
 				<section class="stack framed" aria-labelledby="missed-heading">
-					<h2 class="section-title section-title--lg" id="missed-heading"><span aria-hidden="true">🔍</span> Missed questions</h2>
-					<div class="prose prose--sm">
+					<h2 class="section-title" id="missed-heading"><span aria-hidden="true">🔍</span> Missed questions</h2>
+					<div class="prose">
 						<p>
 							<em>Once you miss some practice questions, you'll be able to review them here.</em>
 						</p>
@@ -85,7 +84,7 @@ const stored = [
 			{/* The heading rides inside the column so the whole row shares one left edge. */}
 			<div class="stack col-split-main col-center-start">
 				<h2 class="section-title section-title--lg" id="data-heading">Your progress data</h2>
-				<div class="prose prose--sm">
+				<div class="prose">
 					<p>
 						Progress data is exclusively stored locally by your browser and device. 
 						See the <a href="/about#privacy">privacy and usage policy</a> for details.

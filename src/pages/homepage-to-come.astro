@@ -239,13 +239,13 @@ for (const size of rowSizes) {
 
 		<section class="stack band band--wash" aria-labelledby="certs-heading" id="certifications">
 			<h2 class="section-title section-title--lg" id="certs-heading">Certifications</h2>
-			<ul class="row-list accent-edge col-main">
+			<ul class="row-list accent-edge col-split-main">
 				{
 					displayedCerts.map((cert) => (
 						<li>
-							{/* Decorative - the cert's own name is the link text and carries it alone. */}
-							<span class="row-list__mark" aria-hidden="true">{cert.emoji}</span>
 							<h3 class="row-list__title">
+								{/* Decorative - the cert's own name is the link text and carries it alone. */}
+								<span class="row-list__mark" aria-hidden="true">{cert.emoji}</span>
 								<a href={`/${cert.slug}`}>{cert.name}</a>
 							</h3>
 							<p>{cert.blurb}</p>
@@ -254,7 +254,7 @@ for (const size of rowSizes) {
 				}
 			</ul>
 			<div class="prose">
-				<p class="col-main">
+				<p class="col-split-main">
 					More to come, check back soon.
 				</p>
 			</div>
