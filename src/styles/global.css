@@ -52,7 +52,7 @@ img, svg {
   --text-base: 1rem;
   --text-lg: 1.25rem;
   --text-xl: 1.5rem;
-  --text-2xl: 1.75rem;
+  --text-2xl: 1.625rem;
   --text-3xl: 2.25rem;
   --text-4xl: 2.5rem;
   --text-5xl: 3rem;
@@ -531,16 +531,16 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
   cursor: pointer;
 }
 
-/* A glyph, not a rule — full ink at 2px, so the control reads as a control. */
+/* A glyph, not a rule - full ink and its own thickness, so the control reads as a control. */
 .site-header__toggle span {
   display: block;
-  height: 2px;
+  height: 2.5px;
   background-color: var(--color-ink);
 }
 
-/* Into an X. 7px is the gap plus a bar, which is each outer bar's distance from the middle one. */
+/* Into an X. The offset is the gap plus a bar, which is each outer bar's distance from the middle one. */
 .site-header--open .site-header__toggle span:first-child {
-  transform: translateY(7px) rotate(45deg);
+  transform: translateY(7.5px) rotate(45deg);
 }
 
 .site-header--open .site-header__toggle span:nth-child(2) {
@@ -548,7 +548,7 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
 }
 
 .site-header--open .site-header__toggle span:last-child {
-  transform: translateY(-7px) rotate(-45deg);
+  transform: translateY(-7.5px) rotate(-45deg);
 }
 
 /* Collapsed by default; the toggle reveals it. Desktop puts it back inline below. */
@@ -671,7 +671,7 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
 }
 
 .card__title, .correction__title {
-  font-size: var(--text-xl);
+  font-size: var(--text-2xl);
   line-height: var(--leading-tight);
   margin-bottom: var(--space-2);
 }
@@ -929,8 +929,10 @@ ul.accent-edge, ol.accent-edge {
   gap: var(--space-2);
 }
 
-.quick-links__label {
+/* Ink, not the caption tier the nav inherits from .caption. */
+.quick-links > .quick-links__label {
   flex: none;
+  color: var(--color-text);
 }
 
 /* min-width: 0 is load-bearing - a flex item floors at min-content, and one nowrap chip
@@ -974,7 +976,6 @@ ul.accent-edge, ol.accent-edge {
 
 .facts__group {
   margin-bottom: var(--space-1);
-  color: var(--color-orange-dark);
 }
 
 /* Stands in for a whole group whose every fact was checked and found unpublished. */
@@ -1101,8 +1102,6 @@ ol.source-list > li::before {
 
 /* The homepage's proof block - two quoted claims, each inside the chrome of where it came from. */
 .correction__label {
-  font-size: var(--text-sm);
-  color: var(--color-ink-light);
   text-align: center;
 }
 
@@ -1293,12 +1292,6 @@ ol.source-list > li::before {
   font-weight: var(--weight-semi);
 }
 
-/* The hero's trust bullets, sitting under the state field. */
-.assurances {
-  font-size: var(--text-base);
-  color: var(--color-ink-lightest);
-}
-
 .assurances > li + li {
   margin-top: var(--space-2);
 }
@@ -1313,7 +1306,7 @@ ol.source-list > li::before {
 .source-wall {
   --tile-w: 11.5rem;
   --tile-h: 3.5rem;
-  --tile-gap: 2px;
+  --tile-gap: 4px;
   --tile-condense: 0.9;
   display: flex;
   flex-direction: column;
@@ -1469,7 +1462,7 @@ ul.source-wall__row {
 
 /* display: flex is what drops Chrome's own triangle; the other two cover Firefox and Safari.
    The chevron below is sized in em, so this font-size is what scales it. */
-.faq__item summary {
+.faq__item summary, .intro-more > summary {
   display: flex;
   align-items: center;
   gap: var(--space-3);
@@ -1479,18 +1472,18 @@ ul.source-wall__row {
   list-style: none;
 }
 
-.faq__item summary::-webkit-details-marker {
+.faq__item summary::-webkit-details-marker, .intro-more > summary::-webkit-details-marker {
   display: none;
 }
 
 /* The disclosure mark - two borders rotated into a chevron, pointing right until the item opens. */
-.faq__item summary::before {
+.faq__item summary::before, .intro-more > summary::before {
   content: "";
   flex: none;
   width: 0.45em;
   height: 0.45em;
-  border-right: 2px solid var(--color-orange-dark);
-  border-bottom: 2px solid var(--color-orange-dark);
+  border-right: 2.5px solid var(--color-orange-dark);
+  border-bottom: 2.5px solid var(--color-orange-dark);
   transform: rotate(-45deg);
 }
 
@@ -1500,6 +1493,40 @@ ul.source-wall__row {
 
 .faq__item p {
   margin-top: var(--space-2);
+}
+
+/* The preview wraps to its own line under the label. */
+.intro-more > summary {
+  flex-wrap: wrap;
+}
+
+/* One-way: the control removes itself, so the text cannot be folded back up.
+   read-more.js catches the focus this drops - keep the two in step. */
+.intro-more[open] > summary {
+  display: none;
+}
+
+/* Open, the first heading keeps the air any other .prose heading gets. */
+.intro-more[open] {
+  margin-top: var(--space-5);
+}
+
+/* The mark trails the label the way a "continue reading" link reads, not an accordion row. */
+.intro-more > summary::before {
+  order: 1;
+  transform: rotate(45deg);
+}
+
+/* Names the sections folded away, so the control says more than "more". */
+.intro-more__peek {
+  order: 2;
+  flex-basis: 100%;
+  font-weight: var(--weight-normal);
+}
+
+/* A script focus target, never tabbed to, so it takes no ring. */
+.intro-more__body:focus {
+  outline: none;
 }
 
 /* 6. Utilities ------------------------------------------------------------ */
@@ -1521,6 +1548,11 @@ ul.source-wall__row {
 /* The element in the selector is what outranks .prose > * + * on specificity. */
 .prose > * + h2 {
   margin-top: var(--space-5);
+}
+
+/* Binds a label to the paragraph under it, on specificity so file order cannot unbind it. */
+.prose > .prose__label + * {
+  margin-top: var(--space-2);
 }
 
 /* Weight is presentation; the ELEMENT carries the meaning, so the weight is set here rather than by
@@ -1590,10 +1622,16 @@ ul.source-wall__row {
   }
 }
 
-/* .prose h2 is the state page intro's headings, which carry no class of their own. */
-.section-title, .prose h2 {
+.section-title {
   font-size: var(--text-2xl);
   line-height: var(--leading-tight);
+}
+
+/* The warm-ink tier under .section-title: the facts panel's groups and the state intro's steps. */
+.facts__group, .prose__label {
+  font-size: var(--text-lg);
+  line-height: var(--leading-tight);
+  color: var(--color-orange-dark);
 }
 
 /* For a heading labeling a whole band; one inside a column or a panel keeps the base size. */
@@ -1618,8 +1656,10 @@ ul.source-wall__row {
   margin-inline: var(--sep-gap);
 }
 
-.caption {
+/* The caption tier - quiet supporting text under a control, a card or a heading. */
+.caption, .assurances, .correction__label, .intro-more__peek {
   font-size: var(--text-base);
+  color: var(--color-ink-lightest);
 }
 
 /* An inline mark 4px taller than a capital, clearing it 2px above the caps and 2px below the baseline.

@@ -69,6 +69,12 @@ const intro = stateIntro({
 	hrefFor: (id) => `#source-${numberSource(id)}`,
 });
 
+// The lede stays open; everything from the first step heading down folds behind one summary.
+const introLede = intro.slice(0, 1);
+const introRest = intro.slice(1);
+// Built from the headings it hides, so an intro-template edit cannot leave the preview stale.
+const introPeek = introRest.filter((b) => b.heading).map((b) => b.heading.replace(/<[^>]+>/g, ""));
+
 // Minutes where a state publishes them, otherwise who sets the clock. The paired fact is what the
 // row cites, so a stand-in value never cites the time-limit source that came up empty.
 const timeLimit =
@@ -236,8 +242,32 @@ const quickLinks = [
 				{/* set:html because the template and the display strings are authored copy that may
 				    carry markup. Everything out of the facts file is escaped before it gets here. */}
 				<div class="prose">
-					{intro.map((block) => (block.heading ? <h2 set:html={block.heading} /> : <p set:html={block.html} />))}
+					{introLede.map((block) => (block.heading ? <h2 class="prose__label" set:html={block.heading} /> : <p set:html={block.html} />))}
 				</div>
+				{/* One fold for the whole walkthrough, so the lede above it always reads.
+				    A state thin enough to fill only the lede gets no control at all. */}
+				{introRest.length > 0 && (
+					<details class="intro-more">
+						<summary>
+							<span>Continue reading…</span>
+							{/* Separators are their own spans so a screen reader skips them. */}
+							{introPeek.length > 0 && (
+								<span class="intro-more__peek">
+									{introPeek.map((question, i) => (
+										<Fragment>
+											{i > 0 && <span aria-hidden="true">{" · "}</span>}
+											{question}
+										</Fragment>
+									))}
+								</span>
+							)}
+						</summary>
+						{/* tabindex so the script can land focus here once the control removes itself. */}
+						<div class="prose intro-more__body" tabindex="-1">
+							{introRest.map((block) => (block.heading ? <h2 class="prose__label" set:html={block.heading} /> : <p set:html={block.html} />))}
+						</div>
+					</details>
+				)}
 			</div>
 
 			<section class="stack baseline-drop" aria-labelledby="facts-heading">
@@ -381,6 +411,8 @@ const quickLinks = [
 
 <script>
 	import { initCiteJump } from "../../../scripts/cite-jump.js";
+	import { initReadMore } from "../../../scripts/read-more.js";
 
 	initCiteJump();
+	initReadMore();
 </script>

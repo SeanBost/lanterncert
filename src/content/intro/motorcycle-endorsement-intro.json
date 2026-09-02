@@ -33,7 +33,7 @@
         "If you're already endorsed in another state, {stateName} accepts a credential from {criteria.transferOutOfStateEndorsement}."
       ]
     ],
-    { "heading": "What the certification process is like" },
+    { "heading": "How do I learn to ride?" },
     [
       [
         {
@@ -51,19 +51,21 @@
       ],
       "Courses will supply you with a bike to learn on. Typically, your course will involve online or classroom informational sessions followed by two days of riding exercises."
     ],
+    { "heading": "What will it cost in {stateName}?" },
     [
       [
         {
           "when": { "criteria.courseRequired": false },
           "text": "A course runs around {criteria.classCost}, and the credential itself is {criteria.dmvCost} to {agencyCode}."
         },
-        "Plan to budget around {criteria.classCost} for the course itself, plus {criteria.dmvCost} to {agencyCode} for the credential."
+        "Plan to budget around {criteria.classCost} for the course, plus {criteria.dmvCost} to {agencyCode} for the credential."
       ],
       {
         "cite": ["xx-nhtsa-motorcycle-safety", "xx-nhtsa-helmet-guide"],
         "text": "<strong>Purchase a full set of gear</strong> to wear during every ride, including a DOT-certified full-face or modular helmet. <strong>Proper gear will save your life</strong>."
       }
     ],
+    { "heading": "How am I tested?" },
     [
       [
         {
@@ -131,7 +133,9 @@
           "when": { "criteria.ridingSkillsTest": "agencyUnlessLicensed", "exam.courseWaivesAgencyExam": null },
           "text": "{agencyCode} also gives a riding skills test, waived for adults who already hold a full {stateName} driver's license."
         }
-      ],
+      ]
+    ],
+    [
       [
         {
           "when": { "criteria.renewalYears": 0 },
