@@ -9,6 +9,7 @@ import exams from "../content/exams/motorcycle-endorsement-exams.json";
 import display from "../content/display/motorcycle-endorsement-display.json";
 import topics from "../content/topics/motorcycle-endorsement-topics.json";
 import questionBank from "../content/questions/motorcycle-endorsement-questions.json";
+import weights from "../content/weights/motorcycle-endorsement-weights.json";
 import states from "../content/states.json";
 
 export const slug = "motorcycle-endorsement";
@@ -20,6 +21,8 @@ const examTypes = examTokens.filter((t) => t !== t.toLowerCase()) as [string, ..
 
 // The topics file is the authority on the topic vocabulary - a topic exists iff it has an entry.
 const topicSlugs = Object.keys(topics) as [string, ...string[]];
+// Topic weights: baseline plus sparse per-state overrides. data-handling.md ▸ Questions §3b-i.
+const topicWeights = weights as { baseline: Record<string, number>; states: Record<string, any> };
 // A slug is a guide anchor AND a localStorage key; a num rides every question id. Permanent from launch.
 const topicNums = new Map(Object.entries(topics).map(([s, t]: [string, any]) => [t.num, s]));
 if (topicNums.size !== topicSlugs.length) {
@@ -28,6 +31,27 @@ if (topicNums.size !== topicSlugs.length) {
 const catchAlls = topicSlugs.filter((s) => (topics as any)[s].catchAll);
 if (catchAlls.length !== 1) {
   throw new Error(`${slug}-topics.json: need exactly one catchAll, found ${catchAlls.length}`);
+}
+
+// Every topic has a baseline; overrides name a real topic and state and carry a note.
+const weightFail = (why: string) => {
+  throw new Error(`${slug}-weights.json: ${why}`);
+};
+const isWeight = (w: unknown) => Number.isInteger(w) && (w as number) >= 0;
+for (const topic of topicSlugs) {
+  if (!(topic in topicWeights.baseline)) weightFail(`no baseline weight for topic "${topic}"`);
+}
+for (const [topic, w] of Object.entries(topicWeights.baseline)) {
+  if (!topicSlugs.includes(topic)) weightFail(`baseline has "${topic}", which is not a topic`);
+  if (!isWeight(w)) weightFail(`baseline "${topic}" must be a non-negative integer`);
+}
+for (const [state, overrides] of Object.entries(topicWeights.states ?? {})) {
+  if (!(state in states)) weightFail(`"${state}" is not a state in states.json`);
+  for (const [topic, o] of Object.entries(overrides as Record<string, any>)) {
+    if (!topicSlugs.includes(topic)) weightFail(`${state} overrides "${topic}", which is not a topic`);
+    if (!isWeight(o?.weight)) weightFail(`${state}.${topic}.weight must be a non-negative integer`);
+    if (!o?.note?.trim()) weightFail(`${state}.${topic} needs a note explaining the override`);
+  }
 }
 
 // A question's id is its key, which the collection schema never receives. data-handling.md ▸ Questions §5.

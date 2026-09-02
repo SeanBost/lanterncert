@@ -1,0 +1,22 @@
+{
+  "baseline": {
+    "fit-to-ride": 10,
+    "gear-and-bike-check": 14,
+    "basic-control": 17,
+    "visibility-and-communication": 14,
+    "space-management": 13,
+    "search-and-strategy": 10,
+    "hazards-and-surfaces": 18,
+    "passengers-and-cargo": 4,
+    "signs-and-markings": 0,
+    "additional-information": 0
+  },
+  "states": {
+    "ga": {
+      "signs-and-markings": {
+        "weight": 20,
+        "note": "DDS runs a separate 20-question Road Signs Test alongside the 20-question Road Rules Test, each needing 15/20, so signs are roughly half of what a Class M applicant is asked to know. Weight 20 sits it beside the largest baseline topic rather than at half the total, because the Road Rules half is what our other nine topics already cover."
+      }
+    }
+  }
+}
