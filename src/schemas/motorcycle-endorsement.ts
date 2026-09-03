@@ -9,6 +9,7 @@ import exams from "../content/exams/motorcycle-endorsement-exams.json";
 import display from "../content/display/motorcycle-endorsement-display.json";
 import topics from "../content/topics/motorcycle-endorsement-topics.json";
 import questionBank from "../content/questions/motorcycle-endorsement-questions.json";
+import guideScaffold from "../content/guide/motorcycle-endorsement-guide.json";
 import weights from "../content/weights/motorcycle-endorsement-weights.json";
 import states from "../content/states.json";
 
@@ -54,6 +55,27 @@ for (const [state, overrides] of Object.entries(topicWeights.states ?? {})) {
   }
 }
 
+// The guide's prose scaffolding: topics, their groups, and nothing else. data-handling.md ▸ §4c.
+const guideGroups: Record<string, Set<string>> = {};
+for (const [topic, section] of Object.entries(guideScaffold) as [string, any][]) {
+  if (topic === "_about") continue;
+  const guideFail = (why: string) => {
+    throw new Error(`${slug}-guide.json: "${topic}" ${why}`);
+  };
+  if (!topicSlugs.includes(topic)) guideFail("is not a topic in the topics file");
+  if (!section?.opener?.trim()) guideFail("has no opener");
+  if (!Array.isArray(section?.groups) || !section.groups.length) guideFail("has no groups");
+  guideGroups[topic] = new Set();
+  for (const group of section.groups) {
+    if (!/^[a-z0-9-]+$/.test(group?.id ?? "")) guideFail(`has a group id that is not kebab-case`);
+    if (guideGroups[topic].has(group.id)) guideFail(`repeats the group id "${group.id}"`);
+    if (!group?.heading?.trim() || !group?.leadIn?.trim()) {
+      guideFail(`group "${group.id}" needs both a heading and a leadIn`);
+    }
+    guideGroups[topic].add(group.id);
+  }
+}
+
 // A question's id is its key, which the collection schema never receives. data-handling.md ▸ Questions §5.
 const sitewideNums = new Set<string>();
 for (const [id, q] of Object.entries(questionBank) as [string, any][]) {
@@ -74,6 +96,9 @@ for (const [id, q] of Object.entries(questionBank) as [string, any][]) {
   if (topicNum !== String((topics as any)[q.meta?.topic]?.num)) {
     fail(`has a topic segment that does not match topic "${q.meta?.topic}"`);
   }
+  if (q.meta?.idKey !== sitewideNum) {
+    fail(`carries idKey "${q.meta?.idKey}", which is not its trailing number`);
+  }
   // Rejects a reused sitewide number, which is the only permanent part of an id.
   if (sitewideNums.has(sitewideNum)) fail(`reuses sitewide number ${sitewideNum}`);
   sitewideNums.add(sitewideNum);
@@ -85,6 +110,11 @@ for (const [id, q] of Object.entries(questionBank) as [string, any][]) {
   // The folder names the crediting document, so a miscredited image cannot ship.
   if (src && src.split("/").at(-2) !== q.content?.media?.imageCredit) {
     fail(`sits in a folder that is not its imageCredit "${q.content?.media?.imageCredit}"`);
+  }
+  // Rejects a guide group the topic does not declare, which would render the fact nowhere.
+  const group = q.guide?.group;
+  if (group && !guideGroups[q.meta?.topic]?.has(group)) {
+    fail(`joins guide group "${group}", which its topic does not declare`);
   }
 }
 
@@ -179,6 +209,8 @@ export function collections(kit: any) {
     schema: z.strictObject({
       num: z.number().int().positive(),
       name: z.string().min(1),
+      // Paired mark for the topic, always decorative: it may never enter an accessible name.
+      emoji: z.string().min(1).max(8),
       description: z.string().min(1),
       catchAll: z.boolean(),
     }),
@@ -279,6 +311,8 @@ export function collections(kit: any) {
     schema: z
       .strictObject({
         meta: z.strictObject({
+          // The id's permanent trailing number as a field, so a reference need not parse the id.
+          idKey: z.string().regex(/^\d+$/, { error: "idKey is the id's trailing number, digits only" }),
           // Exactly one token: a set that needs naming is an umbrella, never an ad-hoc union.
           applies_to: appliesToEnum(examTokens),
           variantGroup: z
@@ -320,6 +354,18 @@ export function collections(kit: any) {
           correctAnswer: z.string().min(1),
           explanation: z.string().min(1),
         }),
+        // What this question contributes to the Study Guide; null keeps it out. §4c.
+        guide: z
+          .strictObject({
+            group: z.string().min(1),
+            // Sparse, so a fact can be inserted between two others without renumbering.
+            order: z.number().int().positive(),
+            kind: z.enum(["rule", "value", "steps"]),
+            label: z.string().min(1).nullable().default(null),
+            // Null falls back to the explanation, which §5 rule 6b makes the same assertion.
+            text: z.string().min(1).nullable().default(null),
+          })
+          .nullable(),
       })
       .superRefine((q: any, ctx: any) => {
         const ids = q.content.choices.map((c: any) => c.id);
@@ -331,6 +377,13 @@ export function collections(kit: any) {
             code: "custom",
             path: ["content", "correctAnswer"],
             message: `correctAnswer "${q.content.correctAnswer}" matches no choice id (${ids.join(", ")})`,
+          });
+        }
+        if (q.guide?.kind === "value" && !q.guide.label) {
+          ctx.addIssue({
+            code: "custom",
+            path: ["guide", "label"],
+            message: "a value renders as a label and a value, so it needs a label",
           });
         }
         for (const field of ["lastEdited", "lastVerified"]) {

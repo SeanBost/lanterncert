@@ -1,7 +1,15 @@
 ---
+import { getCollection } from "astro:content";
 import Layout from "../../../../layouts/Layout.astro";
 import Button from "../../../../components/Button.astro";
 import { certNoindex, certStatePaths, stateInfo, loadState } from "../../../../lib/cert-data.js";
+import { guideForState } from "../../../../lib/study-guide.js";
+import { topicsForState, weightsForState } from "../../../../lib/topic-weights.js";
+import states from "../../../../content/states.json";
+import guideScaffold from "../../../../content/guide/motorcycle-endorsement-guide.json";
+import exams from "../../../../content/exams/motorcycle-endorsement-exams.json";
+import factsFile from "../../../../content/facts/motorcycle-endorsement-facts.json";
+import weights from "../../../../content/weights/motorcycle-endorsement-weights.json";
 
 export async function getStaticPaths() {
 	return await certStatePaths({ examOnly: true });
@@ -11,6 +19,28 @@ const { cert, state } = Astro.params;
 const info = stateInfo(state);
 const facts = await loadState(cert, state);
 const term = facts.meta.localTerm;
+
+const topicEntries = await getCollection(`${cert}-topics`);
+const topics = Object.fromEntries(topicEntries.map((t) => [t.id, t.data]));
+
+const questions = (await getCollection(`${cert}-questions`)).map((q) => ({
+	id: q.id,
+	applies_to: q.data.meta.applies_to,
+	topic: q.data.meta.topic,
+	meta: q.data.meta,
+	content: q.data.content,
+	guide: q.data.guide,
+}));
+
+const resolved = weightsForState(state, weights);
+const topicOrder = topicsForState(state, weights).sort((a, b) => resolved[b] - resolved[a]);
+
+const sections = guideForState(state, {
+	scaffold: guideScaffold,
+	questions,
+	topicOrder,
+	ctx: { states, facts: factsFile, exams },
+});
 ---
 
 <Layout
@@ -20,11 +50,46 @@ const term = facts.meta.localTerm;
 >
 	<div class="stack prose">
 		<h1 class="page-title">Study Guide</h1>
-		<p>{info.name} {term}</p>
-		<p>
-			One sheet of the material, sorted by topic. Content is authored in Sprint 3; topics are
-			sections of this page rather than pages of their own.
-		</p>
+
+		{/* UNSTYLED DUMP - structure only, so the bank can be read back while it is authored. */}
+		<p>{info.name} {term} - {sections.length} of {topicOrder.length} topics have content</p>
+
+		{
+			sections.map((section) => (
+				<section>
+					<h2 id={section.topic}>
+						<span aria-hidden="true">{topics[section.topic]?.emoji}</span>{" "}
+						{topics[section.topic]?.name}
+					</h2>
+					<p><em>{section.opener}</em></p>
+					{section.groups.map((group) => (
+						<div>
+							<h3>{group.heading}</h3>
+							<p>{group.leadIn}</p>
+							<ul>
+								{group.facts.map((fact) => (
+									<li>
+										<strong>{fact.label ? `${fact.label}: ` : ""}</strong>
+										{fact.text}
+										<br />
+										<small>
+											[{fact.kind}] {fact.id} - {fact.source.id}
+											{fact.sourceSection ? ` - ${fact.sourceSection}` : ""}
+										</small>
+										{fact.media && (
+											<div><img src={fact.media.src} alt={fact.media.alt} width="120" /></div>
+										)}
+									</li>
+								))}
+							</ul>
+						</div>
+					))}
+				</section>
+			))
+		}
+
+		{sections.length === 0 && <p>No guide content resolves for this state yet.</p>}
+
 		<p><Button href={`/${cert}/${state}`} variant="secondary">Back to {info.name}</Button></p>
 	</div>
 </Layout>

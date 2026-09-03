@@ -13,6 +13,15 @@
     ],
     "source": "tx-tdlr-curriculum"
   },
+  "momstandard": {
+    "covers": [
+      "MSFBRC",
+      "MNS2011",
+      "CA",
+      "GA"
+    ],
+    "source": null
+  },
   "MSFBRC": {
     "covers": [],
     "source": null

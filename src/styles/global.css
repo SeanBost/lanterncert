@@ -998,7 +998,7 @@ ul.accent-edge, ol.accent-edge {
   font-size: var(--text-lg);
 }
 
-/* Air off the divider below it, so the blurb is not pinned against the next row. */
+/* Air off the divider below, on top of the row's own padding. */
 .row-list > li > p {
   margin-bottom: var(--space-1);
 }

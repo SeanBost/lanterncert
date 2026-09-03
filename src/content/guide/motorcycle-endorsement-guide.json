@@ -1,0 +1,53 @@
+{
+  "_about": {
+    "what": "The Study Guide's PROSE SCAFFOLDING for one cert, keyed by topic slug. A topic IS a guide section, 1:1, so the key is the section anchor. The facts themselves are not here - each one lives on the question that tests it, in that question's `guide` block.",
+    "why": "A guide fact and its question shared scope, topic, source, sourceSection, dates and media, so holding them apart meant six duplicated fields per fact and two build checks to keep them honest. Housing the fact on the question makes that consistency structural instead of enforced.",
+    "positioning": "A cheat sheet, not a manual. It states what a rider needs in order to pass and points at the agency document for everything behind it. Never comprehensive, never explanatory, and it may never read as a substitute for the state manual or a course.",
+    "consequence": "The guide can never carry something the bank does not test. A fact worth reading is a fact worth asking, so anything the guide should say has to be authored as a question with a `guide` block.",
+    "shape": "A topic holds an `opener` and an ordered list of `groups`. A group holds an `id`, a `heading`, a `leadIn` and optional `media`. Group order is array order.",
+    "membership": "A question joins a group through `guide.group` and sorts inside it by `guide.order`. There is no manifest of question ids here, deliberately: a question id is not permanent, so a list of them would go stale silently.",
+    "ordering": "`guide.order` is sparse - 10, 20, 30 - so a fact can be inserted between two others without renumbering the rest.",
+    "kinds": "`guide.kind` decides how a fact renders: `rule` is a bare assertion on one line, `value` is a label and a value rendered into a dl, `steps` is an ordered procedure rendered into an ol. Mixing kinds is what stops a section reading as a wall of declarative sentences.",
+    "text": "`guide.text` is the fact as the guide states it. Null falls back to the question's explanation, which under §5 rule 6b is the same assertion - so a question only carries its own `text` where the guide wants it shorter or shaped for a dl.",
+    "originalText": "`opener` orients a reader arriving at the topic; `leadIn` says what a group of facts is about. One or two sentences each and no more - connective text between individual facts is what makes a cheat sheet feel padded.",
+    "scoping": "A section resolves by resolving its questions, so scope needs no separate expression here. A group whose questions all resolve away renders nothing, which means a leadIn has to survive its group being only partly filled.",
+    "media": "A figure attaches to a GROUP and earns its place when the group is spatial or sequential - geometry, position, formation, or a sequence of actions. Never for a value or a rule. Signs are the exception: the sign IS the fact, so that image rides the question's own media.",
+    "status": "BAREBONES. signs-and-markings has one group with one question behind it. space-management is scaffolding with nothing behind it yet, and renders nothing until its questions are authored."
+  },
+
+  "signs-and-markings": {
+    "opener": "Signs tell you what is coming and what is required, and most can be read from shape and color alone, before you are close enough to read the words.",
+    "groups": [
+      {
+        "id": "shapes",
+        "heading": "What the shape tells you",
+        "leadIn": "Shape is reserved by the national standard, so a shape carries the same meaning in every state.",
+        "media": null
+      },
+      {
+        "id": "colors",
+        "heading": "What the color tells you",
+        "leadIn": "Color does the same job as shape, and the two agree: a sign that looks wrong for its message usually is not the sign you think it is.",
+        "media": null
+      }
+    ]
+  },
+
+  "space-management": {
+    "opener": "Where to sit in the lane, how much room to leave, and what changes when traffic closes in.",
+    "groups": [
+      {
+        "id": "following-distance",
+        "heading": "How much space to keep",
+        "leadIn": "Following distance is counted in seconds rather than car lengths: pick a fixed marker ahead, and count from the moment the vehicle in front passes it until you do.",
+        "media": null
+      },
+      {
+        "id": "lane-position",
+        "heading": "Where to ride in the lane",
+        "leadIn": "A lane is wider than a motorcycle needs, and the whole of it is yours to use.",
+        "media": null
+      }
+    ]
+  }
+}

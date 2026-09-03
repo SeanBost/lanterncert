@@ -14,8 +14,8 @@
   "states": {
     "ga": {
       "signs-and-markings": {
-        "weight": 20,
-        "note": "DDS runs a separate 20-question Road Signs Test alongside the 20-question Road Rules Test, each needing 15/20, so signs are roughly half of what a Class M applicant is asked to know. Weight 20 sits it beside the largest baseline topic rather than at half the total, because the Road Rules half is what our other nine topics already cover."
+        "weight": 50,
+        "note": "Georgia scores road signs as its own exam section, independently of road rules, so a rider who skips signs can fail on that half alone while passing overall, and the baseline withholds signs entirely. Set deliberately below the exam's own signs share: sign questions are quicker to exhaust than the rest of the bank, so mirroring the exam would recycle them faster than a rider improves. A hunch until real p-values replace it."
       }
     }
   }

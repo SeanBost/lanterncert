@@ -1,6 +1,7 @@
 {
   "mot-all-9-1": {
     "meta": {
+      "idKey": "1",
       "applies_to": "ALL",
       "variantGroup": null,
       "topic": "signs-and-markings",
@@ -8,7 +9,7 @@
       "sourceSection": "Table 2A-1, sign shapes; Section 2B.04, STOP signs.",
       "note": "Deliberately the easiest question in the bank, and correctly scoped ALL: a STOP sign means the same thing in every state, so the content genuinely applies everywhere. Which riders are SERVED it is a weighting decision, not a scoping one - signs-and-markings carries a baseline weight of 0, so only a state that demonstrably tests signs sees this. It therefore cannot carry the onboarding walkthrough, which needs a question in a topic every state weights above zero. The MUTCD states when an agency installs a STOP sign rather than what a rider must do, so the explanation reads the converse of an installation warrant - defensible, but the weakest inferential step of any question here. The stop line, crosswalk and best-view hierarchy is state statute, carried by Georgia's manual and not by the MUTCD, so it stays out of the explanation rather than being cited to the wrong document.",
       "dateCreated": "2026-08-31",
-      "lastEdited": "2026-09-01",
+      "lastEdited": "2026-09-02",
       "lastVerified": "2026-08-31"
     },
     "content": {
@@ -27,7 +28,14 @@
         { "id": "d", "text": "Stop only when another vehicle or a pedestrian is approaching" }
       ],
       "correctAnswer": "a",
-      "explanation": "The octagon is reserved for one sign in the national standard, and that sign goes up only where a full stop is always required. The stop is not conditional on what you can see, so an empty intersection changes nothing and a missing stop line does not turn the sign into a yield."
+      "explanation": "The octagon is reserved for one sign in the national standard, and that sign goes up only where a full stop is always required."
+    },
+    "guide": {
+      "group": "shapes",
+      "order": 10,
+      "kind": "value",
+      "label": "Octagon",
+      "text": "Stop. The shape is used for no other sign."
     }
   }
 }
