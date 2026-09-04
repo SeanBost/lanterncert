@@ -252,6 +252,17 @@
     "published": null,
     "verifiedCurrentIn": 2026
   },
+  "ga-dds-drivers-manual": {
+    "state": "GA",
+    "sourceID": "0060",
+    "title": "GA DDS Driver's Manual",
+    "description": "The signs, signals, markings and traffic laws a Georgia rider must also know.",
+    "publisher": "Georgia Department of Driver Services",
+    "url": "https://dds.georgia.gov/book/export/html/33571",
+    "access": "public",
+    "published": 2023,
+    "verifiedCurrentIn": 2026
+  },
   "ga-dds-drivers-manual-testing": {
     "state": "GA",
     "sourceID": "0022",

@@ -30,10 +30,28 @@ for (const [key, config] of Object.entries(certs)) {
       throw new Error(`site-config.json ▸ certTypes ▸ ${key}: "${field}" must be a boolean`);
     }
   }
+  // The Mock Test's length where a state publishes none. It may never render as a state fact.
+  const fallbackCount = config.testDefaults?.questionCount;
+  if (config.hasExam && !(Number.isInteger(fallbackCount) && fallbackCount > 0)) {
+    throw new Error(
+      `site-config.json ▸ certTypes ▸ ${key}: an exam cert needs a positive testDefaults.questionCount`,
+    );
+  }
 }
 
 export function certConfig(cert) {
   return certs[cert] ?? null;
+}
+
+/** A cert slug or its slugShort resolved to the full slug, so tooling may be given either. */
+export function resolveCert(input) {
+  if (certs[input]) return input;
+  return Object.keys(certs).find((key) => certs[key].slugShort === input) ?? null;
+}
+
+/** The Mock Test's question count: the state's own where published, the cert's fallback where not. */
+export function mockTestLength(cert, facts) {
+  return facts?.exam?.questionCount?.value ?? certConfig(cert)?.testDefaults?.questionCount ?? null;
 }
 
 /** The certs a reader may be linked to. Every other cert still builds, unlinked and noindex. */

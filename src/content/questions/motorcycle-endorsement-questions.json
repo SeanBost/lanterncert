@@ -4,6 +4,7 @@
       "idKey": "1",
       "applies_to": "ALL",
       "variantGroup": null,
+      "sisterQuestions": null,
       "topic": "signs-and-markings",
       "source": "xx-fhwa-mutcd",
       "sourceSection": "Table 2A-1, sign shapes; Section 2B.04, STOP signs.",
@@ -36,6 +37,312 @@
       "kind": "value",
       "label": "Octagon",
       "text": "Stop. The shape is used for no other sign."
+    }
+  },
+  "mot-momstandard-2-2": {
+    "meta": {
+      "idKey": "2",
+      "applies_to": "momstandard",
+      "variantGroup": null,
+      "sisterQuestions": null,
+      "topic": "gear-and-bike-check",
+      "source": "xx-msf-operator-manual",
+      "sourceSection": "Know Your Motorcycle, under The Right Motorcycle For You.",
+      "note": "Scoped momstandard because all four MVP manuals set the same test: FL and TX reproduce the MOM sentence, GA states that the motorcycle must fit you and your feet must reach the ground while seated, and CA states the same with the word comfortably added. No number, statute or named procedure, so rule 3d's fence holds. Distractors are the criteria a first-time buyer actually reaches for rather than invented options; the MOM's own next sentence, that smaller motorcycles are usually easier for beginners, is what rules out the engine-size and weight options.",
+      "dateCreated": "2026-09-03",
+      "lastEdited": null,
+      "lastVerified": "2026-09-03"
+    },
+    "content": {
+      "question": "You are choosing your first motorcycle. Which of these tells you the bike is the right size for you?",
+      "media": null,
+      "choices": [
+        { "id": "a", "text": "Your feet reach the ground while you are seated on it" },
+        { "id": "b", "text": "The engine is large enough to keep up with highway traffic" },
+        { "id": "c", "text": "It is heavy enough to feel steady when you come to a stop" },
+        { "id": "d", "text": "The seat is high enough to see over the roofs of cars" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "A motorcycle fits you when you can put your feet on the ground from the seat and work the controls easily. For a beginner, a smaller machine is usually the easier one to handle."
+    },
+    "guide": {
+      "group": null,
+      "order": 10,
+      "kind": "value",
+      "label": "Right size bike",
+      "text": "Your feet reach the ground from the seat, and the controls are easy to work."
+    }
+  },
+  "mot-mns2011-2-3": {
+    "meta": {
+      "idKey": "3",
+      "applies_to": "MNS2011",
+      "variantGroup": "mot-helmet-fastened",
+      "sisterQuestions": null,
+      "topic": "gear-and-bike-check",
+      "source": "xx-msf-operator-manual",
+      "sourceSection": "Wear the Right Gear, under Helmet Selection.",
+      "note": "Scoped MNS2011 rather than momstandard because California's handbook is silent on fastening: a grep for securely fastened and for fly off your head returns nothing in the CA snapshot. FL and TX both reproduce the MOM sentence, so the umbrella is honest for the two states it reaches. GEORGIA STATES THE SAME FACT in its own words, that an unfastened helmet is likely to come off in a crash, and is served by a GA-scoped VARIANT citing ga-dds-motorcycle-manual rather than by widening this question - Sean's call, 2026-09-04, taken over a new umbrella because an umbrella is a standing claim while the evidence here is per-passage. Paired with mot-ga-2-10 in variantGroup mot-helmet-fastened, which is what records that this one fact is covered across FL, TX and GA by two questions rather than one. The group was deliberately left unset while it would have had a single member, because a one-member group fires an undeclared-coverage-gap PROBLEM that neither state could honestly clear at the time. CALIFORNIA IS A REAL AND PERMANENT GAP in this group: its handbook states no fastening rule at all, so no CA question is authorable from CA's own manual and the MOM cannot be cited for a state that does not reproduce it. Declared in the exclusions file.",
+      "dateCreated": "2026-09-03",
+      "lastEdited": null,
+      "lastVerified": "2026-09-03"
+    },
+    "content": {
+      "question": "What happens to a helmet that is resting on your head but not strapped on, if you crash?",
+      "media": null,
+      "choices": [
+        { "id": "a", "text": "It can come off before it has protected your head" },
+        { "id": "b", "text": "It stays put, because your head is pressed up into it" },
+        { "id": "c", "text": "It protects your head but is far more likely to crack" },
+        { "id": "d", "text": "It shifts back and protects your neck instead of your skull" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "A helmet only works while it is on your head, so the strap goes on every time you ride. Left unfastened, it can leave your head in a crash before it has absorbed anything."
+    },
+    "guide": {
+      "group": null,
+      "order": 20,
+      "kind": "rule",
+      "label": null,
+      "text": "A helmet that is not strapped on can come off in a crash before it protects you."
+    }
+  },
+  "mot-momstandard-2-4": {
+    "meta": {
+      "idKey": "4",
+      "applies_to": "momstandard",
+      "variantGroup": null,
+      "sisterQuestions": null,
+      "topic": "gear-and-bike-check",
+      "source": "xx-msf-operator-manual",
+      "sourceSection": "Wear the Right Gear, under Eye and Face Protection.",
+      "note": "Scoped momstandard on four affirmations of the same proposition. FL groups goggles with eyeglasses and sunglasses as protecting the eyes but not the rest of the face; TX and GA carry the MOM sentence; CA states that a lowered and locked face shield protects the face while goggles only protect the eyes. FL widening the eye-only group to include glasses does not narrow the coverage claim being tested. All five documents carry a TEST YOURSELF item on this fact, which is the clearest signal in the chunk that it is genuinely exam-relevant; the stem and choices here are written fresh and deliberately do not follow their three-option shape.",
+      "dateCreated": "2026-09-03",
+      "lastEdited": null,
+      "lastVerified": "2026-09-03"
+    },
+    "content": {
+      "question": "You are deciding between goggles and a face shield. How do the two differ in what they protect?",
+      "media": null,
+      "choices": [
+        { "id": "a", "text": "A face shield covers the whole face; goggles protect only the eyes" },
+        { "id": "b", "text": "Goggles cover the whole face; a face shield protects only the eyes" },
+        { "id": "c", "text": "Both protect the eyes only, but a face shield also cuts wind noise" },
+        { "id": "d", "text": "Both cover the whole face, but goggles seal better against dust" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "A face shield protects the whole face in a crash. Goggles guard the eyes and leave the rest of the face exposed."
+    },
+    "guide": {
+      "group": null,
+      "order": 30,
+      "kind": "value",
+      "label": "Face shield",
+      "text": "Covers the whole face. Goggles guard the eyes only."
+    }
+  },
+  "mot-momstandard-2-5": {
+    "meta": {
+      "idKey": "5",
+      "applies_to": "momstandard",
+      "variantGroup": null,
+      "sisterQuestions": null,
+      "topic": "gear-and-bike-check",
+      "source": "xx-msf-operator-manual",
+      "sourceSection": "Wear the Right Gear, under Eye and Face Protection.",
+      "note": "Scoped momstandard on the sentence appearing in all four state manuals: FL and CA reproduce it, GA drops the words or goggles but states the same, and TX carries both that sentence and a second one saying a windshield or fairing alone is not adequate for eye protection. FLORIDA ADDS A STATUTORY LAYER THAT IS DELIBERATELY LEFT OUT, that a windshield does not count as an eye-protective device and that the requirement reaches riders who may lawfully ride without a helmet, because that is FL statute and belongs in a state-scoped question citing FLHSMV rather than in an umbrella question. The explanation states no mechanism for why a windshield fails, since the manuals assert the outcome without explaining it.",
+      "dateCreated": "2026-09-03",
+      "lastEdited": null,
+      "lastVerified": "2026-09-03"
+    },
+    "content": {
+      "question": "Your motorcycle is fitted with a large windshield. What eye protection do you still need?",
+      "media": null,
+      "choices": [
+        { "id": "a", "text": "A face shield or goggles; a windshield will not keep wind from your eyes" },
+        { "id": "b", "text": "Nothing more, since the windshield already does a face shield's job" },
+        { "id": "c", "text": "Sunglasses, which are enough once a windshield blocks most of the wind" },
+        { "id": "d", "text": "Nothing more, provided you keep to lower speeds and shorter trips" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "Eye protection has to be worn on your face. A windshield sits too far forward to keep the wind out of your eyes, and glasses can water your eyes up or blow off when you turn your head."
+    },
+    "guide": {
+      "group": null,
+      "order": 40,
+      "kind": "rule",
+      "label": null,
+      "text": "A windshield is not eye protection, and neither are glasses or sunglasses."
+    }
+  },
+  "mot-momstandard-2-6": {
+    "meta": {
+      "idKey": "6",
+      "applies_to": "momstandard",
+      "variantGroup": null,
+      "sisterQuestions": null,
+      "topic": "gear-and-bike-check",
+      "source": "xx-msf-operator-manual",
+      "sourceSection": "Wear the Right Gear, under Eye and Face Protection.",
+      "note": "Scoped momstandard on four affirmations: FL reproduces the MOM sentence, TX shortens it, CA and GA both add at night alongside the low-light wording. The variation is in how each names low light, not in the rule, so the widening holds. FL carries a second and stricter equipment rule nearby, that tinted devices must allow colors to be seen correctly and should not be used at night, which is FL regulation and stays out of an umbrella question. Option c is the one to watch at review: the manuals rule tinted protection out in low light without ever endorsing riding with none, so the tinted-versus-nothing framing is not a choice they offer.",
+      "dateCreated": "2026-09-03",
+      "lastEdited": null,
+      "lastVerified": "2026-09-03"
+    },
+    "content": {
+      "question": "You will be riding home after dark. What does that mean for a tinted face shield or tinted goggles?",
+      "media": null,
+      "choices": [
+        { "id": "a", "text": "Change to clear protection, which is what low light calls for" },
+        { "id": "b", "text": "Keep them on; the tint cuts headlight glare from oncoming traffic" },
+        { "id": "c", "text": "Keep them on, since any eye protection beats none after dark" },
+        { "id": "d", "text": "Lift them clear of your eyes and ride without eye protection" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "Tinted eye protection belongs to daylight. Once the light drops it takes away vision you need, so carry a clear shield or clear goggles to change into."
+    },
+    "guide": {
+      "group": null,
+      "order": 50,
+      "kind": "value",
+      "label": "Tinted shield or goggles",
+      "text": "Daylight only. Change to clear before riding at night or in low light."
+    }
+  },
+  "mot-momstandard-2-7": {
+    "meta": {
+      "idKey": "7",
+      "applies_to": "momstandard",
+      "variantGroup": null,
+      "sisterQuestions": null,
+      "topic": "gear-and-bike-check",
+      "source": "xx-msf-operator-manual",
+      "sourceSection": "Wear the Right Gear, under Clothing.",
+      "note": "Scoped momstandard on four affirmations: TX and GA reproduce the MOM sentence, CA states that a jacket, long pants, sturdy footwear and gloves worn even in warm weather can prevent dehydration, and FL states that jackets protect against sunburn, windburn and dehydration. FL IS THE WEAKEST OF THE FOUR because it does not use the even-in-warm-weather framing, but it names dehydration as something gear protects against and nothing in its heat guidance conflicts; GA independently repeats the point in its extreme-hot-weather section. THE EXPLANATION DELIBERATELY STATES NO MECHANISM: no held document explains why covered skin dehydrates less, so asserting one would be an inference the source does not make.",
+      "dateCreated": "2026-09-03",
+      "lastEdited": null,
+      "lastVerified": "2026-09-03"
+    },
+    "content": {
+      "question": "It is a hot summer day. Besides crash protection, what does a riding jacket do for you?",
+      "media": null,
+      "choices": [
+        { "id": "a", "text": "It helps keep you from becoming dehydrated on the ride" },
+        { "id": "b", "text": "It helps your body shed heat faster than bare skin does" },
+        { "id": "c", "text": "It makes the wind easier to feel, so you can judge your speed" },
+        { "id": "d", "text": "It cuts down the engine noise that reaches your ears" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "Wear a jacket in hot weather as well as cold. It helps keep you from dehydrating, and jackets built for summer riding vent enough to do that without leaving you overheated."
+    },
+    "guide": {
+      "group": null,
+      "order": 60,
+      "kind": "rule",
+      "label": null,
+      "text": "Wear a jacket in hot weather too; it helps hold off dehydration."
+    }
+  },
+  "mot-mns2011-2-8": {
+    "meta": {
+      "idKey": "8",
+      "applies_to": "MNS2011",
+      "variantGroup": null,
+      "sisterQuestions": null,
+      "topic": "gear-and-bike-check",
+      "source": "xx-msf-operator-manual",
+      "sourceSection": "Wear the Right Gear, in the protective gear list.",
+      "note": "NOT scoped momstandard, and California is the reason. CA states only that a rider may want to use ear protection against wind that can cause hearing loss, which is permissive and states neither half of what this question tests: that protection still lets horns and sirens through, and that a full face helmet does not prevent the damage. CA then adds VC 27400, restricting earplugs in both ears, which is state law and cuts against an umbrella reaching CA at all. FL and TX both reproduce the MOM sentences in full, so MNS2011 is honest. GEORGIA STATES BOTH HALVES independently, calling the damage irreversible and crediting properly worn protection with still allowing horns and sirens through, so GA is served by a GA-scoped VARIANT citing ga-dds-motorcycle-manual. The variantGroup stays null until the GA variant exists, for the reason recorded on question 3. GA's wording differs enough that the variant is a rewrite rather than a rescope: it says irreversible where the MOM says permanent, and it does not carry the full-face-helmet clause this question tests.",
+      "dateCreated": "2026-09-03",
+      "lastEdited": null,
+      "lastVerified": "2026-09-03"
+    },
+    "content": {
+      "question": "A rider avoids earplugs because they think it will stop them hearing traffic. What does hearing protection actually do?",
+      "media": null,
+      "choices": [
+        { "id": "a", "text": "Brings the noise level down while still letting horns and sirens through" },
+        { "id": "b", "text": "Blocks outside sound completely, which is why it suits track use only" },
+        { "id": "c", "text": "Adds nothing under a full face helmet, which already blocks the noise" },
+        { "id": "d", "text": "Guards your hearing only above highway speeds, so it is optional in town" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "Hearing protection brings the overall noise level down without shutting out horns and sirens. It is worth wearing under a full face helmet too, because the helmet alone does not stop wind and engine noise damaging your hearing over time."
+    },
+    "guide": {
+      "group": null,
+      "order": 70,
+      "kind": "value",
+      "label": "Hearing protection",
+      "text": "Cuts wind and engine noise without shutting out horns and sirens."
+    }
+  },
+  "mot-mns2011-2-9": {
+    "meta": {
+      "idKey": "9",
+      "applies_to": "MNS2011",
+      "variantGroup": null,
+      "sisterQuestions": null,
+      "topic": "gear-and-bike-check",
+      "source": "xx-msf-operator-manual",
+      "sourceSection": "Know Your Motorcycle, under Get Familiar with the Controls.",
+      "note": "Scoped MNS2011 because GEORGIA'S MANUAL HAS NO BORROWED-OR-UNFAMILIAR-MOTORCYCLE MATERIAL AT ALL: a grep for unfamiliar and for borrow returns zero hits in the GA snapshot, so momstandard is unavailable. FL and TX both reproduce the control list and the without-looking standard. CA affirms it too, saying a rider should be able to find them without having to look, but no umbrella covers exactly FL, TX and CA, so a CA twin from ca-dmv-motorcycle-handbook is the route to serving California. CA's list says headlight dimmer switch where the MOM says headlight switch, which is why the stem asks about the headlight switch generally rather than the dimmer.",
+      "dateCreated": "2026-09-03",
+      "lastEdited": null,
+      "lastVerified": "2026-09-03"
+    },
+    "content": {
+      "question": "Before taking an unfamiliar motorcycle into traffic, which controls should you be able to reach and work without hunting for them?",
+      "media": null,
+      "choices": [
+        { "id": "a", "text": "The turn signals, horn, headlight switch and engine cut-off switch" },
+        { "id": "b", "text": "The turn signals and horn only, as the rest are used at a standstill" },
+        { "id": "c", "text": "The brakes and clutch only, as those are the controls that vary least" },
+        { "id": "d", "text": "No particular ones; familiarity comes from riding it a few miles" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "On a motorcycle you have not ridden before, find the turn signals, horn, headlight switch, fuel valve and engine cut-off switch first, then work each one until you can do it without looking."
+    },
+    "guide": {
+      "group": null,
+      "order": 80,
+      "kind": "rule",
+      "label": null,
+      "text": "On an unfamiliar bike, learn the signals, horn, headlight switch, fuel valve and cut-off switch by feel before riding."
+    }
+  },
+  "mot-ga-2-10": {
+    "meta": {
+      "idKey": "10",
+      "applies_to": "GA",
+      "variantGroup": "mot-helmet-fastened",
+      "sisterQuestions": null,
+      "topic": "gear-and-bike-check",
+      "source": "ga-dds-motorcycle-manual",
+      "sourceSection": "Section 3, Before You Ride; Helmet Selection and Helmet Fit.",
+      "note": "The Georgia variant of mot-mns2011-2-3, sharing variantGroup mot-helmet-fastened. GA states the fastening fact near-verbatim with the MOM, so this is a genuine jurisdictional variant of one claim rather than a second question - GA's examType is its own, so no umbrella from the MOM side can reach it. CHOSEN OVER A GA HEARING-PROTECTION VARIANT because GA's hearing text drops the full-face-helmet clause that mot-mns2011-2-8 actually tests, which would have made it a different question carrying a variant's label. It also CARRIES ITS OWN GUIDE BLOCK, which is correct and not a duplicate-fact breach: the guide resolves per state and mot-mns2011-2-3 never reaches GA, so without this block Georgia's guide would carry no helmet-fastening line at all. Order 20 matches the sibling so the fact lands in the same place in every state's guide. Distractor b comes from GA's own Helmet Fit passage, which is the only one of the five documents to tie looseness to the helmet leaving the head. CALIFORNIA CANNOT BE SERVED: its handbook is silent on fastening, so that gap is declared in the exclusions file rather than left as an undeclared coverage hole.",
+      "dateCreated": "2026-09-04",
+      "lastEdited": null,
+      "lastVerified": "2026-09-04"
+    },
+    "content": {
+      "question": "Georgia requires a DOT-compliant helmet. What does the state ask you to do with the chin strap each time you ride?",
+      "media": null,
+      "choices": [
+        { "id": "a", "text": "Fasten it securely, or the helmet can come off in a crash" },
+        { "id": "b", "text": "Leave it loose enough to slip a finger under the chin" },
+        { "id": "c", "text": "Fasten it only once you are riding above city speeds" },
+        { "id": "d", "text": "Leave it unfastened so the helmet comes off easily in a fall" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "Fasten the chin strap every time you ride. A helmet that is loose or unfastened can lift in the wind or leave your head in a fall, before it has taken any of the impact."
+    },
+    "guide": {
+      "group": null,
+      "order": 20,
+      "kind": "rule",
+      "label": null,
+      "text": "Fasten the chin strap every ride. A loose or unfastened helmet can come off in a fall."
     }
   }
 }

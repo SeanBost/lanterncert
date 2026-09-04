@@ -62,6 +62,24 @@ const sections = guideForState(state, {
 						{topics[section.topic]?.name}
 					</h2>
 					<p><em>{section.opener}</em></p>
+					{section.ungrouped.length > 0 && (
+						<ul>
+							{section.ungrouped.map((fact) => (
+								<li>
+									<strong>{fact.label ? `${fact.label}: ` : ""}</strong>
+									{fact.text}
+									<br />
+									<small>
+										[{fact.kind}] [ungrouped] {fact.id} - {fact.source.id}
+										{fact.sourceSection ? ` - ${fact.sourceSection}` : ""}
+									</small>
+									{fact.media && (
+										<div><img src={fact.media.src} alt={fact.media.alt} width="120" /></div>
+									)}
+								</li>
+							))}
+						</ul>
+					)}
 					{section.groups.map((group) => (
 						<div>
 							<h3>{group.heading}</h3>

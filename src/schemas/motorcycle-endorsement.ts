@@ -64,7 +64,8 @@ for (const [topic, section] of Object.entries(guideScaffold) as [string, any][])
   };
   if (!topicSlugs.includes(topic)) guideFail("is not a topic in the topics file");
   if (!section?.opener?.trim()) guideFail("has no opener");
-  if (!Array.isArray(section?.groups) || !section.groups.length) guideFail("has no groups");
+  // Empty is legal: a topic opens with an opener alone until its facts are grouped. §4c rule 3.
+  if (!Array.isArray(section?.groups)) guideFail("has no groups array");
   guideGroups[topic] = new Set();
   for (const group of section.groups) {
     if (!/^[a-z0-9-]+$/.test(group?.id ?? "")) guideFail(`has a group id that is not kebab-case`);
@@ -78,6 +79,7 @@ for (const [topic, section] of Object.entries(guideScaffold) as [string, any][])
 
 // A question's id is its key, which the collection schema never receives. data-handling.md ▸ Questions §5.
 const sitewideNums = new Set<string>();
+const byIdKey = new Map<string, any>();
 for (const [id, q] of Object.entries(questionBank) as [string, any][]) {
   const fail = (why: string) => {
     throw new Error(`${slug}-questions.json: "${id}" ${why}`);
@@ -102,6 +104,7 @@ for (const [id, q] of Object.entries(questionBank) as [string, any][]) {
   // Rejects a reused sitewide number, which is the only permanent part of an id.
   if (sitewideNums.has(sitewideNum)) fail(`reuses sitewide number ${sitewideNum}`);
   sitewideNums.add(sitewideNum);
+  byIdKey.set(sitewideNum, { id, ...q });
   // Fails on a media src with no file behind it. data-handling.md ▸ Questions §9c.
   const src = q.content?.media?.src;
   if (src && !existsSync(new URL(`../../public${src}`, import.meta.url))) {
@@ -115,6 +118,32 @@ for (const [id, q] of Object.entries(questionBank) as [string, any][]) {
   const group = q.guide?.group;
   if (group && !guideGroups[q.meta?.topic]?.has(group)) {
     fail(`joins guide group "${group}", which its topic does not declare`);
+  }
+}
+
+// A sister set is symmetric, single-scope and single-fact. data-handling.md ▸ Questions §5b-i.
+for (const [id, q] of Object.entries(questionBank) as [string, any][]) {
+  const sisters: string[] = q.meta?.sisterQuestions ?? [];
+  if (!sisters.length) continue;
+  const fail = (why: string) => {
+    throw new Error(`${slug}-questions.json: "${id}" ${why}`);
+  };
+  if (new Set(sisters).size !== sisters.length) fail("names the same sister question twice");
+  for (const key of sisters) {
+    if (key === q.meta.idKey) fail("names itself as a sister question");
+    const sister = byIdKey.get(key);
+    if (!sister) fail(`names sister question ${key}, which is not in the bank`);
+    if (sister.meta.applies_to !== q.meta.applies_to) {
+      fail(`is scoped ${q.meta.applies_to} but its sister ${key} is scoped ${sister.meta.applies_to}`);
+    }
+    if (!(sister.meta.sisterQuestions ?? []).includes(q.meta.idKey)) {
+      fail(`names sister question ${key}, which does not name it back`);
+    }
+  }
+  // One fact earns one guide line. data-handling.md ▸ Study Guide §4c rule 2.
+  const withGuide = [q, ...sisters.map((k) => byIdKey.get(k))].filter((s) => s?.guide);
+  if (withGuide.length > 1) {
+    fail(`sits in a sister set carrying ${withGuide.length} guide facts, which duplicates one fact`);
   }
 }
 
@@ -319,6 +348,11 @@ export function collections(kit: any) {
             .string()
             .regex(/^[a-z]{2,4}-[a-z0-9-]+$/, { error: "variantGroup is <slugShort>-<kebab-case name>" })
             .nullable(),
+          // idKeys of questions re-angling this same fact at this same scope. §5 rule 5b-i.
+          sisterQuestions: z
+            .array(z.string().regex(/^\d+$/, { error: "a sister question is named by its idKey" }))
+            .min(1)
+            .nullable(),
           topic: z.enum(topicSlugs),
           source: sourceRef(),
           // Caption under a citation naming where to look. data-handling.md ▸ Questions §1b.
@@ -357,7 +391,8 @@ export function collections(kit: any) {
         // What this question contributes to the Study Guide; null keeps it out. §4c.
         guide: z
           .strictObject({
-            group: z.string().min(1),
+            // Null until a fact is grouped; it renders above the topic's first heading. §4c rule 3.
+            group: z.string().min(1).nullable().default(null),
             // Sparse, so a fact can be inserted between two others without renumbering.
             order: z.number().int().positive(),
             kind: z.enum(["rule", "value", "steps"]),

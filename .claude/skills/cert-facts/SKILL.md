@@ -24,13 +24,26 @@ detail**. That fixes the resolution to work at:
 - **Do not open a schema debate over a detail copy can absorb.** "$250 in-state, $300 out-of-state"
   renders fine as "$250–$300" — that is a note, not a redesign.
 
-The failure mode to avoid is a report full of technically-true objections that change nothing a
-reader would see. Report what would make a rider wrong, not what makes the model uneasy.
+**Every restraint above governs WHAT YOU RECORD. None of them governs HOW HARD YOU LOOK.** Read
+quickly, *"exhaustive is not the goal"* reads as licence to stop early, and it is not — it is about
+keeping a fee footnote out of a value that renders as a range. **Searching is the half of this job
+where more effort is always correct.** Be ruthless about what reaches the page and relentless about
+what you look at first.
+
+**This skill has two failure modes and they pull in opposite directions.** The one above is a report
+padded with objections that change nothing. The one below is a null that a second run would fill —
+and that one is worse, because it ships a hole to a reader who came for exactly that answer.
 
 **A null is expensive.** Every field left null is a hole on the state page a reader came for, so
 "not found" is a last resort reached after the techniques below are spent — not a first-pass
 outcome. Runs are judged on how few honest nulls remain, and a null is only honest once you can name
 what you read and why it wasn't there.
+
+**THE TEST FOR A NULL: would a second run, starting fresh, find this?** If the honest answer is
+*maybe*, the null is not finished and phase 3c has not been done. **A re-run that fills a null is
+proof the first run stopped early** — nothing changed on the web in between, so the answer was
+reachable the whole time and the search, not the source, is what failed. **Run the second pass
+now**, inside this run, where it costs one more sweep instead of a whole session.
 
 ## Invocation
 
@@ -133,10 +146,25 @@ the one at step 5**, and it has to be worked rather than noted:
 supports the stored value, and record the exact quote. A page that loads is not evidence; a passage
 is. Apply every check in *Verifying properly* below before calling anything verified.
 
-**3 · Discover** — every fact without a source, **and every fact phase 2 could not settle**. Work
-*Finding a source* below in order. A fact whose value is already asserted but unsourced (`value`
-set, `source` null) belongs here too. Anything still unresolved goes through *Resolve before
-escalating* before it may be written up as a question.
+**3 · Discover** — every fact without a source, **and every fact phase 2 could not settle**. A fact
+whose value is already asserted but unsourced (`value` set, `source` null) belongs here too. Three
+sub-phases, and **the order is the point**.
+
+**3a · Map the search space before searching it.** For every unsettled fact, write down where the
+answer *could* live — which authority, which document type, which page. **Do this for all of them
+first, as one list.** Breadth is a planning decision, and a run that searches opportunistically
+searches narrowly: you find one answer, feel progress, and never notice the three places you did not
+think of. **A fact with one candidate location on this list has not been thought about**, and that
+is the tell to catch here rather than at the gate.
+
+**3b · Work them.** `Finding a source` below, per fact. Record every attempt as you go — the query,
+the document, the section — not just the one that worked. **The attempt log is what phase 3c reads**,
+and reconstructing it afterwards is guesswork.
+
+**3c · The null sweep — the second run, run now.** Take every fact still null and re-attack it as a
+batch through *Resolve before escalating*. **This is not a formality and it is where this run stops
+being a first draft**; skipping it is what makes a later re-run productive. A fact only becomes
+`unresearched` after it has been through this.
 
 **4 · Assemble.** Build the proposed facts block and any proposed registry entries, plus the report.
 Before assembling, run the *Pre-assembly checks*.
@@ -167,10 +195,60 @@ say so rather than being silently orphaned.
 
 **Work the eight-step ladder in `data-handling.md` ▸ *Sources — registry* ▸ *Finding a source*, in
 order, and stop when the fact is settled.** Rank the candidates it produces with *Choosing between
-sources* in the same file. Escalation is step 8 and comes last — say what you already ruled out, so
-the question isn't re-answered with work that's already been done.
+sources* in the same file. **The ladder's step 8 is escalation, and it is NOT the next step from
+here** — *Resolve before escalating* below sits between them, and a fact reaches Sean only after it.
+When it does, say what was already ruled out, so the question isn't re-answered with work already
+done.
+
+**"Stop when the fact is settled" means settled, not attempted.** The ladder running out is not a
+result; it means the document was not where the ladder looks, which is the question the next section
+asks.
 
 Choosing between two candidates is a **Decide**, not an *Escalate*. Say why in the source note.
+
+### Resolve before escalating
+
+**The ladder is linear and its last rung is "ask Sean". This is what happens between the two**, and
+every fact still null at phase 3c goes through it. **The ladder asks "where is the document?"; this
+asks "what if the question is wrong?"** — which is why working it harder does not substitute.
+
+**The reframes, worked as a checklist.** Each is a different shape of question, not a further step:
+
+- **Change the document type.** An answer absent from an explainer page is routinely on the **form**
+  a rider actually files, the **fee schedule**, the **statute**, or the **administrative rule** that
+  implements it. Agencies explain badly and specify precisely, in different places.
+- **Change the audience.** Look for the page written for **staff, examiners, instructors or
+  third-party testers** rather than for the public. Program manuals and school handbooks state
+  operational numbers the public page rounds off or omits.
+- **Change the jurisdiction, to learn the vocabulary.** Find the same fact for a state already
+  settled, and note **what that document is called and where it sits**. Agencies copy each other's
+  structure; the answer here is often the same document type under a different name.
+- **Change the term.** Search the agency's own phrasing rather than ours — *endorsement* vs *class*
+  vs *designation*, *knowledge test* vs *written exam*, *rider course* vs *safety program*. A
+  zero-hit search may only mean the wrong noun.
+- **Change the direction: search for the ANSWER, not the question.** If a count is plausibly 25 or
+  30, search those numbers against the agency's domain. This finds pages that never use the words
+  you were searching for.
+- **Follow the delegation to its end.** A state that delegates to a program, a contractor or a
+  board has moved the fact, not deleted it. Name each authority and what it did not specify.
+- **Ask what would have to be true.** If the fact were published, which office would own it and what
+  would that page be called? Then look for *that*. This is the reframe that finds documents nobody
+  linked to.
+- **Re-read what is already held, against this specific question.** Phase 1 grepped for a term; the
+  answer may be in a table, a footnote or a form field in a snapshot already on disk. **This is the
+  cheapest rung and the one most often skipped**, because a document already read feels finished.
+
+**Then decide which null this is, and they are not the same:**
+
+- **The agency does not publish it.** A real, finished answer — `not-applicable`, `value: null`
+  **with** a source naming the document that would have carried it. **Strongest when the document
+  is positively silent** where it publishes the neighbouring facts, which is itself evidence.
+- **It is published and not yet found.** `unresearched`. **This is an admission, not a result**, and
+  it carries the attempt log so the next run starts where this one stopped instead of repeating it.
+
+**A null with a short attempt log is the thing to catch.** Two searches and a shrug is not a
+finished answer, and it is indistinguishable at the gate from a genuinely exhausted one **unless the
+log is there**. Escalate a fact only once this section is spent, and say what was ruled out.
 
 ### Resource facts
 
@@ -194,7 +272,35 @@ and are not restated here.** Three things that are run behavior:
 ### Fetching discipline
 
 Identity checks, binary handling, snapshot rules and survey keys are in `data-handling.md` ▸
-*Sources — fetching and snapshots*. Two things that are judgment rather than rule:
+*Sources — fetching and snapshots*. **All fetching goes through `scripts/fetch-page.mjs`** (§3 rule
+1) — never `WebFetch`, which egresses from different infrastructure and returns summarized content.
+
+**Fetch the way a person researching would, not the way a crawler would.** This is the part that
+cost us a whole domain, so it is behavior, not preference:
+
+- **The guard is a backstop, not a model of polite behavior — aim far below it.** It allows 20
+  requests per host per hour. **`ny.gov` was lost at roughly ten in an afternoon, six of them inside
+  twenty minutes**, which never came close to tripping it. **Treat ~6 requests to one host in a run
+  as the point where you stop and say so**, and name the blast radius before any operation that
+  would exceed it. The guard catches catastrophe; the pacing is yours.
+- **Serial, never batched.** One fetch, read it fully, then decide what the next one should be. A
+  queue of candidate URLs fired in sequence is the single clearest bot signature, and it is also
+  worse research — the page you just read usually tells you the right next URL.
+- **Look for the whole document before fetching its parts.** A publisher that chunks a manual across
+  twenty section pages usually also serves a print, export or download view of the whole thing.
+  Finding it turns twenty requests into one. `ga-dds-drivers-manual` is the worked example: eleven
+  section pages, one 210KB book-export URL, and the entry cites the document rather than a chunk
+  (§2 rule 8b).
+- **Stop at the FIRST anomaly, not at the guard's second strike.** A challenge page, an unexpected
+  redirect chain, a 403, a body that does not match the URL — one is enough. The `ny.gov` failure
+  was precisely that the challenge detector fired every time and the run kept going.
+- **A search engine locates; the agency site is then visited once.** Do not walk an agency's own
+  site-search, and never probe a guessed slug — §1 rule 6 bans guessing identifiers, and a run of
+  404s from one client reads exactly like scanning.
+- **Cached is free, so exhaust it first.** Snapshots under 21 days old answer without a request, and
+  most runs should make no requests at all.
+
+Three things that are judgment rather than rule:
 
 - **Agency outbound links go stale.** A state page may send riders to a program domain that has
   lapsed or been redirected. When a linked destination fails, find the program operator's current
@@ -215,6 +321,16 @@ Every fact lands in exactly one of the eight verdicts in `data-handling.md` ▸ 
 `blocked` is rare and usually wrong. A PDF is not blocked — `fetch-page.mjs` saves it and extracts
 its text layer, and a PDF with no extracted text is scanned, so read the saved file directly. A JS
 shell is not blocked either until you have tried the program's other domains.
+
+**`unresearched` is the one to be suspicious of, because it is two very different states wearing one
+name** — *nobody has looked yet* and *this run looked and failed*. Only the first is neutral.
+**Reporting the second without its attempt log makes a thin search indistinguishable from an
+exhausted one**, which is precisely how a null survives into a run that would otherwise have filled
+it. Every `unresearched` this run produces carries what was tried.
+
+**Prefer `not-applicable` to `unresearched` when the evidence supports it, and never the reverse.**
+A sourced null is a finished answer and an unsourced one is an open ticket; recording a settled fact
+as unresearched invites the next run to redo work that was actually done.
 
 ## Making calls
 
@@ -284,7 +400,10 @@ Before writing the report, confirm:
 - Every new or re-dated entry carries both year fields, each derived per `data-handling.md` ▸
   *Dating a source*. A `null` on either is explained in the note.
 - Every range is ascending, same unit, both ends quoted.
-- Every remaining null can be justified by naming the authorities read.
+- **Every remaining null has been through phase 3c**, and carries its attempt log rather than just
+  the authorities read. A null whose log is two lines long has not been worked - send it back.
+- **Every `unresearched` has been checked against `not-applicable`**: if a document we hold is
+  positively silent where it publishes the neighbouring facts, that is a sourced null, not a gap.
 - `meta.dateVerified` is bumped only if every sourced fact in the state was confirmed against its
   source this run — cached snapshots count, changed pages must have been re-read.
 - Any snapshot written for a page you are not registering is named in the report as evidence.
@@ -308,5 +427,7 @@ Sections, in order:
 6. **Detailed notes** — expand every verdict that is not `verified`, plus anything the counts hide.
    Record traps found: a number belonging to a different exam, a stale agency link, a page that
    looked healthy and was not. These are what stop a later pass repeating the work.
-7. **Not verified, and why** — the honest residue, naming the authorities read for each null. Never
-   omit this section, even when empty.
+7. **Not verified, and why** — the honest residue. **Per null: what was tried, in what order, and
+   what the next run should start with.** Naming the authorities read is not enough on its own; the
+   attempt log is what stops the next pass repeating this one, and writing it is also the last
+   chance to notice that an angle was never tried. Never omit this section, even when empty.
