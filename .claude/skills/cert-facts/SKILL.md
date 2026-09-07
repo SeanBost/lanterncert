@@ -25,7 +25,7 @@ detail**. That fixes the resolution to work at:
   renders fine as "$250–$300" — that is a note, not a redesign.
 
 **Every restraint above governs WHAT YOU RECORD. None of them governs HOW HARD YOU LOOK.** Read
-quickly, *"exhaustive is not the goal"* reads as licence to stop early, and it is not — it is about
+quickly, *"exhaustive is not the goal"* reads as license to stop early, and it is not — it is about
 keeping a fee footnote out of a value that renders as a range. **Searching is the half of this job
 where more effort is always correct.** Be ruthless about what reaches the page and relentless about
 what you look at first.
@@ -73,12 +73,13 @@ the review gate but land in two files — the registry ships in the repo and ren
 note never leaves `blackbox/`. Never put note-shaped reasoning in a registry field.
 
 **Never touches:** the question bank, any UI or route, `CLAUDE.md`, `blackbox/data-handling.md`,
-`blackbox/todo.md`, `blackbox/project-plan.md`, `blackbox/sessions.md`, or git. Surface anything
+`blackbox/todo.md`, `blackbox/strategy/project-plan.md`, `blackbox/sessions.md`, or git. Surface anything
 those need as a report item — **a run that finds a standard wrong or missing proposes the change,
 never makes it.**
 
-**Writes on approval:** `src/templates/<cert>-facts-template.json`, and only to add an approved
-vocabulary value. Never mid-run, never unapproved.
+**Writes on approval:** nothing outside the facts and sources files. A new vocabulary value is a
+report item — it lands in `src/schemas/<cert>.ts` and `src/content/display/<cert>-display.json`
+together, by hand, never mid-run.
 
 ## Read first
 
@@ -86,8 +87,13 @@ vocabulary value. Never mid-run, never unapproved.
   key format, source ranking, the source-finding ladder, dating, the fact contract, verification
   checks and verdicts all live there and are **not restated here**. This file covers execution only:
   what a run does, in what order, and where it stops.
-- `src/templates/<cert>-facts-template.json` — what every field is for, and the complete set of
-  allowed values for each constrained field. **This is the authority on vocabularies.**
+- **`blackbox/authoring/<cert>-standards.md` ▸ *Sources*** — **this cert's own source rulings**,
+  which `data-handling.md` deliberately does not carry: which documents are held for reference only,
+  which publisher has served a truncated edition, which manual a state's material actually lives in.
+  **Each one is a trap that costs a re-fetch or a wrong citation.**
+- **`src/schemas/<cert>.ts` ▸ `vocab`** — the complete set of allowed values for each constrained
+  field, build-enforced. **This is the authority on vocabularies**; `data-handling.md` §4 ▸ *Field rules*
+  says what each one means and `src/content/display/<cert>-display.json` what it reads as.
 - `CLAUDE.md` ▸ *The rules that must never be missed*, ▸ *How it's wired*, ▸ *Locked decisions* —
   why the rules are what they are, and the null / `note` / `stateDetails` reasoning.
 - **The most recent report in `blackbox/research/` for this state**, if one exists. It records what
@@ -109,8 +115,8 @@ canonical drift and pages whose text changed since last time. **Never fetch a pa
 snapshot under 21 days old exists** — read `blackbox/source-snapshots/<cert>/<key>.json`. Both
 snapshot stores are partitioned by cert slug; a new cert gets its directory in
 `source-snapshots/` **and** in `source-snapshots-history/`, even though the history one starts
-empty. Request volume is deliberately low; every avoidable request is a bot-rule risk taken for
-nothing.
+empty. Request volume is deliberately low; every avoidable request is load placed on a public agency
+for nothing.
 
 The sweep raises two re-dating flags, `REDATE` and `CURRENCY-STALE`. **Both are work items for this
 run, not noise** — resolve them per `data-handling.md` ▸ *Sources — registry* ▸ *Dating a source*,
@@ -135,7 +141,7 @@ the one at step 5**, and it has to be worked rather than noted:
 3. Recommend `cosmetic` or `meaningful`, and say why. Cosmetic means the diff carries no
    information — a rotating banner, a build timestamp. Anything touching a cited value, or any
    change you cannot fully account for, is meaningful.
-4. **Sean decides.** On approval, apply with
+4. **The reviewer decides.** On approval, apply with
    `--apply-cosmetic <keys>` or `--apply-meaningful <keys>`, comma-separated, and pass
    `--expect-hash <candidate>` so a page that moved again refuses to write. A `meaningful` apply
    raises `REDATE`; say in the report what each year became and on what evidence.
@@ -196,7 +202,7 @@ say so rather than being silently orphaned.
 **Work the eight-step ladder in `data-handling.md` ▸ *Sources — registry* ▸ *Finding a source*, in
 order, and stop when the fact is settled.** Rank the candidates it produces with *Choosing between
 sources* in the same file. **The ladder's step 8 is escalation, and it is NOT the next step from
-here** — *Resolve before escalating* below sits between them, and a fact reaches Sean only after it.
+here** — *Resolve before escalating* below sits between them, and a fact reaches review only after it.
 When it does, say what was already ruled out, so the question isn't re-answered with work already
 done.
 
@@ -208,7 +214,7 @@ Choosing between two candidates is a **Decide**, not an *Escalate*. Say why in t
 
 ### Resolve before escalating
 
-**The ladder is linear and its last rung is "ask Sean". This is what happens between the two**, and
+**The ladder is linear and its last rung is "escalate". This is what happens between the two**, and
 every fact still null at phase 3c goes through it. **The ladder asks "where is the document?"; this
 asks "what if the question is wrong?"** — which is why working it harder does not substitute.
 
@@ -242,7 +248,7 @@ asks "what if the question is wrong?"** — which is why working it harder does 
 
 - **The agency does not publish it.** A real, finished answer — `not-applicable`, `value: null`
   **with** a source naming the document that would have carried it. **Strongest when the document
-  is positively silent** where it publishes the neighbouring facts, which is itself evidence.
+  is positively silent** where it publishes the neighboring facts, which is itself evidence.
 - **It is published and not yet found.** `unresearched`. **This is an admission, not a result**, and
   it carries the attempt log so the next run starts where this one stopped instead of repeating it.
 
@@ -271,32 +277,30 @@ and are not restated here.** Three things that are run behavior:
 
 ### Fetching discipline
 
-Identity checks, binary handling, snapshot rules and survey keys are in `data-handling.md` ▸
-*Sources — fetching and snapshots*. **All fetching goes through `scripts/fetch-page.mjs`** (§3 rule
-1) — never `WebFetch`, which egresses from different infrastructure and returns summarized content.
+Identity checks, binary handling, snapshot rules, survey keys and **the per-host request budget** are
+in `data-handling.md` ▸ *Sources — fetching and snapshots*, and are not restated here. **All fetching
+goes through `scripts/fetch-page.mjs`** (§3 rule 1) — never `WebFetch`, which returns model-summarized
+text that cannot be cited and never lands in the snapshot store the rest of the run reads.
 
-**Fetch the way a person researching would, not the way a crawler would.** This is the part that
-cost us a whole domain, so it is behavior, not preference:
+**Every request goes to a public agency publishing for the public, so the job is to need as few of
+them as possible.** That is a research standard before it is anything else: a run that reads
+carefully asks for less.
 
-- **The guard is a backstop, not a model of polite behavior — aim far below it.** It allows 20
-  requests per host per hour. **`ny.gov` was lost at roughly ten in an afternoon, six of them inside
-  twenty minutes**, which never came close to tripping it. **Treat ~6 requests to one host in a run
-  as the point where you stop and say so**, and name the blast radius before any operation that
-  would exceed it. The guard catches catastrophe; the pacing is yours.
-- **Serial, never batched.** One fetch, read it fully, then decide what the next one should be. A
-  queue of candidate URLs fired in sequence is the single clearest bot signature, and it is also
-  worse research — the page you just read usually tells you the right next URL.
+- **The budget is small, it is §3 rule 16, and a run approaching it stops and says so.** Name the
+  blast radius before any operation that would exceed it.
+- **Serial, never batched.** One fetch, read it fully, then decide what the next one should be. This
+  is also better research — the page you just read usually names the right next URL.
 - **Look for the whole document before fetching its parts.** A publisher that chunks a manual across
   twenty section pages usually also serves a print, export or download view of the whole thing.
   Finding it turns twenty requests into one. `ga-dds-drivers-manual` is the worked example: eleven
   section pages, one 210KB book-export URL, and the entry cites the document rather than a chunk
   (§2 rule 8b).
-- **Stop at the FIRST anomaly, not at the guard's second strike.** A challenge page, an unexpected
-  redirect chain, a 403, a body that does not match the URL — one is enough. The `ny.gov` failure
-  was precisely that the challenge detector fired every time and the run kept going.
-- **A search engine locates; the agency site is then visited once.** Do not walk an agency's own
-  site-search, and never probe a guessed slug — §1 rule 6 bans guessing identifiers, and a run of
-  404s from one client reads exactly like scanning.
+- **Stop at the first sign the site would rather not serve the request** — an interstitial, an
+  unexpected redirect chain, a 403, a body that does not match the URL. **One is enough**, and §3
+  rule 15 is what happens next: report it and end the run's work on that host.
+- **A search engine locates; the agency site is then visited once.** Never walk an agency's own
+  site-search, and never guess a URL — §1 rule 6 bans guessing identifiers, and a guess spends a
+  request to learn nothing.
 - **Cached is free, so exhaust it first.** Snapshots under 21 days old answer without a request, and
   most runs should make no requests at all.
 
@@ -308,10 +312,11 @@ Three things that are judgment rather than rule:
   referring source's note.
 - **A zero-hit search across a whole authority is evidence.** If a complete statute chapter never
   mentions a term, that silence is a finding worth reporting, not a failed search.
-- **A blocked document is handed over, not retried.** Where a PDF looks likely to support at least
-  one fact or question and no path reaches it, name the URL and a `temp-` filename and move on with
-  the run - `data-handling.md` §3 rule 14 carries the procedure. **Retrying a challenge is what gets
-  a whole domain blocked**, so a refusal is a finding to report, never something to work around.
+- **A document no automated path reaches is reported, not retried** (§3 rule 14). Where a PDF looks
+  likely to support at least one fact or question and the fetcher cannot reach it, name the URL and
+  the `temp-` filename it would take, then carry on with the rest of the run. **The refusal ends this
+  run's interest in that URL**: nothing is re-requested, and no second route is looked for. Whether a
+  person later opens the page in a browser is their own call and a separate one.
 
 ## Verdicts
 
@@ -361,7 +366,7 @@ Three that govern how a *run* behaves:
   add a vocabulary entry to the template mid-run. Do not stop to ask — collect it and keep going.
   Propose the token *and* the evidence for it, so one word can approve both.
 - **A page that now disagrees produces `drifted` and a recommendation, never an edit.** The report
-  carries the old value, the new value and the quote. Sean decides.
+  carries the old value, the new value and the quote. The reviewer decides.
 - **Decide what a new registry entry is when you propose it** — a fact's `source` or an
   `additionalResources` key, never both, never neither. An entry cited by nothing is an orphan the
   sweep will flag next run.
@@ -400,10 +405,17 @@ Before writing the report, confirm:
 - Every new or re-dated entry carries both year fields, each derived per `data-handling.md` ▸
   *Dating a source*. A `null` on either is explained in the note.
 - Every range is ascending, same unit, both ends quoted.
+- **Every value, display string and registry `description` is written rather than lifted, and carries
+  no term somebody owns.** These render, so `data-handling.md` §6 binds them exactly as it binds a
+  stem: phrasing is not free even where the fact is (rule 1), a `purchase` or `restricted` document
+  is never reproduced (rule 5), and a trademarked term may be cited but never taught (rule 10).
+  **A `title` naming its publisher is citation and stays** — the line is content versus citation.
+  An owned-looking term the cert's standards register does not list is traced to an owner before it
+  is used, at its FIRST marked use in the document rather than the instance in front of you.
 - **Every remaining null has been through phase 3c**, and carries its attempt log rather than just
   the authorities read. A null whose log is two lines long has not been worked - send it back.
 - **Every `unresearched` has been checked against `not-applicable`**: if a document we hold is
-  positively silent where it publishes the neighbouring facts, that is a sourced null, not a gap.
+  positively silent where it publishes the neighboring facts, that is a sourced null, not a gap.
 - `meta.dateVerified` is bumped only if every sourced fact in the state was confirmed against its
   source this run — cached snapshots count, changed pages must have been re-read.
 - Any snapshot written for a page you are not registering is named in the report as evidence.

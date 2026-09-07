@@ -23,17 +23,18 @@ function loadJson(path, required = true) {
 }
 
 const args = process.argv.slice(2);
+const VALUE_FLAGS = new Set(["--state", "--proposed"]);
 const flag = (name) => args.includes(name);
 const value = (name) => {
   const i = args.indexOf(name);
   return i === -1 ? null : args[i + 1];
 };
 // Walked rather than filtered: indexOf finds the first match, so a repeated value misreads.
-const positional = args.filter((a, i) => !a.startsWith("--") && args[i - 1] !== "--state");
+const positional = args.filter((a, i) => !a.startsWith("--") && !VALUE_FLAGS.has(args[i - 1]));
 
 if (!positional.length || flag("--help")) {
   console.error(
-    "audit-questions: usage — node scripts/audit-questions.mjs <cert-slug|slugShort> [--state <code>] [--json]",
+    "audit-questions: usage — node scripts/audit-questions.mjs <cert-slug|slugShort> [--state <code>] [--resolve] [--proposed <bank.json>] [--json]",
   );
   process.exit(1);
 }
@@ -56,7 +57,12 @@ const facts = loadJson(content("facts"));
 const exams = loadJson(content("exams"));
 const topics = loadJson(content("topics"));
 const weights = loadJson(content("weights"));
-const questionBank = loadJson(content("questions"));
+const bankPath = content("questions");
+const liveBank = loadJson(bankPath);
+// Runs every check against a candidate bank rather than the tracked one.
+const proposedPath = value("--proposed");
+const questionBank = proposedPath ? loadJson(resolve(proposedPath)) : liveBank;
+const newIds = new Set(Object.keys(questionBank).filter((id) => !(id in liveBank)));
 const guideScaffold = loadJson(content("guide"));
 // Optional and private, so a checkout without it still runs — but silently, which is the trap.
 const exclusionsPath = join(ROOT, "blackbox", "authoring", `${cert}-exclusions.json`);
@@ -68,6 +74,8 @@ if (only && !stateSlugs.length) {
   console.error(`audit-questions: no facts for state "${only}" in ${cert}`);
   process.exit(1);
 }
+
+const clip = (text, max) => (text.length > max ? `${text.slice(0, max - 1)}…` : text);
 
 const problems = [];
 const notes = [];
@@ -268,9 +276,48 @@ if (uncaptioned.length) {
   );
 }
 
+// ── choice formatting ────────────────────────────────────────────────────────
+// Flags a choice expanded over four lines, read from raw text because parsing discards format.
+const EXPANDED_CHOICE = /"id":\s*"[a-z]"\s*,\s*\n\s*"text"/g;
+for (const [label, path] of [["the bank", bankPath], ...(proposedPath ? [["the proposed bank", resolve(proposedPath)]] : [])]) {
+  const expanded = (readFileSync(path, "utf8").match(EXPANDED_CHOICE) ?? []).length;
+  if (expanded) {
+    problem(
+      "choice-format",
+      `${label} carries ${expanded} choice(s) expanded over four lines — a JSON.stringify rewrite. Restore the one-line form: ${path}`,
+    );
+  }
+}
+
+// ── meta.note ───────────────────────────────────────────────────────────────
+// Flags a note that runs long or records a decision. data-handling.md §1 rule 9.
+const NOTE_MAX_WORDS = 40;
+const DECISION = /\b(?:decided|declined|chose|chosen|overruled|rejected)\b|\w+'s call\b|\d{4}-\d{2}-\d{2}/i;
+for (const q of bank) {
+  const text = q.meta.note;
+  if (!text) continue;
+  const words = text.trim().split(/\s+/).length;
+  const decision = text.match(DECISION);
+  if (words <= NOTE_MAX_WORDS && !decision) continue;
+  const why = [
+    words > NOTE_MAX_WORDS ? `${words} words, past the ${NOTE_MAX_WORDS} a fact needs` : null,
+    decision ? `records a decision ("${decision[0]}")` : null,
+  ].filter(Boolean).join(" and ");
+  note("meta-note", `${q.id}'s note ${why} — a note carries a fact about the source, nothing else`);
+}
+
 // ── report ───────────────────────────────────────────────────────────────────
 if (flag("--json")) {
-  console.log(JSON.stringify({ cert, states: stateSlugs, quota: quotaRows, problems, notes }, null, 2));
+  const resolution = Object.fromEntries(
+    stateSlugs.map((slug) => [slug, resolvedFor[slug].map((q) => q.id)]),
+  );
+  console.log(
+    JSON.stringify(
+      { cert, states: stateSlugs, proposed: proposedPath, new: [...newIds], quota: quotaRows, resolution, problems, notes },
+      null,
+      2,
+    ),
+  );
   process.exit(problems.length ? 1 : 0);
 }
 
@@ -298,6 +345,33 @@ const totals = stateSlugs.map((slug) => {
 });
 console.log("  " + "TOTAL".padEnd(width) + totals.join(""));
 console.log(`  ${shortfall} question-slots still to author across every state and topic.`);
+
+// Per state: the questions it resolves, then the ones it does not and the token that excluded them.
+if (flag("--resolve")) {
+  console.log("\nRESOLUTION — what each state resolves, and what it does not");
+  for (const slug of stateSlugs) {
+    const mine = resolvedFor[slug];
+    const gained = mine.filter((q) => newIds.has(q.id)).length;
+    const suffix = proposedPath ? ` (${gained} new)` : "";
+    console.log(`  ${slug.toUpperCase()} · ${mine.length} of ${bank.length} in the bank${suffix}`);
+    for (const topic of Object.keys(topics)) {
+      const held = mine.filter((q) => q.meta.topic === topic);
+      const missed = bank.filter((q) => q.meta.topic === topic && !held.includes(q));
+      if (!held.length && !missed.length) continue;
+      console.log(`    ${topic} · ${held.length}`);
+      for (const q of held) {
+        const fact = q.guide ? (q.guide.text ?? q.content.explanation) : q.content.question;
+        const line = q.guide?.label ? `${q.guide.label} — ${fact}` : fact;
+        const mark = newIds.has(q.id) ? "+" : " ";
+        console.log(`      ${mark} ${q.id.padEnd(24)}${clip(line, 88)}`);
+      }
+      if (missed.length) {
+        const detail = missed.map((q) => `${q.id} (${q.meta.applies_to})`).join(", ");
+        console.log(`        not reached: ${clip(detail, 96)}`);
+      }
+    }
+  }
+}
 
 for (const [label, list] of [["PROBLEM", problems], ["NOTE", notes]]) {
   if (!list.length) continue;

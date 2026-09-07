@@ -76,8 +76,7 @@ img, svg {
   --space-10: 6rem;
   --space-11: 7rem;
 
-  /* Outside the scale on purpose: a gap between inline punctuation and its text rides on the type
-     size, not on layout rhythm. It tops up the markup's own space either side of a pipe. */
+  /* Tops up the markup's own space either side of a pipe. Sized in em, so it is not a scale step. */
   --sep-gap: 0.15em;
 
   /* Radius — three values, reused; nothing defines its own */
@@ -133,8 +132,7 @@ img, svg {
   --color-ink-hover: var(--color-ink-light);
 
   --color-border: var(--color-ink-lightest);
-  /* The two ends of the button's hover sweep, each with the type color it carries. Orange is a
-     surface and never holds type, so it arrives as the sweep rather than sitting under the label. */
+  /* The two ends of the button's hover sweep, each with the type color it carries. */
   --color-accent: var(--color-ink-med);
   --color-accent-hover: var(--color-orange);
   --color-accent-ink: var(--white);
@@ -592,16 +590,14 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
 }
 */
 
-/* The positioning context for the underline below. The nav renders identically on every page -
-   aria-current stays in the markup for assistive tech and is deliberately given no styling. */
+/* The positioning context for the underline below. aria-current is markup only - never style it. */
 .site-nav__list a {
   position: relative;
   display: block;
   padding: var(--space-3) var(--nav-pad-x);
 }
 
-/* Inset to --nav-pad-x rather than to 0: an absolute pseudo-element lays out against the PADDING box,
-   so this puts the bar at the label's own width instead of the padded box's. */
+/* Inset to --nav-pad-x, which puts the bar at the label's width rather than the padded box's. */
 .site-nav__list a::after {
   content: "";
   position: absolute;
@@ -774,8 +770,7 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
   padding: var(--space-5);
 }
 
-/* An accent down the left edge instead of a card, painted as a sized background rather than a border.
-   Square on the left, or the radius tapers the bar instead of letting it run the full height. */
+/* An accent down the left edge, painted as a sized background. Square on the left, or it tapers. */
 .accent-edge {
   padding: 0 var(--space-5);
   border-radius: 0 var(--radius-md) var(--radius-md) 0;
@@ -956,7 +951,7 @@ ul.accent-edge, ol.accent-edge {
   --color-border: var(--color-orange-dark);
 }
 
-/* A divided list stands a step clear of its neighbours either side. Two classes, so it outranks
+/* A divided list stands a step clear of its neighbors either side. Two classes, so it outranks
    .stack's own step from anywhere in the file; the last selector needs three to outrank .button-row. */
 .stack > * + .facts, .stack > * + .row-list, .stack > * + .source-list,
 .stack > .facts + *, .stack > .row-list + *, .stack > .source-list + *,
@@ -1030,8 +1025,7 @@ ol.source-list, ul.source-list {
   padding-left: var(--space-5);
 }
 
-/* The number is drawn INSIDE the li rather than as a list marker, because a marker is laid out
-   beyond the content edge and would hang into the accent gutter. list-item needs no counter-reset. */
+/* The number is drawn inside the li, so it cannot hang into the accent gutter the way a marker does. */
 ol.source-list {
   list-style: none;
 }
@@ -1185,8 +1179,7 @@ ol.source-list > li::before {
   text-overflow: ellipsis;
 }
 
-/* Weight rather than color separates host from path, the way a real address bar dims the path -
-   which a single link color cannot do without breaking the link affordance. */
+/* Weight, not color, separates host from path - the link affordance owns the color here. */
 .correction__host {
   font-weight: var(--weight-semi);
 }
@@ -1532,8 +1525,7 @@ ul.source-wall__row {
   margin-top: var(--space-2);
 }
 
-/* Weight is presentation; the ELEMENT carries the meaning, so the weight is set here rather than by
-   swapping <strong> for something lighter. <b> draws the eye, <strong> says it matters. */
+/* Both elements take bold; the element carries the meaning and the weight is only presentation. */
 .prose strong, .prose b {
   font-weight: var(--weight-bold);
 }
@@ -1640,7 +1632,7 @@ ul.source-wall__row {
   color: var(--color-ink-lightest);
 }
 
-/* An inline mark 4px taller than a capital, clearing it 2px above the caps and 2px below the baseline.
+/* An inline mark set a little taller than a capital.
    display undoes the img reset in §1, which would otherwise stack this on its own line. */
 .caption__icon {
   display: inline-block;
