@@ -21,7 +21,7 @@ followed by an exam-prep product with three deliberately progressive tools/featu
 Every guide claim and question/answer cites the agency document it came from, every jurisdictional
 fact carries the date it was last verified against that document, and both are visible to the
 reader and linked on-page. For the foreseeable future, there's no ads, no signup, and no upsell, since
-focusing on developing a user base to build SEO/AEO goodwill and incrementally test/improve content is worth
+focusing on developing a user base to build SEO/AEO/Forum goodwill and incrementally test/improve content is worth
 more than a cash-in this early. More targeted growth directions can be determined with more data.
 
 **Status: pre-alpha.** The scaffold, content pipeline and deploy pipeline are all live; what's

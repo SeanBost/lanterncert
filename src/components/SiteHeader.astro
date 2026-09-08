@@ -6,9 +6,13 @@ const links = [
 	{ href: "/progress", label: "My Progress" },
 ];
 
+// Temporary: carries the parked homepage until it takes over "/".
+const ctaPages = ["/", "/homepage-to-come", "/about"];
+
 // Compared without the hash, so "/#certifications" marks the homepage it points into.
 const here = Astro.url.pathname.replace(/\/+$/, "") || "/";
 const isCurrent = (href) => (href.split("#")[0].replace(/\/+$/, "") || "/") === here;
+const showCta = ctaPages.includes(here);
 ---
 
 <header class="site-header">
@@ -19,7 +23,7 @@ const isCurrent = (href) => (href.split("#")[0].replace(/\/+$/, "") || "/") === 
 				class="site-header__logo"
 				src="/lanterncert-logo.png"
 				alt="LanternCert"
-				width="1240"
+				width="1221"
 				height="160"
 			/>
 		</a>
@@ -41,6 +45,12 @@ const isCurrent = (href) => (href.split("#")[0].replace(/\/+$/, "") || "/") === 
 						</a>
 					</li>
 				))}
+				{showCta && (
+					<li>
+						{/* A <button> until it has a destination; it becomes an <a class="btn site-nav__cta">. */}
+						<button class="btn site-nav__cta" type="button">Start learning</button>
+					</li>
+				)}
 			</ul>
 		</nav>
 	</div>

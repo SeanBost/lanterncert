@@ -15,8 +15,16 @@ const POLL_MS = 200;
 const DRIFT_PX = 8;
 const DRIFT_DEG = 0;
 // Seconds. Each tile draws its own periods from this range - see wave().
-const DRIFT_PERIOD_MIN = 12;
+const DRIFT_PERIOD_MIN = 10;
 const DRIFT_PERIOD_MAX = 16;
+
+// Half the wall's front-to-back depth: the center leads by it, the rim trails by it, and neither
+// moves. Read with --wall-perspective in global.css, which owns how deep the projection runs.
+const DOME_Z_PX = 60;
+// Raises the WHOLE surface toward the reader, so every tile grows rather than only the middle ones.
+const DOME_LIFT_PX = 20;
+// Falloff shape from center to rim: 1 is a cone, above flattens the middle, below bulges it.
+const DOME_FALLOFF = 1;
 // A frame after a background tab returns is worth the whole hidden span, which would teleport a tile.
 const MAX_FRAME_S = 0.05;
 
@@ -87,9 +95,9 @@ const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 /** One axis of drift: two out-of-step sines summing to a peak of 1, as a function of seconds.
     The two periods almost never divide each other, so the path never closes into a loop the eye learns. */
-function wave() {
+function wave(periodMin, periodMax) {
   const term = () => ({
-    w: (2 * Math.PI) / (DRIFT_PERIOD_MIN + Math.random() * (DRIFT_PERIOD_MAX - DRIFT_PERIOD_MIN)),
+    w: (2 * Math.PI) / (periodMin + Math.random() * (periodMax - periodMin)),
     phase: Math.random() * 2 * Math.PI,
   });
   const [a, b] = [term(), term()];
@@ -137,6 +145,99 @@ export function initHeroArt() {
     cell.host.textContent = source.url;
   }
 
+  // The curve is GEOMETRY, not motion, so it is laid out before the reduced-motion return and a
+  // wall that never animates is still a curved one.
+  const rowEls = [...wall.querySelectorAll(".source-wall__row")];
+  cells.forEach((cell) => (cell.row = rowEls.indexOf(cell.el.closest(".source-wall__row"))));
+
+  // The projection is done HERE, so nothing in the wall needs a CSS perspective or a 3D context.
+  const tile = (cell, tx, ty, s) =>
+    `translate(${tx.toFixed(2)}px, ${ty.toFixed(2)}px) scale(${s.toFixed(4)})` +
+    (DRIFT_DEG ? ` rotate(${(cell.deg ?? 0).toFixed(3)}deg)` : "");
+
+  // A field over the wall rather than a height stamped on a tile: a tile reads it where it now is.
+  let field = null;
+  // The one line of projection: a plane at depth z reads P / (P - z) times its own size.
+  const perspectiveScale = (z) => (field ? field.perspective / (field.perspective - z) : 1);
+  const zAt = (px, py) => {
+    if (!field) return 0;
+    const u = Math.min(1, Math.hypot(px / field.halfX, py / field.halfY));
+    return DOME_LIFT_PX + DOME_Z_PX * (1 - 2 * Math.pow(u, DOME_FALLOFF));
+  };
+
+  function curve() {
+    const perspective = parseFloat(getComputedStyle(wall).getPropertyValue("--wall-perspective")) || 0;
+    // Cleared before reading, so a rect is the tile's layout box rather than its projected one.
+    for (const cell of cells) cell.el.style.transform = "none";
+    const box = wall.getBoundingClientRect();
+    const rects = cells.map((cell) => cell.el.getBoundingClientRect());
+
+    // The perspective centers on the wall's own box, so the field is normalized to that same box.
+    const midX = box.x + box.width / 2;
+    const midY = box.y + box.height / 2;
+    const halfX = Math.max(box.width / 2, 1);
+    const halfY = Math.max(box.height / 2, 1);
+
+    field = perspective ? { halfX, halfY, perspective } : null;
+    cells.forEach((cell, i) => {
+      cell.box = rects[i];
+      cell.dx = rects[i].x + rects[i].width / 2 - midX;
+      cell.dy = rects[i].y + rects[i].height / 2 - midY;
+      cell.z = zAt(cell.dx, cell.dy);
+      cell.s = perspectiveScale(cell.z);
+    });
+
+    /** @type {any[][]} */
+    const rows = [];
+    for (const cell of cells) (rows[cell.row] ??= []).push(cell);
+
+    // Every gap comes off the LAYOUT rather than off a number here, so global.css keeps owning it.
+    const gapOf = (a, b, axis) =>
+      axis === "x" ? b.box.x - (a.box.x + a.box.width) : b.box.y - (a.box.y + a.box.height);
+
+    // Rows are stacked by their own projected heights, so no two can close on each other whatever
+    // the curve does. The tallest tile in a row sets that row's height.
+    const heights = rows.map((row) => row[0].box.height * Math.max(...row.map((c) => c.s)));
+    const scales = rows.map((row) => Math.max(...row.map((c) => c.s)));
+    let stack = heights.reduce((sum, h) => sum + h, 0);
+    for (let i = 0; i < rows.length - 1; i++) {
+      stack += gapOf(rows[i][0], rows[i + 1][0], "y") * ((scales[i] + scales[i + 1]) / 2);
+    }
+    let cursorY = -stack / 2;
+
+    rows.forEach((row, i) => {
+      const centerY = cursorY + heights[i] / 2;
+      cursorY += heights[i];
+      if (i < rows.length - 1) {
+        cursorY += gapOf(row[0], rows[i + 1][0], "y") * ((scales[i] + scales[i + 1]) / 2);
+      }
+
+      // Laid out left to right at each tile's own projected width, every gap scaled to its pair.
+      const gapX = row.length > 1 ? gapOf(row[0], row[1], "x") : 0;
+      const widths = row.map((c) => c.box.width * c.s);
+      let span = widths.reduce((sum, w) => sum + w, 0);
+      for (let j = 0; j < row.length - 1; j++) span += gapX * ((row[j].s + row[j + 1].s) / 2);
+      // The row keeps the center it had, so the brick offset between rows survives the solve.
+      const first = row[0];
+      const last = row[row.length - 1];
+      const was = (first.box.x + last.box.x + last.box.width) / 2 - midX;
+      let cursorX = was - span / 2;
+
+      row.forEach((cell, j) => {
+        const centerX = cursorX + widths[j] / 2;
+        cursorX += widths[j];
+        if (j < row.length - 1) cursorX += gapX * ((cell.s + row[j + 1].s) / 2);
+        // scale() runs first and about the tile's own center, so the translate is a plain screen-space
+        // move from where the tile was laid out to where the solve wants it.
+        cell.tx = centerX - cell.dx;
+        cell.ty = centerY - cell.dy;
+        cell.el.style.transform = tile(cell, cell.tx, cell.ty, cell.s);
+      });
+    });
+  }
+  curve();
+  new ResizeObserver(curve).observe(wall);
+
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
   let onScreen = true;
@@ -146,9 +247,10 @@ export function initHeroArt() {
   const form = document.getElementById("autocomplete");
   const paused = () => document.hidden || !onScreen || !!form?.contains(document.activeElement);
 
-  // Each tile drifts a couple of pixels on its own clock. Transform, not margin: the layout box never
-  // moves, and the tile's overflow clip travels with it so the ellipsis can't re-cut mid-drift.
-  cells.forEach((cell) => (cell.drift = { x: wave(), y: wave(), r: wave() }));
+  // Each tile drifts on its own clock, on top of the curve it already sits on. Transform, not margin:
+  // the layout box never moves, and the tile's overflow clip travels with it so the ellipsis holds.
+  const plane = () => wave(DRIFT_PERIOD_MIN, DRIFT_PERIOD_MAX);
+  cells.forEach((cell) => (cell.drift = { x: plane(), y: plane(), r: plane() }));
 
   // An accumulated clock rather than the wall clock, so a pause resumes from the phase it stopped at.
   let driftT = 0;
@@ -160,9 +262,12 @@ export function initHeroArt() {
       driftT += elapsed;
       for (const cell of cells) {
         const { x, y, r } = cell.drift;
-        cell.el.style.transform =
-          `translate(${(x(driftT) * DRIFT_PX).toFixed(2)}px, ${(y(driftT) * DRIFT_PX).toFixed(2)}px)` +
-          ` rotate(${(r(driftT) * DRIFT_DEG).toFixed(3)}deg)`;
+        const wanderX = x(driftT) * DRIFT_PX;
+        const wanderY = y(driftT) * DRIFT_PX;
+        // Sampled where the tile has wandered to, never where it was laid out.
+        const z = zAt(cell.dx + wanderX, cell.dy + wanderY);
+        cell.deg = r(driftT) * DRIFT_DEG;
+        cell.el.style.transform = tile(cell, cell.tx + wanderX, cell.ty + wanderY, perspectiveScale(z));
       }
     }
     requestAnimationFrame(drift);

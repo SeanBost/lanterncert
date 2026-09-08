@@ -44,6 +44,7 @@ img, svg {
   /* The quoted overview's own stack, minus Google Sans - Roboto is the real fallback in it. */
   --font-overview: "Roboto", Arial, sans-serif;
   --weight-normal: 400;
+  --weight-med: 500;
   --weight-semi: 600;
   --weight-bold: 700;
   --weight-extrabold: 800;
@@ -125,7 +126,7 @@ img, svg {
   --color-page: var(--white);
   --color-surface: var(--white);
   --color-header: var(--color-yellow-nearwhite);
-  --color-footer: color-mix(in srgb, var(--color-yellow-offwhite) 60%, var(--color-yellow-nearwhite));
+  --color-footer: var(--band-warm-fill);
 
   --color-text: var(--color-ink);
   /* One dial for every ink link's hover - the chrome's and the heading links' alike. */
@@ -138,16 +139,14 @@ img, svg {
   --color-accent-ink: var(--white);
   --color-accent-hover-ink: var(--color-ink);
   --color-focus: var(--color-orange-dark);
-  /* The light beams raked across a warm band */
-  --color-beam: var(--color-yellow-nearwhite);
-  /* Controls the color of the warm band's background gradient */
-  --band-warm-gradient: linear-gradient(160deg,
-    color-mix(in srgb, var(--color-yellow-offwhite) 20%, var(--color-yellow-nearwhite)),
-    color-mix(in srgb, var(--color-yellow-offwhite) 80%, var(--color-yellow-nearwhite)));
-  /* The pane set behind text that needs a busy band quieted under it. */
-  --color-band-warm-blur: color-mix(in srgb, var(--color-yellow-offwhite) 20%, var(--color-yellow-nearwhite));
+  /* The one warm surface the lit bands and the footer are all filled with. */
+  --band-warm-fill: color-mix(in srgb, var(--color-yellow-offwhite) 5%, var(--color-yellow-nearwhite));
+  /* The pane set behind text that needs a lit band quieted under it. */
+  --color-band-warm-blur: var(--white);
   /* A tint of the hover fill, so a resting chip reads as the quiet end of the same control. */
   --color-chip: color-mix(in srgb, var(--color-orange-offwhite) 90%, var(--color-orange));
+  /* The lit end of every warm ramp - the swept h1 word and the nav CTA take the same light. */
+  --color-orange-lit: color-mix(in srgb, var(--color-orange) 70%, var(--color-orange-dark));
 
   /* Deliberately low contrast, the one place it is unwanted: a disabled control must not invite a click. */
   --color-disabled: var(--color-ink-light);
@@ -164,11 +163,20 @@ img, svg {
   /* The outer edge only - against the header and the footer, never between two bands.
      Must be redeclared wherever --band-pad is, or this var() picks up the new value. */
   --band-pad-edge: var(--band-pad);
-  /* Strength and scaling of a warm band's light beams; --color-beam carries the hue. */
-  --beam-opacity: .751;
-  --beam-fit: 100% 100%;
+  /* How far up from an open band's bottom edge its fill has reached white. */
+  --band-open-foot: 3rem;
+  /* Ink carrying a little of the warm ramp, so a shadow falling on a warm band does not gray it. */
+  --shadow-hue: color-mix(in srgb, var(--color-orange-dark) 15%, var(--color-ink));
+  /* A contact edge and a wide diffuse one, for anything the eye reads as a raised sheet. */
+  --shadow-card:
+    0 1px 2px -1px color-mix(in srgb, var(--shadow-hue) 8%, transparent),
+    0 10px 20px -14px color-mix(in srgb, var(--shadow-hue) 16%, transparent);
+  /* The same pair at control scale, taken by a chip, a field and every button. */
+  --shadow-control:
+    0 1px 2px -1px color-mix(in srgb, var(--shadow-hue) 8%, transparent),
+    0 3px 4px -4px color-mix(in srgb, var(--shadow-hue) 16%, transparent);
   /* Alpha and edge feather of the pane; --color-band-warm-blur carries the tint. */
-  --band-warm-blur-opacity: 80%;
+  --band-warm-blur-opacity: 45%;
   --band-warm-blur-radius: 16px;
   --standard-border: 1px solid var(--color-border);
   --header-h: 3.75rem;
@@ -238,12 +246,15 @@ h1 {
   font-family: var(--font-display);
   font-weight: var(--weight-semi);
   font-size: var(--text-xl);
+  /* In em, so one value covers every size an h1 takes. A new heading level joins both rules. */
+  letter-spacing: -0.02em;
   color: var(--color-ink-med);
 }
 
 h2, h3 {
   font-family: var(--font-display);
   font-weight: var(--weight-bold);
+  letter-spacing: -0.01em;
   color: var(--color-ink-med);
 }
 
@@ -326,13 +337,30 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
   --band-to: var(--white);
 }
 
-/* A hairline of the frame gradient on both edges, drawn under a transparent border like .framed. */
-.band--warm {
-  border-block: 1px solid transparent;
+/* The two lit bands, both one flat warm fill under a frame-gradient hairline. The fill is drawn as
+   a layer rather than a background-color, which the border-box clip below would run under the ring. */
+.band--warm, .band--warm-open {
   background-color: var(--color-ink-med);
-  background-image: var(--band-warm-gradient), var(--frame-gradient);
   background-origin: padding-box, border-box;
   background-clip: padding-box, border-box;
+}
+
+/* Closed: the hairline on both edges, drawn under a transparent border the way .framed is. */
+.band--warm {
+  border-block: 1px solid transparent;
+  background-image: linear-gradient(var(--band-warm-fill) 0 0), var(--frame-gradient);
+}
+
+/* Open: the same hairline along the top alone, and a foot taking the last --band-open-foot to white,
+   so the band runs out into the page rather than ending on an edge. */
+.band--warm-open {
+  border-top: 1px solid transparent;
+  background-image:
+    linear-gradient(to top, var(--white), transparent var(--band-open-foot)),
+    linear-gradient(var(--band-warm-fill) 0 0),
+    var(--frame-gradient);
+  background-origin: padding-box, padding-box, border-box;
+  background-clip: padding-box, padding-box, border-box;
 }
 
 .bands > .band:last-child {
@@ -371,7 +399,7 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
 /* Bleeds out to the viewport edges and clips there, so the wall runs off both sides equally rather
    than widening the page. Desktop puts it back in its column below. */
 .hero-art {
-  --art-fade: 22%;
+  --art-fade: 18%;
   display: flex;
   align-items: flex-start;
   justify-content: center;
@@ -532,13 +560,13 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
 /* A glyph, not a rule - full ink and its own thickness, so the control reads as a control. */
 .site-header__toggle span {
   display: block;
-  height: 2.5px;
+  height: 3px;
   background-color: var(--color-ink);
 }
 
 /* Into an X. The offset is the gap plus a bar, which is each outer bar's distance from the middle one. */
 .site-header--open .site-header__toggle span:first-child {
-  transform: translateY(7.5px) rotate(45deg);
+  transform: translateY(8px) rotate(45deg);
 }
 
 .site-header--open .site-header__toggle span:nth-child(2) {
@@ -546,7 +574,7 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
 }
 
 .site-header--open .site-header__toggle span:last-child {
-  transform: translateY(-7.5px) rotate(-45deg);
+  transform: translateY(-8px) rotate(-45deg);
 }
 
 /* Collapsed by default; the toggle reveals it. Desktop puts it back inline below. */
@@ -581,7 +609,7 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
   flex-direction: column;
   align-items: center;
   font-size: var(--text-xl);
-  font-weight: var(--weight-semi);
+  font-weight: var(--weight-normal);
 }
 
 /* Nav separators, commented out rather than deleted.
@@ -612,6 +640,36 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
 /* Swipes open to full width, alongside the color step the rule above applies. */
 .site-nav__list a:hover::after, .site-nav__list a:focus-visible::after {
   clip-path: inset(0 0 0 0);
+}
+
+/* The chrome's filled control, on the palette's one warm token that can carry white type.
+   Two classes, so it outranks .btn from above it in the file instead of on source order. */
+.site-nav__list .site-nav__cta {
+  --cta-fill: var(--color-orange-dark);
+  --btn-under: linear-gradient(135deg, var(--color-orange-lit), var(--cta-fill));
+  /* inline-flex, not .btn's inline-block: min-height sets the box, so the label has to center in it. */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: var(--space-3);
+  /* Under .btn's 44px, which is the AAA target size - this clears the AA one with room to spare. */
+  min-height: 40px;
+  font-weight: var(--weight-med);
+  padding: var(--space-0) var(--space-3);
+  border-radius: var(--radius-md);
+  background-color: var(--cta-fill);
+  line-height: var(--leading-tight);
+}
+
+/* The fill is already the focus hue, so the ring is drawn in ink to stay visible beside it. */
+.site-nav__list .site-nav__cta:focus-visible {
+  outline-color: var(--color-ink);
+}
+
+/* The press: down a pixel, with the halo dropping to its quiet step. */
+.site-nav__list .site-nav__cta:active {
+  --glow: var(--glow-key);
+  transform: translateY(1px);
 }
 
 /* The warm band's frame-gradient hairline, drawn under a transparent border the same way. */
@@ -703,6 +761,7 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
 /* The gradient ring both frame types are drawn by. The first layer hides the frame everywhere except
    the ring, so an unsupported color-mix costs the ring and nothing else. */
 .framed, .card-grid--lit .card {
+  box-shadow: var(--shadow-card);
   border: var(--frame-w) solid transparent;
   background-color: var(--white);
   background-image:
@@ -803,6 +862,7 @@ ul.accent-edge, ol.accent-edge {
 }
 
 .btn, .btn:visited {
+  box-shadow: var(--shadow-control);
   display: inline-block;
   padding: var(--space-2) var(--space-5);
   min-height: 44px;
@@ -825,14 +885,15 @@ ul.accent-edge, ol.accent-edge {
   cursor: pointer;
 }
 
-/* The splash-fade both lit controls carry: a diagonal wedge growing across the surface.
-   --splash is a percentage along the GRADIENT LINE, so it covers every corner at any size. */
+/* The splash-fade every lit control carries, over --btn-under where one is set. --splash is a
+   percentage along the GRADIENT LINE, so the wedge covers every corner at any size. */
 .btn, .btn:visited, .chip, .chip:visited {
   background-image: linear-gradient(
-    135deg,
-    var(--splash-fill) calc(var(--splash) - 30%),
-    transparent var(--splash)
-  );
+      135deg,
+      var(--splash-fill) calc(var(--splash) - 30%),
+      transparent var(--splash)
+    ),
+    var(--btn-under, none);
   background-origin: border-box;
 }
 
@@ -889,6 +950,7 @@ ul.accent-edge, ol.accent-edge {
 /* A mini button carrying .btn's splash-fade at body size. The :visited half is
    load-bearing: a:visited is (0,1,1) and outranks a lone class. */
 .chip, .chip:visited {
+  box-shadow: var(--shadow-control);
   display: inline-block;
   padding: var(--space-0) var(--space-2);
   border-radius: var(--radius-md);
@@ -1097,6 +1159,7 @@ ol.source-list > li::before {
 
 /* A window onto the publisher's page. --frame-w is the edge, the seam and the air around the pill. */
 .correction__browser {
+  box-shadow: var(--shadow-card);
   display: flex;
   flex-direction: column;
   gap: var(--frame-w);
@@ -1266,6 +1329,12 @@ ol.source-list > li::before {
   font-weight: var(--weight-semi);
 }
 
+.assurances > li {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
 .assurances > li + li {
   margin-top: var(--space-2);
 }
@@ -1282,6 +1351,9 @@ ol.source-list > li::before {
   --tile-h: 3.5rem;
   --tile-gap: 4px;
   --tile-condense: 0.9;
+  /* Distance to the wall's vanishing point - smaller deepens every tile's travel toward the reader.
+     Read by hero-art.js, which does the projection itself; no CSS perspective is declared anywhere. */
+  --wall-perspective: 600px;
   display: flex;
   flex-direction: column;
   gap: var(--tile-gap);
@@ -1369,6 +1441,7 @@ ul.source-wall__row {
 
 /* Padding, size and leading all match .btn so the field and its submit compute the same height. */
 .autocomplete__input {
+  box-shadow: var(--shadow-control);
   width: 100%;
   min-height: 44px;
   padding: var(--space-2) var(--space-3);
@@ -1551,9 +1624,12 @@ ul.source-wall__row {
   margin-right: 0.12em;
 }
 
-/* The dark orange, not the accent - both accents are surfaces and never carry type. */
+/* The ramp's light end stops short of --color-orange, which cannot clear the large-text bar as type. */
 .page-title__accent {
   --sweep-ink: var(--color-orange-dark);
+  --sweep-lit: var(--color-orange-lit);
+  /* Which end the ramp starts from; 90deg lands the light end on the left instead. */
+  --sweep-turn: 270deg;
   --sweep-from: var(--color-ink-med);
   --glow: var(--glow-hero);
   color: var(--sweep-ink);
@@ -1568,12 +1644,19 @@ ul.source-wall__row {
 
 /* The background-color, the padding pair and the drop-shadow filter are each load-bearing below. */
 @supports (background-clip: text) or (-webkit-background-clip: text) {
-  /* The swept color is the background COLOR and the gradient only ever hides it; never put it in the
-     gradient. --sweep-ink is what the word sweeps TO, --sweep-from what the gradient hides it with. */
+  /* Two layers, and the split is what makes it work: the curtain slides and the ramp never does.
+     Merge them and the position animation below drags the ramp across the word as it reveals. */
   .sweep-in {
     background-color: var(--sweep-ink, var(--color-ink));
-    background-image: linear-gradient(90deg, transparent 0 48%, var(--sweep-from, var(--color-page)) 53% 100%);
-    background-size: 220% 100%;
+    background-image:
+      linear-gradient(90deg, transparent 0 48%, var(--sweep-from, var(--color-page)) 53% 100%),
+      linear-gradient(
+        var(--sweep-turn, 90deg),
+        var(--sweep-lit, var(--sweep-ink, var(--color-ink))),
+        var(--sweep-ink, var(--color-ink))
+      );
+    /* The ramp is exactly the box, so it has no slack and the keyframe's position cannot move it. */
+    background-size: 220% 100%, 100% 100%;
     background-repeat: no-repeat;
     background-position: 0 0;
     -webkit-background-clip: text;
@@ -1619,6 +1702,18 @@ ul.source-wall__row {
 .text-key, .prose .text-key {
   color: var(--color-orange-dark);
   font-weight: var(--weight-bold);
+}
+
+/* Mobile: caps the title and its lede at the widest line balance settles on, then centers that box -
+   so the leftover splits either side with both blocks still ranged left. */
+.hero-lead {
+  max-width: 18.5rem;
+  margin-inline: auto;
+}
+
+/* Evens a short block's lines instead of filling each one to the measure. */
+.text-balance {
+  text-wrap: balance;
 }
 
 /* An inline separator, topping up the space the markup already keeps either side of it. */
@@ -1718,27 +1813,6 @@ ul.source-wall__row {
     padding-top: var(--space-8);
   }
 
-  /* isolation is load-bearing: without it the -1 child escapes to the page background and vanishes. */
-  .band--warm {
-    position: relative;
-    isolation: isolate;
-  }
-
-  /* Light beams raking down from a point above the band's top-left corner. */
-  .band--warm::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background-color: var(--color-beam);
-    opacity: var(--beam-opacity);
-    mask-image: url("/assets/band-beams.png");
-    mask-size: var(--beam-fit);
-    mask-position: top left;
-    mask-repeat: no-repeat;
-    pointer-events: none;
-  }
-
   /* One card per row, centered and capped at the mobile maximum, so the stack reads as continuous
      with mobile. The alternative reflows to a 2-then-1 row that reads as a mistake. */
   .card-grid {
@@ -1782,11 +1856,11 @@ ul.source-wall__row {
     margin-top: var(--space-9);
   }
 
-  /* Back into its column, overhanging its left edge by 10% of the column's width and its right by 15%. */
+  /* Back into its column and overhanging both its edges, centered rather than flex-start - which is
+     what makes the wall lose the same slice of tile off each side. */
   .hero-art {
-    justify-content: flex-start;
-    min-width: 125%;
-    margin-inline: -10% 0;
+    min-width: 120%;
+    margin-inline: -7.5% 0;
   }
 
   /* A single centered column, for a page with no sidebar to hand the leftover width to. */
@@ -1797,6 +1871,12 @@ ul.source-wall__row {
 
   .page-title--hero {
     font-size: var(--text-6xl);
+  }
+
+  /* Back to the column: the split's own width is the measure once the hero is two columns. */
+  .hero-lead {
+    max-width: none;
+    margin-inline: 0;
   }
 
   .site-header__toggle {
@@ -1836,10 +1916,10 @@ ul.source-wall__row {
     --nav-underline-drop: var(--header-drop);
     flex-direction: row;
     align-items: center;
-    gap: var(--space-2);
+    /* No gap: the anchors' own inline padding is the whole space between labels, and it abuts. */
+    gap: 0;
     margin-right: calc(-1 * var(--nav-pad-x));
     font-size: var(--text-lg);
-    font-weight: var(--weight-semi);
   }
 
   /* Nav separators, commented out rather than deleted. Restoring one needs its own spacing back.
@@ -1850,6 +1930,14 @@ ul.source-wall__row {
 
   .site-nav__list a {
     padding: var(--space-2) var(--nav-pad-x);
+  }
+
+  /* margin-right puts back the list's negative one: a filled control aligns by its edge, not its label. */
+  .site-nav__list .site-nav__cta {
+    margin-top: 0;
+    margin-right: var(--nav-pad-x);
+    /* The one gap the row still declares, the rest having gone to gap: 0 above. */
+    margin-left: var(--space-2);
   }
 
   /* Opens left to right on the inline nav, where the stacked mobile panel opens from its center. */
@@ -2019,11 +2107,6 @@ ul.source-wall__row {
    Measure before adding a rule here, and delete the whole block the day Gecko
    composites these cheaply.
    =========================================================================== */
-
-/* The beams: a full-bleed masked layer repainted behind every scrolling band. */
-:root[data-engine="gecko"] .band--warm::before {
-  display: none;
-}
 
 /* No blur means the band must go opaque - see-through chrome with nothing behind it reads worse. */
 :root[data-engine="gecko"] .site-header {

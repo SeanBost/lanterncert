@@ -28,6 +28,12 @@ if (!primary) {
 
 const sources = (await Promise.all(displayedCerts.map((cert) => loadAllSources(cert.slug)))).flat();
 
+// The source count leads: it is the one claim a free competitor cannot make in the same words.
+const assurances = [
+	{ mark: "🏛️", line: `Backed by ${sources.length} official sources` },
+	{ mark: "🔓", line: "No ads, paywalls, or signup" },
+];
+
 // Round-robin by scope so the top of the wall shows the mix rather than one agency's run.
 // Sorted before grouping, so each group inherits title order without a second sort.
 const sorted = sources.sort((a, b) => a.title.localeCompare(b.title));
@@ -84,13 +90,13 @@ for (const size of rowSizes) {
 	<div class="bands">
 		<div class="split split--even band band--wash">
 			<div class="stack-lg">
-				<div class="stack">
+				<div class="stack hero-lead">
 					<h1 class="page-title page-title--hero">
 						Learn <em>exactly</em> what gets you
 						<span class="page-title__accent sweep-in">certified</span>
 					</h1>
 					<div class="prose">
-						<p>
+						<p class="text-balance">
 							Requirements, exam prep, and what the certification process is like.
 							All cited and linked on-page.
 						</p>
@@ -104,14 +110,12 @@ for (const size of rowSizes) {
 
 				{/* Each mark is decorative - the sentence beside it carries the meaning on its own. */}
 				<ul class="assurances">
-					<li>
-						{/* <img class="caption__icon" src="/lanterncert-icon-mini.png" alt="" width="64" height="64" /> icons parked for emojis*/}
-						<span aria-hidden="true">🔓</span> No ads, paywalls, or signup
-					</li>
-					<li>
-						{/* <img class="caption__icon" src="/lanterncert-icon-mini.png" alt="" width="64" height="64" />*/}
-						<span aria-hidden="true">🏛️</span> Backed by {sources.length} official sources
-					</li>
+					{assurances.map(({ mark, line }) => (
+						<li>
+							<span aria-hidden="true">{mark}</span>
+							{line}
+						</li>
+					))}
 				</ul>
 			</div>
 
@@ -142,7 +146,7 @@ for (const size of rowSizes) {
 			</div>
 		</div>
 
-		<div class="split band band--warm">
+		<div class="split band band--warm-open">
 			<section class="stack band-warm-blur" aria-labelledby="trust-heading">
 				<h2 class="section-title section-title--lg baseline-drop" id="trust-heading">Everything you need to know, <span class="text-accent">cited</span></h2>
 				<div class="prose">
