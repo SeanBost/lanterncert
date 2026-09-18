@@ -1704,13 +1704,6 @@ ul.source-wall__row {
   font-weight: var(--weight-bold);
 }
 
-/* Mobile: caps the title and its lede at the widest line balance settles on, then centers that box -
-   so the leftover splits either side with both blocks still ranged left. */
-.hero-lead {
-  max-width: 18.5rem;
-  margin-inline: auto;
-}
-
 /* Evens a short block's lines instead of filling each one to the measure. */
 .text-balance {
   text-wrap: balance;
@@ -1871,12 +1864,6 @@ ul.source-wall__row {
 
   .page-title--hero {
     font-size: var(--text-6xl);
-  }
-
-  /* Back to the column: the split's own width is the measure once the hero is two columns. */
-  .hero-lead {
-    max-width: none;
-    margin-inline: 0;
   }
 
   .site-header__toggle {
@@ -2151,7 +2138,7 @@ ul.source-wall__row {
 
     mask-image: url("/assets/band-beams.svg");
 
-   3. The white seam glow, cast by a warm band's NEIGHBOURS onto their facing
+   3. The white seam glow, cast by a warm band's NEIGHBORS onto their facing
       edges. It lightened them toward white, so it went dark the day
       --color-page resolved to --white and has painted nothing since. It needs a
       page color that is not white before it does anything at all.

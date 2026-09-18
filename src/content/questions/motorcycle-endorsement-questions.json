@@ -2,7 +2,7 @@
   "mot-all-9-1": {
     "meta": {
       "idKey": "1",
-      "applies_to": "ALL",
+      "appliesTo": "ALL",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "signs-and-markings",
@@ -42,7 +42,7 @@
   "mot-momstandard-2-2": {
     "meta": {
       "idKey": "2",
-      "applies_to": "momstandard",
+      "appliesTo": "momstandard",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "gear-and-bike-check",
@@ -73,10 +73,10 @@
       "text": "Your feet reach the ground from the seat, and the controls are easy to work."
     }
   },
-  "mot-mns2011-2-3": {
+  "mot-momstandard-2-3": {
     "meta": {
       "idKey": "3",
-      "applies_to": "MNS2011",
+      "appliesTo": "momstandard",
       "variantGroup": "mot-helmet-fastened",
       "sisterQuestions": null,
       "topic": "gear-and-bike-check",
@@ -84,8 +84,8 @@
       "sourceSection": "Wear the Right Gear, under Helmet Selection.",
       "note": null,
       "dateCreated": "2026-09-03",
-      "lastEdited": null,
-      "lastVerified": "2026-09-03"
+      "lastEdited": "2026-09-11",
+      "lastVerified": "2026-09-11"
     },
     "content": {
       "question": "What happens to a helmet that is resting on your head but not strapped on, if you crash?",
@@ -110,7 +110,7 @@
   "mot-momstandard-2-4": {
     "meta": {
       "idKey": "4",
-      "applies_to": "momstandard",
+      "appliesTo": "momstandard",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "gear-and-bike-check",
@@ -144,7 +144,7 @@
   "mot-momstandard-2-5": {
     "meta": {
       "idKey": "5",
-      "applies_to": "momstandard",
+      "appliesTo": "momstandard",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "gear-and-bike-check",
@@ -178,7 +178,7 @@
   "mot-momstandard-2-6": {
     "meta": {
       "idKey": "6",
-      "applies_to": "momstandard",
+      "appliesTo": "momstandard",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "gear-and-bike-check",
@@ -212,7 +212,7 @@
   "mot-momstandard-2-7": {
     "meta": {
       "idKey": "7",
-      "applies_to": "momstandard",
+      "appliesTo": "momstandard",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "gear-and-bike-check",
@@ -246,8 +246,8 @@
   "mot-mns2011-2-8": {
     "meta": {
       "idKey": "8",
-      "applies_to": "MNS2011",
-      "variantGroup": null,
+      "appliesTo": "MNS2011",
+      "variantGroup": "mot-hearing-protection",
       "sisterQuestions": null,
       "topic": "gear-and-bike-check",
       "source": "xx-msf-operator-manual",
@@ -280,8 +280,8 @@
   "mot-mns2011-2-9": {
     "meta": {
       "idKey": "9",
-      "applies_to": "MNS2011",
-      "variantGroup": null,
+      "appliesTo": "MNS2011",
+      "variantGroup": "mot-unfamiliar-controls",
       "sisterQuestions": null,
       "topic": "gear-and-bike-check",
       "source": "xx-msf-operator-manual",
@@ -309,40 +309,6 @@
       "kind": "rule",
       "label": null,
       "text": "On an unfamiliar bike, learn the signals, horn, headlight switch, fuel valve and cut-off switch by feel before riding."
-    }
-  },
-  "mot-ga-2-10": {
-    "meta": {
-      "idKey": "10",
-      "applies_to": "GA",
-      "variantGroup": "mot-helmet-fastened",
-      "sisterQuestions": null,
-      "topic": "gear-and-bike-check",
-      "source": "ga-dds-motorcycle-manual",
-      "sourceSection": "Section 3, Before You Ride; Helmet Selection and Helmet Fit.",
-      "note": null,
-      "dateCreated": "2026-09-04",
-      "lastEdited": null,
-      "lastVerified": "2026-09-04"
-    },
-    "content": {
-      "question": "Georgia requires a DOT-compliant helmet. What does the state ask you to do with the chin strap each time you ride?",
-      "media": null,
-      "choices": [
-        { "id": "a", "text": "Fasten it securely, or the helmet can come off in a crash" },
-        { "id": "b", "text": "Leave it loose enough to slip a finger under the chin" },
-        { "id": "c", "text": "Fasten it only once you are riding above city speeds" },
-        { "id": "d", "text": "Leave it unfastened so the helmet comes off easily in a fall" }
-      ],
-      "correctAnswer": "a",
-      "explanation": "Fasten the chin strap every time you ride. A helmet that is loose or unfastened can lift in the wind or leave your head in a fall, before it has taken any of the impact."
-    },
-    "guide": {
-      "group": null,
-      "order": 20,
-      "kind": "rule",
-      "label": null,
-      "text": "Fasten the chin strap every ride. A loose or unfastened helmet can come off in a fall."
     }
   }
 }

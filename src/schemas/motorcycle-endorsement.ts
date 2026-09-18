@@ -92,8 +92,8 @@ for (const [id, q] of Object.entries(questionBank) as [string, any][]) {
   const sitewideNum = parts.pop() as string;
   const topicNum = parts.pop();
   parts.shift();
-  if (parts.join("-") !== String(q.meta?.applies_to).toLowerCase()) {
-    fail(`has a scope segment that does not match applies_to "${q.meta?.applies_to}"`);
+  if (parts.join("-") !== String(q.meta?.appliesTo).toLowerCase()) {
+    fail(`has a scope segment that does not match appliesTo "${q.meta?.appliesTo}"`);
   }
   if (topicNum !== String((topics as any)[q.meta?.topic]?.num)) {
     fail(`has a topic segment that does not match topic "${q.meta?.topic}"`);
@@ -133,8 +133,8 @@ for (const [id, q] of Object.entries(questionBank) as [string, any][]) {
     if (key === q.meta.idKey) fail("names itself as a sister question");
     const sister = byIdKey.get(key);
     if (!sister) fail(`names sister question ${key}, which is not in the bank`);
-    if (sister.meta.applies_to !== q.meta.applies_to) {
-      fail(`is scoped ${q.meta.applies_to} but its sister ${key} is scoped ${sister.meta.applies_to}`);
+    if (sister.meta.appliesTo !== q.meta.appliesTo) {
+      fail(`is scoped ${q.meta.appliesTo} but its sister ${key} is scoped ${sister.meta.appliesTo}`);
     }
     if (!(sister.meta.sisterQuestions ?? []).includes(q.meta.idKey)) {
       fail(`names sister question ${key}, which does not name it back`);
@@ -343,7 +343,7 @@ export function collections(kit: any) {
           // The id's permanent trailing number as a field, so a reference need not parse the id.
           idKey: z.string().regex(/^\d+$/, { error: "idKey is the id's trailing number, digits only" }),
           // Exactly one token: a set that needs naming is an umbrella, never an ad-hoc union.
-          applies_to: appliesToEnum(examTokens),
+          appliesTo: appliesToEnum(examTokens),
           variantGroup: z
             .string()
             .regex(/^[a-z]{2,4}-[a-z0-9-]+$/, { error: "variantGroup is <slugShort>-<kebab-case name>" })

@@ -88,7 +88,7 @@ const ctx = { states, facts, exams };
 const resolvedFor = Object.fromEntries(
   stateSlugs.map((slug) => {
     const tokens = scopeTokens(slug, ctx);
-    return [slug, bank.filter((q) => tokens.has(q.meta.applies_to))];
+    return [slug, bank.filter((q) => tokens.has(q.meta.appliesTo))];
   }),
 );
 
@@ -98,7 +98,8 @@ function mockLength(slug) {
 }
 
 // ── variantGroup coverage ────────────────────────────────────────────────────
-// Reports any state with facts that a variantGroup does not reach. data-handling.md ▸ Questions §5b.
+// Builds a variantGroup x state matrix of what each group reaches.
+// Gaps report and never block. data-handling.md ▸ Questions §5b.
 const groups = new Map();
 for (const q of bank) {
   if (!q.meta.variantGroup) continue;
@@ -107,31 +108,50 @@ for (const q of bank) {
 }
 
 const declared = exclusions.variantGroups ?? {};
-// Without it every deliberate gap reads as a PROBLEM, so the run says which mode it is in.
+// Without it every deliberate gap reads as undeclared, so the run says which mode it is in.
 if (!existsSync(exclusionsPath)) {
   note("variant-coverage", `no exclusions file at ${exclusionsPath} — every gap will read as undeclared`);
 }
+
+// Collects null-group questions that miss at least one state with facts.
+const narrow = bank.filter(
+  (q) => !q.meta.variantGroup && stateSlugs.some((slug) => !resolvedFor[slug].includes(q)),
+);
+
+const coverageRows = [];
+let owedTotal = 0;
+let declaredTotal = 0;
 for (const [group, members] of groups) {
-  const covered = new Set(
-    stateSlugs.filter((slug) => resolvedFor[slug].some((q) => q.meta.variantGroup === group)),
-  );
-  const missing = stateSlugs.filter((slug) => !covered.has(slug));
-  for (const slug of missing) {
-    const reason = declared[group]?.[slug];
-    if (reason) {
-      note("variant-coverage", `${group} deliberately omits ${slug} — ${reason}`);
-    } else {
-      problem(
-        "variant-coverage",
-        `${group} reaches ${[...covered].join(", ") || "no state"} but not ${slug}, and nothing declares that gap`,
-      );
+  const cells = stateSlugs.map((slug) => {
+    const hit = resolvedFor[slug].find((q) => q.meta.variantGroup === group);
+    if (hit) return { text: hit.id.split("-").slice(-2).join("-"), owed: false };
+    if (declared[group]?.[slug]) {
+      declaredTotal += 1;
+      return { text: "declared", owed: false };
+    }
+    owedTotal += 1;
+    return { text: "OWED", owed: true };
+  });
+  coverageRows.push({ group, cells, members: members.length });
+}
+
+function printCoverage() {
+  console.log("\nCOVERAGE — variantGroup x state, gaps are owed variants and never block");
+  if (!coverageRows.length) {
+    console.log("  no question carries a variantGroup yet");
+  } else {
+    const width = Math.max(28, ...coverageRows.map((r) => r.group.length + 2));
+    console.log("  " + "group".padEnd(width) + stateSlugs.map((s) => s.toUpperCase().padEnd(10)).join(""));
+    for (const row of coverageRows) {
+      console.log("  " + row.group.padEnd(width) + row.cells.map((c) => c.text.padEnd(10)).join(""));
     }
   }
-  if (members.length === 1) {
-    note(
-      "variant-coverage",
-      `${group} has one member (${members[0].id}) — a group of one is either unfinished or should not be a group`,
-    );
+  console.log(
+    `  ${coverageRows.length} group(s) · ${owedTotal} owed · ${declaredTotal} declared · ${narrow.length} narrow by declaration`,
+  );
+  if (narrow.length) {
+    console.log("  narrow (variantGroup null, reaches some states and not others):");
+    for (const q of narrow) console.log(`      ${q.id} · ${q.meta.appliesTo}`);
   }
 }
 
@@ -199,7 +219,7 @@ const QUANTITY = new RegExp(`\\b\\d+(?:\\.\\d+)?%?\\b|\\b(?:${NUMBER_WORD})[- ](
 const FRACTION = /\b(?:half|halves|thirds?|quarters?|three-quarters)\b/gi;
 const stateCodes = new Set(Object.values(states).map((s) => s.abbreviation));
 for (const q of bank) {
-  if (stateCodes.has(q.meta.applies_to)) continue;
+  if (stateCodes.has(q.meta.appliesTo)) continue;
   const text = [
     q.content.question,
     q.content.explanation,
@@ -211,7 +231,7 @@ for (const q of bank) {
   if (found.length) {
     note(
       "wide-scope-number",
-      `${q.id} is scoped ${q.meta.applies_to} and carries a quantity (${found.join(", ")}) — confirm every covered state's document states it`,
+      `${q.id} is scoped ${q.meta.appliesTo} and carries a quantity (${found.join(", ")}) — confirm every covered state's document states it`,
     );
   }
 }
@@ -346,6 +366,8 @@ const totals = stateSlugs.map((slug) => {
 console.log("  " + "TOTAL".padEnd(width) + totals.join(""));
 console.log(`  ${shortfall} question-slots still to author across every state and topic.`);
 
+printCoverage();
+
 // Per state: the questions it resolves, then the ones it does not and the token that excluded them.
 if (flag("--resolve")) {
   console.log("\nRESOLUTION — what each state resolves, and what it does not");
@@ -366,7 +388,7 @@ if (flag("--resolve")) {
         console.log(`      ${mark} ${q.id.padEnd(24)}${clip(line, 88)}`);
       }
       if (missed.length) {
-        const detail = missed.map((q) => `${q.id} (${q.meta.applies_to})`).join(", ");
+        const detail = missed.map((q) => `${q.id} (${q.meta.appliesTo})`).join(", ");
         console.log(`        not reached: ${clip(detail, 96)}`);
       }
     }

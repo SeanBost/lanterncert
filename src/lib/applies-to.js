@@ -1,4 +1,4 @@
-// Resolves a question's applies_to against a state, via exam.examType and never courseType.
+// Resolves a question's appliesTo against a state, via exam.examType and never courseType.
 // data-handling.md ▸ Questions §3.
 
 /** Umbrellas reaching any token already held, applied until nothing new is added. */
@@ -15,7 +15,7 @@ function withUmbrellas(tokens, exams) {
   return tokens;
 }
 
-/** Every applies_to token matching this state: ALL, its code, its exam, and whatever covers those. */
+/** Every appliesTo token matching this state: ALL, its code, its exam, and whatever covers those. */
 export function scopeTokens(stateSlug, { states, facts, exams }) {
   const state = states[stateSlug];
   const stateFacts = facts[stateSlug];
@@ -34,5 +34,5 @@ export function scopeTokens(stateSlug, { states, facts, exams }) {
 /** Scope resolved once for the whole bank; a question carries exactly one token. */
 export function questionsForState(questions, stateSlug, ctx) {
   const tokens = scopeTokens(stateSlug, ctx);
-  return questions.filter((q) => tokens.has(q.applies_to));
+  return questions.filter((q) => tokens.has(q.appliesTo));
 }

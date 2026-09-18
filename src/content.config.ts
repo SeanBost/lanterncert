@@ -8,7 +8,7 @@ const stateCodes = Object.values(states).map((s) => s.abbreviation);
 // Registry scope is any state in states.json, or `multi` for xx- keys. data-handling.md ▸ Sources §2.
 const scopeEnum = z.enum(["multi", ...stateCodes] as [string, ...string[]]);
 
-// applies_to takes a state code, ALL, or an exam token. data-handling.md ▸ Questions §3.
+// appliesTo takes a state code, ALL, or an exam token. data-handling.md ▸ Questions §3.
 const appliesToEnum = (examTypes: string[]) =>
   z.enum([...new Set(["ALL", ...stateCodes, ...examTypes])] as [string, ...string[]]);
 

@@ -32,10 +32,35 @@ passage behind it.
 
 ```
 /cert-questions <cert> --source <source-key>   one registered document, worked end to end
+/cert-questions <cert> --survey <source-key>   enumerate a document end to end, author nothing
 /cert-questions <cert> <state>                 every teachable source that state resolves
 /cert-questions <cert> <state> --topic <slug>  the same, narrowed to one topic's quota
 /cert-questions <cert> --resume                continue the most recent worklist for this cert
 ```
+
+**`--survey` enumerates the whole document before deciding anything, and authors nothing. Large
+documents want it.** It runs phases 0-1, then **3-4 over every chunk**, and **holds gate A until the
+last chunk is enumerated** — the one place the phase order changes, and the reason the mode exists.
+Phases 5-8 do not run.
+
+The two jobs it separates have different costs: a thin candidate list is invisible and compounds
+through everything built on it, while an unauthored candidate is simply work not yet done. Settling
+scope once with the whole document in view also beats settling it in twenty fragments, each decided
+on less evidence than the last.
+
+**A decision that would change how later chunks are ENUMERATED still stops the run when it appears.**
+Holding gate A is only safe because scope evidence is recorded per document rather than as a token
+— the evidence survives whatever the gate decides, so enumeration does not depend on the answer.
+A question about *what to read* is not in that class and cannot wait.
+
+- **A chunk reaches `enumerated`** when every unit is accounted for and its candidates carry
+  evidence, with nothing authored. Distinct from `worked`, which additionally means nothing is left
+  `queued`.
+- **At survey scale the decisions brief groups its items by the rule they turn on**, not by the
+  chunk that raised them. Ten items in four families is one page; ten items in ten families is a
+  list nobody can hold.
+- **Authoring then proceeds through `--resume` in normal gate-sized batches.** Surveying widens the
+  reading, never the gate.
 
 **`--source` is worked to exhaustion, and that usually takes several runs.** A manual yields far more
 candidates than one gate can carry, so the expected shape is one `--source` run followed by
@@ -104,6 +129,7 @@ them**: a design call and a distractor call are read in different modes, and a r
 forces a reviewer to switch on every paragraph.
 
 Run 0–1 without stopping. Stop at 2. Then run 3–5 without stopping. Stop at 6.
+**`--survey` reorders this and nothing else:** 0–1, then 3–4 over every chunk, then stop at 2.
 
 **0 · Preflight.** Resolve the cert and target. Load the bank, the topics, the weights, the guide
 scaffold and the registry. Run `node scripts/audit-questions.mjs <cert> --resolve`, which is the
@@ -158,8 +184,12 @@ re-enumerating**, which is the whole point: enumeration is expensive, it is the 
 awkward material, and redoing it per gate invites quietly skipping whatever was hard last time.
 
 - **Write the ledger at phase 4, before authoring**, and update each entry's verdict at phase 7.
-- **A `queued` entry carries its verified scope**, so a resuming run does not re-grep four manuals to
-  rediscover what this run already established.
+- **A `queued` entry carries its scope EVIDENCE, one row per document the scope could reach** — the
+  phrase found, or an explicit note that the document is silent — so a resuming run does not re-read
+  every manual to rediscover what this run already established. **Never record the conclusion
+  alone.** A scope token is derived, so it can be re-derived and re-checked; a token recorded by
+  itself cannot be checked without redoing the work it summarizes, and an error in it then survives
+  every later reading of the ledger.
 - **The ledger gets long, and that is correct.** It is the resumability record and the answer to
   *"did anything testable get missed?"*; both jobs need every candidate, not a count.
 
@@ -173,12 +203,25 @@ without stopping** — an empty gate is a gate nobody reads next time.
 fetch a page in this skill** — a snapshot under 21 days old is the source of truth, and refreshing
 one is `/cert-facts`'s job.
 
-**4 · Enumerate candidates before writing anything.** List every testable fact in the chunk, as a
-flat list, *before* authoring a single question. Then assign each one a verdict.
+**4 · Enumerate candidates before writing anything.** Work the chunk's own units in order — its
+sentences, bullets and list items — and **account for every one**, *before* authoring a single
+question. A unit either yields a candidate or is marked as carrying no assertion: framing,
+transition, cross-reference, or a restatement of a unit already counted. Then assign each candidate
+a verdict.
+
+**The passage's structure owns the candidate list; your reading of it does not.** This is the same
+discipline as quoting a passage before asking about it, moved one step earlier. Enumerating from
+memory after reading produces a summary, and a summary silently drops whatever was hardest to hold —
+which is reliably the material worth asking about.
 
 **This ordering is the point.** Enumerating first is what surfaces the material that is genuinely
 tested but awkward to write; authoring first means you write the easy items and never notice the
-rest. **A candidate list shorter than the passage deserves is the first sign a run is coasting.**
+rest. **A chunk whose candidate list is shorter than its unit count owes an explanation of the
+difference, not a defense of the list.**
+
+**Sweeping units rather than counting candidates is what makes this scale.** A short chapter and a
+long manual differ in how many units they hold, never in the procedure applied to one, so coverage
+is true by construction instead of by a threshold somebody has to tune.
 
 **5 · Author, one question at a time.** Work the candidate list in order, following *Authoring one
 question* below. **Finish each question completely before starting the next.**
@@ -390,6 +433,9 @@ that appears to have changed since its snapshot.
   **check its FIRST use in the snapshot, never the instance being copied.** A manual marks a mark
   once and then writes it bare for forty pages, which is how a mark reaches a stem by way of careful
   work. An unlisted term with an owner is a decisions-brief item and a proposed register entry.
+  **Read a chapter carrying an owned term at full depth rather than passing over it.** The name is
+  barred; the knowledge it organizes is not, and a candidate needs that knowledge. Enumerate what
+  the term packages and test that.
 - **Never quote a `purchase` or `restricted` document** (§6 rule 5). It may inform understanding; it
   may not be reproduced, and it is a weak citation for a rider who cannot open it.
 - **Never invent an id.** The trailing number counts sitewide, is never reused, and `meta.idKey` must
@@ -429,6 +475,9 @@ Before writing the report, confirm:
 - **Every explanation reads as hand-written.** No stem restated, no *important to note*, no reflexive
   antithesis, no em dashes, no inflated register. **Then read the batch's explanations back to back**
   — if they share one rhythm, they were written to a template rather than to their facts.
+  **Then read them against a sample already in the bank**, not only against each other: a batch can
+  be internally varied and still drift as a whole, and that drift shows only against what shipped
+  before it.
 - Every `sourceSection` is under 90 characters, points rather than explains, and carries no claim.
 - Every scope wider than one state names the documents checked, one per covered state.
 - Every id is `<slugShort>-<scope>-<topicNum>-<sitewideNum>`, its segments agree with the fields they

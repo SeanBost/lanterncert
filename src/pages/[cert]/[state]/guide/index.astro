@@ -25,7 +25,7 @@ const topics = Object.fromEntries(topicEntries.map((t) => [t.id, t.data]));
 
 const questions = (await getCollection(`${cert}-questions`)).map((q) => ({
 	id: q.id,
-	applies_to: q.data.meta.applies_to,
+	appliesTo: q.data.meta.appliesTo,
 	topic: q.data.meta.topic,
 	meta: q.data.meta,
 	content: q.data.content,

@@ -67,6 +67,7 @@ might otherwise slip by me/AI tools as I build the systems and content shapes fr
 Snapshots of fetched documents are stored locally and gitignored. The registry publishes metadata
 about documents, never the documents. Users are encouraged to click-through to primary sources for
 full pictures.
+
 ## Stack
 
 - **Astro**, a static site generator with built-in content validation, builds to `/dist`
@@ -119,22 +120,19 @@ asset paths break over `file://`.
 `npm run build` also archives a dated zip of `/dist` into `/builds` via the `postbuild` hook. It's a
 local version record, gitignored, and the script no-ops on CI.
 
-## Deploy
+## Deploying
 
 Push to `main`. Cloudflare Pages watches the repo, runs `npm run build` on its own builders, and
 publishes `/dist`. `.nvmrc` pins Node 24 so their build matches local.
 
-## License
-
-MIT, in [LICENSE](LICENSE). The code is MIT; the agency documents it cites belong to the agencies
-that published them.
-
-## Legal
+## Legal stuff
 
 This is free exam-preparation material assembled from publicly available sources. Not official
-agency material. Verify current requirements with your state's licensing agency.
+agency material. Not endorsed by any official agency. Verify current requirements with your state's licensing agency.
 
 A working privacy and usage policy can be found at [lanterncert.com/about/#privacy](https://lanterncert.com/about/#privacy)
+
+If you'd like to copy and mess around with the basic structure for a project of your own, go for it! Up to commit `2b36e43`, everything tracked is under an MIT license. Beyond that, all rights are reserved.
 
 ## You are currently reading this
 
