@@ -71,9 +71,13 @@ from here — re-reading a live page is that skill's job and its request budget,
 
 ## Read first
 
+- **`blackbox/technique/cert-questions-audit.md` — read it in full before phase 0, and stop if it is missing.**
+  This file is the process: what a run does, in what order, and where it stops. That one is the
+  technique each step applies, and it is not published. **A run on the process alone is not this
+  skill.**
 - **`blackbox/data-handling.md` ▸ *Questions* (§5) and ▸ *Study Guide* (§4c)** — what a correct
   question is. **Not restated here.**
-- **`CLAUDE.md` ▸ *The three modes*, ▸ *Conventions*** — the voice rules a stem has to satisfy.
+- **`blackbox/decisions.md` ▸ *The three modes*, and `CLAUDE.md` ▸ *Conventions*** — the voice rules a stem has to satisfy.
 - **`blackbox/data-handling.md` ▸ *Legal and authorship* (§6)** — copyright, fair use and the
   trademark bar. **Not restated here**, and it is what phase 3b is checking against.
 - **`blackbox/authoring/<cert>-standards.md`**, plus any source-diff or terminology register it
@@ -109,7 +113,7 @@ snapshot cannot support is the headline finding of any run that has one.**
 
 **3 · Judge what no check can.** Distractor strength, explanation quality, stem clarity, scope
 legality by terminology, and umbrella facts against every covered document. *What the script cannot
-see*, below.
+see*, in the technique file.
 
 **3b · Read the bank as a publisher, not as an examiner.** Phases 2 and 3 ask whether a question is
 **right**. This one asks whether it is **ours to ship**, which is a different failure and passes
@@ -151,103 +155,11 @@ phases never enter.
 rider getting an item wrong — it is a takedown, a demand letter, or a reader deciding the whole site
 was generated. **None of them is a taste call**, so none of them gets softened to a NOTE.
 
-### 1 · Does it steal?
+1. **Does it steal?** Expression reproduced from a cited document.
+2. **Does it read as machine-written?** Judged across the whole bank, never one question at a time.
+3. **Whose mark is this?** A term somebody owns, used as the thing being taught.
 
-Set each question beside the passage it cites and read the two together. **Facts are free and
-expression is not** (§6 rule 1), so a question can name the right fact, cite the right document, and
-still reproduce that document's sentence.
-
-- **The tell is a clause that could not have been written without the document open** — its
-  structure, its distinctive verb, its ordering of a list, its unusual qualifier. A shared technical
-  noun is not a finding; a shared shape is.
-- **Check the choices, not just the explanation.** A distractor lifted from a bulleted list carries
-  that list's phrasing straight through, and it is the field nobody re-reads.
-- **A `purchase` or `restricted` source is stricter** (§6 rule 5): nothing from it may be reproduced
-  at all, so any traceable phrasing is a finding rather than a judgment.
-- **Class A art reproduces an artifact on purpose**, which is the point of the class; what it may not
-  do is reproduce a **publisher's drawing** of that artifact. Check the recipe, not the image.
-- **Then check the reverse direction on `sourceSection`** — a locator quoting a marked or copyrighted
-  heading verbatim is reproduction on a rendered page, however short.
-
-### 2 · Does it read as machine-written?
-
-**Judge it as a reader who never saw how it was made**, because that is the only reader it gets. A
-bank that reads as generated is not a style problem: per-question citation is the entire wedge, and
-content that pattern-matches to bulk output undermines the claim it exists to make.
-
-**THIS CHECK IS PER-BANK, NOT PER-QUESTION, AND THAT IS WHY IT LIVES HERE.** An authoring run sees
-one question at a time and cannot see the tell at all; this run is the only one holding forty
-explanations at once. **Sameness is the finding.** Read every explanation in a topic back to back:
-identical sentence length, identical rhythm, every one opening on the same construction, every one
-closing on a restated consequence — that is the signature, and no single item shows it.
-
-Per item, the tells worth naming:
-
-- **The explanation restates the stem before answering it.** A human writing a fact writes the fact.
-- **Antithesis as a reflex** — *"it isn't X, it's Y"*, *"not because A, but because B"* — used where a
-  plain assertion carries the same content.
-- **Tricolons everywhere.** Three parallel clauses is a fine sentence and a terrible habit; count how
-  many the topic contains.
-- **Hedge-then-assert padding** — *it is important to note*, *keep in mind*, *remember that*,
-  *generally speaking* — all of which say nothing and all of which appear when a sentence is being
-  produced rather than written.
-- **Inflated register**: *crucial*, *vital*, *ensure*, *utilize*, *leverage*, *delve*, *robust*,
-  stacked adverbs. The house voice is plain.
-- **Em dashes and en dashes**, which are banned in rendered copy anyway and are a reliable tell on
-  top of that. The house mark is a hyphen.
-
-**The fix is never a synonym pass.** A flagged explanation is rewritten from the fact, and the report
-says so rather than proposing replacement wording — rewriting is the authoring run's job and this
-run writes nothing.
-
-### 3 · Whose mark is this?
-
-§6 rule 10 bars a trademarked term as content anywhere a reader sees it, and the cert's live cases
-are in its standards file. **The register catches only what is already on it, so this check has two
-halves and the second is the one that matters.**
-
-- **Against the register:** every barred term, in every reader-visible field, including
-  `sourceSection` and `alt`. Mechanical, and the script does not do it.
-- **For the register:** every acronym, mnemonic, named procedure, checklist name and
-  course-flavored phrase in the bank that is **not** on the register gets traced to an owner before
-  it is cleared. A term with no owner is fine; a term with one is a new case, and the report
-  nominates it.
-- **CHECK THE FIRST USE IN THE SNAPSHOT, NEVER THE USE THAT WAS COPIED.** A manual marks a mark
-  once, at first use, and then writes it bare for forty pages. Reading the bare instance is exactly
-  how a mark gets carried into a stem by someone doing careful work, and it is a near-miss this
-  project has actually had.
-- **Test the practice, never the name.** A question resting on the *behavior* a mnemonic packages is
-  sound and stays; only the name is the defect, so the finding is usually a two-word deletion.
-- **Naming an organization, course or document in order to cite it is not a finding** (§6 rule 7) —
-  the line is content versus citation.
-- **Logos are never ours** (§6 rule 7), which reaches art: an agency wordmark or seal inside a Class
-  A image is a finding even where the sign it sits on is faithfully reproduced.
-
-## What the script cannot see
-
-- **Scope by terminology.** §5 rule 4a scopes a named procedure or mnemonic exactly like a number,
-  and no regex derives that. **A term one covered manual does not use invalidates the umbrella**,
-  however universal the advice underneath it. Check every wide-scoped question against the cert's
-  terminology register.
-- **Umbrella facts against every covered document.** For each wide-scoped question, confirm the
-  asserted fact is locatable in **every** state manual that umbrella reaches — run
-  `audit-questions.mjs <cert> --resolve` to see exactly which states that is.
-  **This is deliberately a re-runnable check rather than a stored record** — pointing it at a new
-  state's manual is exactly how you find which umbrella questions can widen when state five arrives,
-  and a note written today would have gone stale instead.
-- **Whether a distractor is defensible.** The script sees four strings; only a reader sees that one
-  of them is arguably correct.
-- **Whether an explanation teaches.** Read it with the question hidden. It is also the Study Guide
-  fact, so an explanation that only makes sense as an answer is a defect in two places.
-- **Whether a `guide.kind` fits its fact.** A value forced into `rule`, or a procedure flattened out
-  of `steps`, is what makes a section read as a wall of sentences.
-- **Whether the quota was met by breadth or by padding.** The script counts; it cannot see that six
-  of a topic's questions are one fact in six costumes. Undeclared re-angles are the tell.
-- **Whether a question is worth asking at all.** Trivia that no exam would test still passes every
-  mechanical check.
-- **Whether the copy is ours to ship.** Reproduced expression, an owned mark used as content, and
-  prose that reads as generated are all invisible to a checker that only sees strings, fields and
-  counts. *The three shipping checks*, above.
+How each check is run is in the technique file ▸ *The three shipping checks*.
 
 ## Severity
 

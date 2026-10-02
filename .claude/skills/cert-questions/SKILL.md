@@ -104,14 +104,18 @@ declared — **a gap only, never owed work**, which belongs in the worklist ledg
 
 ## Read first
 
+- **`blackbox/technique/cert-questions.md` — read it in full before phase 0, and stop if it is missing.**
+  This file is the process: what a run does, in what order, and where it stops. That one is the
+  technique each step applies, and it is not published. **A run on the process alone is not this
+  skill.**
 - **`blackbox/authoring/<cert>-standards.md`** — **this cert's own rulings**, and the first thing to
   read on a run. Scope instances, barred terms, which sources are independent texts. `data-handling.md`
   owns the rule; **this file owns which cases it has already been applied to**, and a run that skips it
   re-derives a scope decision already made.
-- **`blackbox/data-handling.md` ▸ *Questions* (§5) and ▸ *Study Guide* (§4c)** — the authority on
+- **`blackbox/data-handling.md` ▸ *Questions* (§5), ▸ *Study Guide* (§4c) and ▸ *Legal and authorship* (§6)** — the authority on
   every shape and rule, **not restated here.** This file covers execution only: what a run does, in
   what order, and where it stops. §5 rule 4 and 4a govern scope, rule 13 the quota, §4c the guide.
-- **`CLAUDE.md` ▸ *The three modes*, ▸ *The rules that must never be missed*, ▸ *Conventions*** — the
+- **`blackbox/decisions.md` ▸ *The three modes*, and `CLAUDE.md` ▸ *The rules that must never be missed*, ▸ *Conventions*** — the
   reasoning, the voice rules, and the test/exam split that binds every stem you write.
 - **The existing bank.** Read every question in the topic you are about to author for, in full. It is
   the worked example, and it is the only way to know what is already covered.
@@ -210,22 +214,13 @@ question. A unit either yields a candidate or is marked as carrying no assertion
 transition, cross-reference, or a restatement of a unit already counted. Then assign each candidate
 a verdict.
 
-**The passage's structure owns the candidate list; your reading of it does not.** This is the same
-discipline as quoting a passage before asking about it, moved one step earlier. Enumerating from
-memory after reading produces a summary, and a summary silently drops whatever was hardest to hold —
-which is reliably the material worth asking about.
-
-**This ordering is the point.** Enumerating first is what surfaces the material that is genuinely
-tested but awkward to write; authoring first means you write the easy items and never notice the
-rest. **A chunk whose candidate list is shorter than its unit count owes an explanation of the
-difference, not a defense of the list.**
-
-**Sweeping units rather than counting candidates is what makes this scale.** A short chapter and a
-long manual differ in how many units they hold, never in the procedure applied to one, so coverage
-is true by construction instead of by a threshold somebody has to tune.
+How each unit is weighed is in the technique file ▸ *Enumerating a chunk*.
 
 **5 · Author, one question at a time.** Work the candidate list in order, following *Authoring one
-question* below. **Finish each question completely before starting the next.**
+question* in the technique file. **Finish each question completely before starting the next.**
+Each question runs the same nine steps: quote the passage, decide its scope, write the stem, the
+choices, the explanation and the guide fact, write `sourceSection`, fill `meta`, then re-read the
+passage against the finished question.
 
 **A decision that surfaces here is appended to the brief, never folded into the question report.**
 Keep authoring around it — author what does not depend on the answer, and leave what does as
@@ -294,93 +289,6 @@ yields, author up to the cap, and mark the rest `queued` with their scope verifi
 about a reviewer's attention and nothing else** — it is not a reason to leave a document unread, to
 shorten a candidate list, or to move to a different chunk before this one is exhausted.
 
-## Authoring one question
-
-**Per question, in this order. Do not batch these steps across questions** — drafting four stems and
-then filling in four explanations produces four shallow questions, every time. The order is the
-quality mechanism.
-
-1. **Quote the passage.** Copy the exact sentence or sentences the question rests on, verbatim, into
-   the review table. **If you cannot quote it, you cannot ask it.** This is the same rule as §1.1 for
-   facts, and it is what makes review *"is this answerable from this text?"* rather than *"is this
-   true?"*
-2. **Decide scope, and say why.** Default to the narrowest honest scope — a single state. Widening
-   to an umbrella requires reading the *same* fact in every document that umbrella reaches and
-   naming them in the report. §5 rule 4: anything carrying a number, a statute or a named procedure
-   is state-scoped, **however the document spells it**.
-3. **Write the stem.** It must be answerable with the choices covered up — a stem that only makes
-   sense once you have read the options is a recognition test, not a knowledge one. Name the state
-   in the stem whenever the scope is a single state (§5c).
-4. **Write the choices.** Then run *The distractor bar* below.
-5. **Write the explanation.** It asserts, it does not argue (§5 rule 6b). It is read by someone who
-   has just answered, with the stem and the choices in view, so it may lean on them for its subject.
-6. **Write the guide block** — `kind`, `label`, `order` and `text`. Leave `group: null` unless the
-   material obviously clusters; grouping is a later pass and is deliberately not a precondition
-   (§4c rule 3).
-   - **EVERY QUESTION'S GUIDE FACT IS A DELIBERATE CALL, NEVER A DEFAULT IN EITHER DIRECTION.** Two
-     people read this fact: one who just answered the question, and one scanning the Study Guide cold
-     who has seen neither the stem nor the choices. **Ask whether one sentence serves both.**
-     - **When it does, leave `text` null** and the explanation renders in the guide. That is the
-       tightest outcome, and common for a short, self-contained fact.
-     - **When it does not, write `text`** — usually because the explanation is too long to take in at
-       a glance, or leans on the stem for what it is about. A `value` row always needs its own.
-   - **Brevity is the strong default, not a cap.** A guide fact is scanned, so most land well under a
-     hundred characters. **Go longer where the context is what makes the fact usable**, and say why
-     at the gate.
-   - **Two errors, equally real:** a `text` that rewords the explanation at the same length, and a
-     null that leaves a long or stem-dependent explanation standing in. **The second is the quieter
-     one**, since nothing looks wrong until the guide is read as a page.
-   - **A GUIDE FACT IS READ COLD, SO IT HAS TO STAND COMPLETELY ON ITS OWN.** **Name the thing being
-     acted on and say what happens to it** — *"Lift to shift up, press to shift down"* fails, because
-     it never says lift WHAT, or up and down in what. **Read whatever the guide will actually show —
-     `text`, or the explanation where `text` is null — with the question hidden**, and ask whether a
-     stranger could act on it.
-7. **Write `sourceSection`.** A locator, capped at 90 characters, that points and never explains.
-   **Write it now, while the document is open** — it is a nightmare to backfill.
-8. **Fill `meta` honestly, and leave `note` null unless it holds a bare fact no field can**
-   (§1 rule 9). **It is not a review record.** Scope evidence, rejected alternatives, who decided
-   what and when, and why a field is null all belong to the report, the decisions brief and
-   `sessions.md` — a note repeating them is a second owner that goes stale silently and ships
-   inside tracked content. **If it reads like an argument, it is in the wrong file.**
-9. **Re-read the passage one final time against the finished question.** This catches the specific
-   failure where a question drifts from its source while being polished.
-
-### The distractor bar
-
-Distractors are where questions break, and both directions are failures:
-
-- **A distractor that is obviously wrong makes the question free.** No joke options, no options a
-  rider would never consider.
-- **A distractor that is arguably right makes the question broken.** For each one, you must be able
-  to name what in the passage rules it out. **Record that rebuttal in the review table.**
-- **This rebuttal is an authoring artifact and never ships.** §5 rule 6b keeps it out of the
-  explanation; it exists so review can see the question is sound. The two are not in conflict.
-
-Mechanical tells, all of which give the answer away:
-
-- The correct answer is the longest, most qualified, or most detailed option.
-- Options differ in grammatical form, tense or length.
-- Absolute words (*always*, *never*, *only*) appear in distractors but not the key.
-- *All of the above* / *none of the above* — **never use either.**
-- A negative stem (*which is NOT*) — avoid unless the source frames it that way.
-
-### Voice
-
-The stem and choices are copy a reader sees, so the house rules bind: **no "we", "us" or "our"**,
-sentence case, **hyphens rather than em or en dashes**, US spelling, and **"test" is ours while
-"exam" is theirs**. Never copy source wording — read for the fact, close the document, write from
-understanding. If your sentence tracks theirs, rewrite it (§6 rule 1). **The tell is a clause you
-could not have written with the document shut**: its structure, its distinctive verb, its ordering of
-a list. A shared technical noun is fine; a shared shape is not, and **the choices are where it slips
-through** — a distractor lifted off a bulleted list carries that list's phrasing intact.
-
-**It also has to read as written rather than produced**, because a reader judges the bank without
-ever seeing how it was made. Assert the fact and stop: no restating the stem before answering it, no
-*it is important to note*, no reflexive *not X but Y*, no third parallel clause added for rhythm, and
-none of *crucial*, *vital*, *ensure*, *utilize*, *leverage*, *robust*. **The audit catches sameness
-across a topic and you cannot see it from inside one question** — which is the argument for writing
-each explanation as the fact demands rather than to a template you are carrying between them.
-
 ## Verdicts
 
 **Every candidate from phase 4 lands in exactly one**, and every one appears in the ledger and the
@@ -446,14 +354,8 @@ that appears to have changed since its snapshot.
   acronym. **Naming an organization or a document in order to cite it stays allowed.** Note this bars
   a term the document *does* use, where rule 4a bars one no document uses — a term can fail either.
   **The cert's live cases are in its standards file**, and that list grows.
-  **THE REGISTER ONLY HOLDS WHAT SOMEBODY ALREADY CAUGHT, so an acronym, mnemonic, checklist name or
-  course-flavored phrase that is NOT on it is not thereby cleared** — trace it to an owner first, and
-  **check its FIRST use in the snapshot, never the instance being copied.** A manual marks a mark
-  once and then writes it bare for forty pages, which is how a mark reaches a stem by way of careful
-  work. An unlisted term with an owner is a decisions-brief item and a proposed register entry.
-  **Read a chapter carrying an owned term at full depth rather than passing over it.** The name is
-  barred; the knowledge it organizes is not, and a candidate needs that knowledge. Enumerate what
-  the term packages and test that.
+  **Tracing a term the register does not list is §6 rule 10; one found to have an owner is a
+  decisions-brief item and a proposed register entry.**
 - **Never quote a `purchase` or `restricted` document** (§6 rule 5). It may inform understanding; it
   may not be reproduced, and it is a weak citation for a rider who cannot open it.
 - **Never invent an id.** The trailing number counts sitewide, is never reused, and `meta.idKey` must
@@ -476,43 +378,9 @@ that appears to have changed since its snapshot.
 
 ## Pre-assembly checks
 
-Before writing the report, confirm:
-
-- Every question carries a verbatim passage quote, and that quote is in the snapshot of the source it
-  names.
-- Every distractor has a recorded rebuttal, and none of the mechanical tells above is present.
-- Every guide fact — `text`, or the explanation where `text` is null — reads as a standalone fact
-  with the question hidden, and is short enough to take in at a glance or states why it is not.
-- **No reader-visible field reproduces its source's expression.** Read each stem, choice,
-  explanation, guide `text` and `sourceSection` against the quoted passage sitting beside it in the
-  report: facts are free and phrasing is not (§6 rule 1), and a `purchase` or `restricted` document
-  supplies neither (§6 rule 5).
-- **No reader-visible field carries a term somebody owns.** Barred terms checked against the
-  standards register, and **every acronym, mnemonic or named procedure the register does not list
-  traced to an owner** — cleared in the report, or raised in the brief. Naming a document to cite it
-  stays fine; using a mark as the thing being taught does not (§6 rule 10).
-- **Every explanation reads as hand-written.** No stem restated, no *important to note*, no reflexive
-  antithesis, no em dashes, no inflated register. **Then read the batch's explanations back to back**
-  — if they share one rhythm, they were written to a template rather than to their facts.
-  **Then read them against a sample already in the bank**, not only against each other: a batch can
-  be internally varied and still drift as a whole, and that drift shows only against what shipped
-  before it.
-- Every `sourceSection` is under 90 characters, points rather than explains, and carries no claim.
-- Every scope wider than one state names the documents checked, one per covered state.
-- Every id is `<slugShort>-<scope>-<topicNum>-<sitewideNum>`, its segments agree with the fields they
-  name, `idKey` equals the trailing number, and no number is reused.
-- Every `sisterQuestions` list is symmetric, single-scope, and carries at most one `guide` block
-  across the set.
-- Every `media.src` names a file that will exist by the time the bank is written, filed under its
-  `imageCredit`.
-- Every candidate from phase 4 has a verdict **in the ledger**, every `deferred` names its blocker,
-  and every `queued` carries its verified scope. No `deferred` blames gate capacity.
-- `node scripts/audit-questions.mjs <cert> --proposed <file>` was run against the proposed bank and
-  its output is in the report — **including any new NOTE this run introduces.** The flag runs every
-  check against a candidate file, so **nothing is spliced into the tracked bank to audit it.**
-- `--resolve --proposed <file>` was run for the affected states and pasted into the report, and its
-  *not reached* lines were read: **a state missing a fact it should have had is a finding**, and it
-  is the one the tokens alone will not show you.
+Before writing the report, run every check in the technique file ▸ *Pre-assembly checks*. Two of
+them are scripts whose output goes in the report: `node scripts/audit-questions.mjs <cert> --proposed
+<file>` over the proposed bank, and `--resolve --proposed <file>` for the affected states.
 
 ## Report
 

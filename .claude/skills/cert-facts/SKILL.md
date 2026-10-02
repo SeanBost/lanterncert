@@ -83,9 +83,12 @@ together, by hand, never mid-run.
 
 ## Read first
 
+- **`blackbox/technique/cert-facts.md` — read it in full before phase 0, and stop if it is missing.**
+  This file is the process: what a run does, in what order, and where it stops. That one is the
+  technique each step applies, and it is not published. **A run on the process alone is not this
+  skill.**
 - **`blackbox/data-handling.md` — the authority on every shape and rule.** Registry entry shape,
-  key format, source ranking, the source-finding ladder, dating, the fact contract, verification
-  checks and verdicts all live there and are **not restated here**. This file covers execution only:
+  key format, dating and the fact contract all live there and are **not restated here**. This file covers execution only:
   what a run does, in what order, and where it stops.
 - **`blackbox/authoring/<cert>-standards.md` ▸ *Sources*** — **this cert's own source rulings**,
   which `data-handling.md` deliberately does not carry: which documents are held for reference only,
@@ -94,8 +97,8 @@ together, by hand, never mid-run.
 - **`src/schemas/<cert>.ts` ▸ `vocab`** — the complete set of allowed values for each constrained
   field, build-enforced. **This is the authority on vocabularies**; `data-handling.md` §4 ▸ *Field rules*
   says what each one means and `src/content/display/<cert>-display.json` what it reads as.
-- `CLAUDE.md` ▸ *The rules that must never be missed*, ▸ *How it's wired*, ▸ *Locked decisions* —
-  why the rules are what they are, and the null / `note` / `stateDetails` reasoning.
+- `CLAUDE.md` ▸ *The rules that must never be missed* and `blackbox/decisions.md` ▸ *Locked* —
+  why the rules are what they are. `data-handling.md` §4 carries the null / `note` / `stateDetails` split.
 - **The most recent report in `blackbox/research/` for this state**, if one exists. It records what
   was already ruled out, and re-running settled research is the cheapest way to waste a pass.
 - **A completed state's block in the facts file**, if this state is not the first. It is the
@@ -168,7 +171,7 @@ the document, the section — not just the one that worked. **The attempt log is
 and reconstructing it afterwards is guesswork.
 
 **3c · The null sweep — the second run, run now.** Take every fact still null and re-attack it as a
-batch through *Resolve before escalating*. **This is not a formality and it is where this run stops
+batch through *Resolve before escalating* in the technique file. **This is not a formality and it is where this run stops
 being a first draft**; skipping it is what makes a later re-run productive. A fact only becomes
 `unresearched` after it has been through this.
 
@@ -189,7 +192,7 @@ changed and was not re-read against the fact it backs, leaves the date alone.
 
 A stored value with a stored source is a **claim**, not a fact.
 
-**Run all nine checks in `data-handling.md` ▸ *Cert facts* ▸ *Verification*** — including check 8,
+**Run all nine checks in the technique file ▸ *Verification*** — including check 8,
 which asks whether a supportable citation is still the *best available* one, and which runs on
 `--verify-only` too. Each has caught a real defect. Record the supporting quote for every fact.
 
@@ -199,81 +202,20 @@ say so rather than being silently orphaned.
 
 ## Finding a source
 
-**Work the eight-step ladder in `data-handling.md` ▸ *Sources — registry* ▸ *Finding a source*, in
-order, and stop when the fact is settled.** Rank the candidates it produces with *Choosing between
+**Work the eight-step ladder in the technique file ▸ *Finding a source*, in order, and stop when
+the fact is settled.** Rank the candidates it produces with *Choosing between
 sources* in the same file. **The ladder's step 8 is escalation, and it is NOT the next step from
-here** — *Resolve before escalating* below sits between them, and a fact reaches review only after it.
+here** — *Resolve before escalating*, in the technique file, sits between them, and a fact reaches review only after it.
 When it does, say what was already ruled out, so the question isn't re-answered with work already
 done.
 
 **"Stop when the fact is settled" means settled, not attempted.** The ladder running out is not a
-result; it means the document was not where the ladder looks, which is the question the next section
+result; it means the document was not where the ladder looks, which is the question *Resolve before escalating*
 asks.
 
 Choosing between two candidates is a **Decide**, not an *Escalate*. Say why in the source note.
 
-### Resolve before escalating
-
-**The ladder is linear and its last rung is "escalate". This is what happens between the two**, and
-every fact still null at phase 3c goes through it. **The ladder asks "where is the document?"; this
-asks "what if the question is wrong?"** — which is why working it harder does not substitute.
-
-**The reframes, worked as a checklist.** Each is a different shape of question, not a further step:
-
-- **Change the document type.** An answer absent from an explainer page is routinely on the **form**
-  a rider actually files, the **fee schedule**, the **statute**, or the **administrative rule** that
-  implements it. Agencies explain badly and specify precisely, in different places.
-- **Change the audience.** Look for the page written for **staff, examiners, instructors or
-  third-party testers** rather than for the public. Program manuals and school handbooks state
-  operational numbers the public page rounds off or omits.
-- **Change the jurisdiction, to learn the vocabulary.** Find the same fact for a state already
-  settled, and note **what that document is called and where it sits**. Agencies copy each other's
-  structure; the answer here is often the same document type under a different name.
-- **Change the term.** Search the agency's own phrasing rather than ours — *endorsement* vs *class*
-  vs *designation*, *knowledge test* vs *written exam*, *rider course* vs *safety program*. A
-  zero-hit search may only mean the wrong noun.
-- **Change the direction: search for the ANSWER, not the question.** If a count is plausibly 25 or
-  30, search those numbers against the agency's domain. This finds pages that never use the words
-  you were searching for.
-- **Follow the delegation to its end.** A state that delegates to a program, a contractor or a
-  board has moved the fact, not deleted it. Name each authority and what it did not specify.
-- **Ask what would have to be true.** If the fact were published, which office would own it and what
-  would that page be called? Then look for *that*. This is the reframe that finds documents nobody
-  linked to.
-- **Re-read what is already held, against this specific question.** Phase 1 grepped for a term; the
-  answer may be in a table, a footnote or a form field in a snapshot already on disk. **This is the
-  cheapest rung and the one most often skipped**, because a document already read feels finished.
-
-**Then decide which null this is, and they are not the same:**
-
-- **The agency does not publish it.** A real, finished answer — `not-applicable`, `value: null`
-  **with** a source naming the document that would have carried it. **Strongest when the document
-  is positively silent** where it publishes the neighboring facts, which is itself evidence.
-- **It is published and not yet found.** `unresearched`. **This is an admission, not a result**, and
-  it carries the attempt log so the next run starts where this one stopped instead of repeating it.
-
-**A null with a short attempt log is the thing to catch.** Two searches and a shrug is not a
-finished answer, and it is indistinguishable at the gate from a genuinely exhausted one **unless the
-log is there**. Escalate a fact only once this section is spent, and say what was ruled out.
-
-### Resource facts
-
-A **resource fact** is one whose source IS the destination a rider is sent to — `criteria.findCourse`
-and `exam.practiceExam`. **The ten rules are in `data-handling.md` ▸ *Cert facts* ▸ *Resource facts*
-and are not restated here.** Three things that are run behavior:
-
-- **Research them like any other fact, but the ladder ends at the agency.** A third-party practice
-  site is never a source however good it looks, so steps 6 and 8 of *Finding a source* do not apply —
-  there is no aggregator to read for direction and nothing to escalate. Search the agency's own
-  driver-license section, not just the motorcycle pages.
-- **Read the resource before naming it. A page's title is not its content** — GA DDS's prominent
-  "Practice Test" is the **car** test, and only opening it showed 45 car questions and 5 road signs.
-  The value you write is the title a reader sees, so a run that titled it from the nav label would
-  have told Georgians it was theirs.
-- **An imperfect one is a Decide, not an Escalate**, provided rule 8's bar is met — a demonstrable
-  overlap stated in the state's own terms, plus a title that says its scope. Put the overlap in the
-  source note. **If you cannot title it honestly in a few words, it does not qualify and the value is
-  null.** A weak link is worse than no link.
+Resource facts are worked per the technique file ▸ *Resource facts*.
 
 ### Fetching discipline
 
@@ -320,8 +262,18 @@ Three things that are judgment rather than rule:
 
 ## Verdicts
 
-Every fact lands in exactly one of the eight verdicts in `data-handling.md` ▸ *Cert facts* ▸
-*Verdicts*.
+Every fact lands in exactly one.
+
+| verdict | meaning |
+|---|---|
+| `verified` | a passage in the snapshot supports the stored value |
+| `inferred` | source supports without stating, **and the note says so**; otherwise `unsupported` |
+| `drifted` | the page now says something else — report both, change nothing |
+| `unsupported` | page is fine, no passage supports the claim |
+| `dead` | link broken, or the page is no longer what was cited |
+| `not-applicable` | checked, does not apply → `value: null` **with** a source |
+| `unresearched` | no source found; stays null |
+| `blocked` | could not be fetched by any method |
 
 `blocked` is rare and usually wrong. A PDF is not blocked — `fetch-page.mjs` saves it and extracts
 its text layer, and a PDF with no extracted text is scanned, so read the saved file directly. A JS
@@ -387,38 +339,7 @@ Two things that are run behavior rather than shape:
 
 ## Pre-assembly checks
 
-Before writing the report, confirm:
-
-- Every fact you are proposing has its supporting quote, and that quote is in the snapshot of the
-  source you are naming.
-- Every new registry key is cited exactly once, as a fact source or an `additionalResources` entry,
-  and its note (if any) is proposed into `blackbox/source-notes/<cert>-source-notes.json`, not into
-  the entry.
-- Every new entry carries `state` and a `sourceID` that is the next unused number in the file, and
-  sits in its alphabetical position. No `sourceID` is reused, including one freed by a removal.
-- Every new entry carries a `description` inside **50–90 characters**, the range Zod enforces, and
-  every entry you re-read still describes what that document actually holds. A `purchase` or
-  `restricted` entry says so.
-- Every resource fact you are proposing names a destination you actually opened, and its `value`
-  titles what is really there — scope first, brevity second. Its overlap, if imperfect, is in the
-  source note.
-- Every new or re-dated entry carries both year fields, each derived per `data-handling.md` ▸
-  *Dating a source*. A `null` on either is explained in the note.
-- Every range is ascending, same unit, both ends quoted.
-- **Every value, display string and registry `description` is written rather than lifted, and carries
-  no term somebody owns.** These render, so `data-handling.md` §6 binds them exactly as it binds a
-  stem: phrasing is not free even where the fact is (rule 1), a `purchase` or `restricted` document
-  is never reproduced (rule 5), and a trademarked term may be cited but never taught (rule 10).
-  **A `title` naming its publisher is citation and stays** — the line is content versus citation.
-  An owned-looking term the cert's standards register does not list is traced to an owner before it
-  is used, at its FIRST marked use in the document rather than the instance in front of you.
-- **Every remaining null has been through phase 3c**, and carries its attempt log rather than just
-  the authorities read. A null whose log is two lines long has not been worked - send it back.
-- **Every `unresearched` has been checked against `not-applicable`**: if a document we hold is
-  positively silent where it publishes the neighboring facts, that is a sourced null, not a gap.
-- `meta.dateVerified` is bumped only if every sourced fact in the state was confirmed against its
-  source this run — cached snapshots count, changed pages must have been re-read.
-- Any snapshot written for a page you are not registering is named in the report as evidence.
+Before writing the report, run every check in the technique file ▸ *Pre-assembly checks*.
 
 ## Report
 
