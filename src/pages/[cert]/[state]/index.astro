@@ -172,7 +172,7 @@ const modes = !config.hasExam ? [] : [
 		emoji: "📖",
 		icon: "book",
 		cta: "Get started",
-		blurb: "Start here. A crash course in the material, sorted by topic, with the source behind every section.",
+		blurb: "Start here. Read a crash course on the material, sorted by topic, with the source behind every section.",
 	},
 	{
 		href: `${base}/practice`,
@@ -180,7 +180,7 @@ const modes = !config.hasExam ? [] : [
 		emoji: "🧠",
 		icon: "cards",
 		cta: "Start practicing",
-		blurb: "One question at a time, untimed. Every answer comes with the reason and the source.",
+		blurb: "Answer one question at a time, untimed. Every answer comes with the reason why and the source.",
 	},
 	{
 		href: `${base}/test`,
@@ -192,7 +192,7 @@ const modes = !config.hasExam ? [] : [
 		// fallback sentence, so the page never shapes a test after an exam that isn't published.
 		blurb: noExamFormat
 			? "Take a practice test covering the essentials you need to know, scored at the end."
-			: `Take a practice test shaped like the real ${facts.meta.agencyCode} exam, scored at the end.`,
+			: `Take a timed practice test shaped like the real ${facts.meta.agencyCode} exam, scored at the end.`,
 	},
 ];
 

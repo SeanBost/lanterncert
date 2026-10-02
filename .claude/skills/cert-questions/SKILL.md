@@ -165,7 +165,8 @@ carry this document's content and which states each one reaches, and **name ever
 cannot honestly reach at all**. It costs one pass over the exams file and one grep per state, and it
 is what turns a mid-run surprise into a decision taken before any work rests on it.
 
-- **A state the document cannot reach owes variants, and that is a decision, not a discovery.** It
+- **A state the document cannot reach owes variants where its own manual teaches the content, and
+  nothing where it is silent. Either way that is a decision, not a discovery.** It
   goes to gate A. **Finding this out mid-authoring is the failure** — by then questions are already
   written against scopes that skip the state, and the answer is usually already recorded.
 - **Read the cert's standards file and its diff or override register first**; both are scope work
@@ -311,12 +312,29 @@ quality mechanism.
    sense once you have read the options is a recognition test, not a knowledge one. Name the state
    in the stem whenever the scope is a single state (§5c).
 4. **Write the choices.** Then run *The distractor bar* below.
-5. **Write the explanation.** It asserts, it does not argue (§5 rule 6b). **Then read it with the
-   question hidden**: if it does not teach something on its own, it is not finished, because this
-   sentence is also the Study Guide fact.
-6. **Write the guide block** — `kind`, `label`, `order`, and `text` only where the guide wants it
-   shorter than the explanation. Leave `group: null` unless the material obviously clusters;
-   grouping is a later pass and is deliberately not a precondition (§4c rule 3).
+5. **Write the explanation.** It asserts, it does not argue (§5 rule 6b). It is read by someone who
+   has just answered, with the stem and the choices in view, so it may lean on them for its subject.
+6. **Write the guide block** — `kind`, `label`, `order` and `text`. Leave `group: null` unless the
+   material obviously clusters; grouping is a later pass and is deliberately not a precondition
+   (§4c rule 3).
+   - **EVERY QUESTION'S GUIDE FACT IS A DELIBERATE CALL, NEVER A DEFAULT IN EITHER DIRECTION.** Two
+     people read this fact: one who just answered the question, and one scanning the Study Guide cold
+     who has seen neither the stem nor the choices. **Ask whether one sentence serves both.**
+     - **When it does, leave `text` null** and the explanation renders in the guide. That is the
+       tightest outcome, and common for a short, self-contained fact.
+     - **When it does not, write `text`** — usually because the explanation is too long to take in at
+       a glance, or leans on the stem for what it is about. A `value` row always needs its own.
+   - **Brevity is the strong default, not a cap.** A guide fact is scanned, so most land well under a
+     hundred characters. **Go longer where the context is what makes the fact usable**, and say why
+     at the gate.
+   - **Two errors, equally real:** a `text` that rewords the explanation at the same length, and a
+     null that leaves a long or stem-dependent explanation standing in. **The second is the quieter
+     one**, since nothing looks wrong until the guide is read as a page.
+   - **A GUIDE FACT IS READ COLD, SO IT HAS TO STAND COMPLETELY ON ITS OWN.** **Name the thing being
+     acted on and say what happens to it** — *"Lift to shift up, press to shift down"* fails, because
+     it never says lift WHAT, or up and down in what. **Read whatever the guide will actually show —
+     `text`, or the explanation where `text` is null — with the question hidden**, and ask whether a
+     stranger could act on it.
 7. **Write `sourceSection`.** A locator, capped at 90 characters, that points and never explains.
    **Write it now, while the document is open** — it is a nightmare to backfill.
 8. **Fill `meta` honestly, and leave `note` null unless it holds a bare fact no field can**
@@ -463,7 +481,8 @@ Before writing the report, confirm:
 - Every question carries a verbatim passage quote, and that quote is in the snapshot of the source it
   names.
 - Every distractor has a recorded rebuttal, and none of the mechanical tells above is present.
-- Every explanation reads as a standalone fact with the question hidden.
+- Every guide fact — `text`, or the explanation where `text` is null — reads as a standalone fact
+  with the question hidden, and is short enough to take in at a glance or states why it is not.
 - **No reader-visible field reproduces its source's expression.** Read each stem, choice,
   explanation, guide `text` and `sourceSection` against the quoted passage sitting beside it in the
   report: facts are free and phrasing is not (§6 rule 1), and a `purchase` or `restricted` document
@@ -497,8 +516,41 @@ Before writing the report, confirm:
 
 ## Report
 
-Write to `blackbox/research/<cert>-questions-<target>-<YYYY-MM-DD>.md` and give a short summary in
-the terminal. Suffix rather than overwrite an existing report for the same target and date.
+Write to `blackbox/research/<cert>-questions-<target>-<YYYY-MM-DD>.md`. Suffix rather than overwrite
+an existing report for the same target and date.
+
+### What the terminal carries at gate B
+
+**EVERY READER-VISIBLE FIELD, VERBATIM, IN THE TERMINAL.** The gate is the one moment a person sees
+this content before it reaches a rider, so a summary of it is not a review — approving a stem from a
+one-line paraphrase approves wording nobody read. Per question, in full and exactly as it would ship:
+
+- **The stem**, word for word.
+- **All four choices**, word for word, with the correct one marked.
+- **The explanation**, word for word, labeled **Explanation**.
+- **The guide fact, for EVERY question**, labeled **Guide fact** — the `guide` block's `text` word for
+  word, or an explicit *same as the explanation* where `text` is null — with its `kind` and group.
+  **Never leave it implied.** The two are read by different people, and a gate that shows one leaves
+  the reviewer to infer the other. **Keep those two labels fixed**, so a reviewer's reply can name
+  either one without ambiguity.
+- **Any art the question should carry**, as a one-line brief. Art is proposed at the gate even where
+  it is drawn later.
+
+**Plus the `meta` a reviewer needs to judge the question** — never the whole object, and never fields
+they cannot act on. `source` and `sourceSection`, because a citation is what makes the question
+trustworthy; `appliesTo`, because it decides who ever sees this; `variantGroup`, because `null` is a
+declaration and §5 rule 5b requires the reason stated at the gate; and `note` wherever it is not null,
+because it shapes a field the reviewer is reading. **Dates, `idKey` and `sisterQuestions` stay out** of
+the terminal unless something about them is unusual — they are in the report and in the JSON.
+
+**The supporting evidence stays in the report file and is pointed at, not pasted.** Source passages,
+distractor rebuttals, per-state scope evidence and the audit output are what a reviewer reaches for
+when a question looks wrong, and inlining all of it buries the content they are checking. **Name the
+file and say what is in it.**
+
+**If the batch is too long to present this way, the batch is too long.** Lower the cap rather than
+compress the presentation; *How much gate B carries* bounds a reviewer's attention, and this is the
+form that attention is actually spent on.
 
 **IT CARRIES NO DESIGN DECISIONS.** Every one is in the brief, settled at gate A or waiting there.
 A report that argues for a call has taken gate A's job back.

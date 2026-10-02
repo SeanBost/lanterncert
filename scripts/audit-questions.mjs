@@ -92,6 +92,16 @@ const resolvedFor = Object.fromEntries(
   }),
 );
 
+// ── unreachable scope ────────────────────────────────────────────────────────
+const reachable = new Set(Object.values(resolvedFor).flat().map((q) => q.id));
+for (const q of bank) {
+  if (reachable.has(q.id)) continue;
+  problem(
+    "unreachable-scope",
+    `${q.id} is scoped ${q.meta.appliesTo}, which no state resolves - the question renders nowhere. Check casing against states.json abbreviation and the exams file keys.`,
+  );
+}
+
 /** Mock Test length: the state's own count where published, the cert's fallback where not. */
 function mockLength(slug) {
   return facts[slug].exam?.questionCount?.value ?? certConfig.testDefaults?.questionCount ?? null;
@@ -147,12 +157,8 @@ function printCoverage() {
     }
   }
   console.log(
-    `  ${coverageRows.length} group(s) · ${owedTotal} owed · ${declaredTotal} declared · ${narrow.length} narrow by declaration`,
+    `  ${coverageRows.length} group(s) · ${owedTotal} owed · ${declaredTotal} declared · ${narrow.length} narrow with no group (--resolve lists what each state misses)`,
   );
-  if (narrow.length) {
-    console.log("  narrow (variantGroup null, reaches some states and not others):");
-    for (const q of narrow) console.log(`      ${q.id} · ${q.meta.appliesTo}`);
-  }
 }
 
 // An exclusion naming a group or state that no longer exists is a rule outliving its reason.
