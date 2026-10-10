@@ -1,5 +1,6 @@
 // Universal schema machinery only; cert vocabulary lives in src/schemas/<cert>.ts.
-import { reference, z } from "astro:content";
+import { defineCollection, reference, z } from "astro:content";
+import { file } from "astro/loaders";
 import states from "./content/states.json";
 import * as motorcycleEndorsement from "./schemas/motorcycle-endorsement";
 
@@ -45,6 +46,20 @@ const makeFact =
 
 const kit = { makeSourceRef, makeFact, amount, year, scopeEnum, appliesToEnum };
 
+// Hosted agency records, cert-agnostic. Each id also names its fragment, src/content/records/<id>.html.
+const records = defineCollection({
+  loader: file("src/content/records/records.json"),
+  schema: z.strictObject({
+    title: z.string().min(1),
+    description: z.string().min(1),
+    intro: z.string().min(1),
+    artifactTitle: z.string().min(1),
+    agency: z.string().min(1),
+    date: z.iso.date(),
+  }),
+});
+
 export const collections = {
+  records,
   ...motorcycleEndorsement.collections(kit),
 };

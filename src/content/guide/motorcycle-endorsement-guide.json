@@ -75,13 +75,115 @@
       {
         "id": "shapes",
         "heading": "What the shape tells you",
-        "leadIn": "Shape is reserved by the national standard, so a shape carries the same meaning in every state.",
+        "leadIn": "The national standard reserves most shapes for one sign or one kind of sign, so those mean the same in every state. Rectangles are shared, and which way one stands is only a general guide.",
         "media": null
       },
       {
         "id": "colors",
         "heading": "What the color tells you",
         "leadIn": "Color does the same job as shape, and the two agree: a sign that looks wrong for its message usually is not the sign you think it is.",
+        "media": null
+      },
+      {
+        "id": "regulatory",
+        "heading": "Signs that state a rule",
+        "leadIn": "Regulatory signs give notice of a traffic law or regulation, so what one says is binding.",
+        "media": null
+      },
+      {
+        "id": "speed",
+        "heading": "Speed signs",
+        "leadIn": "Some speed signs set a limit, and others give notice of one or recommend a speed. The words on the sign say which.",
+        "media": null
+      },
+      {
+        "id": "signals",
+        "heading": "Traffic signals",
+        "leadIn": "What a signal asks of you depends on its color and on whether it is steady, flashing or dark.",
+        "media": null
+      },
+      {
+        "id": "markings",
+        "heading": "Pavement markings and lanes",
+        "leadIn": "Lines and lanes painted on the road carry rules of their own, from crosswalks to turn lanes and bicycle lanes.",
+        "media": null
+      },
+      {
+        "id": "roundabouts",
+        "heading": "Roundabouts",
+        "leadIn": "Roundabouts keep traffic moving one way around a center island, with a set way to enter, ride and leave.",
+        "media": null
+      }
+    ]
+  },
+
+  "rules-of-the-road": {
+    "opener": "Some states test their traffic laws as part of the knowledge exam. Here are the rules a rider most needs, starting with who goes first.",
+    "groups": [
+      {
+        "id": "right-of-way",
+        "heading": "Right-of-way",
+        "leadIn": "The law settles who goes first in each situation, and expects you to give way whenever insisting would cause a crash.",
+        "media": null
+      },
+      {
+        "id": "officers-and-work-zones",
+        "heading": "Officers, emergency vehicles and work zones",
+        "leadIn": "Officers, flaggers, and emergency and work vehicles all come before the usual order of traffic.",
+        "media": null
+      },
+      {
+        "id": "turns",
+        "heading": "Turns",
+        "leadIn": "Where a turn starts and finishes, and when a red light still lets you make one.",
+        "media": null
+      },
+      {
+        "id": "school-buses",
+        "heading": "School buses",
+        "leadIn": "A school bus's lights say when to slow, when to stop and how long to stay stopped.",
+        "media": null
+      },
+      {
+        "id": "stopping-and-parking",
+        "heading": "Stopping and parking",
+        "leadIn": "Some places are closed to you even for a moment; others allow only a quick passenger stop.",
+        "media": null
+      },
+      {
+        "id": "speed-and-lanes",
+        "heading": "Speed and lane use",
+        "leadIn": "Default speed limits, and the rules for the passing lane, slow traffic and changing lanes.",
+        "media": null
+      },
+      {
+        "id": "phones-headphones-and-conduct",
+        "heading": "Phones, headphones and conduct",
+        "leadIn": "What the law bars while you ride: holding a phone, headphones that cut out traffic, and driving to intimidate.",
+        "media": null
+      },
+      {
+        "id": "passing",
+        "heading": "Passing",
+        "leadIn": "Where a pass is allowed, how it has to end, and what you owe a vehicle you pass or that passes you.",
+        "media": null
+      },
+      {
+        "id": "expressways",
+        "heading": "Expressways",
+        "leadIn": "Joining an expressway, the lanes on it, and when you may stop on its shoulder.",
+        "media": null
+      },
+      {
+        "id": "pedestrians-and-bicycles",
+        "heading": "Pedestrians and bicycles",
+        "leadIn": "Where crosswalks are, when you must stop for someone in one, and what a cyclist may do on the road.",
+        "media": null
+      },
+      {
+        "id": "after-a-crash",
+        "heading": "After a crash",
+        "leadIn": "What the law asks of you at the scene, whoever was at fault.",
         "media": null
       }
     ]

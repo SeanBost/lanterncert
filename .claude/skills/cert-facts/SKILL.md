@@ -72,14 +72,19 @@ without their own argument they could only be revalidated as part of a full pass
 the review gate but land in two files — the registry ships in the repo and renders on the site, the
 note never leaves `blackbox/`. Never put note-shaped reasoning in a registry field.
 
-**Never touches:** the question bank, any UI or route, `CLAUDE.md`, `blackbox/data-handling.md`,
-`blackbox/todo.md`, `blackbox/strategy/project-plan.md`, `blackbox/sessions.md`, or git. Surface anything
-those need as a report item — **a run that finds a standard wrong or missing proposes the change,
-never makes it.**
+**Never touches:** the question bank, any UI or route, `blackbox/sessions.md`, or git. Each has
+another owner whose checks a run here would bypass.
 
-**Writes on approval:** nothing outside the facts and sources files. A new vocabulary value is a
-report item — it lands in `src/schemas/<cert>.ts` and `src/content/display/<cert>-display.json`
-together, by hand, never mid-run.
+**Writes on approval only:** `CLAUDE.md`, `blackbox/data-handling.md` and
+`blackbox/strategy/project-plan.md`. **A run that finds a standard wrong or missing proposes the
+change at the review gate and writes it once approved**, in the same session, since a rule changed
+in one file and not its owner is how the two drift. A new vocabulary value is a report item — it
+lands in `src/schemas/<cert>.ts` and `src/content/display/<cert>-display.json` together, by hand,
+never mid-run.
+
+**Writes freely:** `blackbox/todo.md`, for work the run finds owed elsewhere — another skill's job, a
+follow-up run, a blocked fetch. **Owed work goes on the to-do list, never only into a report**, where
+nobody looks for it once the run is closed.
 
 ## Read first
 
@@ -234,9 +239,11 @@ carefully asks for less.
   is also better research — the page you just read usually names the right next URL.
 - **Look for the whole document before fetching its parts.** A publisher that chunks a manual across
   twenty section pages usually also serves a print, export or download view of the whole thing.
-  Finding it turns twenty requests into one. `ga-dds-drivers-manual` is the worked example: eleven
-  section pages, one 210KB book-export URL, and the entry cites the document rather than a chunk
-  (§2 rule 8b).
+  Finding it turns twenty requests into one. **Then confirm it is whole**: where the publisher also
+  offers a PDF, that is the document, and an HTML view can carry every section while dropping text
+  inside them (§2 rule 8b). `ga-dds-drivers-manual` is the worked example: a book export that
+  collapsed eleven section pages into one response, then proved to drop subsection bodies the PDF
+  carries, so the entry now cites the PDF.
 - **Stop at the first sign the site would rather not serve the request** — an interstitial, an
   unexpected redirect chain, a 403, a body that does not match the URL. **One is enough**, and §3
   rule 15 is what happens next: report it and end the run's work on that host.

@@ -1,6 +1,6 @@
 ---
 name: cert-questions
-description: Author exam questions and their Study Guide facts for a cert — the entries in src/content/questions/<cert>-questions.json, drafted from a primary source passage and stopped for review before anything is written. Use when filling a topic's quota, working a newly registered document, or building out a state's bank. Invoked as /cert-questions <cert> --source <key> or /cert-questions <cert> <state>.
+description: Author exam questions and their Study Guide facts for a cert — the entries in src/content/questions/<cert>-questions.json, drafted from a primary source passage and stopped for review before anything is written. Use when a topic is below its floor, working a newly registered document, or building out a state's bank. Invoked as /cert-questions <cert> --source <key> or /cert-questions <cert> <state>.
 ---
 
 # cert-questions
@@ -34,7 +34,7 @@ passage behind it.
 /cert-questions <cert> --source <source-key>   one registered document, worked end to end
 /cert-questions <cert> --survey <source-key>   enumerate a document end to end, author nothing
 /cert-questions <cert> <state>                 every teachable source that state resolves
-/cert-questions <cert> <state> --topic <slug>  the same, narrowed to one topic's quota
+/cert-questions <cert> <state> --topic <slug>  the same, narrowed to one topic
 /cert-questions <cert> --resume                continue the most recent worklist for this cert
 ```
 
@@ -84,14 +84,24 @@ which chunk to start from there rather than reaching for a finer flag.
 **Writes on approval only:** `src/content/guide/<cert>-guide.json` — and only to add or edit a
 group's `heading`, `leadIn` or `media`. **An `opener` is hand-written prose**; propose wording, never
 overwrite it. Also `blackbox/authoring/<cert>-exclusions.json`, where an approved deliberate gap is
-declared — **a gap only, never owed work**, which belongs in the worklist ledger.
+declared — **a gap only, never owed work**, which belongs in the worklist ledger. And
+`blackbox/authoring/<cert>-standards.md`, only for a ruling raised at gate A and explicitly approved.
 
-**Never touches:** the facts file, the sources registry, `src/content/topics/`,
-`src/content/weights/`, `src/content/exams/`, any UI or route, `CLAUDE.md`,
-`blackbox/data-handling.md`, `blackbox/authoring/<cert>-standards.md`, `blackbox/todo.md`,
-`blackbox/strategy/project-plan.md`, `blackbox/sessions.md`, or git.
+Also on approval: `src/content/topics/`, `src/content/weights/`, `src/content/exams/`, `CLAUDE.md`,
+`blackbox/data-handling.md` and `blackbox/strategy/project-plan.md`. **A rule changed at a gate is
+written to `data-handling.md` in the same session**, never left for later.
 
-**A run that needs one of those proposes the change and continues.** Four cases will come up:
+**Writes freely:** `blackbox/todo.md`, for work the run finds owed elsewhere — another skill's job, a
+follow-up run, a document that needs fetching. **Owed work goes on the to-do list, never only into the
+brief**, where nobody looks for it once the run is closed.
+
+**Never touches:** the facts file, the sources registry, any UI or route, `blackbox/sessions.md`, or
+git. Each has another owner whose checks a run here would bypass.
+
+**A run that needs a change it may not make on its own proposes it at a gate and continues.** Five
+cases will come up:
+- **Work is owed to another skill** — a snapshot, a registry entry, a fact to re-verify. Add it to
+  `todo.md` and name it in the brief.
 - **The best source for a question is not in the registry.** Registering is `/cert-facts`'s job.
   Name the document and the questions it would unblock, and author what you can without it.
 - **Material has no honest topic.** Report it as a proposed topic — §4b rule 6 says be generous
@@ -99,8 +109,8 @@ declared — **a gap only, never owed work**, which belongs in the worklist ledg
 - **A topic's weight looks wrong for what the source actually tests.** Report it. A weight change
   moves every other topic's quota, so it is never a side effect of an authoring run.
 - **A cert ruling is owed** — a scope instance, a newly barred term, a source that behaves oddly.
-  **Propose it at gate A; never write the standards file.** Same posture as `data-handling.md`, and
-  for the same reason: a run that edits the rules it is judged against has stopped being reviewable.
+  **Propose it at gate A, and write it to the standards file only once it is explicitly approved.** A
+  run that changes the rules it is judged against on its own has stopped being reviewable.
 
 ## Read first
 
@@ -140,19 +150,15 @@ scaffold and the registry. Run `node scripts/audit-questions.mjs <cert> --resolv
 run's starting picture: the quota, and what each state already reads. If the bank has uncommitted
 changes, say so in the report; do not refuse.
 
-**Then decide which of the two run modes you are in, because they have different briefs.**
+**Both modes read everything in scope and author every candidate worth keeping**; they differ in
+scope, not appetite. `--source` reads one document, `<state>` every document the state resolves. **The
+candidate ledger is the brief**, and the run is finished when every candidate in every chunk holds a
+terminal verdict.
 
-- **`--source` is EXHAUSTION mode. The candidate ledger is the brief**, and the run is finished when
-  every candidate in every chunk holds a terminal verdict. **The quota is reported and does not
-  steer.** A topic already over its floor is not a reason to stop reading a document — the quota is
-  a floor, never a target *(§5 rule 13)*, and the expensive thing is reopening a source later, not
-  authoring one more question while it is open.
-- **`<state>` is QUOTA mode. The quota table is the brief**: it says which topics are short and by
-  how much, and the run works toward those floors across whatever sources the state resolves.
+- **The quota is a floor, never a stopping point**: past about twice it, a candidate is still
+  authored whenever it is a valuable add, and often it is (§5 rule 13).
 
-**The failure this split prevents is real and has happened.** Reading the quota table as the brief on
-a `--source` run ends it the moment one topic passes its floor, leaving the rest of the document
-unread and every remaining candidate to be re-enumerated in some later session.
+Reading the floor as a stopping point once ended a run with most of its document unread.
 
 **1 · Worklist and scope reconnaissance.** Enumerate what this run will read, and write it to
 `blackbox/research/<cert>-worklist-<target>-<YYYY-MM-DD>.md` before authoring anything.
@@ -213,6 +219,10 @@ sentences, bullets and list items — and **account for every one**, *before* au
 question. A unit either yields a candidate or is marked as carrying no assertion: framing,
 transition, cross-reference, or a restatement of a unit already counted. Then assign each candidate
 a verdict.
+
+**Judgment cuts are made here, once the candidates are found and before any is authored.** Where the
+cert's standards or §5 rule 13 say a cut reaches review only as a count, it becomes `rejected` with a
+few words of why in the ledger and is never itemized at a gate.
 
 How each unit is weighed is in the technique file ▸ *Enumerating a chunk*.
 
@@ -308,7 +318,8 @@ is `worked` when nothing in it is `queued`, and a source is finished when no chu
 - **`deferred`** — testable, but genuinely **blocked**. Name the blocker. A source contradicting
   itself is the worked example, and a deferral that is a standing decision belongs in
   `blackbox/authoring/<cert>-exclusions.json` so the audit reads it as declared rather than missing.
-- **`rejected`** — not exam-relevant, or not testable in four options. Say which.
+- **`rejected`** — not exam-relevant, not testable in four options, or not a valuable add past about
+  twice the floor. Say which.
 
 **Never write "gate cap" as a blocker on a `deferred` item.** That conflates *the run ended* with
 *something is wrong*, and it is what the split exists to prevent: one of those clears itself on the
@@ -365,6 +376,10 @@ that appears to have changed since its snapshot.
 
 **Only after approval, and only for approved questions.** Standards are `data-handling.md` §5 rules
 9–9e; per-image recipes live in `blackbox/working-materials/question-art/recipes.md`.
+
+- **A picture-only question is approved before its art exists and waits whole** in
+  `blackbox/working-materials/question-art/staged-questions.json`, `media` filled in, splicing into the
+  bank the day its file exists. A question its stem can answer ships at once with `media: null`.
 
 - **Class A** reproduces an artifact a rider meets on the road — always SVG, the artifact's own
   colors, accuracy is the whole job. **Class B** explains something — always a transparent PNG at
@@ -440,10 +455,11 @@ it; a reader who stops after it has done the job the gate exists for. Sections, 
    second owner of the resolver's answer.
 4. **Guide impact** — which sections gained facts, which groups are proposed, what still renders
    ungrouped.
-5. **Counts** — candidates by verdict; questions by topic and scope; quota movement per state, before
-   and after; art required. **Quota movement is reported in both modes and steers only in quota
-   mode** — on a `--source` run it is a consequence, not a target.
-6. **Not authored, and why** — every `deferred` and `rejected` candidate with its reason, and every
+5. **Counts** — candidates by verdict; questions by topic and scope; art required; and quota
+   movement per state, flagging any topic still under its floor; and how many candidates the
+   count-only cuts removed.
+6. **Not authored, and why** — every `deferred` and `rejected` candidate with its reason, except
+   count-only cuts, which the ledger lists and Counts totals; and every
    `queued` one listed separately as the next gate's work. **Never omit this section, even when
    empty**; it is the record that the passage was worked rather than mined for whatever was easiest.
    **Keep `queued` visibly apart from `deferred`** — one is a backlog and the other is a set of

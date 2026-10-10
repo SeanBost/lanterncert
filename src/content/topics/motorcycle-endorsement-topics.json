@@ -62,6 +62,13 @@
     "description": "Sign shapes, colors and meanings, traffic signals, pavement markings, and what each one requires of a rider.",
     "catchAll": false
   },
+  "rules-of-the-road": {
+    "num": 10,
+    "name": "Rules of the road",
+    "emoji": "⚖️",
+    "description": "A state's traffic law: right-of-way, passing and lane rules, school buses and emergency vehicles, speed limits, parking, work zones, phone and headphone laws, and what to do after a crash.",
+    "catchAll": false
+  },
   "additional-information": {
     "num": 99,
     "name": "Additional information",

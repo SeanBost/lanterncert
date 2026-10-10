@@ -1,0 +1,44 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import Button from "../../../components/Button.astro";
+import { captionLead, downloadPath, loadRecords } from "../../../lib/records.js";
+import { formatDate } from "../../../lib/format-fact.js";
+
+export async function getStaticPaths() {
+	return (await loadRecords()).map((record) => ({ params: { slug: record.id }, props: { record } }));
+}
+
+const { record } = Astro.props;
+const { title, description, intro, date } = record.data;
+---
+
+<Layout title={title} description={description}>
+	<div class="stack-lg col-center">
+		<div class="stack">
+			<h1 class="page-title">{title}</h1>
+			<div class="prose">
+				<p>{intro}</p>
+			</div>
+		</div>
+
+		<figure>
+			{/* set:html because the fragment is the hosted record itself, the same file the download serves. */}
+			<div class="record__doc framed" set:html={record.html} />
+			<figcaption class="caption record__caption text-balance">
+				{captionLead(record.data)} <time datetime={date}>{formatDate(date)}</time>
+			</figcaption>
+		</figure>
+
+		<div class="button-row">
+			{/* Hidden until src/scripts/copy-link.js finds a clipboard to write to. */}
+			<Button data-copy-link aria-live="polite" hidden>Copy link</Button>
+			<Button href={downloadPath(record.id)} download={`${record.id}.html`}>Download a copy</Button>
+		</div>
+	</div>
+</Layout>
+
+<script>
+	import { initCopyLink } from "../../../scripts/copy-link.js";
+
+	initCopyLink();
+</script>

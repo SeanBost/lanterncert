@@ -935,6 +935,11 @@ ul.accent-edge, ol.accent-edge {
   cursor: not-allowed;
 }
 
+/* Keeps a hidden button hidden against .btn's own display. */
+.btn[hidden] {
+  display: none;
+}
+
 .button-row {
   display: flex;
   flex-wrap: wrap;
@@ -1575,6 +1580,49 @@ ul.source-wall__row {
 /* A script focus target, never tabbed to, so it takes no ring. */
 .intro-more__body:focus {
   outline: none;
+}
+
+/* A hosted record: the artifact on a framed sheet, at the base type size. */
+.record__doc {
+  font-size: var(--text-base);
+}
+
+/* Spaces the children of the fragment's one wrapper div, which carries the original's typeface. */
+.record__doc > div > * + *, .record__doc blockquote > * + * {
+  margin-top: var(--space-4);
+}
+
+/* The header fields, ruled off from the body the way a mail client sets them. */
+.record__doc dl {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  column-gap: var(--space-4);
+  padding-bottom: var(--space-4);
+  border-bottom: var(--standard-border);
+}
+
+.record__doc dt {
+  font-weight: var(--weight-semi);
+}
+
+/* Lets an email address break anywhere rather than push the sheet past a phone's width. */
+.record__doc dd {
+  overflow-wrap: anywhere;
+}
+
+/* Clears the UA's side and bottom margins only, so the top keeps the sheet's rhythm. */
+.record__doc blockquote {
+  margin-inline: 0;
+  margin-bottom: 0;
+}
+
+/* Centered under its sheet and a step tighter than .stack, like the homepage proof cards' labels. */
+.record__caption {
+  text-align: center;
+}
+
+.record__doc + .record__caption {
+  margin-top: var(--space-2);
 }
 
 /* 6. Utilities ------------------------------------------------------------ */

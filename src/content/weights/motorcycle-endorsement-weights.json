@@ -1,4 +1,5 @@
 {
+  "_about": "The baseline sums to 100, so a state with no overrides reads each weight as a percent; an override is not held to it, since every share is a weight over its own state's total.",
   "baseline": {
     "fit-to-ride": 10,
     "gear-and-bike-check": 14,
@@ -9,13 +10,18 @@
     "hazards-and-surfaces": 18,
     "passengers-and-cargo": 4,
     "signs-and-markings": 0,
+    "rules-of-the-road": 0,
     "additional-information": 0
   },
   "states": {
     "ga": {
       "signs-and-markings": {
-        "weight": 50,
-        "note": "Georgia scores road signs as its own exam section, independently of road rules, so a rider who skips signs can fail on that half alone while passing overall, and the baseline withholds signs entirely. Set deliberately below the exam's own signs share: sign questions are quicker to exhaust than the rest of the bank, so mirroring the exam would recycle them faster than a rider improves. A hunch until real p-values replace it."
+        "weight": 100,
+        "note": "Georgia scores road signs as its own exam section, independently of road rules, so a rider who skips signs can fail on that half alone while passing overall, and the baseline withholds signs entirely. Weighted level with the rules topic and with the riding topics combined, so each is a third of Georgia's Mock Test. A hunch until real p-values replace it."
+      },
+      "rules-of-the-road": {
+        "weight": 100,
+        "note": "Georgia's knowledge exam pairs its road signs test with a road rules test, and DDS's own manuals say the Driver's Manual carries the information for it, so Georgia's traffic law is examined where most states' motorcycle manuals leave it out. Weighted level with signs and with the riding topics combined. A hunch until real p-values replace it."
       }
     }
   }

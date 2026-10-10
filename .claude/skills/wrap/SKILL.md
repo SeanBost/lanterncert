@@ -33,8 +33,8 @@ Run 1-5 uninterrupted. Stop at the gate. Write only what is approved.
 node blackbox/snapshot-docs.mjs
 ```
 
-**Before any edit.** These files are gitignored, so the snapshot is their only undo. A folder is
-never refreshed in place; the script suffixes instead.
+**Before any edit.** These files are gitignored, so the snapshot is their only undo. It commits to a
+private local history and does nothing when nothing has changed.
 
 ### 2 · Gather
 
@@ -95,6 +95,6 @@ is looking.
 ## Boundaries
 
 - **Owns:** `sessions.md`, `todo.md`, `decisions.md`, and the snapshot.
-- **Proposes but never writes on its own:** any change to `data-handling.md`, the spine, or a cert
-  standards file.
+- **Proposes but never writes without explicit approval:** any change to `data-handling.md`, the
+  spine, or a cert standards file.
 - **Never touches:** the question bank, the facts files, the sources registry, or anything in `src/`.

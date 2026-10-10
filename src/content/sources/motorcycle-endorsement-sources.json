@@ -120,6 +120,17 @@
     "published": null,
     "verifiedCurrentIn": 2026
   },
+  "ca-dmv-pra-motorcycle-test": {
+    "state": "CA",
+    "sourceID": "0061",
+    "title": "CA DMV Public Records Response on the Motorcycle Knowledge Test",
+    "description": "A written reply stating how many questions the motorcycle knowledge test has.",
+    "publisher": "California Department of Motor Vehicles",
+    "url": "https://lanterncert.com/records/ca-dmv-req-2026-3933",
+    "access": "public",
+    "published": 2026,
+    "verifiedCurrentIn": 2026
+  },
   "ca-dmv-sample-m-test-1": {
     "state": "CA",
     "sourceID": "0057",
@@ -258,7 +269,7 @@
     "title": "GA DDS Driver's Manual",
     "description": "The signs, signals, markings and traffic laws a Georgia rider must also know.",
     "publisher": "Georgia Department of Driver Services",
-    "url": "https://dds.georgia.gov/book/export/html/33571",
+    "url": "https://dds.georgia.gov/document/document/ga-drivers-manual-2023-2024/download",
     "access": "public",
     "published": 2023,
     "verifiedCurrentIn": 2026

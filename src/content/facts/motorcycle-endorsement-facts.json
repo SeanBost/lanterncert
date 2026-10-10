@@ -141,7 +141,7 @@
       "agencyCode": "CA DMV",
       "agencyName": "California Department of Motor Vehicles",
       "localTerm": "Class M1 license",
-      "note": "Two motorcycle classes: M1 covers any two-wheeled motorcycle and everything M2 covers, M2 covers a motorized bicycle, moped or bicycle with an attached motor. There is no unlicensed tier at any engine size. The CMSP is California's official training program, administered by the CHP through a contractor and delivered as a 15-hour course of 5 classroom hours and 10 riding hours; an extended Premier Program runs 7.5 classroom and 13.5 riding. The course is mandatory under 21 and optional at 21 and older. Riders under 21 must also hold an M1 or M2 instruction permit for six months before the license. Course completion issues a DL 389 certificate that waives the DMV skills test for 12 months, though an observation test may still be required. The DMV driving test covers a pre-trip inspection, track paths, slow riding and gear shifting; the application fee covers three attempts, a retest is $7, and three failures void the application. The DMV knowledge test draws on the California Motorcycle Handbook and is not offered after 4:30 p.m. The CMSP course sets its own written evaluation at 80%, the same threshold the DMV test uses but a separate exam.",
+      "note": "Two motorcycle classes: M1 covers any two-wheeled motorcycle and everything M2 covers, M2 covers a motorized bicycle, moped or bicycle with an attached motor. There is no unlicensed tier at any engine size. The CMSP is California's official training program, administered by the CHP through a contractor and delivered as a 15-hour course of 5 classroom hours and 10 riding hours; an extended Premier Program runs 7.5 classroom and 13.5 riding. The course is mandatory under 21 and optional at 21 and older. Riders under 21 must also hold an M1 or M2 instruction permit for six months before the license. Course completion issues a DL 389 certificate that waives the DMV skills test for 12 months, though an observation test may still be required. The DMV driving test covers a pre-trip inspection, track paths, slow riding and gear shifting; the application fee covers three attempts, a retest is $7, and three failures void the application. The DMV knowledge test draws on the California Motorcycle Handbook and is not offered after 4:30 p.m. The CMSP course sets its own written evaluation at 80%, the same threshold the DMV test uses but a separate exam. The DMV's records-request reply says an applicant fails at 5 incorrect of 25, which implies 84% against the 80% the permits page publishes; passingScorePercent cites the published figure.",
       "stateDetails": null
     },
     "exam": {
@@ -149,7 +149,7 @@
       "examName":            { "value": null, "source": "ca-dmv-instruction-permits" },
       "examAdministration":  { "value": "agency", "source": "ca-dmv-motorcycle-licenses" },
       "courseWaivesAgencyExam": { "value": false, "source": "ca-dmv-motorcycle-licenses" },
-      "questionCount":       { "value": null, "source": "ca-dmv-instruction-permits" },
+      "questionCount":       { "value": 25, "source": "ca-dmv-pra-motorcycle-test" },
       "timeLimitMinutes":    { "value": null, "source": "ca-dmv-motorcycle-licenses" },
       "passingScorePercent": { "value": 80, "source": "ca-dmv-instruction-permits" },
       "isExamSectioned":     { "value": false, "source": "ca-dmv-instruction-permits" },
