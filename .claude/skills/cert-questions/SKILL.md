@@ -274,7 +274,7 @@ Each item, numbered and in this shape:
 - **Recommendation** — which, and the one thing that decides it.
 - **Consequence** — **what changes downstream, stated as an outcome and not as a token.** Which
   riders read which fact, which files move, what the audit says afterwards. *"GA riders get no
-  helmet-fastening fact until a variant exists"* is a consequence; *"scoped `MNS2011`"* is not.
+  helmet-fastening fact until a variant exists"* is a consequence; *"scoped `mom-current`"* is not.
 - **Reversibility** — cheap to change later, or baked into ids and stored progress.
 
 **A rule cited here carries its content, not just its number.** `§5 rule 4` means nothing at review

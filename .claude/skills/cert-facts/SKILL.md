@@ -123,8 +123,7 @@ canonical drift and pages whose text changed since last time. **Never fetch a pa
 snapshot under 21 days old exists** — read `blackbox/source-snapshots/<cert>/<key>.json`. Both
 snapshot stores are partitioned by cert slug; a new cert gets its directory in
 `source-snapshots/` **and** in `source-snapshots-history/`, even though the history one starts
-empty. Request volume is deliberately low; every avoidable request is load placed on a public agency
-for nothing.
+empty. Every avoidable request is load placed on a public agency for nothing.
 
 The sweep raises two re-dating flags, `REDATE` and `CURRENCY-STALE`. **Both are work items for this
 run, not noise** — resolve them per `data-handling.md` ▸ *Sources — registry* ▸ *Dating a source*,
@@ -224,17 +223,15 @@ Resource facts are worked per the technique file ▸ *Resource facts*.
 
 ### Fetching discipline
 
-Identity checks, binary handling, snapshot rules, survey keys and **the per-host request budget** are
+Identity checks, binary handling, snapshot rules, survey keys and **request pacing** are
 in `data-handling.md` ▸ *Sources — fetching and snapshots*, and are not restated here. **All fetching
 goes through `scripts/fetch-page.mjs`** (§3 rule 1) — never `WebFetch`, which returns model-summarized
 text that cannot be cited and never lands in the snapshot store the rest of the run reads.
 
-**Every request goes to a public agency publishing for the public, so the job is to need as few of
-them as possible.** That is a research standard before it is anything else: a run that reads
-carefully asks for less.
+**Every request goes to a public agency publishing for the public, so fetch what the work needs and
+nothing for its own sake.** A run that reads carefully asks for less.
 
-- **The budget is small, it is §3 rule 16, and a run approaching it stops and says so.** Name the
-  blast radius before any operation that would exceed it.
+- **Pace requests rather than ration them** (§3 rule 16): the work decides how many.
 - **Serial, never batched.** One fetch, read it fully, then decide what the next one should be. This
   is also better research — the page you just read usually names the right next URL.
 - **Look for the whole document before fetching its parts.** A publisher that chunks a manual across
@@ -264,7 +261,7 @@ Three things that are judgment rather than rule:
 - **A document no automated path reaches is reported, not retried** (§3 rule 14). Where a PDF looks
   likely to support at least one fact or question and the fetcher cannot reach it, name the URL and
   the `temp-` filename it would take, then carry on with the rest of the run. **The refusal ends this
-  run's interest in that URL**: nothing is re-requested, and no second route is looked for. Whether a
+  run's requests to that URL**, though the same document published elsewhere is fair game. Whether a
   person later opens the page in a browser is their own call and a separate one.
 
 ## Verdicts
@@ -326,9 +323,9 @@ Three that govern how a *run* behaves:
   Propose the token *and* the evidence for it, so one word can approve both.
 - **A page that now disagrees produces `drifted` and a recommendation, never an edit.** The report
   carries the old value, the new value and the quote. The reviewer decides.
-- **Decide what a new registry entry is when you propose it** — a fact's `source` or an
-  `additionalResources` key, never both, never neither. An entry cited by nothing is an orphan the
-  sweep will flag next run.
+- **Decide what cites a new registry entry when you propose it** — one of the citers
+  `data-handling.md` §2 rule 10 lists, and never both a fact's `source` and an `additionalResources`
+  key. An entry cited by nothing is an orphan the sweep will flag next run.
 
 ## Registry entries
 

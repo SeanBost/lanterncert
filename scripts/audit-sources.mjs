@@ -69,6 +69,13 @@ function keysForQuestions(cert) {
   return keys;
 }
 
+// An exam token cites the document behind its coverage; a lineage token cites its model text.
+function keysForExams(cert) {
+  const path = join(ROOT, "src", "content", "exams", `${cert}-exams.json`);
+  if (!existsSync(path)) return new Set();
+  return new Set(Object.values(JSON.parse(readFileSync(path, "utf8"))).map((e) => e?.source).filter(Boolean));
+}
+
 const args = process.argv.slice(2);
 const cert = args.find((a) => !a.startsWith("--"));
 const stateArg = args.indexOf("--state");
@@ -114,6 +121,7 @@ for (const [code, state] of Object.entries(facts)) {
 const introKeys = keysForIntro(cert);
 for (const key of introKeys) note(key, "intro");
 for (const key of keysForQuestions(cert)) note(key, "questions");
+for (const key of keysForExams(cert)) note(key, "exams");
 
 // ===================== TEMPORARY HARDCODE — DELETE THIS =====================
 // Exempts states with no facts yet from ORPHANED, since nothing can cite them.

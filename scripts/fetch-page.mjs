@@ -223,10 +223,7 @@ function hash(text) {
   return "sha256:" + createHash("sha256").update(text).digest("hex").slice(0, 32);
 }
 
-/**
- * Preferred PDF reader: pdf-parse resolves ToUnicode maps, which subset-encoded PDFs need.
- * Falls back to the reader below; an encrypted PDF defeats both.
- */
+/** Preferred PDF reader, falling back to the one below; a PDF that needs a password to open defeats both. */
 export async function readPdfText(buf) {
   try {
     const { PDFParse } = await import("pdf-parse");

@@ -1,14 +1,12 @@
 {
+  "aamva": {
+    "covers": [
+      "GA"
+    ],
+    "source": "xx-aamva-motorcycle-manual"
+  },
   "CA": {
     "covers": [],
-    "source": null
-  },
-  "fltxcatemp": {
-    "covers": [
-      "MSFBRC",
-      "MNS2011",
-      "CA"
-    ],
     "source": null
   },
   "GA": {
@@ -21,12 +19,24 @@
     ],
     "source": "tx-tdlr-curriculum"
   },
-  "momstandard": {
+  "mom": {
+    "covers": [
+      "mom-current",
+      "CA"
+    ],
+    "source": null
+  },
+  "mom-current": {
     "covers": [
       "MSFBRC",
-      "MNS2011",
-      "CA",
-      "GA"
+      "MNS2011"
+    ],
+    "source": "xx-msf-operator-manual"
+  },
+  "msf-aamva": {
+    "covers": [
+      "mom",
+      "aamva"
     ],
     "source": null
   },

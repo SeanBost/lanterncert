@@ -39,10 +39,10 @@
       "text": "A stop sign always calls for a full stop, even when no one else is coming."
     }
   },
-  "mot-momstandard-2-2": {
+  "mot-msf-aamva-2-2": {
     "meta": {
       "idKey": "2",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "gear-and-bike-check",
@@ -73,10 +73,10 @@
       "text": "Your feet reach the ground from the seat."
     }
   },
-  "mot-momstandard-2-3": {
+  "mot-msf-aamva-2-3": {
     "meta": {
       "idKey": "3",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": "mot-helmet-fastened",
       "sisterQuestions": null,
       "topic": "gear-and-bike-check",
@@ -107,10 +107,10 @@
       "text": "A helmet that is not strapped on can come off in a crash before it protects you."
     }
   },
-  "mot-momstandard-2-4": {
+  "mot-msf-aamva-2-4": {
     "meta": {
       "idKey": "4",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "gear-and-bike-check",
@@ -141,10 +141,10 @@
       "text": "Covers the whole face. Goggles guard the eyes only."
     }
   },
-  "mot-momstandard-2-5": {
+  "mot-msf-aamva-2-5": {
     "meta": {
       "idKey": "5",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "gear-and-bike-check",
@@ -175,10 +175,10 @@
       "text": "A windshield is not eye protection, and glasses alone won't keep the wind out of your eyes."
     }
   },
-  "mot-momstandard-2-6": {
+  "mot-msf-aamva-2-6": {
     "meta": {
       "idKey": "6",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "gear-and-bike-check",
@@ -209,10 +209,10 @@
       "text": "Daylight only. Change to clear before riding at night or in low light."
     }
   },
-  "mot-momstandard-2-7": {
+  "mot-msf-aamva-2-7": {
     "meta": {
       "idKey": "7",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "gear-and-bike-check",
@@ -243,10 +243,10 @@
       "text": "Wear a jacket in hot weather too; it helps hold off dehydration."
     }
   },
-  "mot-momstandard-2-8": {
+  "mot-msf-aamva-2-8": {
     "meta": {
       "idKey": "8",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": "mot-hearing-protection",
       "sisterQuestions": null,
       "topic": "gear-and-bike-check",
@@ -277,10 +277,10 @@
       "text": "Cuts wind noise without shutting out horns and sirens."
     }
   },
-  "mot-fltxcatemp-2-9": {
+  "mot-mom-2-9": {
     "meta": {
       "idKey": "9",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": "mot-unfamiliar-controls",
       "sisterQuestions": null,
       "topic": "gear-and-bike-check",
@@ -311,10 +311,10 @@
       "text": "On an unfamiliar bike, learn the signals, horn, headlight switch, fuel valve and cut-off switch by feel before riding."
     }
   },
-  "mot-momstandard-3-10": {
+  "mot-msf-aamva-3-10": {
     "meta": {
       "idKey": "10",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -345,10 +345,10 @@
       "text": "Use both brakes every time you slow or stop, not only in emergencies."
     }
   },
-  "mot-momstandard-3-11": {
+  "mot-msf-aamva-3-11": {
     "meta": {
       "idKey": "11",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -379,10 +379,10 @@
       "text": "At least 70% of total stopping power."
     }
   },
-  "mot-momstandard-3-12": {
+  "mot-msf-aamva-3-12": {
     "meta": {
       "idKey": "12",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -413,10 +413,10 @@
       "text": "Squeeze the front brake smoothly and build pressure. Never grab it."
     }
   },
-  "mot-momstandard-3-13": {
+  "mot-msf-aamva-3-13": {
     "meta": {
       "idKey": "13",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -447,10 +447,10 @@
       "text": "To stop quickly in a curve, straighten the motorcycle first, then brake."
     }
   },
-  "mot-fltxcatemp-3-14": {
+  "mot-mom-3-14": {
     "meta": {
       "idKey": "14",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -481,10 +481,10 @@
       "text": "Entering a curve too fast leads to crossing lanes, leaving the road, or skidding from hard braking."
     }
   },
-  "mot-momstandard-3-15": {
+  "mot-msf-aamva-3-15": {
     "meta": {
       "idKey": "15",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -515,10 +515,10 @@
       "text": null
     }
   },
-  "mot-momstandard-3-16": {
+  "mot-msf-aamva-3-16": {
     "meta": {
       "idKey": "16",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -549,10 +549,10 @@
       "text": "Press the handgrip on the side you want to turn: press left, lean left, go left."
     }
   },
-  "mot-momstandard-3-17": {
+  "mot-msf-aamva-3-17": {
     "meta": {
       "idKey": "17",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -583,10 +583,10 @@
       "text": "Rises with speed and with how sharp the turn is."
     }
   },
-  "mot-momstandard-3-18": {
+  "mot-msf-aamva-3-18": {
     "meta": {
       "idKey": "18",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -617,10 +617,10 @@
       "text": "In normal turns, rider and motorcycle lean together at the same angle."
     }
   },
-  "mot-momstandard-3-19": {
+  "mot-msf-aamva-3-19": {
     "meta": {
       "idKey": "19",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -651,10 +651,10 @@
       "text": "In slow, tight turns, lean the motorcycle only and keep your body upright."
     }
   },
-  "mot-momstandard-3-20": {
+  "mot-msf-aamva-3-20": {
     "meta": {
       "idKey": "20",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -685,10 +685,10 @@
       "text": "Start with your right wrist flat, so you do not use too much throttle by accident."
     }
   },
-  "mot-momstandard-3-21": {
+  "mot-msf-aamva-3-21": {
     "meta": {
       "idKey": "21",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -719,10 +719,10 @@
       "text": null
     }
   },
-  "mot-momstandard-3-22": {
+  "mot-msf-aamva-3-22": {
     "meta": {
       "idKey": "22",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -753,10 +753,10 @@
       "text": "Feet firm on the footrests, toes never pointing down."
     }
   },
-  "mot-momstandard-3-23": {
+  "mot-msf-aamva-3-23": {
     "meta": {
       "idKey": "23",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -787,10 +787,10 @@
       "text": "Grabbing the front brake or jamming the rear can lock a wheel and cost you control."
     }
   },
-  "mot-momstandard-3-24": {
+  "mot-msf-aamva-3-24": {
     "meta": {
       "idKey": "24",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -821,10 +821,10 @@
       "text": "Roll on the throttle through the turn to hold or slightly increase speed."
     }
   },
-  "mot-mns2011-3-25": {
+  "mot-mom-current-3-25": {
     "meta": {
       "idKey": "25",
-      "appliesTo": "MNS2011",
+      "appliesTo": "mom-current",
       "variantGroup": "mot-shift-lever-direction",
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -855,10 +855,10 @@
       "text": "Lift the gearshift lever to change up a gear and press it down to change down, one gear each time."
     }
   },
-  "mot-mns2011-3-26": {
+  "mot-mom-current-3-26": {
     "meta": {
       "idKey": "26",
-      "appliesTo": "MNS2011",
+      "appliesTo": "mom-current",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -889,10 +889,10 @@
       "text": "1-N-2-3-4-5+, with neutral between first and second."
     }
   },
-  "mot-momstandard-3-27": {
+  "mot-msf-aamva-3-27": {
     "meta": {
       "idKey": "27",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -923,10 +923,10 @@
       "text": "Two brake controls: a front hand lever and a rear foot pedal."
     }
   },
-  "mot-mns2011-3-28": {
+  "mot-mom-current-3-28": {
     "meta": {
       "idKey": "28",
-      "appliesTo": "MNS2011",
+      "appliesTo": "mom-current",
       "variantGroup": "mot-maximum-braking",
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -957,10 +957,10 @@
       "text": null
     }
   },
-  "mot-mns2011-3-29": {
+  "mot-mom-current-3-29": {
     "meta": {
       "idKey": "29",
-      "appliesTo": "MNS2011",
+      "appliesTo": "mom-current",
       "variantGroup": "mot-braking-posture",
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -991,10 +991,10 @@
       "text": "Braking hard, press your knees to the tank and look far ahead; it keeps the stop straight."
     }
   },
-  "mot-fltxcatemp-3-30": {
+  "mot-mom-3-30": {
     "meta": {
       "idKey": "30",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -1025,10 +1025,10 @@
       "text": "The front brake is safe when used properly, and avoiding it gives up most of your stopping power."
     }
   },
-  "mot-mns2011-3-31": {
+  "mot-mom-current-3-31": {
     "meta": {
       "idKey": "31",
-      "appliesTo": "MNS2011",
+      "appliesTo": "mom-current",
       "variantGroup": "mot-weight-transfer-braking",
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -1059,10 +1059,10 @@
       "text": "Braking shifts weight forward and adds front traction, so front brake pressure can build as you slow."
     }
   },
-  "mot-momstandard-3-32": {
+  "mot-msf-aamva-3-32": {
     "meta": {
       "idKey": "32",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -1093,10 +1093,10 @@
       "text": "The further a motorcycle is leaned, the less traction is left for braking."
     }
   },
-  "mot-mns2011-3-33": {
+  "mot-mom-current-3-33": {
     "meta": {
       "idKey": "33",
-      "appliesTo": "MNS2011",
+      "appliesTo": "mom-current",
       "variantGroup": "mot-linked-braking",
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -1127,10 +1127,10 @@
       "text": "Either control applies both brakes. Integrated is a variation, where the rear control also applies partial front brake."
     }
   },
-  "mot-mns2011-3-34": {
+  "mot-mom-current-3-34": {
     "meta": {
       "idKey": "34",
-      "appliesTo": "MNS2011",
+      "appliesTo": "mom-current",
       "variantGroup": "mot-abs",
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -1161,10 +1161,10 @@
       "text": "An anti-lock braking system prevents wheel lock-up in a panic stop, acting when too much brake pressure is applied."
     }
   },
-  "mot-mns2011-3-35": {
+  "mot-mom-current-3-35": {
     "meta": {
       "idKey": "35",
-      "appliesTo": "MNS2011",
+      "appliesTo": "mom-current",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -1195,10 +1195,10 @@
       "text": "Releases and reapplies brake pressure more than 15 times a second."
     }
   },
-  "mot-momstandard-3-36": {
+  "mot-msf-aamva-3-36": {
     "meta": {
       "idKey": "36",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": "mot-riding-posture",
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -1229,10 +1229,10 @@
       "text": null
     }
   },
-  "mot-fltxcatemp-3-37": {
+  "mot-mom-3-37": {
     "meta": {
       "idKey": "37",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -1263,10 +1263,10 @@
       "text": null
     }
   },
-  "mot-fltxcatemp-3-38": {
+  "mot-mom-3-38": {
     "meta": {
       "idKey": "38",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -1297,10 +1297,10 @@
       "text": "Slow enough before downshifting. Too fast and the motorcycle lurches and can skid the rear wheel."
     }
   },
-  "mot-mns2011-3-39": {
+  "mot-mom-current-3-39": {
     "meta": {
       "idKey": "39",
-      "appliesTo": "MNS2011",
+      "appliesTo": "mom-current",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -1331,10 +1331,10 @@
       "text": "Shifting down slows the motorcycle much as the brakes do. That is engine braking."
     }
   },
-  "mot-fltxcatemp-3-40": {
+  "mot-mom-3-40": {
     "meta": {
       "idKey": "40",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -1365,10 +1365,10 @@
       "text": "Sit far enough forward on the seat that your arms are slightly bent on the grips."
     }
   },
-  "mot-fltxcatemp-3-41": {
+  "mot-mom-3-41": {
     "meta": {
       "idKey": "41",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -1399,10 +1399,10 @@
       "text": "Set the bars so your hands sit no higher than your elbows."
     }
   },
-  "mot-mns2011-3-42": {
+  "mot-mom-current-3-42": {
     "meta": {
       "idKey": "42",
-      "appliesTo": "MNS2011",
+      "appliesTo": "mom-current",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -1433,10 +1433,10 @@
       "text": "The gearshift lever is just ahead of the left footrest, worked by your left foot."
     }
   },
-  "mot-mns2011-3-43": {
+  "mot-mom-current-3-43": {
     "meta": {
       "idKey": "43",
-      "appliesTo": "MNS2011",
+      "appliesTo": "mom-current",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -1467,10 +1467,10 @@
       "text": "Five on most motorcycles, with some at four or six."
     }
   },
-  "mot-mns2011-3-44": {
+  "mot-mom-current-3-44": {
     "meta": {
       "idKey": "44",
-      "appliesTo": "MNS2011",
+      "appliesTo": "mom-current",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -1501,10 +1501,10 @@
       "text": "Shift up before the engine over-revs, but not so soon that it strains."
     }
   },
-  "mot-fltxcatemp-3-45": {
+  "mot-mom-3-45": {
     "meta": {
       "idKey": "45",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -1535,10 +1535,10 @@
       "text": "Downhill or into first gear, use the brakes to slow enough before downshifting."
     }
   },
-  "mot-fltxcatemp-3-46": {
+  "mot-mom-3-46": {
     "meta": {
       "idKey": "46",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -1569,10 +1569,10 @@
       "text": null
     }
   },
-  "mot-fltxcatemp-3-47": {
+  "mot-mom-3-47": {
     "meta": {
       "idKey": "47",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -1603,10 +1603,10 @@
       "text": "Change gear before entering a turn. If you must shift mid-turn, do it smoothly."
     }
   },
-  "mot-mns2011-3-48": {
+  "mot-mom-current-3-48": {
     "meta": {
       "idKey": "48",
-      "appliesTo": "MNS2011",
+      "appliesTo": "mom-current",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -1637,10 +1637,10 @@
       "text": "Rear brake pressure goes light, then lighter, as weight shifts forward."
     }
   },
-  "mot-momstandard-5-49": {
+  "mot-msf-aamva-5-49": {
     "meta": {
       "idKey": "49",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "space-management",
@@ -1671,10 +1671,10 @@
       "text": null
     }
   },
-  "mot-momstandard-5-50": {
+  "mot-msf-aamva-5-50": {
     "meta": {
       "idKey": "50",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "space-management",
@@ -1705,10 +1705,10 @@
       "text": "Hazards on your left only: ride the center or right of the lane. Traffic on both sides: the center is usually best."
     }
   },
-  "mot-momstandard-5-51": {
+  "mot-msf-aamva-5-51": {
     "meta": {
       "idKey": "51",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "space-management",
@@ -1739,10 +1739,10 @@
       "text": "Choose a lane position that lets you see and be seen, avoids blind spots and wind blast, and keeps an escape route."
     }
   },
-  "mot-momstandard-5-52": {
+  "mot-msf-aamva-5-52": {
     "meta": {
       "idKey": "52",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "space-management",
@@ -1773,10 +1773,10 @@
       "text": "On a dry road you can ride in any part of the lane, the center included."
     }
   },
-  "mot-momstandard-5-53": {
+  "mot-msf-aamva-5-53": {
     "meta": {
       "idKey": "53",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "space-management",
@@ -1807,10 +1807,10 @@
       "text": "Do not ride beside vehicles in the next lane. Speed up or slow down until both sides of you are clear."
     }
   },
-  "mot-momstandard-5-54": {
+  "mot-msf-aamva-5-54": {
     "meta": {
       "idKey": "54",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "space-management",
@@ -1841,10 +1841,10 @@
       "text": "Count following distance in seconds, from when the vehicle ahead passes a fixed point until you reach it."
     }
   },
-  "mot-momstandard-5-55": {
+  "mot-msf-aamva-5-55": {
     "meta": {
       "idKey": "55",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "space-management",
@@ -1909,10 +1909,10 @@
       "text": "About the same as a car's."
     }
   },
-  "mot-momstandard-5-57": {
+  "mot-msf-aamva-5-57": {
     "meta": {
       "idKey": "57",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "space-management",
@@ -1943,10 +1943,10 @@
       "text": "When stopped, keep well back from the vehicle ahead, so you have room to move if a driver behind does not slow."
     }
   },
-  "mot-fltxcatemp-5-58": {
+  "mot-mom-5-58": {
     "meta": {
       "idKey": "58",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "space-management",
@@ -1977,10 +1977,10 @@
       "text": "Following a car, ride in the center of the lane, where its driver can see you in the inside rearview mirror."
     }
   },
-  "mot-momstandard-5-59": {
+  "mot-msf-aamva-5-59": {
     "meta": {
       "idKey": "59",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "space-management",
@@ -2011,10 +2011,10 @@
       "text": "Let a tailgater pass, or slow down and open space ahead. Speeding up only gets you a faster tailgater."
     }
   },
-  "mot-mns2011-7-60": {
+  "mot-mom-current-7-60": {
     "meta": {
       "idKey": "60",
-      "appliesTo": "MNS2011",
+      "appliesTo": "mom-current",
       "variantGroup": "mot-oil-buildup-locations",
       "sisterQuestions": null,
       "topic": "hazards-and-surfaces",
@@ -2045,10 +2045,10 @@
       "text": null
     }
   },
-  "mot-fltxcatemp-5-61": {
+  "mot-mom-5-61": {
     "meta": {
       "idKey": "61",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "space-management",
@@ -2079,10 +2079,10 @@
       "text": "To set up a pass, hang back a safe distance in the left portion of your lane, then signal and check before pulling out."
     }
   },
-  "mot-fltxcatemp-5-62": {
+  "mot-mom-5-62": {
     "meta": {
       "idKey": "62",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": "mot-passing-blind-spot",
       "sisterQuestions": null,
       "topic": "space-management",
@@ -2113,10 +2113,10 @@
       "text": "When passing, get through the other driver's blind spot without lingering, then signal and check before moving back."
     }
   },
-  "mot-fltxcatemp-5-63": {
+  "mot-mom-5-63": {
     "meta": {
       "idKey": "63",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "space-management",
@@ -2147,10 +2147,10 @@
       "text": "When a car passes you, stay in the center of your lane, clear of its mirrors and anything thrown from it."
     }
   },
-  "mot-momstandard-5-64": {
+  "mot-msf-aamva-5-64": {
     "meta": {
       "idKey": "64",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "space-management",
@@ -2181,10 +2181,10 @@
       "text": "On a dry road, riding the center of your lane discourages drivers from squeezing past you in it."
     }
   },
-  "mot-mns2011-5-65": {
+  "mot-mom-current-5-65": {
     "meta": {
       "idKey": "65",
-      "appliesTo": "MNS2011",
+      "appliesTo": "mom-current",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "space-management",
@@ -2215,10 +2215,10 @@
       "text": "Drivers most often try to squeeze past you in your lane in heavy traffic, when they want to get by, and as you turn or exit."
     }
   },
-  "mot-momstandard-5-66": {
+  "mot-msf-aamva-5-66": {
     "meta": {
       "idKey": "66",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "space-management",
@@ -2249,10 +2249,10 @@
       "text": "Give merging traffic room: change lanes if you can, or change speed to open a gap."
     }
   },
-  "mot-fltxcatemp-7-67": {
+  "mot-mom-7-67": {
     "meta": {
       "idKey": "67",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "hazards-and-surfaces",
@@ -2283,10 +2283,10 @@
       "text": "When a large vehicle passes, keep away from the side of your lane nearest it. Its wind blast can push you."
     }
   },
-  "mot-momstandard-6-68": {
+  "mot-msf-aamva-6-68": {
     "meta": {
       "idKey": "68",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "search-and-strategy",
@@ -2317,10 +2317,10 @@
       "text": "Search for escape paths as well as hazards before anything goes wrong."
     }
   },
-  "mot-mns2011-6-69": {
+  "mot-mom-6-69": {
     "meta": {
       "idKey": "69",
-      "appliesTo": "MNS2011",
+      "appliesTo": "mom",
       "variantGroup": "mot-search-ahead-distance",
       "sisterQuestions": null,
       "topic": "search-and-strategy",
@@ -2351,10 +2351,10 @@
       "text": "About 12 seconds. Far enough to plan before a hazard gets close."
     }
   },
-  "mot-momstandard-6-70": {
+  "mot-msf-aamva-6-70": {
     "meta": {
       "idKey": "70",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "search-and-strategy",
@@ -2385,10 +2385,10 @@
       "text": null
     }
   },
-  "mot-momstandard-6-71": {
+  "mot-msf-aamva-6-71": {
     "meta": {
       "idKey": "71",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "search-and-strategy",
@@ -2419,10 +2419,10 @@
       "text": "To get room from a hazard, change your speed, change your position or direction, or use your lights or horn to be noticed."
     }
   },
-  "mot-fltxcatemp-6-72": {
+  "mot-mom-6-72": {
     "meta": {
       "idKey": "72",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "search-and-strategy",
@@ -2453,10 +2453,10 @@
       "text": "Two hazards at once: change speed so they separate, then take them one at a time."
     }
   },
-  "mot-momstandard-6-73": {
+  "mot-msf-aamva-6-73": {
     "meta": {
       "idKey": "73",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "search-and-strategy",
@@ -2487,10 +2487,10 @@
       "text": "At an intersection where a vehicle may cross your path, cover the clutch and both brakes. It cuts your reaction time."
     }
   },
-  "mot-mns2011-6-74": {
+  "mot-mom-current-6-74": {
     "meta": {
       "idKey": "74",
-      "appliesTo": "MNS2011",
+      "appliesTo": "mom-current",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "search-and-strategy",
@@ -2521,10 +2521,10 @@
       "text": "About 4 seconds ahead. A hazard inside it needs a quick swerve or stop."
     }
   },
-  "mot-fltxcatemp-6-75": {
+  "mot-mom-6-75": {
     "meta": {
       "idKey": "75",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "search-and-strategy",
@@ -2555,10 +2555,10 @@
       "text": "Three or more hazards at once: weigh each one, then keep an equal distance from all of them."
     }
   },
-  "mot-fltxcatemp-6-76": {
+  "mot-mom-6-76": {
     "meta": {
       "idKey": "76",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "search-and-strategy",
@@ -2589,10 +2589,10 @@
       "text": "Treat any place traffic can cross your path, a driveway included, like an intersection."
     }
   },
-  "mot-momstandard-6-77": {
+  "mot-msf-aamva-6-77": {
     "meta": {
       "idKey": "77",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "search-and-strategy",
@@ -2623,10 +2623,10 @@
       "text": "At an intersection, the biggest danger is an oncoming car turning left in front of you."
     }
   },
-  "mot-fltxcatemp-6-78": {
+  "mot-mom-6-78": {
     "meta": {
       "idKey": "78",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "search-and-strategy",
@@ -2657,10 +2657,10 @@
       "text": "Never count on eye contact. A driver can look straight at you and still not see you."
     }
   },
-  "mot-momstandard-6-79": {
+  "mot-msf-aamva-6-79": {
     "meta": {
       "idKey": "79",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "search-and-strategy",
@@ -2691,10 +2691,10 @@
       "text": "At an intersection, ride with your headlight on, in the part of the lane with the best view of oncoming traffic."
     }
   },
-  "mot-momstandard-6-80": {
+  "mot-msf-aamva-6-80": {
     "meta": {
       "idKey": "80",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "search-and-strategy",
@@ -2725,10 +2725,10 @@
       "text": "When a driver may cross your path, slow down and take a lane position where that driver can see you."
     }
   },
-  "mot-momstandard-6-81": {
+  "mot-msf-aamva-6-81": {
     "meta": {
       "idKey": "81",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "search-and-strategy",
@@ -2759,10 +2759,10 @@
       "text": "Passing a car waiting to turn, avoid sudden changes of speed or position. The driver may think you are turning and pull out."
     }
   },
-  "mot-mns2011-6-82": {
+  "mot-mom-current-6-82": {
     "meta": {
       "idKey": "82",
-      "appliesTo": "MNS2011",
+      "appliesTo": "mom-current",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "search-and-strategy",
@@ -2793,10 +2793,10 @@
       "text": "If a car coming the other way turns left across your lane, be ready to brake hard."
     }
   },
-  "mot-fltxcatemp-6-83": {
+  "mot-mom-6-83": {
     "meta": {
       "idKey": "83",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "search-and-strategy",
@@ -2827,10 +2827,10 @@
       "text": "At a blind intersection, ride on the side of the lane away from whatever blocks the view, where cross-street drivers see you first."
     }
   },
-  "mot-fltxcatemp-6-84": {
+  "mot-mom-6-84": {
     "meta": {
       "idKey": "84",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "search-and-strategy",
@@ -2861,10 +2861,10 @@
       "text": "Blind intersection: stop at the line, then stop again just short of the cross lane, front wheel clear, and lean forward to look."
     }
   },
-  "mot-fltxcatemp-6-85": {
+  "mot-mom-6-85": {
     "meta": {
       "idKey": "85",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": "mot-lane-position-hazard-right",
       "sisterQuestions": null,
       "topic": "search-and-strategy",
@@ -2895,10 +2895,10 @@
       "text": "Passing parked cars with no oncoming traffic, ride in the left portion, clear of opening doors and people stepping out."
     }
   },
-  "mot-fltxcatemp-6-86": {
+  "mot-mom-6-86": {
     "meta": {
       "idKey": "86",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "search-and-strategy",
@@ -2929,10 +2929,10 @@
       "text": "Passing parked cars with oncoming traffic, the center of the lane usually leaves the most space on both sides."
     }
   },
-  "mot-fltxcatemp-6-87": {
+  "mot-mom-6-87": {
     "meta": {
       "idKey": "87",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "search-and-strategy",
@@ -2963,10 +2963,10 @@
       "text": "When a parked car starts to pull out, slow down or change lanes. Its driver may not see you."
     }
   },
-  "mot-fltxcatemp-6-88": {
+  "mot-mom-6-88": {
     "meta": {
       "idKey": "88",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "search-and-strategy",
@@ -2997,10 +2997,10 @@
       "text": "When a car makes a sudden U-turn ahead, slow down, sound your horn, and carry on with care."
     }
   },
-  "mot-momstandard-4-89": {
+  "mot-msf-aamva-4-89": {
     "meta": {
       "idKey": "89",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "visibility-and-communication",
@@ -3031,10 +3031,10 @@
       "text": "Head-on or from behind, a motorcycle presents a far smaller shape than a car, and many drivers aren't watching for one."
     }
   },
-  "mot-momstandard-4-90": {
+  "mot-msf-aamva-4-90": {
     "meta": {
       "idKey": "90",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "visibility-and-communication",
@@ -3065,10 +3065,10 @@
       "text": "A motorcycle can look farther away than it is, so drivers who see you may still pull out in front of you."
     }
   },
-  "mot-momstandard-4-91": {
+  "mot-msf-aamva-4-91": {
     "meta": {
       "idKey": "91",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "visibility-and-communication",
@@ -3133,10 +3133,10 @@
       "text": "Ride as though other drivers cannot see you. It keeps you more alert."
     }
   },
-  "mot-mns2011-4-93": {
+  "mot-mom-current-4-93": {
     "meta": {
       "idKey": "93",
-      "appliesTo": "MNS2011",
+      "appliesTo": "mom-current",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "visibility-and-communication",
@@ -3167,10 +3167,10 @@
       "text": "Visually busy surroundings can hide you and your motorcycle from other drivers."
     }
   },
-  "mot-momstandard-4-95": {
+  "mot-msf-aamva-4-95": {
     "meta": {
       "idKey": "95",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "visibility-and-communication",
@@ -3201,10 +3201,10 @@
       "text": "About half of rider and motorcycle together."
     }
   },
-  "mot-momstandard-4-97": {
+  "mot-msf-aamva-4-97": {
     "meta": {
       "idKey": "97",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "visibility-and-communication",
@@ -3235,10 +3235,10 @@
       "text": "About twice as likely to be noticed."
     }
   },
-  "mot-momstandard-4-94": {
+  "mot-msf-aamva-4-94": {
     "meta": {
       "idKey": "94",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "visibility-and-communication",
@@ -3269,10 +3269,10 @@
       "text": "Wear a bright orange, red, yellow or green jacket or vest, and a brightly colored helmet."
     }
   },
-  "mot-momstandard-4-96": {
+  "mot-msf-aamva-4-96": {
     "meta": {
       "idKey": "96",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "visibility-and-communication",
@@ -3303,10 +3303,10 @@
       "text": "Reflective material on your vest and helmet sides helps drivers spot you from the side, ahead and behind."
     }
   },
-  "mot-momstandard-4-98": {
+  "mot-msf-aamva-4-98": {
     "meta": {
       "idKey": "98",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "visibility-and-communication",
@@ -3337,10 +3337,10 @@
       "text": "In fog, keep your headlight on, set to low beam."
     }
   },
-  "mot-momstandard-4-99": {
+  "mot-msf-aamva-4-99": {
     "meta": {
       "idKey": "99",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "visibility-and-communication",
@@ -3371,10 +3371,10 @@
       "text": "Signal every lane change and turn, even with no one around. Signals also make you easier to spot."
     }
   },
-  "mot-momstandard-4-100": {
+  "mot-msf-aamva-4-100": {
     "meta": {
       "idKey": "100",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "visibility-and-communication",
@@ -3405,10 +3405,10 @@
       "text": "Entering a freeway, signal. Drivers coming up from behind are more likely to see you and make room."
     }
   },
-  "mot-momstandard-4-101": {
+  "mot-msf-aamva-4-101": {
     "meta": {
       "idKey": "101",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "visibility-and-communication",
@@ -3439,10 +3439,10 @@
       "text": "Switch your signal off after each turn. A driver may pull out, expecting you to turn again."
     }
   },
-  "mot-momstandard-4-102": {
+  "mot-msf-aamva-4-102": {
     "meta": {
       "idKey": "102",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "visibility-and-communication",
@@ -3473,10 +3473,10 @@
       "text": "A motorcycle's brake light is easy to miss. Flash it before slowing where drivers behind won't expect it."
     }
   },
-  "mot-momstandard-4-103": {
+  "mot-msf-aamva-4-103": {
     "meta": {
       "idKey": "103",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "visibility-and-communication",
@@ -3541,10 +3541,10 @@
       "text": "When stopped at an intersection with traffic coming from behind, flash your brake light."
     }
   },
-  "mot-momstandard-4-105": {
+  "mot-msf-aamva-4-105": {
     "meta": {
       "idKey": "105",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "visibility-and-communication",
@@ -3575,10 +3575,10 @@
       "text": "Check mirrors as part of your routine, and above all when waiting at an intersection, before a lane change and before slowing."
     }
   },
-  "mot-fltxcatemp-4-106": {
+  "mot-mom-4-106": {
     "meta": {
       "idKey": "106",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "visibility-and-communication",
@@ -3609,10 +3609,10 @@
       "text": "Convex mirrors show a wider view but make vehicles look farther away than they are."
     }
   },
-  "mot-fltxcatemp-4-107": {
+  "mot-mom-4-107": {
     "meta": {
       "idKey": "107",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "visibility-and-communication",
@@ -3643,10 +3643,10 @@
       "text": "Even once you judge convex mirrors well, allow extra distance before changing lanes."
     }
   },
-  "mot-momstandard-4-108": {
+  "mot-msf-aamva-4-108": {
     "meta": {
       "idKey": "108",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "visibility-and-communication",
@@ -3677,10 +3677,10 @@
       "text": "Mirrors are not enough. Before changing lanes, turn your head to check the blind spot."
     }
   },
-  "mot-fltxcatemp-4-109": {
+  "mot-mom-4-109": {
     "meta": {
       "idKey": "109",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "visibility-and-communication",
@@ -3711,10 +3711,10 @@
       "text": "Changing lanes on a multi-lane road, check the far lane too. A driver there may want the same space."
     }
   },
-  "mot-fltxcatemp-4-110": {
+  "mot-mom-4-110": {
     "meta": {
       "idKey": "110",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "visibility-and-communication",
@@ -3745,10 +3745,10 @@
       "text": "In an emergency, sound the horn loud and long, and be ready to stop or swerve."
     }
   },
-  "mot-momstandard-4-111": {
+  "mot-msf-aamva-4-111": {
     "meta": {
       "idKey": "111",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "visibility-and-communication",
@@ -3779,10 +3779,10 @@
       "text": "A motorcycle's horn is quieter than a car's. Use it, but do not rely on it."
     }
   },
-  "mot-momstandard-7-112": {
+  "mot-msf-aamva-7-112": {
     "meta": {
       "idKey": "112",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "hazards-and-surfaces",
@@ -3813,10 +3813,10 @@
       "text": "At night, ride slower than by day, especially on unfamiliar roads."
     }
   },
-  "mot-momstandard-7-113": {
+  "mot-msf-aamva-7-113": {
     "meta": {
       "idKey": "113",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "hazards-and-surfaces",
@@ -3847,10 +3847,10 @@
       "text": "Distances are harder to judge at night. Allow more room to pass and be passed."
     }
   },
-  "mot-momstandard-7-114": {
+  "mot-msf-aamva-7-114": {
     "meta": {
       "idKey": "114",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "hazards-and-surfaces",
@@ -3881,10 +3881,10 @@
       "text": "At night, use the car ahead: its headlights light the road, and bouncing taillights warn of rough pavement."
     }
   },
-  "mot-momstandard-7-115": {
+  "mot-msf-aamva-7-115": {
     "meta": {
       "idKey": "115",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "hazards-and-surfaces",
@@ -3915,10 +3915,10 @@
       "text": "At night, use high beam whenever you are not following or meeting another vehicle."
     }
   },
-  "mot-momstandard-7-116": {
+  "mot-msf-aamva-7-116": {
     "meta": {
       "idKey": "116",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "hazards-and-surfaces",
@@ -3983,10 +3983,10 @@
       "text": "At night, ride slow enough to stop within the distance your headlight lights up."
     }
   },
-  "mot-momstandard-3-118": {
+  "mot-msf-aamva-3-118": {
     "meta": {
       "idKey": "118",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -4051,10 +4051,10 @@
       "text": "Most crash-involved riders use too little front brake and too much rear."
     }
   },
-  "mot-momstandard-3-120": {
+  "mot-msf-aamva-3-120": {
     "meta": {
       "idKey": "120",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -4085,10 +4085,10 @@
       "text": "When the front wheel locks, let go of the front brake at once, then put it back on."
     }
   },
-  "mot-mns2011-3-121": {
+  "mot-mom-current-3-121": {
     "meta": {
       "idKey": "121",
-      "appliesTo": "MNS2011",
+      "appliesTo": "mom-current",
       "variantGroup": "mot-front-skid-control-loss",
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -4119,10 +4119,10 @@
       "text": "A front-wheel skid costs steering and balance at once. Release the lever immediately."
     }
   },
-  "mot-momstandard-3-122": {
+  "mot-msf-aamva-3-122": {
     "meta": {
       "idKey": "122",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -4153,10 +4153,10 @@
       "text": "If you can't straighten up before braking in a curve, brake gently, then add pressure as you straighten."
     }
   },
-  "mot-momstandard-3-123": {
+  "mot-msf-aamva-3-123": {
     "meta": {
       "idKey": "123",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -4187,10 +4187,10 @@
       "text": "When stopping in a curve, straighten the handlebars in the last few feet."
     }
   },
-  "mot-mns2011-3-124": {
+  "mot-mom-3-124": {
     "meta": {
       "idKey": "124",
-      "appliesTo": "MNS2011",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -4221,10 +4221,10 @@
       "text": "Too much rear brake locks the rear wheel, and a locked rear wheel cannot change direction."
     }
   },
-  "mot-momstandard-3-125": {
+  "mot-msf-aamva-3-125": {
     "meta": {
       "idKey": "125",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -4255,10 +4255,10 @@
       "text": "To swerve, press the handgrip on the side you want to go, then press the opposite grip once you are clear."
     }
   },
-  "mot-momstandard-3-126": {
+  "mot-msf-aamva-3-126": {
     "meta": {
       "idKey": "126",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -4289,10 +4289,10 @@
       "text": "In a swerve, stay upright and let the motorcycle lean under you, knees pressed to the tank and feet planted."
     }
   },
-  "mot-fltxcatemp-3-127": {
+  "mot-mom-3-127": {
     "meta": {
       "idKey": "127",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -4323,10 +4323,10 @@
       "text": "In a swerve, make your escape path the target of your vision."
     }
   },
-  "mot-momstandard-3-128": {
+  "mot-msf-aamva-3-128": {
     "meta": {
       "idKey": "128",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -4357,10 +4357,10 @@
       "text": "Separate braking from swerving: brake before or after, never during."
     }
   },
-  "mot-fltxcatemp-3-129": {
+  "mot-mom-3-129": {
     "meta": {
       "idKey": "129",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -4391,10 +4391,10 @@
       "text": "Running wide in a curve or turn is a primary cause of single-vehicle crashes."
     }
   },
-  "mot-momstandard-3-130": {
+  "mot-msf-aamva-3-130": {
     "meta": {
       "idKey": "130",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -4425,10 +4425,10 @@
       "text": "Every curve is different: it may stay constant, widen, tighten or lead into more turns."
     }
   },
-  "mot-momstandard-3-131": {
+  "mot-msf-aamva-3-131": {
     "meta": {
       "idKey": "131",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -4459,10 +4459,10 @@
       "text": "The best line through a curve isn't always the road's own curve; set your lane position for traffic, conditions and the curve's shape."
     }
   },
-  "mot-mns2011-7-132": {
+  "mot-mom-current-7-132": {
     "meta": {
       "idKey": "132",
-      "appliesTo": "MNS2011",
+      "appliesTo": "mom-current",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "hazards-and-surfaces",
@@ -4493,10 +4493,10 @@
       "text": "A motorcycle responds faster than a car but is more sensitive to rough roads and crosswinds."
     }
   },
-  "mot-fltxcatemp-7-133": {
+  "mot-mom-7-133": {
     "meta": {
       "idKey": "133",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "hazards-and-surfaces",
@@ -4527,10 +4527,10 @@
       "text": "To ride over an obstacle: slow down first, keep the motorcycle straight, rise slightly off the seat, and roll on a little throttle just before contact."
     }
   },
-  "mot-fltxcatemp-7-134": {
+  "mot-mom-7-134": {
     "meta": {
       "idKey": "134",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "hazards-and-surfaces",
@@ -4561,10 +4561,10 @@
       "text": "After you ride over an obstacle, inspect the tires and rims off the road before going on."
     }
   },
-  "mot-momstandard-7-135": {
+  "mot-msf-aamva-7-135": {
     "meta": {
       "idKey": "135",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "hazards-and-surfaces",
@@ -4595,10 +4595,10 @@
       "text": "Wet pavement is especially slippery just after rain starts, before surface oil washes to the side of the road."
     }
   },
-  "mot-momstandard-7-136": {
+  "mot-msf-aamva-7-136": {
     "meta": {
       "idKey": "136",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "hazards-and-surfaces",
@@ -4629,10 +4629,10 @@
       "text": "Slow down before a slippery surface, and especially before a wet curve."
     }
   },
-  "mot-momstandard-7-137": {
+  "mot-msf-aamva-7-137": {
     "meta": {
       "idKey": "137",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "hazards-and-surfaces",
@@ -4663,10 +4663,10 @@
       "text": "On a slippery surface, keep every control smooth; an abrupt change in speed or direction can start a skid."
     }
   },
-  "mot-momstandard-7-138": {
+  "mot-msf-aamva-7-138": {
     "meta": {
       "idKey": "138",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "hazards-and-surfaces",
@@ -4697,10 +4697,10 @@
       "text": "The front brake still works on a slippery surface. Use both brakes, squeezing the front gradually."
     }
   },
-  "mot-fltxcatemp-7-139": {
+  "mot-mom-7-139": {
     "meta": {
       "idKey": "139",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "hazards-and-surfaces",
@@ -4731,10 +4731,10 @@
       "text": "Approach an obstacle you must ride over as close to a right angle as possible."
     }
   },
-  "mot-momstandard-7-140": {
+  "mot-msf-aamva-7-140": {
     "meta": {
       "idKey": "140",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "hazards-and-surfaces",
@@ -4765,10 +4765,10 @@
       "text": "When rain begins, ride in a tire track, often the left one, and keep off the oily center strip."
     }
   },
-  "mot-momstandard-7-141": {
+  "mot-msf-aamva-7-141": {
     "meta": {
       "idKey": "141",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "hazards-and-surfaces",
@@ -4799,10 +4799,10 @@
       "text": "Check for oil wherever your foot will land when you stop or park."
     }
   },
-  "mot-momstandard-7-142": {
+  "mot-msf-aamva-7-142": {
     "meta": {
       "idKey": "142",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "hazards-and-surfaces",
@@ -4833,10 +4833,10 @@
       "text": "Expect dirt and gravel at the road's edges, most of all on curves and highway ramps."
     }
   },
-  "mot-momstandard-7-143": {
+  "mot-msf-aamva-7-143": {
     "meta": {
       "idKey": "143",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "hazards-and-surfaces",
@@ -4867,10 +4867,10 @@
       "text": "Ice tends to form in low or shaded areas and on bridges and overpasses."
     }
   },
-  "mot-fltxcatemp-7-144": {
+  "mot-mom-7-144": {
     "meta": {
       "idKey": "144",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "hazards-and-surfaces",
@@ -4901,10 +4901,10 @@
       "text": "On ice or snow you can't avoid: stay upright, go as slowly as possible, and keep off the brakes."
     }
   },
-  "mot-momstandard-7-145": {
+  "mot-msf-aamva-7-145": {
     "meta": {
       "idKey": "145",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "hazards-and-surfaces",
@@ -4935,10 +4935,10 @@
       "text": "Cross railroad tracks straight, staying in your lane. Steering to meet them at a right angle can put you in another lane."
     }
   },
-  "mot-momstandard-7-146": {
+  "mot-msf-aamva-7-146": {
     "meta": {
       "idKey": "146",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "hazards-and-surfaces",
@@ -4969,10 +4969,10 @@
       "text": "To cross a railroad or trolley track, or a seam, running alongside you, move away and cross at 45 degrees or more with a decisive turn."
     }
   },
-  "mot-momstandard-7-147": {
+  "mot-msf-aamva-7-147": {
     "meta": {
       "idKey": "147",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "hazards-and-surfaces",
@@ -5003,10 +5003,10 @@
       "text": "If grooves or a grating set the motorcycle weaving, hold your speed and go straight across."
     }
   },
-  "mot-momstandard-7-148": {
+  "mot-msf-aamva-7-148": {
     "meta": {
       "idKey": "148",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "hazards-and-surfaces",
@@ -5037,10 +5037,10 @@
       "text": "You seldom hear a flat. A front flat makes the steering feel heavy; a rear flat makes the back jerk or sway."
     }
   },
-  "mot-momstandard-7-149": {
+  "mot-msf-aamva-7-149": {
     "meta": {
       "idKey": "149",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "hazards-and-surfaces",
@@ -5071,10 +5071,10 @@
       "text": "With a flat: grip firmly, roll off gently and steer straight, then once slowed, move to the roadside, pull in the clutch and stop."
     }
   },
-  "mot-momstandard-7-150": {
+  "mot-msf-aamva-7-150": {
     "meta": {
       "idKey": "150",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "hazards-and-surfaces",
@@ -5105,10 +5105,10 @@
       "text": "With a flat tire, brake gradually and only with the brake of the good tire, if you are sure which one is flat."
     }
   },
-  "mot-fltxcatemp-7-151": {
+  "mot-mom-7-151": {
     "meta": {
       "idKey": "151",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "hazards-and-surfaces",
@@ -5139,10 +5139,10 @@
       "text": "If a stuck throttle won't free with a few twists, kill the engine with its cut-off switch as you pull in the clutch."
     }
   },
-  "mot-fltxcatemp-7-152": {
+  "mot-mom-7-152": {
     "meta": {
       "idKey": "152",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "hazards-and-surfaces",
@@ -5173,10 +5173,10 @@
       "text": "A wobble, the front wheel and bars shaking side to side, usually traces to the load, accessories or tire pressure."
     }
   },
-  "mot-fltxcatemp-7-153": {
+  "mot-mom-7-153": {
     "meta": {
       "idKey": "153",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "hazards-and-surfaces",
@@ -5207,10 +5207,10 @@
       "text": "In a wobble: grip firmly without fighting it, close the throttle gradually, don't brake, and pull off as soon as you can."
     }
   },
-  "mot-fltxcatemp-7-154": {
+  "mot-mom-7-154": {
     "meta": {
       "idKey": "154",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "hazards-and-surfaces",
@@ -5241,10 +5241,10 @@
       "text": "If the chain or belt breaks, the rear wheel loses drive at once. Roll off and brake to a stop somewhere safe."
     }
   },
-  "mot-fltxcatemp-7-155": {
+  "mot-mom-7-155": {
     "meta": {
       "idKey": "155",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "hazards-and-surfaces",
@@ -5275,10 +5275,10 @@
       "text": "If the engine starts to seize, squeeze the clutch, pull off and check the oil."
     }
   },
-  "mot-fltxcatemp-7-156": {
+  "mot-mom-7-156": {
     "meta": {
       "idKey": "156",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "hazards-and-surfaces",
@@ -5309,10 +5309,10 @@
       "text": "Avoid an animal if you safely can, but in traffic stay in your lane. Hitting something small beats hitting a car."
     }
   },
-  "mot-mns2011-7-157": {
+  "mot-mom-current-7-157": {
     "meta": {
       "idKey": "157",
-      "appliesTo": "MNS2011",
+      "appliesTo": "mom-current",
       "variantGroup": "mot-dog-chase",
       "sisterQuestions": null,
       "topic": "hazards-and-surfaces",
@@ -5343,10 +5343,10 @@
       "text": "Chased by a dog: downshift and approach slowly, then accelerate away. Don't kick at it."
     }
   },
-  "mot-mns2011-7-158": {
+  "mot-mom-current-7-158": {
     "meta": {
       "idKey": "158",
-      "appliesTo": "MNS2011",
+      "appliesTo": "mom-current",
       "variantGroup": "mot-large-animal",
       "sisterQuestions": null,
       "topic": "hazards-and-surfaces",
@@ -5377,10 +5377,10 @@
       "text": "For large animals such as deer, elk or cattle, brake and prepare to stop. They are unpredictable."
     }
   },
-  "mot-momstandard-7-159": {
+  "mot-msf-aamva-7-159": {
     "meta": {
       "idKey": "159",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "hazards-and-surfaces",
@@ -5411,10 +5411,10 @@
       "text": "If anything strikes you while riding, keep looking at the road and keep both hands on the grips."
     }
   },
-  "mot-fltxcatemp-7-160": {
+  "mot-mom-7-160": {
     "meta": {
       "idKey": "160",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "hazards-and-surfaces",
@@ -5445,10 +5445,10 @@
       "text": "Before pulling off the road: check the roadside is firm, signal clearly, and check your mirror and blind spot."
     }
   },
-  "mot-fltxcatemp-7-161": {
+  "mot-mom-7-161": {
     "meta": {
       "idKey": "161",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "hazards-and-surfaces",
@@ -5479,10 +5479,10 @@
       "text": "Stop well clear of the road, on firm, level ground. A parked motorcycle is hard to see, and a stand won't set well on a loose or sloping shoulder."
     }
   },
-  "mot-momstandard-8-162": {
+  "mot-msf-aamva-8-162": {
     "meta": {
       "idKey": "162",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "passengers-and-cargo",
@@ -5513,10 +5513,10 @@
       "text": "Carrying a passenger or heavy load is for experienced riders; the added weight alters the handling."
     }
   },
-  "mot-momstandard-8-163": {
+  "mot-msf-aamva-8-163": {
     "meta": {
       "idKey": "163",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "passengers-and-cargo",
@@ -5547,10 +5547,10 @@
       "text": "A passenger wears the same level of protective gear as the rider."
     }
   },
-  "mot-mns2011-8-164": {
+  "mot-mom-current-8-164": {
     "meta": {
       "idKey": "164",
-      "appliesTo": "MNS2011",
+      "appliesTo": "mom-current",
       "variantGroup": "mot-child-passenger-position",
       "sisterQuestions": null,
       "topic": "passengers-and-cargo",
@@ -5581,10 +5581,10 @@
       "text": "A child passenger sits directly behind the rider, never in front."
     }
   },
-  "mot-momstandard-8-165": {
+  "mot-msf-aamva-8-165": {
     "meta": {
       "idKey": "165",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "passengers-and-cargo",
@@ -5615,10 +5615,10 @@
       "text": "Always instruct your passenger before setting off, even one who rides."
     }
   },
-  "mot-fltxcatemp-8-166": {
+  "mot-mom-8-166": {
     "meta": {
       "idKey": "166",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": "mot-passenger-mounting",
       "sisterQuestions": null,
       "topic": "passengers-and-cargo",
@@ -5649,10 +5649,10 @@
       "text": "A passenger gets on only after the engine is running in neutral, with both your feet down and the brake on."
     }
   },
-  "mot-momstandard-8-167": {
+  "mot-msf-aamva-8-167": {
     "meta": {
       "idKey": "167",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "passengers-and-cargo",
@@ -5683,10 +5683,10 @@
       "text": "A passenger sits as far forward as possible without crowding you, holding your waist, hips or belt."
     }
   },
-  "mot-momstandard-8-168": {
+  "mot-msf-aamva-8-168": {
     "meta": {
       "idKey": "168",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "passengers-and-cargo",
@@ -5717,10 +5717,10 @@
       "text": "A passenger keeps both feet on the footrests, even at stops, and legs clear of the muffler and chains."
     }
   },
-  "mot-momstandard-8-169": {
+  "mot-msf-aamva-8-169": {
     "meta": {
       "idKey": "169",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "passengers-and-cargo",
@@ -5751,10 +5751,10 @@
       "text": "A passenger stays directly behind you and looks over your shoulder into turns."
     }
   },
-  "mot-momstandard-8-170": {
+  "mot-msf-aamva-8-170": {
     "meta": {
       "idKey": "170",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "passengers-and-cargo",
@@ -5785,10 +5785,10 @@
       "text": "A passenger tightens their hold for bumps, starting off, and sudden moves such as sharp turns."
     }
   },
-  "mot-fltxcatemp-8-171": {
+  "mot-mom-8-171": {
     "meta": {
       "idKey": "171",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "passengers-and-cargo",
@@ -5819,10 +5819,10 @@
       "text": "A heavier passenger means more time to turn, slow down and gain speed."
     }
   },
-  "mot-momstandard-8-172": {
+  "mot-msf-aamva-8-172": {
     "meta": {
       "idKey": "172",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "passengers-and-cargo",
@@ -5853,10 +5853,10 @@
       "text": "With a passenger: ride a little slower, start slowing earlier, keep a larger cushion and wait for larger gaps."
     }
   },
-  "mot-momstandard-8-173": {
+  "mot-msf-aamva-8-173": {
     "meta": {
       "idKey": "173",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "passengers-and-cargo",
@@ -5887,10 +5887,10 @@
       "text": "Before carrying a passenger or heavy load, check both tire pressures and adjust the suspension for the weight."
     }
   },
-  "mot-fltxcatemp-8-174": {
+  "mot-mom-8-174": {
     "meta": {
       "idKey": "174",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "passengers-and-cargo",
@@ -5921,10 +5921,10 @@
       "text": "Carry loads low and over or in front of the rear axle, with saddlebags evenly loaded."
     }
   },
-  "mot-fltxcatemp-8-175": {
+  "mot-mom-8-175": {
     "meta": {
       "idKey": "175",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "passengers-and-cargo",
@@ -5955,10 +5955,10 @@
       "text": "Fasten loads with elastic cords, using more than one attachment point per side, and check them often."
     }
   },
-  "mot-fltxcatemp-8-176": {
+  "mot-mom-8-176": {
     "meta": {
       "idKey": "176",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "passengers-and-cargo",
@@ -5989,10 +5989,10 @@
       "text": "Mount a tank bag securely, clear of the controls, instruments and brake lines."
     }
   },
-  "mot-mns2011-8-177": {
+  "mot-mom-8-177": {
     "meta": {
       "idKey": "177",
-      "appliesTo": "MNS2011",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "passengers-and-cargo",
@@ -6023,10 +6023,10 @@
       "text": "Test-ride a fully loaded motorcycle on familiar roads before a trip. Expect weaker acceleration and longer stops."
     }
   },
-  "mot-mns2011-5-178": {
+  "mot-mom-5-178": {
     "meta": {
       "idKey": "178",
-      "appliesTo": "MNS2011",
+      "appliesTo": "mom",
       "variantGroup": "mot-group-route",
       "sisterQuestions": null,
       "topic": "space-management",
@@ -6057,10 +6057,10 @@
       "text": "Before a group ride, hold a riders' meeting on the route, stops and fuel, so a rider who gets separated never has to hurry."
     }
   },
-  "mot-fltxcatemp-5-179": {
+  "mot-mom-5-179": {
     "meta": {
       "idKey": "179",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "space-management",
@@ -6091,10 +6091,10 @@
       "text": "The last rider sets the group's pace. The lead and last riders should be the most experienced."
     }
   },
-  "mot-fltxcatemp-5-180": {
+  "mot-mom-5-180": {
     "meta": {
       "idKey": "180",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "space-management",
@@ -6125,10 +6125,10 @@
       "text": "Put inexperienced riders just behind the leader, so they never chase the group and riders behind can watch them."
     }
   },
-  "mot-mns2011-5-181": {
+  "mot-mom-current-5-181": {
     "meta": {
       "idKey": "181",
-      "appliesTo": "MNS2011",
+      "appliesTo": "mom-current",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "space-management",
@@ -6159,10 +6159,10 @@
       "text": "In a group, nobody races, passes inside the group or crowds the rider ahead. A faster rider goes on to an agreed meeting point."
     }
   },
-  "mot-fltxcatemp-5-182": {
+  "mot-mom-5-182": {
     "meta": {
       "idKey": "182",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "space-management",
@@ -6193,10 +6193,10 @@
       "text": "Watch the rider behind you in your mirrors. If anyone falls behind, the whole group slows down."
     }
   },
-  "mot-fltxcatemp-5-183": {
+  "mot-mom-5-183": {
     "meta": {
       "idKey": "183",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "space-management",
@@ -6227,10 +6227,10 @@
       "text": "A close group uses less road, is easier to see and is harder to split up, but each rider still keeps a space cushion."
     }
   },
-  "mot-momstandard-5-184": {
+  "mot-msf-aamva-5-184": {
     "meta": {
       "idKey": "184",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "space-management",
@@ -6261,10 +6261,10 @@
       "text": "Never ride side by side with another rider in the same lane. Neither of you would have room to avoid a hazard."
     }
   },
-  "mot-momstandard-5-185": {
+  "mot-msf-aamva-5-185": {
     "meta": {
       "idKey": "185",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "space-management",
@@ -6295,10 +6295,10 @@
       "text": "Staggered formation: the leader rides the left side of the lane, the second rider the right, and so on, alternating."
     }
   },
-  "mot-momstandard-5-186": {
+  "mot-msf-aamva-5-186": {
     "meta": {
       "idKey": "186",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "space-management",
@@ -6329,10 +6329,10 @@
       "text": "Ride single file in curves, in turns, and entering or leaving a highway."
     }
   },
-  "mot-momstandard-5-187": {
+  "mot-msf-aamva-5-187": {
     "meta": {
       "idKey": "187",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "space-management",
@@ -6363,10 +6363,10 @@
       "text": "Passing through the oncoming lane, a staggered group goes one rider at a time, the leader first, each from the left side of the lane."
     }
   },
-  "mot-momstandard-5-188": {
+  "mot-msf-aamva-5-188": {
     "meta": {
       "idKey": "188",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "space-management",
@@ -6397,10 +6397,10 @@
       "text": "After passing, the leader returns to the left side of the lane and holds passing speed, opening room for the next rider."
     }
   },
-  "mot-momstandard-1-189": {
+  "mot-msf-aamva-1-189": {
     "meta": {
       "idKey": "189",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "fit-to-ride",
@@ -6431,10 +6431,10 @@
       "text": "Even one drink can affect your riding. Impairment begins well below the legal limit."
     }
   },
-  "mot-mns2011-1-190": {
+  "mot-mom-1-190": {
     "meta": {
       "idKey": "190",
-      "appliesTo": "MNS2011",
+      "appliesTo": "mom",
       "variantGroup": "mot-drugs-and-alcohol",
       "sisterQuestions": null,
       "topic": "fit-to-ride",
@@ -6465,10 +6465,10 @@
       "text": "Over-the-counter and prescription drugs can have side effects that make riding riskier, and with alcohol they are more dangerous still."
     }
   },
-  "mot-momstandard-1-191": {
+  "mot-msf-aamva-1-191": {
     "meta": {
       "idKey": "191",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "fit-to-ride",
@@ -6499,10 +6499,10 @@
       "text": "BAC is the amount of alcohol in your blood. How much you drink, how fast, and your body weight all play a major part."
     }
   },
-  "mot-momstandard-1-192": {
+  "mot-msf-aamva-1-192": {
     "meta": {
       "idKey": "192",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "fit-to-ride",
@@ -6533,10 +6533,10 @@
       "text": "A 12-ounce beer, a 5-ounce glass of wine and a shot of liquor each hold about the same alcohol: one drink."
     }
   },
-  "mot-momstandard-1-193": {
+  "mot-msf-aamva-1-193": {
     "meta": {
       "idKey": "193",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "fit-to-ride",
@@ -6567,10 +6567,10 @@
       "text": "Your body processes alcohol at about one drink an hour. Drink faster and it builds up."
     }
   },
-  "mot-mns2011-1-194": {
+  "mot-mom-current-1-194": {
     "meta": {
       "idKey": "194",
-      "appliesTo": "MNS2011",
+      "appliesTo": "mom-current",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "fit-to-ride",
@@ -6601,10 +6601,10 @@
       "text": "Alcohol dulls your judgment of your own riding first, so you feel more capable as you get worse and take bigger risks."
     }
   },
-  "mot-momstandard-1-195": {
+  "mot-msf-aamva-1-195": {
     "meta": {
       "idKey": "195",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "fit-to-ride",
@@ -6635,10 +6635,10 @@
       "text": "If you'll be riding, don't drink: once you start, your resistance weakens. If you have been drinking, don't ride."
     }
   },
-  "mot-mns2011-1-196": {
+  "mot-mom-1-196": {
     "meta": {
       "idKey": "196",
-      "appliesTo": "MNS2011",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "fit-to-ride",
@@ -6669,10 +6669,10 @@
       "text": "Waiting an hour per drink doesn't guarantee you're fit to ride. Side effects can remain."
     }
   },
-  "mot-mns2011-1-197": {
+  "mot-mom-current-1-197": {
     "meta": {
       "idKey": "197",
-      "appliesTo": "MNS2011",
+      "appliesTo": "mom-current",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "fit-to-ride",
@@ -6737,10 +6737,10 @@
       "text": "Even where cannabis is legal, don't ride impaired by it. It distorts your sense of time, space and speed."
     }
   },
-  "mot-fltxcatemp-1-199": {
+  "mot-mom-1-199": {
     "meta": {
       "idKey": "199",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": "mot-riding-fatigue",
       "sisterQuestions": null,
       "topic": "fit-to-ride",
@@ -6771,10 +6771,10 @@
       "text": "Riding tires you faster than driving a car. Wind, cold and rain tire you quickly, so dress warmly."
     }
   },
-  "mot-momstandard-1-200": {
+  "mot-msf-aamva-1-200": {
     "meta": {
       "idKey": "200",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "fit-to-ride",
@@ -6805,10 +6805,10 @@
       "text": "Fatigue costs you control. Stop and get off the motorcycle at least every two hours, and don't rely on stimulants."
     }
   },
-  "mot-momstandard-2-201": {
+  "mot-msf-aamva-2-201": {
     "meta": {
       "idKey": "201",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "gear-and-bike-check",
@@ -6839,10 +6839,10 @@
       "text": "Dress warm and dry in cold or wet weather. Getting cold makes the motorcycle harder to control."
     }
   },
-  "mot-fltxcatemp-2-202": {
+  "mot-mom-2-202": {
     "meta": {
       "idKey": "202",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "gear-and-bike-check",
@@ -6873,10 +6873,10 @@
       "text": "On an unfamiliar motorcycle, work the controls a few times first, then ride cautiously: gentle throttle, slower turns, extra stopping room."
     }
   },
-  "mot-momstandard-2-203": {
+  "mot-msf-aamva-2-203": {
     "meta": {
       "idKey": "203",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "gear-and-bike-check",
@@ -6907,10 +6907,10 @@
       "text": "Check your motorcycle before every ride. Read the owner's manual and keep the motorcycle in good condition."
     }
   },
-  "mot-fltxcatemp-2-204": {
+  "mot-mom-2-204": {
     "meta": {
       "idKey": "204",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "gear-and-bike-check",
@@ -6941,10 +6941,10 @@
       "text": "Pre-ride: try each brake on its own. Each should feel firm, hold the motorcycle, and turn on the brake light."
     }
   },
-  "mot-fltxcatemp-2-205": {
+  "mot-mom-2-205": {
     "meta": {
       "idKey": "205",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "gear-and-bike-check",
@@ -6975,10 +6975,10 @@
       "text": "Before you ride, check that the throttle springs fully closed when released and that the clutch feels tight and smooth."
     }
   },
-  "mot-fltxcatemp-2-206": {
+  "mot-mom-2-206": {
     "meta": {
       "idKey": "206",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": "mot-mirror-adjustment",
       "sisterQuestions": null,
       "topic": "gear-and-bike-check",
@@ -7009,10 +7009,10 @@
       "text": "Adjust your mirrors before you start riding, to show the lane behind and beside you. Seeing the edge of your arm is fine."
     }
   },
-  "mot-fltxcatemp-2-207": {
+  "mot-mom-2-207": {
     "meta": {
       "idKey": "207",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "gear-and-bike-check",
@@ -7043,10 +7043,10 @@
       "text": "Check oil and transmission fluid before riding, and brake fluid and coolant weekly. Look underneath for leaks."
     }
   },
-  "mot-mns2011-2-208": {
+  "mot-mom-current-2-208": {
     "meta": {
       "idKey": "208",
-      "appliesTo": "MNS2011",
+      "appliesTo": "mom-current",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "gear-and-bike-check",
@@ -7077,10 +7077,10 @@
       "text": "If your motorcycle has a fuel valve, open it before starting out. Closed, the bike may start, then stall once the lines empty."
     }
   },
-  "mot-fltxcatemp-2-209": {
+  "mot-mom-2-209": {
     "meta": {
       "idKey": "209",
-      "appliesTo": "fltxcatemp",
+      "appliesTo": "mom",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "gear-and-bike-check",
@@ -7247,10 +7247,10 @@
       "text": "Check chain tension at its tightest point and lubricate the chain hot. Never lubricate a belt."
     }
   },
-  "mot-momstandard-3-214": {
+  "mot-msf-aamva-3-214": {
     "meta": {
       "idKey": "214",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "basic-control",
@@ -11497,10 +11497,10 @@
       "text": null
     }
   },
-  "mot-momstandard-3-355": {
+  "mot-msf-aamva-3-355": {
     "meta": {
       "idKey": "355",
-      "appliesTo": "momstandard",
+      "appliesTo": "msf-aamva",
       "variantGroup": null,
       "sisterQuestions": null,
       "topic": "basic-control",

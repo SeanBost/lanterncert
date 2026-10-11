@@ -85,15 +85,17 @@ const note = (check, message) => notes.push({ check, message });
 // The bank as a flat list, since every check below reads the id and the key is the id.
 const bank = Object.entries(questionBank).map(([id, q]) => ({ id, ...q }));
 const ctx = { states, facts, exams };
-const resolvedFor = Object.fromEntries(
-  stateSlugs.map((slug) => {
+// Every state's resolution, whatever --state narrows the report to.
+const resolvedAll = Object.fromEntries(
+  Object.keys(facts).map((slug) => {
     const tokens = scopeTokens(slug, ctx);
     return [slug, bank.filter((q) => tokens.has(q.meta.appliesTo))];
   }),
 );
+const resolvedFor = Object.fromEntries(stateSlugs.map((slug) => [slug, resolvedAll[slug]]));
 
 // ── unreachable scope ────────────────────────────────────────────────────────
-const reachable = new Set(Object.values(resolvedFor).flat().map((q) => q.id));
+const reachable = new Set(Object.values(resolvedAll).flat().map((q) => q.id));
 for (const q of bank) {
   if (reachable.has(q.id)) continue;
   problem(
@@ -289,6 +291,23 @@ for (let i = 0; i < bank.length; i++) {
         "near-duplicate",
         `${a.id} and ${b.id} share ${Math.round(similarity * 100)}% of their stem and declare no sisterQuestions or variantGroup link`,
       );
+    }
+  }
+}
+
+// ── citation reach ───────────────────────────────────────────────────────────
+// Flags a question citing one state's document while reaching another. data-handling.md §5 rule 1a.
+const registry = loadJson(content("sources"));
+for (const q of bank) {
+  const reached = Object.entries(resolvedAll)
+    .filter(([, qs]) => qs.some((r) => r.id === q.id))
+    .map(([slug]) => states[slug].abbreviation);
+  for (const key of [q.meta.source, q.content?.media?.imageCredit]) {
+    const home = registry[key]?.state;
+    if (!home || home === "multi") continue;
+    const others = reached.filter((code) => code !== home);
+    if (others.length) {
+      problem("citation-reach", `${q.id} cites ${key}, a ${home} document, but also reaches ${others.join(", ")}`);
     }
   }
 }

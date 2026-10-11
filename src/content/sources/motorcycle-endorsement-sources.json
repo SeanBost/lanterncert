@@ -36,11 +36,11 @@
     "state": "CA",
     "sourceID": "0043",
     "title": "CA DMV California Driver's Handbook",
-    "description": "The full driver handbook in browsable sections: license classes and test rules.",
+    "description": "Traffic laws, signs, safe driving and alcohol limits that the knowledge tests cover.",
     "publisher": "California Department of Motor Vehicles",
-    "url": "https://www.dmv.ca.gov/portal/handbook/california-driver-handbook/",
+    "url": "https://www.dmv.ca.gov/portal/file/california-driver-handbook-pdf/",
     "access": "public",
-    "published": null,
+    "published": 2025,
     "verifiedCurrentIn": 2026
   },
   "ca-dmv-driver-licenses": {
@@ -569,6 +569,17 @@
     "url": "https://dol.wa.gov/driver-licenses-and-permits/motorcycle",
     "access": "public",
     "published": null,
+    "verifiedCurrentIn": 2026
+  },
+  "xx-aamva-motorcycle-manual": {
+    "state": "multi",
+    "sourceID": "0063",
+    "title": "AAMVA Model Motorcycle Operator Manual",
+    "description": "The model rider manual states adapt into their own, with blanks for local law.",
+    "publisher": "American Association of Motor Vehicle Administrators",
+    "url": "https://www.aamva.org/getmedia/8e906e6f-9b5c-4a2c-b22e-7905c523e387/AAMVA-Motorcycle-Operator-Manual.pdf",
+    "access": "public",
+    "published": 2015,
     "verifiedCurrentIn": 2026
   },
   "xx-fhwa-mutcd": {

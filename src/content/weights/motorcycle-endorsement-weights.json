@@ -23,6 +23,12 @@
         "weight": 100,
         "note": "Georgia's knowledge exam pairs its road signs test with a road rules test, and DDS's own manuals say the Driver's Manual carries the information for it, so Georgia's traffic law is examined where most states' motorcycle manuals leave it out. Weighted level with signs and with the riding topics combined. A hunch until real p-values replace it."
       }
+    },
+    "ca": {
+      "rules-of-the-road": {
+        "weight": 25,
+        "note": "California's motorcycle handbook says its knowledge test questions are based on that handbook and the California Driver's Handbook, which carries the state's traffic law, so road rules are examined. Weighted well under the riding topics, since the DMV's published sample motorcycle test asks no road-rule question. A hunch until real p-values replace it."
+      }
     }
   }
 }
