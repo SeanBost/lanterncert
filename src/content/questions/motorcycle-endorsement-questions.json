@@ -8339,7 +8339,7 @@
     "meta": {
       "idKey": "247",
       "appliesTo": "GA",
-      "variantGroup": null,
+      "variantGroup": "mot-all-way-stop",
       "sisterQuestions": null,
       "topic": "rules-of-the-road",
       "source": "ga-dds-drivers-manual",
@@ -8441,7 +8441,7 @@
     "meta": {
       "idKey": "250",
       "appliesTo": "GA",
-      "variantGroup": null,
+      "variantGroup": "mot-emergency-vehicle-yield",
       "sisterQuestions": null,
       "topic": "rules-of-the-road",
       "source": "ga-dds-drivers-manual",
@@ -8543,7 +8543,7 @@
     "meta": {
       "idKey": "253",
       "appliesTo": "GA",
-      "variantGroup": null,
+      "variantGroup": "mot-crosswalk-stopped-vehicle",
       "sisterQuestions": null,
       "topic": "rules-of-the-road",
       "source": "ga-dds-drivers-manual",
@@ -8713,7 +8713,7 @@
     "meta": {
       "idKey": "258",
       "appliesTo": "GA",
-      "variantGroup": null,
+      "variantGroup": "mot-school-bus-stop",
       "sisterQuestions": null,
       "topic": "rules-of-the-road",
       "source": "ga-dds-drivers-manual",
@@ -9155,7 +9155,7 @@
     "meta": {
       "idKey": "271",
       "appliesTo": "GA",
-      "variantGroup": null,
+      "variantGroup": "mot-default-speed-city",
       "sisterQuestions": null,
       "topic": "rules-of-the-road",
       "source": "ga-dds-drivers-manual",
@@ -9189,7 +9189,7 @@
     "meta": {
       "idKey": "272",
       "appliesTo": "GA",
-      "variantGroup": null,
+      "variantGroup": "mot-default-speed-highway",
       "sisterQuestions": null,
       "topic": "rules-of-the-road",
       "source": "ga-dds-drivers-manual",
@@ -9325,7 +9325,7 @@
     "meta": {
       "idKey": "276",
       "appliesTo": "GA",
-      "variantGroup": null,
+      "variantGroup": "mot-handheld-phone",
       "sisterQuestions": null,
       "topic": "rules-of-the-road",
       "source": "ga-dds-drivers-manual",
@@ -9529,7 +9529,7 @@
     "meta": {
       "idKey": "282",
       "appliesTo": "GA",
-      "variantGroup": null,
+      "variantGroup": "mot-passing-bicyclist",
       "sisterQuestions": null,
       "topic": "rules-of-the-road",
       "source": "ga-dds-drivers-manual",
@@ -9699,7 +9699,7 @@
     "meta": {
       "idKey": "287",
       "appliesTo": "GA",
-      "variantGroup": null,
+      "variantGroup": "mot-railroad-gates",
       "sisterQuestions": null,
       "topic": "hazards-and-surfaces",
       "source": "ga-dds-drivers-manual",
@@ -9869,7 +9869,7 @@
     "meta": {
       "idKey": "292",
       "appliesTo": "GA",
-      "variantGroup": null,
+      "variantGroup": "mot-prescription-dui",
       "sisterQuestions": null,
       "topic": "fit-to-ride",
       "source": "ga-dds-drivers-manual",
@@ -9903,7 +9903,7 @@
     "meta": {
       "idKey": "293",
       "appliesTo": "GA",
-      "variantGroup": null,
+      "variantGroup": "mot-implied-consent",
       "sisterQuestions": null,
       "topic": "fit-to-ride",
       "source": "ga-dds-drivers-manual",
@@ -9937,7 +9937,7 @@
     "meta": {
       "idKey": "294",
       "appliesTo": "GA",
-      "variantGroup": null,
+      "variantGroup": "mot-high-beam-dimming",
       "sisterQuestions": null,
       "topic": "visibility-and-communication",
       "source": "ga-dds-drivers-manual",
@@ -10209,7 +10209,7 @@
     "meta": {
       "idKey": "302",
       "appliesTo": "GA",
-      "variantGroup": null,
+      "variantGroup": "mot-turn-signal-not-proof",
       "sisterQuestions": null,
       "topic": "search-and-strategy",
       "source": "ga-dds-drivers-manual",
@@ -10515,7 +10515,7 @@
     "meta": {
       "idKey": "311",
       "appliesTo": "GA",
-      "variantGroup": null,
+      "variantGroup": "mot-crash-scene-duties",
       "sisterQuestions": null,
       "topic": "rules-of-the-road",
       "source": "ga-dds-drivers-manual",
@@ -12379,6 +12379,1230 @@
       "kind": "rule",
       "label": null,
       "text": "Vehicles on your right only: ride the left or center of the lane."
+    }
+  },
+  "mot-ca-2-381": {
+    "meta": {
+      "idKey": "381",
+      "appliesTo": "CA",
+      "variantGroup": "mot-helmet-law",
+      "sisterQuestions": null,
+      "topic": "gear-and-bike-check",
+      "source": "ca-dmv-motorcycle-handbook",
+      "sourceSection": "Preparing to Ride, Wear the Right Gear, under Helmet Use and Helmet Selection.",
+      "note": null,
+      "dateCreated": "2026-10-12",
+      "lastEdited": null,
+      "lastVerified": "2026-10-12"
+    },
+    "content": {
+      "question": "Under California law, who must wear a DOT-compliant motorcycle helmet?",
+      "media": null,
+      "choices": [
+        { "id": "a", "text": "Every rider and every passenger" },
+        { "id": "b", "text": "Riders only; passengers may choose" },
+        { "id": "c", "text": "Riders and passengers under 21 only" },
+        { "id": "d", "text": "Anyone riding on a freeway or highway" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "California requires every rider and every passenger to wear a helmet that meets the federal DOT standard. The DOT marking on the back should be the manufacturer's own, never a sticker. Eye and face protection is strongly advised but not required by law."
+    },
+    "guide": {
+      "group": null,
+      "order": 15,
+      "kind": "rule",
+      "label": null,
+      "text": "Every rider and passenger must wear a DOT-compliant helmet, with the maker's DOT marking on the back, not a sticker. Eye protection is advised, not required."
+    }
+  },
+  "mot-ca-10-382": {
+    "meta": {
+      "idKey": "382",
+      "appliesTo": "CA",
+      "variantGroup": "mot-headset-law",
+      "sisterQuestions": null,
+      "topic": "rules-of-the-road",
+      "source": "ca-dmv-motorcycle-handbook",
+      "sourceSection": "Preparing to Ride, Wear the Right Gear, under Face, Eye, and Ear Protection.",
+      "note": null,
+      "dateCreated": "2026-10-12",
+      "lastEdited": null,
+      "lastVerified": "2026-10-12"
+    },
+    "content": {
+      "question": "In California, may you ride with earplugs or earphones in both ears?",
+      "media": null,
+      "choices": [
+        { "id": "a", "text": "Only noise-reducing earplugs that let you hear sirens and horns" },
+        { "id": "b", "text": "Yes, any earplugs or earphones, as long as the volume stays low" },
+        { "id": "c", "text": "No, never; one ear must always stay uncovered while you ride" },
+        { "id": "d", "text": "Yes, but only on freeways, where the wind noise is worst" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "Riding with a headset, earphones or earplugs in both ears is against California law. The one exception is hearing protection made to cut damaging noise, and even that must still let you hear a siren or another vehicle's horn."
+    },
+    "guide": {
+      "group": "phones-headphones-and-conduct",
+      "order": 20,
+      "kind": "rule",
+      "label": null,
+      "text": "No headset, earphones or earplugs in both ears, except noise-reducing earplugs that still let you hear sirens and horns."
+    }
+  },
+  "mot-ca-1-384": {
+    "meta": {
+      "idKey": "384",
+      "appliesTo": "CA",
+      "variantGroup": "mot-permit-restrictions",
+      "sisterQuestions": null,
+      "topic": "fit-to-ride",
+      "source": "ca-dmv-motorcycle-handbook",
+      "sourceSection": "License Requirements, the M1/M2 requirements table, Note 4.",
+      "note": null,
+      "dateCreated": "2026-10-12",
+      "lastEdited": null,
+      "lastVerified": "2026-10-12"
+    },
+    "content": {
+      "question": "In California, what limits apply while you ride on a motorcycle instruction permit?",
+      "media": null,
+      "choices": [
+        { "id": "a", "text": "No passengers, no freeways and no riding after dark" },
+        { "id": "b", "text": "No passengers, but freeways and night riding are allowed" },
+        { "id": "c", "text": "No freeways, but a licensed passenger may ride with you" },
+        { "id": "d", "text": "No limits, as long as a licensed rider follows you" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "A California motorcycle permit bars three things: carrying a passenger, riding on a freeway and riding at night."
+    },
+    "guide": {
+      "group": null,
+      "order": 25,
+      "kind": "value",
+      "label": "Permit limits",
+      "text": "No passengers, no freeways, no night riding."
+    }
+  },
+  "mot-ca-3-385": {
+    "meta": {
+      "idKey": "385",
+      "appliesTo": "CA",
+      "variantGroup": "mot-friction-zone",
+      "sisterQuestions": null,
+      "topic": "basic-control",
+      "source": "ca-dmv-motorcycle-handbook",
+      "sourceSection": "Ride Within Your Abilities, Basic Vehicle Control, under U-turns.",
+      "note": null,
+      "dateCreated": "2026-10-12",
+      "lastEdited": null,
+      "lastVerified": "2026-10-12"
+    },
+    "content": {
+      "question": "You are making a slow, tight U-turn. Where should you keep the clutch for the most control?",
+      "media": null,
+      "choices": [
+        { "id": "a", "text": "In the friction zone, where it is only partly engaged" },
+        { "id": "b", "text": "Pulled fully in, so the motorcycle coasts through" },
+        { "id": "c", "text": "Fully released, controlling speed with the throttle alone" },
+        { "id": "d", "text": "Snapped in and out in quick bursts to keep speed down" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "The friction zone is where the clutch is partly engaged, neither fully engaged nor fully released. Working the clutch there through a U-turn gives you more control."
+    },
+    "guide": {
+      "group": null,
+      "order": 115,
+      "kind": "value",
+      "label": "Friction zone",
+      "text": "Where the clutch is partly engaged, neither fully engaged nor released. Use it for control in slow, tight turns."
+    }
+  },
+  "mot-ca-10-386": {
+    "meta": {
+      "idKey": "386",
+      "appliesTo": "CA",
+      "variantGroup": "mot-hov-lanes",
+      "sisterQuestions": null,
+      "topic": "rules-of-the-road",
+      "source": "ca-dmv-motorcycle-handbook",
+      "sourceSection": "Ride Within Your Abilities, Keeping Your Distance, under Carpool/HOV Lanes.",
+      "note": null,
+      "dateCreated": "2026-10-12",
+      "lastEdited": null,
+      "lastVerified": "2026-10-12"
+    },
+    "content": {
+      "question": "You are riding alone on a California freeway and want to use the carpool lane. Which is true?",
+      "media": null,
+      "choices": [
+        { "id": "a", "text": "You may unless posted, entering only at marked openings" },
+        { "id": "b", "text": "You may not, since a rider alone does not count as a carpool" },
+        { "id": "c", "text": "You may, and you can cross its double lines wherever it is safe" },
+        { "id": "d", "text": "You may, but you need a decal on the motorcycle to use it" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "A motorcycle may use a California carpool lane with only the rider aboard, unless signs say otherwise. Get in and out only at the marked entry and exit points, never across the double parallel lines."
+    },
+    "guide": {
+      "group": "expressways",
+      "order": 30,
+      "kind": "rule",
+      "label": null,
+      "text": "Motorcycles may use carpool lanes, a lone rider included, unless posted. Enter and exit only at marked openings, never across the double lines."
+    }
+  },
+  "mot-ca-5-387": {
+    "meta": {
+      "idKey": "387",
+      "appliesTo": "CA",
+      "variantGroup": "mot-stopping-distance-like-cars",
+      "sisterQuestions": null,
+      "topic": "space-management",
+      "source": "ca-dmv-motorcycle-handbook",
+      "sourceSection": "Ride Within Your Abilities, Keeping Your Distance, under Following Another Vehicle.",
+      "note": null,
+      "dateCreated": "2026-10-12",
+      "lastEdited": null,
+      "lastVerified": "2026-10-12"
+    },
+    "content": {
+      "question": "Compared with a car in the same traffic, how much room does a motorcycle need to stop?",
+      "media": null,
+      "choices": [
+        { "id": "a", "text": "About as much as the car needs" },
+        { "id": "b", "text": "About half as much, since it weighs less" },
+        { "id": "c", "text": "Twice as much, having only two tires" },
+        { "id": "d", "text": "Less, as long as both brakes are used" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "A motorcycle takes about as much distance to stop as the cars around it, so leave room ahead on that basis. Riding too close behind can be a factor in collisions involving riders."
+    },
+    "guide": {
+      "group": "following-distance",
+      "order": 30,
+      "kind": "value",
+      "label": "Stopping distance",
+      "text": "As much as other vehicles need."
+    }
+  },
+  "mot-ca-5-388": {
+    "meta": {
+      "idKey": "388",
+      "appliesTo": "CA",
+      "variantGroup": "mot-following-distance-baseline",
+      "sisterQuestions": null,
+      "topic": "space-management",
+      "source": "ca-dmv-motorcycle-handbook",
+      "sourceSection": "Ride Within Your Abilities, under Following Another Vehicle and Riding at Night.",
+      "note": null,
+      "dateCreated": "2026-10-12",
+      "lastEdited": null,
+      "lastVerified": "2026-10-12"
+    },
+    "content": {
+      "question": "In California, what is the minimum following distance a rider should normally keep behind the vehicle ahead?",
+      "media": null,
+      "choices": [
+        { "id": "a", "text": "At least two seconds" },
+        { "id": "b", "text": "At least one second" },
+        { "id": "c", "text": "At least four seconds" },
+        { "id": "d", "text": "At least five seconds" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "In California, a rider's normal following distance is at least two seconds: just enough room to brake or steer around a vehicle that stops short ahead of you. Make it three seconds or more at night, on slippery pavement, in heavy traffic, or behind a vehicle you can't see through."
+    },
+    "guide": {
+      "group": "following-distance",
+      "order": 5,
+      "kind": "value",
+      "label": "Following distance",
+      "text": "At least 2 seconds normally; 3 or more at night or in poor conditions."
+    }
+  },
+  "mot-ca-10-389": {
+    "meta": {
+      "idKey": "389",
+      "appliesTo": "CA",
+      "variantGroup": "mot-lane-sharing",
+      "sisterQuestions": null,
+      "topic": "rules-of-the-road",
+      "source": "ca-dmv-driver-handbook",
+      "sourceSection": "Section 7, Laws and Rules of the Road, Sharing the Road, under Motorcycles.",
+      "note": "Only the Driver's Handbook states that lane splitting is legal; the Motorcycle Handbook defines it without saying so.",
+      "dateCreated": "2026-10-12",
+      "lastEdited": null,
+      "lastVerified": "2026-10-12"
+    },
+    "content": {
+      "question": "Traffic on a California freeway has slowed to a crawl in both lanes. May you ride between the two lanes of cars?",
+      "media": null,
+      "choices": [
+        { "id": "a", "text": "Yes, lane splitting is legal in California" },
+        { "id": "b", "text": "No, a motorcycle must stay within one lane" },
+        { "id": "c", "text": "Not until the traffic has come to a full stop" },
+        { "id": "d", "text": "Not unless a sign says lane splitting is allowed" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "Yes. California law allows a motorcycle to share a lane with other traffic, which is called lane splitting."
+    },
+    "guide": {
+      "group": "speed-and-lanes",
+      "order": 60,
+      "kind": "rule",
+      "label": null,
+      "text": "Lane splitting, a motorcycle sharing a lane with other traffic, is legal."
+    }
+  },
+  "mot-ca-3-390": {
+    "meta": {
+      "idKey": "390",
+      "appliesTo": "CA",
+      "variantGroup": "mot-underbrake-front",
+      "sisterQuestions": null,
+      "topic": "basic-control",
+      "source": "ca-dmv-motorcycle-handbook",
+      "sourceSection": "Ride Within Your Abilities, under Collision Avoidance.",
+      "note": null,
+      "dateCreated": "2026-10-12",
+      "lastEdited": null,
+      "lastVerified": "2026-10-12"
+    },
+    "content": {
+      "question": "Riders involved in collisions most often make which braking mistake?",
+      "media": null,
+      "choices": [
+        { "id": "a", "text": "Too little front brake and too much rear" },
+        { "id": "b", "text": "Too much front brake and too little rear" },
+        { "id": "c", "text": "Using both brakes together instead of one" },
+        { "id": "d", "text": "Braking too early, well before they need to" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "Most riders in collisions use the front brake too little and the rear too much. The front brake supplies about three-quarters of your stopping power, so make full use of it, squeezing it on rather than grabbing."
+    },
+    "guide": {
+      "group": null,
+      "order": 410,
+      "kind": "rule",
+      "label": null,
+      "text": "Most riders in collisions underuse the front brake and overuse the rear."
+    }
+  },
+  "mot-ca-8-391": {
+    "meta": {
+      "idKey": "391",
+      "appliesTo": "CA",
+      "variantGroup": "mot-passenger-equipment",
+      "sisterQuestions": null,
+      "topic": "passengers-and-cargo",
+      "source": "ca-dmv-motorcycle-handbook",
+      "sourceSection": "Carrying Passengers and Cargo, under Equipment.",
+      "note": null,
+      "dateCreated": "2026-10-12",
+      "lastEdited": null,
+      "lastVerified": "2026-10-12"
+    },
+    "content": {
+      "question": "You plan to carry a passenger. What should your motorcycle have first?",
+      "media": null,
+      "choices": [
+        { "id": "a", "text": "A seat big enough for two, and footrests for the passenger" },
+        { "id": "b", "text": "A backrest for the passenger, and a second pair of mirrors" },
+        { "id": "c", "text": "Saddlebags for the passenger's gear, and a taller windshield" },
+        { "id": "d", "text": "Handlebars moved so you can sit farther forward than usual" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "Set the motorcycle up for two: a seat with room for you both, so you aren't pushed farther forward than you usually sit, and footrests for the passenger. Solid footing keeps your passenger from slipping off and taking you with them."
+    },
+    "guide": {
+      "group": null,
+      "order": 10,
+      "kind": "rule",
+      "label": null,
+      "text": "To carry a passenger, have a seat with room for two and passenger footrests."
+    }
+  },
+  "mot-ca-1-392": {
+    "meta": {
+      "idKey": "392",
+      "appliesTo": "CA",
+      "variantGroup": "mot-bac-limits",
+      "sisterQuestions": null,
+      "topic": "fit-to-ride",
+      "source": "ca-dmv-motorcycle-handbook",
+      "sourceSection": "Being in Shape to Ride, under Blood Alcohol Concentration and Alcohol and the Law.",
+      "note": null,
+      "dateCreated": "2026-10-12",
+      "lastEdited": null,
+      "lastVerified": "2026-10-12"
+    },
+    "content": {
+      "question": "In California, at what blood alcohol concentration is it illegal to ride?",
+      "media": null,
+      "choices": [
+        { "id": "a", "text": "0.08 at 21 or older, 0.01 under 21" },
+        { "id": "b", "text": "0.08 at 21 or older, 0.02 under 21" },
+        { "id": "c", "text": "0.10 at 21 or older, 0.05 under 21" },
+        { "id": "d", "text": "0.08 for every rider, whatever their age" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "At 21 and older, riding with a BAC of 0.08 or more is illegal in California. Under 21 the limit is 0.01, which is zero tolerance. Seeming sober counts for nothing; a breath or blood test decides."
+    },
+    "guide": {
+      "group": null,
+      "order": 10,
+      "kind": "value",
+      "label": "Legal BAC limit",
+      "text": "0.08 at 21 or older; 0.01 under 21. A breath or blood test decides, not how sober you seem."
+    }
+  },
+  "mot-ca-1-393": {
+    "meta": {
+      "idKey": "393",
+      "appliesTo": "CA",
+      "variantGroup": "mot-moped-license-class",
+      "sisterQuestions": null,
+      "topic": "fit-to-ride",
+      "source": "ca-dmv-motorcycle-handbook",
+      "sourceSection": "License Requirements, the M1 and M2 class list and the class chart.",
+      "note": "DL 665's class chart also lets any license class ride a short-term rental motorized bicycle, which is why the stem says the moped was bought.",
+      "dateCreated": "2026-10-12",
+      "lastEdited": null,
+      "lastVerified": "2026-10-12"
+    },
+    "content": {
+      "question": "You have bought a moped to ride in California. What is the lowest license class that lets you ride it?",
+      "media": null,
+      "choices": [
+        { "id": "a", "text": "Class M2, which covers mopeds" },
+        { "id": "b", "text": "Class M1, which covers motorcycles" },
+        { "id": "c", "text": "Any class of driver's license" },
+        { "id": "d", "text": "None, since a moped has pedals" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "In California a moped calls for at least a Class M2 license, which also covers motorized bicycles and scooters. A Class M1 covers every two-wheel motorcycle as well as everything an M2 does."
+    },
+    "guide": {
+      "group": null,
+      "order": 22,
+      "kind": "value",
+      "label": "License classes",
+      "text": "M1: any two-wheel motorcycle, plus everything M2 covers. M2: mopeds, motorized bicycles and scooters only."
+    }
+  },
+  "mot-msf-aamva-2-394": {
+    "meta": {
+      "idKey": "394",
+      "appliesTo": "msf-aamva",
+      "variantGroup": null,
+      "sisterQuestions": null,
+      "topic": "gear-and-bike-check",
+      "source": "xx-msf-operator-manual",
+      "sourceSection": "Wear the Right Gear, under Eye and Face Protection.",
+      "note": null,
+      "dateCreated": "2026-10-12",
+      "lastEdited": null,
+      "lastVerified": "2026-10-12"
+    },
+    "content": {
+      "question": "Which of these must good eye or face protection do?",
+      "media": null,
+      "choices": [
+        { "id": "a", "text": "Keep your view to both sides clear" },
+        { "id": "b", "text": "Seal tightly, so no air reaches your eyes" },
+        { "id": "c", "text": "Carry a tint, to cut glare day and night" },
+        { "id": "d", "text": "Fasten loosely, so it flips up quickly" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "Eye or face protection has to leave your view to both sides clear. It should also let air through so it doesn't fog, stay free of scratches, resist punctures, leave room for glasses, and fasten firmly enough not to blow off."
+    },
+    "guide": {
+      "group": null,
+      "order": 45,
+      "kind": "value",
+      "label": "Eye protection",
+      "text": "Clear side vision, vented against fogging, scratch-free, puncture-resistant, room for glasses, fastened securely."
+    }
+  },
+  "mot-ca-3-395": {
+    "meta": {
+      "idKey": "395",
+      "appliesTo": "CA",
+      "variantGroup": null,
+      "sisterQuestions": null,
+      "topic": "basic-control",
+      "source": "ca-dmv-motorcycle-handbook",
+      "sourceSection": "Ride Within Your Abilities, Basic Vehicle Control, under U-turns.",
+      "note": null,
+      "dateCreated": "2026-10-12",
+      "lastEdited": null,
+      "lastVerified": "2026-10-12"
+    },
+    "content": {
+      "question": "Which brake should you use to control your speed in a slow, tight U-turn?",
+      "media": null,
+      "choices": [
+        { "id": "a", "text": "The rear brake, dragged lightly" },
+        { "id": "b", "text": "The front brake, squeezed gently" },
+        { "id": "c", "text": "Both brakes together, as for any stop" },
+        { "id": "d", "text": "Neither, just the throttle and clutch" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "Lightly dragging the rear brake keeps your speed down and the motorcycle steady through a tight U-turn. Leave the front brake alone; it can tip the motorcycle over."
+    },
+    "guide": {
+      "group": null,
+      "order": 117,
+      "kind": "rule",
+      "label": null,
+      "text": "In a slow, tight U-turn, drag the rear brake to control speed. Keep off the front, which can tip the motorcycle over."
+    }
+  },
+  "mot-msf-aamva-5-396": {
+    "meta": {
+      "idKey": "396",
+      "appliesTo": "msf-aamva",
+      "variantGroup": null,
+      "sisterQuestions": null,
+      "topic": "space-management",
+      "source": "xx-msf-operator-manual",
+      "sourceSection": "Ride Within Your Abilities, under Lane Positions.",
+      "note": null,
+      "dateCreated": "2026-10-12",
+      "lastEdited": null,
+      "lastVerified": "2026-10-12"
+    },
+    "content": {
+      "question": "Which lane position is the best one for a motorcycle?",
+      "media": null,
+      "choices": [
+        { "id": "a", "text": "It depends on traffic and road conditions" },
+        { "id": "b", "text": "The left portion, next to the center line" },
+        { "id": "c", "text": "The right portion, next to the curb" },
+        { "id": "d", "text": "The center, away from both edges" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "There is no lane position that is always best. Pick the part of the lane where drivers can see you and you keep space around you, and move as traffic and road conditions change."
+    },
+    "guide": {
+      "group": "lane-position",
+      "order": 5,
+      "kind": "rule",
+      "label": null,
+      "text": "No lane position is always best. Ride where you are seen and keep space around you, and shift as conditions change."
+    }
+  },
+  "mot-ca-10-397": {
+    "meta": {
+      "idKey": "397",
+      "appliesTo": "CA",
+      "variantGroup": "mot-passing-within-speed-limit",
+      "sisterQuestions": null,
+      "topic": "rules-of-the-road",
+      "source": "ca-dmv-motorcycle-handbook",
+      "sourceSection": "Ride Within Your Abilities, Keeping Your Distance, under Passing.",
+      "note": null,
+      "dateCreated": "2026-10-12",
+      "lastEdited": null,
+      "lastVerified": "2026-10-12"
+    },
+    "content": {
+      "question": "You are passing a slower vehicle. May you go over the speed limit to finish the pass?",
+      "media": null,
+      "choices": [
+        { "id": "a", "text": "No, a pass must be completed within the posted limit" },
+        { "id": "b", "text": "Yes, briefly, to get back into your lane sooner" },
+        { "id": "c", "text": "Yes, by up to 10 mph, as long as you are passing" },
+        { "id": "d", "text": "Yes, on a two-lane road where passing time is short" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "No. A pass has to be finished within the posted speed limit, and made only where passing is allowed."
+    },
+    "guide": {
+      "group": "passing",
+      "order": 15,
+      "kind": "rule",
+      "label": null,
+      "text": "Finish every pass within the posted speed limit, and pass only where it is allowed."
+    }
+  },
+  "mot-ca-4-398": {
+    "meta": {
+      "idKey": "398",
+      "appliesTo": "CA",
+      "variantGroup": null,
+      "sisterQuestions": null,
+      "topic": "visibility-and-communication",
+      "source": "ca-dmv-motorcycle-handbook",
+      "sourceSection": "Ride Within Your Abilities, Increasing Visibility, under Turn Signals.",
+      "note": null,
+      "dateCreated": "2026-10-12",
+      "lastEdited": null,
+      "lastVerified": "2026-10-12"
+    },
+    "content": {
+      "question": "In California, how far ahead of a turn should you signal?",
+      "media": null,
+      "choices": [
+        { "id": "a", "text": "Through the last 100 feet before the turn" },
+        { "id": "b", "text": "Just as you start to make the turn" },
+        { "id": "c", "text": "Through the last 25 feet before the turn" },
+        { "id": "d", "text": "Only when another vehicle is close behind" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "California riders signal a turn through the last 100 feet before it. At highway speed, signal at least five seconds before changing lanes, and signal even when no one seems to be around."
+    },
+    "guide": {
+      "group": null,
+      "order": 115,
+      "kind": "value",
+      "label": "Signal timing",
+      "text": "Through the last 100 feet before a turn; at highway speed, at least 5 seconds before a lane change."
+    }
+  },
+  "mot-ca-10-399": {
+    "meta": {
+      "idKey": "399",
+      "appliesTo": "CA",
+      "variantGroup": null,
+      "sisterQuestions": null,
+      "topic": "rules-of-the-road",
+      "source": "ca-dmv-motorcycle-handbook",
+      "sourceSection": "Ride Within Your Abilities, under Group Riding.",
+      "note": null,
+      "dateCreated": "2026-10-12",
+      "lastEdited": null,
+      "lastVerified": "2026-10-12"
+    },
+    "content": {
+      "question": "Riding in a group, the first two riders make it through a green light before it turns red. What must the riders behind them do?",
+      "media": null,
+      "choices": [
+        { "id": "a", "text": "Stop for the red light like any other vehicle" },
+        { "id": "b", "text": "Follow through, so the group stays together" },
+        { "id": "c", "text": "Follow through if the leader waves them on" },
+        { "id": "d", "text": "Go through after a full stop, as a group" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "Every rider in a group obeys stop signs and signals, as any vehicle must; a group gets no exception to stay together. Once riders are split up, the ones ahead slow down a little so the group can come back together."
+    },
+    "guide": {
+      "group": null,
+      "order": 5,
+      "kind": "rule",
+      "label": null,
+      "text": "In a group, every rider obeys signals and stop signs. Nobody runs a light to keep up."
+    }
+  },
+  "mot-ca-10-400": {
+    "meta": {
+      "idKey": "400",
+      "appliesTo": "CA",
+      "variantGroup": "mot-right-on-red",
+      "sisterQuestions": null,
+      "topic": "rules-of-the-road",
+      "source": "ca-dmv-driver-handbook",
+      "sourceSection": "Section 6, Navigating the Roads, Turns; Section 7, Traffic Signals.",
+      "note": null,
+      "dateCreated": "2026-10-12",
+      "lastEdited": null,
+      "lastVerified": "2026-10-12"
+    },
+    "content": {
+      "question": "You are stopped at a red light and want to turn right. When may you make the turn?",
+      "media": null,
+      "choices": [
+        { "id": "a", "text": "After a full stop, unless a sign forbids it or it is a red arrow" },
+        { "id": "b", "text": "Without stopping, as long as no traffic is coming from the left" },
+        { "id": "c", "text": "Only where a sign says turning right on red is allowed" },
+        { "id": "d", "text": "Not until the light turns green, since red means stay stopped" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "After a full stop at the limit line, you may turn right on a red light once pedestrians and traffic are clear, unless a NO TURN ON RED sign is posted. A red arrow is different: stay stopped until it turns green. You may also turn left on red from a one-way street onto another one-way street."
+    },
+    "guide": {
+      "group": "turns",
+      "order": 30,
+      "kind": "value",
+      "label": "Turning on red",
+      "text": "Right: after a full stop, unless a sign forbids it, and never on a red arrow. Left: only from a one-way street onto a one-way street."
+    }
+  },
+  "mot-ca-10-401": {
+    "meta": {
+      "idKey": "401",
+      "appliesTo": "CA",
+      "variantGroup": "mot-move-over-law",
+      "sisterQuestions": null,
+      "topic": "rules-of-the-road",
+      "source": "ca-dmv-driver-handbook",
+      "sourceSection": "Section 7, Laws and Rules of the Road, under Move Over and Slow Down.",
+      "note": null,
+      "dateCreated": "2026-10-12",
+      "lastEdited": null,
+      "lastVerified": "2026-10-12"
+    },
+    "content": {
+      "question": "In California, a tow truck is stopped on the shoulder ahead with its amber lights flashing. What does the law require of you?",
+      "media": null,
+      "choices": [
+        { "id": "a", "text": "Move over and slow down as you go past" },
+        { "id": "b", "text": "Nothing; a tow truck is not an emergency vehicle" },
+        { "id": "c", "text": "Stop behind it until the driver waves you on" },
+        { "id": "d", "text": "Slow down only if it blocks part of your lane" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "California's Move Over law covers more than police cars and ambulances. Move over and slow down for a stopped emergency vehicle or tow truck with flashing amber lights, and for a stopped road work vehicle showing flashing or amber lights."
+    },
+    "guide": {
+      "group": "officers-and-work-zones",
+      "order": 30,
+      "kind": "value",
+      "label": "Move Over law",
+      "text": "Move over and slow down for stopped emergency vehicles, tow trucks and road work vehicles with flashing lights."
+    }
+  },
+  "mot-ca-7-402": {
+    "meta": {
+      "idKey": "402",
+      "appliesTo": "CA",
+      "variantGroup": "mot-night-stopping-distance",
+      "sisterQuestions": null,
+      "topic": "hazards-and-surfaces",
+      "source": "ca-dmv-driver-handbook",
+      "sourceSection": "Section 8, Safe Driving, Understand the Road Conditions, under Darkness.",
+      "note": null,
+      "dateCreated": "2026-10-12",
+      "lastEdited": null,
+      "lastVerified": "2026-10-12"
+    },
+    "content": {
+      "question": "Riding at night, how should you set your speed?",
+      "media": null,
+      "choices": [
+        { "id": "a", "text": "So you can stop within the distance your headlight lights up" },
+        { "id": "b", "text": "To match the speed of the traffic around you" },
+        { "id": "c", "text": "To the posted limit, which already allows for darkness" },
+        { "id": "d", "text": "So you can stop before the taillights you see ahead" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "At night, keep your speed low enough that you can stop within the stretch of road your headlight lights up."
+    },
+    "guide": {
+      "group": null,
+      "order": 80,
+      "kind": "rule",
+      "label": null,
+      "text": null
+    }
+  },
+  "mot-ca-10-403": {
+    "meta": {
+      "idKey": "403",
+      "appliesTo": "CA",
+      "variantGroup": "mot-emergency-vehicle-yield",
+      "sisterQuestions": null,
+      "topic": "rules-of-the-road",
+      "source": "ca-dmv-driver-handbook",
+      "sourceSection": "Section 7, Laws and Rules of the Road, Sharing the Road, under Emergency Vehicles.",
+      "note": null,
+      "dateCreated": "2026-10-12",
+      "lastEdited": null,
+      "lastVerified": "2026-10-12"
+    },
+    "content": {
+      "question": "You are halfway across an intersection when an ambulance comes up behind you with its siren on and red lights flashing. What should you do?",
+      "media": null,
+      "choices": [
+        { "id": "a", "text": "Keep going through, then pull to the right edge and stop" },
+        { "id": "b", "text": "Stop right where you are, in the intersection" },
+        { "id": "c", "text": "Speed up to stay well ahead of the ambulance" },
+        { "id": "d", "text": "Move to the left so it can pass you on the right" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "Give way to any emergency vehicle using its siren and red lights: drive to the right edge of the road and stop until it has passed. If you are already in an intersection, clear it first, then pull right and stop. Once it has gone by, don't follow within 300 feet while its siren or lights are on."
+    },
+    "guide": {
+      "group": "officers-and-work-zones",
+      "order": 20,
+      "kind": "value",
+      "label": "Emergency vehicles",
+      "text": "Siren and red lights: pull to the right edge and stop, clearing any intersection first. Never follow within 300 feet."
+    }
+  },
+  "mot-ca-10-404": {
+    "meta": {
+      "idKey": "404",
+      "appliesTo": "CA",
+      "variantGroup": "mot-school-bus-stop",
+      "sisterQuestions": null,
+      "topic": "rules-of-the-road",
+      "source": "ca-dmv-driver-handbook",
+      "sourceSection": "Section 7, Laws and Rules of the Road, under Around Children.",
+      "note": null,
+      "dateCreated": "2026-10-12",
+      "lastEdited": null,
+      "lastVerified": "2026-10-12"
+    },
+    "content": {
+      "question": "On a California road with one lane each way, a school bus stopped on the other side has its red lights flashing. What must you do?",
+      "media": null,
+      "choices": [
+        { "id": "a", "text": "Stop, and stay stopped until the lights stop flashing" },
+        { "id": "b", "text": "Slow down and pass with care, since it is across the road" },
+        { "id": "c", "text": "Stop, then go once the children reach the curb" },
+        { "id": "d", "text": "Nothing; only traffic behind the bus must stop" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "Flashing red lights on a school bus mean every vehicle stops, from either direction, and stays stopped until the children are across and the lights go off. The exception is a bus on the other side of a divided highway, or one with two or more lanes each way. Flashing yellow lights mean the bus is about to stop: slow down and get ready to stop."
+    },
+    "guide": {
+      "group": "school-buses",
+      "order": 20,
+      "kind": "value",
+      "label": "School bus",
+      "text": "Red lights flashing: stop from either direction until they go off, unless the bus is across a divided or multilane highway. Yellow: get ready to stop."
+    }
+  },
+  "mot-ca-10-405": {
+    "meta": {
+      "idKey": "405",
+      "appliesTo": "CA",
+      "variantGroup": "mot-crosswalk-stopped-vehicle",
+      "sisterQuestions": null,
+      "topic": "rules-of-the-road",
+      "source": "ca-dmv-driver-handbook",
+      "sourceSection": "Section 7, Laws and Rules of the Road, under Pedestrians.",
+      "note": null,
+      "dateCreated": "2026-10-12",
+      "lastEdited": null,
+      "lastVerified": "2026-10-12"
+    },
+    "content": {
+      "question": "The car in the lane beside you stops at a crosswalk, and you can't see why. What should you do?",
+      "media": null,
+      "choices": [
+        { "id": "a", "text": "Stop as well; it may be hiding someone crossing" },
+        { "id": "b", "text": "Ride on past, since your own lane is clear" },
+        { "id": "c", "text": "Sound your horn, then pass it slowly" },
+        { "id": "d", "text": "Pass it, as long as you see no one in the road" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "Never pass a vehicle stopped at a crosswalk. It may be blocking your view of a pedestrian crossing in front of it."
+    },
+    "guide": {
+      "group": "right-of-way",
+      "order": 60,
+      "kind": "rule",
+      "label": null,
+      "text": null
+    }
+  },
+  "mot-ca-10-406": {
+    "meta": {
+      "idKey": "406",
+      "appliesTo": "CA",
+      "variantGroup": "mot-all-way-stop",
+      "sisterQuestions": null,
+      "topic": "rules-of-the-road",
+      "source": "ca-dmv-driver-handbook",
+      "sourceSection": "Section 7, Laws and Rules of the Road, Right-of-Way Rules, under Intersections.",
+      "note": null,
+      "dateCreated": "2026-10-12",
+      "lastEdited": null,
+      "lastVerified": "2026-10-12"
+    },
+    "content": {
+      "question": "You and a car reach a four-way stop at the same moment, and the car is on your right. Who goes first?",
+      "media": null,
+      "choices": [
+        { "id": "a", "text": "The car on your right" },
+        { "id": "b", "text": "You, since the car is on your right" },
+        { "id": "c", "text": "Whichever of you is going straight" },
+        { "id": "d", "text": "The car, since it is the larger vehicle" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "Where there are no signs, or at a four-way stop once you have both stopped, the first to arrive goes first. When two arrive together, yield to the one on your right. And never insist on your right-of-way: give it up whenever that would prevent a collision."
+    },
+    "guide": {
+      "group": "right-of-way",
+      "order": 30,
+      "kind": "value",
+      "label": "Who goes first",
+      "text": "First to arrive goes first; arriving together, yield to the vehicle on your right. Give up your right-of-way to prevent a collision."
+    }
+  },
+  "mot-ca-10-407": {
+    "meta": {
+      "idKey": "407",
+      "appliesTo": "CA",
+      "variantGroup": "mot-default-speed-city",
+      "sisterQuestions": null,
+      "topic": "rules-of-the-road",
+      "source": "ca-dmv-driver-handbook",
+      "sourceSection": "Section 7, Laws and Rules of the Road, under Business or Residential Districts.",
+      "note": null,
+      "dateCreated": "2026-10-12",
+      "lastEdited": null,
+      "lastVerified": "2026-10-12"
+    },
+    "content": {
+      "question": "In California, what is the speed limit in a business or residential district when no limit is posted?",
+      "media": null,
+      "choices": [
+        { "id": "a", "text": "25 mph" },
+        { "id": "b", "text": "30 mph" },
+        { "id": "c", "text": "35 mph" },
+        { "id": "d", "text": "20 mph" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "Unless signs say otherwise, the limit in a California business or residential district is 25 mph, and the same within 500 feet of a school while children are outside. Alleys and blind intersections are 15 mph, as is the last 100 feet before a railroad crossing whose tracks you can't see 400 feet each way."
+    },
+    "guide": {
+      "group": "speed-and-lanes",
+      "order": 10,
+      "kind": "value",
+      "label": "City speed limits",
+      "text": "25 mph in business and residential districts and near a school with children outside; 15 mph in alleys and at blind intersections."
+    }
+  },
+  "mot-ca-10-408": {
+    "meta": {
+      "idKey": "408",
+      "appliesTo": "CA",
+      "variantGroup": "mot-default-speed-highway",
+      "sisterQuestions": null,
+      "topic": "rules-of-the-road",
+      "source": "ca-dmv-driver-handbook",
+      "sourceSection": "Section 8, Safe Driving, under Manage Your Speed.",
+      "note": null,
+      "dateCreated": "2026-10-12",
+      "lastEdited": null,
+      "lastVerified": "2026-10-12"
+    },
+    "content": {
+      "question": "On most California highways, what is the top speed when no other limit is posted?",
+      "media": null,
+      "choices": [
+        { "id": "a", "text": "65 mph" },
+        { "id": "b", "text": "70 mph" },
+        { "id": "c", "text": "55 mph" },
+        { "id": "d", "text": "75 mph" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "Unless posted otherwise, most California highways top out at 65 mph, and two-lane undivided highways at 55. Whatever the limit, California's Basic Speed Law bars riding faster than is safe for the conditions."
+    },
+    "guide": {
+      "group": "speed-and-lanes",
+      "order": 20,
+      "kind": "value",
+      "label": "Highway speed limits",
+      "text": "65 mph on most highways and 55 on two-lane undivided ones, unless posted. Never faster than conditions safely allow."
+    }
+  },
+  "mot-ca-10-409": {
+    "meta": {
+      "idKey": "409",
+      "appliesTo": "CA",
+      "variantGroup": "mot-handheld-phone",
+      "sisterQuestions": null,
+      "topic": "rules-of-the-road",
+      "source": "ca-dmv-driver-handbook",
+      "sourceSection": "Section 8, Safe Driving, under Cell Phones and Texting; Minors and Cell Phones.",
+      "note": null,
+      "dateCreated": "2026-10-12",
+      "lastEdited": null,
+      "lastVerified": "2026-10-12"
+    },
+    "content": {
+      "question": "Riding in California, how may an adult rider use a cell phone?",
+      "media": null,
+      "choices": [
+        { "id": "a", "text": "Hands-free only, never holding it" },
+        { "id": "b", "text": "Holding it for calls, but not for texting" },
+        { "id": "c", "text": "Never; any cell phone use while operating a vehicle is always illegal" },
+        { "id": "d", "text": "Texting is fine if the phone is mounted" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "Using a hand-held phone while you ride is illegal in California. An adult may use hands-free mode when it's truly necessary, but shouldn't send or read texts. A rider under 18 may not use a phone for calls or texts at all, except to call for emergency help."
+    },
+    "guide": {
+      "group": "phones-headphones-and-conduct",
+      "order": 10,
+      "kind": "rule",
+      "label": null,
+      "text": "Hand-held phone use is illegal. Adults: hands-free only when necessary, and no texting. Under 18: no calls or texts except in an emergency."
+    }
+  },
+  "mot-ca-4-410": {
+    "meta": {
+      "idKey": "410",
+      "appliesTo": "CA",
+      "variantGroup": "mot-high-beam-dimming",
+      "sisterQuestions": null,
+      "topic": "visibility-and-communication",
+      "source": "ca-dmv-driver-handbook",
+      "sourceSection": "Section 5, An Introduction to Driving, under Using Your Headlights.",
+      "note": null,
+      "dateCreated": "2026-10-12",
+      "lastEdited": null,
+      "lastVerified": "2026-10-12"
+    },
+    "content": {
+      "question": "In California, you are riding at night with your high beam on. When must you switch to low beam?",
+      "media": null,
+      "choices": [
+        { "id": "a", "text": "Within 500 feet of an oncoming vehicle or 300 feet of one you follow" },
+        { "id": "b", "text": "Within 500 feet of an oncoming vehicle or 200 feet of one you follow" },
+        { "id": "c", "text": "Within 1,000 feet of any vehicle, coming or going" },
+        { "id": "d", "text": "Only when an oncoming driver flashes their lights at you" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "Dim to low beam within 500 feet of a vehicle coming toward you and within 300 feet of one you're following. On an open country road or a dark street with no one near, use your high beam."
+    },
+    "guide": {
+      "group": null,
+      "order": 20,
+      "kind": "value",
+      "label": "Dimming your high beam",
+      "text": "Within 500 feet of an oncoming vehicle, and 300 feet of one you follow."
+    }
+  },
+  "mot-ca-6-411": {
+    "meta": {
+      "idKey": "411",
+      "appliesTo": "CA",
+      "variantGroup": "mot-turn-signal-not-proof",
+      "sisterQuestions": null,
+      "topic": "search-and-strategy",
+      "source": "ca-dmv-driver-handbook",
+      "sourceSection": "Section 6, Navigating the Roads, under Crossing or Entering Traffic.",
+      "note": null,
+      "dateCreated": "2026-10-12",
+      "lastEdited": null,
+      "lastVerified": "2026-10-12"
+    },
+    "content": {
+      "question": "You are waiting to turn left, and an oncoming car has its right turn signal on. When is it safe to start your turn?",
+      "media": null,
+      "choices": [
+        { "id": "a", "text": "Once the car actually begins its turn" },
+        { "id": "b", "text": "As soon as you see its signal flashing" },
+        { "id": "c", "text": "Once the car slows near the corner" },
+        { "id": "d", "text": "When the driver waves you ahead" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "A signal shows what a driver may do, not what they will do. It may be on by mistake, or the driver may mean to turn just past you, so wait until the car actually starts its turn before you begin yours."
+    },
+    "guide": {
+      "group": null,
+      "order": 10,
+      "kind": "rule",
+      "label": null,
+      "text": "Turning left across an oncoming car signaling right, wait until it actually starts to turn."
+    }
+  },
+  "mot-ca-10-412": {
+    "meta": {
+      "idKey": "412",
+      "appliesTo": "CA",
+      "variantGroup": "mot-passing-bicyclist",
+      "sisterQuestions": null,
+      "topic": "rules-of-the-road",
+      "source": "ca-dmv-driver-handbook",
+      "sourceSection": "Section 7, Laws and Rules of the Road, Sharing the Road, under Passing a Bicyclist.",
+      "note": null,
+      "dateCreated": "2026-10-12",
+      "lastEdited": null,
+      "lastVerified": "2026-10-12"
+    },
+    "content": {
+      "question": "In California, you come up behind a bicyclist in your lane and can't change lanes. Oncoming traffic leaves you only about two feet to pass. What should you do?",
+      "media": null,
+      "choices": [
+        { "id": "a", "text": "Stay behind until you can give at least three feet" },
+        { "id": "b", "text": "Pass slowly, using the two feet you have" },
+        { "id": "c", "text": "Sound your horn so the rider moves over, then pass" },
+        { "id": "d", "text": "Pass, as long as you keep under 15 mph" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "When you can't move into another lane to pass a bicyclist, California requires at least three feet of space. If you can't give three feet, stay behind the rider until you can."
+    },
+    "guide": {
+      "group": "passing",
+      "order": 50,
+      "kind": "value",
+      "label": "Passing a bicyclist",
+      "text": "A lane away if you can. If not, at least 3 feet, and don't pass until you can give it."
+    }
+  },
+  "mot-ca-1-413": {
+    "meta": {
+      "idKey": "413",
+      "appliesTo": "CA",
+      "variantGroup": "mot-prescription-dui",
+      "sisterQuestions": null,
+      "topic": "fit-to-ride",
+      "source": "ca-dmv-driver-handbook",
+      "sourceSection": "Section 9, Alcohol and Drugs.",
+      "note": null,
+      "dateCreated": "2026-10-12",
+      "lastEdited": null,
+      "lastVerified": "2026-10-12"
+    },
+    "content": {
+      "question": "An over-the-counter allergy pill leaves you drowsy. Can riding after taking it count as DUI in California?",
+      "media": null,
+      "choices": [
+        { "id": "a", "text": "Yes, if it affects your ability to ride safely" },
+        { "id": "b", "text": "No, DUI covers only alcohol and illegal drugs" },
+        { "id": "c", "text": "No, not for a medicine sold without a prescription" },
+        { "id": "d", "text": "Only if you have also been drinking" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "California's DUI law covers any drug that affects your ability to drive safely, prescription and over-the-counter medicines included. Read the label and know how a medicine affects you before you ride."
+    },
+    "guide": {
+      "group": null,
+      "order": 20,
+      "kind": "rule",
+      "label": null,
+      "text": "DUI law covers any drug that impairs you, prescription and over-the-counter medicines included."
+    }
+  },
+  "mot-ca-1-414": {
+    "meta": {
+      "idKey": "414",
+      "appliesTo": "CA",
+      "variantGroup": "mot-implied-consent",
+      "sisterQuestions": null,
+      "topic": "fit-to-ride",
+      "source": "ca-dmv-driver-handbook",
+      "sourceSection": "Section 9, Alcohol and Drugs, under DUI Arrests.",
+      "note": null,
+      "dateCreated": "2026-10-12",
+      "lastEdited": null,
+      "lastVerified": "2026-10-12"
+    },
+    "content": {
+      "question": "An officer suspects you of riding under the influence and asks you to take a chemical test. Which is true in California?",
+      "media": null,
+      "choices": [
+        { "id": "a", "text": "By riding in California, you have already agreed to take it" },
+        { "id": "b", "text": "You may refuse it with no effect on your license" },
+        { "id": "c", "text": "You need take it only if you failed a roadside check" },
+        { "id": "d", "text": "You may insist on a breath test and refuse blood or urine" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "Riding in California means you have consented to a breath, blood or urine test whenever an officer suspects DUI. Even after a breath test, you may still be required to give blood or urine to check for drugs."
+    },
+    "guide": {
+      "group": null,
+      "order": 30,
+      "kind": "rule",
+      "label": null,
+      "text": "Riding in California means consenting to a breath, blood or urine test whenever an officer suspects DUI."
+    }
+  },
+  "mot-ca-7-415": {
+    "meta": {
+      "idKey": "415",
+      "appliesTo": "CA",
+      "variantGroup": "mot-railroad-gates",
+      "sisterQuestions": null,
+      "topic": "hazards-and-surfaces",
+      "source": "ca-dmv-driver-handbook",
+      "sourceSection": "Section 7, Laws and Rules of the Road, under Near Railroad or Light Rail Tracks.",
+      "note": null,
+      "dateCreated": "2026-10-12",
+      "lastEdited": null,
+      "lastVerified": "2026-10-12"
+    },
+    "content": {
+      "question": "A train has just passed a crossing ahead, and the gate is rising, but the red lights are still flashing. What should you do?",
+      "media": null,
+      "choices": [
+        { "id": "a", "text": "Stay stopped until the lights stop flashing" },
+        { "id": "b", "text": "Go once the gate has gone all the way up" },
+        { "id": "c", "text": "Go once you can see that the track is clear" },
+        { "id": "d", "text": "Ride around the end of the gate as it rises" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "Flashing red lights at a crossing mean stop and wait until they stop, even if the gate rises: expect a train on any track, at any time. Stop at least 15 feet from the nearest track, never go around or under a gate, and don't start across without room to clear the tracks completely."
+    },
+    "guide": {
+      "group": null,
+      "order": 20,
+      "kind": "value",
+      "label": "Railroad crossings",
+      "text": "Wait while red lights flash, even if the gate rises. Stop at least 15 feet back, never go around a gate, and cross only with room to clear."
+    }
+  },
+  "mot-ca-10-416": {
+    "meta": {
+      "idKey": "416",
+      "appliesTo": "CA",
+      "variantGroup": "mot-crash-scene-duties",
+      "sisterQuestions": null,
+      "topic": "rules-of-the-road",
+      "source": "ca-dmv-driver-handbook",
+      "sourceSection": "Section 10, Collisions, under What to Do if You Are in a Collision.",
+      "note": null,
+      "dateCreated": "2026-10-12",
+      "lastEdited": null,
+      "lastVerified": "2026-10-12"
+    },
+    "content": {
+      "question": "You are in a minor crash, and no one is hurt. Which of these must you do?",
+      "media": null,
+      "choices": [
+        { "id": "a", "text": "Show your license, registration and insurance to the other driver" },
+        { "id": "b", "text": "Leave both vehicles exactly where they stopped until police arrive" },
+        { "id": "c", "text": "Ride on, since no one was hurt and your motorcycle still runs" },
+        { "id": "d", "text": "Report it to the police within one hour, even with no injuries" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "Always stop after a crash; leaving is a hit-and-run. If no one is hurt, move out of traffic, then call 911. Show your license, registration, insurance and current address to the other driver and any officer. If anyone is hurt, call 911 right away."
+    },
+    "guide": {
+      "group": "after-a-crash",
+      "order": 20,
+      "kind": "value",
+      "label": "After a crash",
+      "text": "Stop. If anyone is hurt, call 911 at once; if not, move out of traffic, then call. Show license, registration, insurance and address."
+    }
+  },
+  "mot-ca-10-417": {
+    "meta": {
+      "idKey": "417",
+      "appliesTo": "CA",
+      "variantGroup": null,
+      "sisterQuestions": null,
+      "topic": "rules-of-the-road",
+      "source": "ca-dmv-motorcycle-handbook",
+      "sourceSection": "Motorcycle Insurance Facts.",
+      "note": null,
+      "dateCreated": "2026-10-12",
+      "lastEdited": null,
+      "lastVerified": "2026-10-12"
+    },
+    "content": {
+      "question": "In California, you are in a crash that causes a couple thousand dollars in damage but hurts no one. Must you report it to the DMV?",
+      "media": null,
+      "choices": [
+        { "id": "a", "text": "Yes, within 10 days, though no one was hurt" },
+        { "id": "b", "text": "No, the police report it to the DMV for you" },
+        { "id": "c", "text": "No, only crashes with injuries are reported" },
+        { "id": "d", "text": "Yes, but only if the crash was your fault" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "If you're involved in a crash that causes more than $1,000 in property damage or injures anyone, however slightly, you must report it to the DMV within 10 days. The police won't file it for you."
+    },
+    "guide": {
+      "group": "after-a-crash",
+      "order": 25,
+      "kind": "value",
+      "label": "Reporting a crash",
+      "text": "To the DMV within 10 days if damage tops $1,000 or anyone is hurt. The police won't file it for you."
     }
   }
 }
