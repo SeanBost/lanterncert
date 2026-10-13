@@ -43,6 +43,8 @@ img, svg {
   --font-quote: "Montserrat", "Open Sans", Corbel, Arial, sans-serif;
   /* The quoted overview's own stack, minus Google Sans - Roboto is the real fallback in it. */
   --font-overview: "Roboto", Arial, sans-serif;
+  /* The homepage record's own face, as its hosted fragment sets it. */
+  --font-record: Arial, sans-serif;
   --weight-normal: 400;
   --weight-med: 500;
   --weight-semi: 600;
@@ -200,11 +202,10 @@ img, svg {
      caller's, so both read these through their own linear-gradient(). */
   --accent-line-stops: var(--color-orange-dark),
     color-mix(in srgb, var(--color-yellow-dark) 50%, var(--color-orange));
-  --frame-gradient: linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--color-yellow-offwhite) 85%, var(--color-yellow)),
-    color-mix(in srgb, var(--color-orange-offwhite) 85%, var(--color-orange))
-  );
+  /* The frame gradient's two ends, named so a flat surface can match either one. */
+  --frame-from: color-mix(in srgb, var(--color-yellow-offwhite) 85%, var(--color-yellow));
+  --frame-to: color-mix(in srgb, var(--color-orange-offwhite) 85%, var(--color-orange));
+  --frame-gradient: linear-gradient(135deg, var(--frame-from), var(--frame-to));
 }
 
 /* 3. Base ----------------------------------------------------------------- */
@@ -336,7 +337,6 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
 /* The two lit bands, both one flat warm fill under a frame-gradient hairline. The fill is drawn as
    a layer rather than a background-color, which the border-box clip below would run under the ring. */
 .band--warm, .band--warm-open {
-  background-color: var(--color-ink-med);
   background-origin: padding-box, border-box;
   background-clip: padding-box, border-box;
 }
@@ -1173,8 +1173,8 @@ ol.source-list > li::before {
   padding-left: 0;
 }
 
-/* The homepage's proof block - two quoted claims, each inside the chrome of where it came from. */
-.correction__label {
+/* The homepage's exhibits, each quoting a source in the chrome of where it came from; captions center. */
+.correction__label, .reply-sheet__label {
   text-align: center;
 }
 
@@ -1184,12 +1184,19 @@ ol.source-list > li::before {
   margin-top: var(--space-2);
 }
 
-/* The phrase the light lands on. Area comes from stacking blurs, since text-shadow has no spread;
-   §7 darkens it only where a script exists to light it again. */
-.correction__key {
-  --glow: var(--glow-key);
-  text-shadow: 0 0 var(--space-2) var(--glow), 0 0 var(--space-4) var(--glow);
-  color: var(--color-ink);
+/* The phrase an exhibit turns on, under a chisel-marker pass in the frame's own yellow; §7 swipes it in. */
+.key-mark {
+  --mark-band: 72%;
+  --mark-pool: color-mix(in srgb, var(--frame-from) 75%, var(--color-yellow));
+  margin-inline: -0.3em;
+  padding-inline: 0.3em;
+  background: linear-gradient(100deg, transparent 0.35em, var(--mark-pool) 0.35em, var(--frame-from) 1.2em,
+      var(--frame-from) calc(100% - 1.2em), var(--mark-pool) calc(100% - 0.35em), transparent calc(100% - 0.35em))
+    0 calc(100% - 1px) / 100% var(--mark-band) no-repeat;
+}
+
+/* Semibold inside the browser cards' light type; the record's answer is bold in its own right. */
+.correction__quote .key-mark {
   font-weight: var(--weight-semi);
 }
 
@@ -1214,9 +1221,8 @@ ol.source-list > li::before {
   border-radius: var(--radius-sm);
 }
 
-/* A character waiting its turn - transparent, so the text is laid out and typing causes no reflow.
-   Scoped through the card so it outranks .correction__key's own color from anywhere in the file. */
-.correction__browser .correction__char--pending {
+/* A character src/scripts/type-in.js has yet to reveal - transparent, so typing causes no reflow. */
+.type-in__char--pending {
   color: transparent;
 }
 
@@ -1291,13 +1297,11 @@ ol.source-list > li::before {
   color: var(--color-ink-lightest);
 }
 
-/* A query, not a destination - so unlike the address bar this is plain text and never a link.
-   min-width: 0 for the same reason .correction__url needs it. */
+/* The query, a quiet link that reruns the search; min-width: 0 for the same reason .correction__url needs it. */
 .correction__search {
   min-width: 0;
   overflow: hidden;
   font-size: var(--text-sm);
-  color: var(--color-ink-light);
   white-space: nowrap;
   text-overflow: ellipsis;
 }
@@ -1343,6 +1347,177 @@ ol.source-list > li::before {
    so it outranks that step from anywhere in the file rather than relying on sitting below it. */
 .correction > * + .correction__evidence {
   margin-top: var(--space-5);
+}
+
+/* The homepage's records exhibit - one agency reply, laid on a folder cut from the browser cards' frame. */
+.reply-sheet {
+  --sheet-gray: color-mix(in srgb, var(--color-ink-lightester) 60%, var(--white));
+  --tab-h: var(--space-5);
+  --folder-lift: var(--space-4);
+  display: grid;
+  /* Holds the folder's overhang above the paper and its tab inside the figure's own box. */
+  padding-top: calc(var(--folder-lift) + var(--tab-h));
+}
+
+/* One shared cell, so the folder always sizes to the column and the caption drops to the next row. */
+.reply-sheet__folder, .reply-sheet__paper {
+  grid-area: 1 / 1;
+}
+
+/* The negative margins reach above and below the paper. */
+.reply-sheet__folder {
+  margin: calc(-1 * var(--folder-lift)) 0 calc(-1 * var(--space-2));
+  border-radius: 0 var(--radius-md) var(--radius-md);
+  background: var(--frame-gradient);
+  box-shadow: var(--shadow-card);
+  rotate: 1deg;
+  pointer-events: none;
+}
+
+/* Reached for by its tab - the one part taking the pointer - the folder lifts and the paper stays put. */
+.reply-sheet__folder:hover,
+.reply-sheet__folder:has(.reply-sheet__tab:focus-visible) {
+  translate: 0 calc(-1 * var(--space-1));
+}
+
+/* The tab doubles as a quiet link to /records; its label sits on the seam with the folder. */
+.reply-sheet__tab {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  display: flex;
+  align-items: last baseline;
+  gap: 0.4em;
+  min-width: 40%;
+  height: var(--tab-h);
+  padding: 0 var(--tab-h) 0 calc(var(--space-4) + var(--space-1));
+  font-weight: var(--weight-semi);
+  font-variant-caps: all-small-caps;
+  line-height: 1;
+  letter-spacing: 0.06em;
+  pointer-events: auto;
+}
+
+/* Stretches the tab's hit area down to the paper, so the lift never slides it out from under the pointer. */
+.reply-sheet__tab::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 calc(-1 * var(--folder-lift));
+}
+
+/* The tab's shape, in --frame-from to meet the folder seamlessly, kept off the link so its focus ring survives the clip. */
+.reply-sheet__tab::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  background: var(--frame-from);
+  clip-path: polygon(0 0, calc(100% - var(--tab-h)) 0, 100% 100%, 0 100%);
+}
+
+/* The exhibits' quiet links hold their ink through every link state; a:hover's underline is the cue. */
+.correction a.correction__search:is(:link, :visited),
+.reply-sheet a.reply-sheet__tab:is(:link, :visited) {
+  color: var(--color-ink-light);
+}
+
+/* The nudge settles the tiles onto the text's baseline past the icon file's own margin. */
+.reply-sheet__tab img {
+  width: 0.875em;
+  height: auto;
+  translate: 0 0.08em;
+}
+
+/* Positioned, so it paints above the rotated folder before it. */
+.reply-sheet__paper {
+  position: relative;
+  margin-inline: var(--space-2);
+  padding: var(--space-5);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+  font-family: var(--font-record);
+  /* Cuts the dog-ear's corner, running past the bottom edge so --shadow-card's drop survives. */
+  clip-path: polygon(
+    0 0,
+    calc(100% - var(--space-6)) 0,
+    100% var(--space-6),
+    100% calc(100% + var(--space-5)),
+    0 calc(100% + var(--space-5))
+  );
+}
+
+/* The folded-over corner, mirroring the paper's cut. */
+.reply-sheet__paper::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: var(--space-6);
+  aspect-ratio: 1;
+  border-bottom-left-radius: var(--radius-sm);
+  background: var(--sheet-gray);
+  clip-path: polygon(0 0, 0 100%, 100% 100%);
+}
+
+.reply-sheet__head {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: var(--space-1) var(--space-4);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--sheet-gray);
+  font-size: var(--text-sm);
+}
+
+.reply-sheet__head dt {
+  font-weight: var(--weight-bold);
+}
+
+.reply-sheet__body {
+  margin: var(--space-4) 0 0;
+}
+
+/* Elided text as handwriting, sized in em so each line lands on the surrounding type's rhythm. */
+.reply-sheet__elided {
+  display: grid;
+  gap: 0.6em;
+  padding-block: 0.3em;
+}
+
+/* Strokes from src/lib/squiggle.js. */
+.reply-sheet__squiggle {
+  height: 1em;
+  max-width: 100%;
+  fill: none;
+  stroke: var(--sheet-gray);
+  stroke-width: 2.1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Holds stroke weight when a line too long for the paper squeezes sideways. */
+.reply-sheet__squiggle path {
+  vector-effect: non-scaling-stroke;
+}
+
+/* The word stays in the text for a screen reader; only its ink is hidden under the bar. */
+.reply-sheet__redact {
+  padding-inline: 0.2em;
+  border-radius: var(--radius-sm);
+  background: var(--sheet-gray);
+  color: transparent;
+}
+
+.reply-sheet__sign {
+  display: grid;
+  font-size: var(--text-sm);
+  color: var(--color-ink-light);
+}
+
+/* Clears the tilted folder's lowest corner. */
+.reply-sheet__label {
+  margin-top: var(--space-4);
 }
 
 /* Ties the lead-in to the field width so the two read as one control. Owns its own inner gap rather
@@ -1783,6 +1958,11 @@ ul.source-wall__row {
   font-weight: var(--weight-bold);
 }
 
+/* A key-accented link holds its orange through every link state, a:visited:hover included. */
+.prose a.text-key:is(:link, :visited) {
+  color: var(--color-orange-dark);
+}
+
 /* Evens a short block's lines instead of filling each one to the measure. */
 .text-balance {
   text-wrap: balance;
@@ -1794,7 +1974,7 @@ ul.source-wall__row {
 }
 
 /* The caption tier - quiet supporting text under a control, a card or a heading. */
-.caption, .assurances, .correction__label, .intro-more__peek {
+.caption, .assurances, .correction__label, .reply-sheet__label, .intro-more__peek {
   font-size: var(--text-base);
   color: var(--color-ink-lightest);
 }
@@ -1865,6 +2045,18 @@ ul.source-wall__row {
     align-items: start;
     /* Column only — the base `gap` stays the row rhythm between the halves once they stack. */
     column-gap: var(--space-6);
+  }
+
+  /* Insets the records exhibit, so it stops sharing the browser cards' edges in their column. */
+  .reply-sheet__folder {
+    margin-inline: calc(var(--space-6) + var(--space-1));
+  }
+
+  /* Rises into the folder's overhang, padded by the same amount so its content stays put. */
+  .reply-sheet__paper {
+    margin: calc(-1 * var(--space-1)) calc(var(--space-6) + var(--space-3)) 0;
+    padding: calc(var(--space-5) + var(--space-1));
+    padding-bottom: var(--space-5);
   }
 
   .link-columns {
@@ -2100,6 +2292,10 @@ ul.source-wall__row {
     transition: --splash 160ms ease-out, color 70ms ease-out, --glow 160ms ease-out;
   }
 
+  .reply-sheet__folder {
+    transition: translate 160ms ease-out;
+  }
+
   /* `backwards` holds the hidden frame through the delay; no `forwards`, so nothing stays latched. */
   .sweep-in {
     animation: sweep-in 400ms ease-out 200ms backwards;
@@ -2110,18 +2306,18 @@ ul.source-wall__row {
     transition: color 50ms ease-out;
   }
 
-  /* The card is dark ONLY where a script exists to light it, so JS off, an old browser and a
-     reduced-motion reader all get the lit card rather than a flat one. */
+  /* A mark is held back ONLY where a script exists to bring it in, so JS off, an old browser and a
+     reduced-motion reader all get the marked phrase rather than a bare one. */
   @media (scripting: enabled) {
-    /* A :not() so lit is the ABSENCE of a rule - declaring transparent on .correction__key itself
-       would make that the resting value, and the transition would run toward it. */
-    .correction:not(.correction--typed) .correction__key {
-      --glow: transparent;
+    /* A :not() so marked is the ABSENCE of a rule - the transition runs toward the resting value.
+       Released when typing finishes, by src/scripts/correction.js and src/scripts/reply-sheet.js. */
+    .correction:not(.correction--typed) .key-mark,
+    .reply-sheet:not(.reply-sheet--typed) .key-mark {
+      background-size: 0 var(--mark-band);
     }
 
-    /* Keyed to typing finishing, not to scroll - src/scripts/correction.js adds the class. */
-    .correction__key {
-      transition: --glow 700ms ease-out;
+    .key-mark {
+      transition: background-size 500ms ease-out 150ms;
     }
   }
 }

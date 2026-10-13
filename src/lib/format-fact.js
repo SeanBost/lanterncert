@@ -44,6 +44,14 @@ export function formatDate(iso) {
   });
 }
 
+const AP_MONTHS = ["Jan.", "Feb.", "March", "April", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."];
+
+/** A bare ISO date with its month abbreviated AP style, for captions where width is tight. */
+export function formatDateShort(iso) {
+  const [y, m, d] = iso.split("-").map(Number);
+  return `${AP_MONTHS[m - 1]} ${d}, ${y}`;
+}
+
 /** Returns null for an absent value — only the caller can say what "we don't know" looks like. */
 export function formatFact(value, unit) {
   if (value === null || value === undefined) return null;

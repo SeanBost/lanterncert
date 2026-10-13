@@ -9,7 +9,7 @@
   "gear-and-bike-check": {
     "num": 2,
     "name": "Riding gear & bike check",
-    "emoji": "🦺",
+    "emoji": "🧤",
     "description": "Everything settled before moving: helmets and the DOT standard, eye and face protection, jackets, boots, gloves, hearing protection and weather layering, the controls and the gear pattern, the pre-ride inspection, choosing a bike that fits, and borrowing an unfamiliar one.",
     "catchAll": false
   },
@@ -23,7 +23,7 @@
   "visibility-and-communication": {
     "num": 4,
     "name": "Visibility & communication",
-    "emoji": "💡",
+    "emoji": "🦺",
     "description": "Being seen and saying what you intend: conspicuity, headlight, signals, brake light, horn, mirrors, head checks and blind spots.",
     "catchAll": false
   },
@@ -44,7 +44,7 @@
   "hazards-and-surfaces": {
     "num": 7,
     "name": "Hazards & surfaces",
-    "emoji": "⚠️",
+    "emoji": "🌧️",
     "description": "Slippery surfaces, obstacles, tracks and gratings, night riding, wind, animals, and what to do when the bike itself fails.",
     "catchAll": false
   },
@@ -65,7 +65,7 @@
   "rules-of-the-road": {
     "num": 10,
     "name": "Rules of the road",
-    "emoji": "⚖️",
+    "emoji": "🚦",
     "description": "A state's traffic law: right-of-way, passing and lane rules, school buses and emergency vehicles, speed limits, parking, work zones, phone and headphone laws, and what to do after a crash.",
     "catchAll": false
   },

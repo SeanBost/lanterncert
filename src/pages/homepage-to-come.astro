@@ -2,7 +2,9 @@
 import Layout from "../layouts/Layout.astro";
 import StateAutocomplete from "../components/StateAutocomplete.astro";
 import { displayedCerts, loadAllSources, loadSourceEntries, loadState } from "../lib/cert-data.js";
-import { formatDate } from "../lib/format-fact.js";
+import { formatDate, formatDateShort } from "../lib/format-fact.js";
+import { loadRecords, recordPath } from "../lib/records.js";
+import { squiggleLine } from "../lib/squiggle.js";
 
 // Georgia until there is a sourced correction per state. The link comes from the registry, never the copy.
 const CORRECTION = { cert: "motorcycle-endorsement", state: "ga", sourceId: "ga-dds-test-exams" };
@@ -15,6 +17,31 @@ if (!correctionSource) {
 
 // Split so the address bar can weight the host over the path, the way a real one does.
 const correctionUrl = new URL(correctionSource.url);
+
+// The overview card's query, shown in its search bar and rerun live from it.
+const SEARCH_QUERY = "georgia motorcycle exam questions";
+const searchUrl = `https://www.google.com/search?${new URLSearchParams({ q: SEARCH_QUERY })}`;
+
+// The trust copy's key phrase opens the state page the correction exhibits.
+const correctionStateHref = `/${CORRECTION.cert}/${CORRECTION.state}`;
+
+// The CA reply until a cleaner record lands. Its link, title and date come from the record, never the copy.
+const RECORD_ID = "ca-dmv-req-2026-3933";
+const record = (await loadRecords()).find((entry) => entry.id === RECORD_ID);
+if (!record) {
+	throw new Error(`homepage record: ${RECORD_ID} is not in src/content/records`);
+}
+const recordHref = recordPath(RECORD_ID);
+const recordDate = formatDateShort(record.data.date);
+
+// The reply's elided text as handwriting: word spans are picked, in body-size pixels; seeds draw the strokes.
+const squiggles = {
+	before: [
+		squiggleLine(3, [[1, 49.8], [60.9, 97.7], [108, 157.1], [168.1, 194.3], [206.3, 264.3], [272.9, 318.9]]),
+		squiggleLine(8, [[1, 27.3], [39.1, 86.8], [95.9, 120.1], [129.7, 154.3], [162.3, 212.4]]),
+	],
+	after: [squiggleLine(13, [[1, 42.9], [52.2, 76.3], [84.4, 125.6], [134.2, 182], [193.7, 245.3]])],
+};
 
 // Read only by the parked figcaption below; kept so restoring it stays a pure uncomment.
 const correctionVerified = formatDate(correctionFacts.meta.dateVerified);
@@ -146,99 +173,156 @@ for (const size of rowSizes) {
 			</div>
 		</div>
 
-		<div class="split band band--warm-open">
-			<section class="stack" aria-labelledby="trust-heading">
-				<h2 class="section-title section-title--lg baseline-drop" id="trust-heading">Everything you need to know, <span class="text-accent">cited</span></h2>
-				<div class="prose">
-					<p>
-						Learning everything to get certified is a pain.
-						Search results and AI overviews leave out important details, 
-						and agencies overcomplicate how they share their requirements. 
-					</p>
-					<p>
-						LanternCert organizes <strong class="text-key">what you need to know in a single place</strong>. 
-						Every fact and practice question links to the official source behind it.
-						Get the big picture at a glance, then dig into the details that matter most to you.
-					</p>
-				</div>
-			</section>
+		<div class="stack-xl band band--warm-open">
+			<div class="split">
+				<section class="stack" aria-labelledby="trust-heading">
+					<h2 class="section-title section-title--lg baseline-drop" id="trust-heading">Everything you need to know, <span class="text-accent">cited</span></h2>
+					<div class="prose">
+						<p>
+							Learning everything to get certified is a pain.
+							Search results and AI overviews leave out important details,
+							and agencies overcomplicate how they share their requirements.
+						</p>
+						<p>
+							LanternCert organizes <a class="text-key" href={correctionStateHref}>what you need to know in a single place</a>.
+							Every fact and practice question links to the official source behind it.
+							Get the big picture, then go as deep as you need.
+						</p>
+					</div>
+				</section>
 
-			{/* The label sits OUTSIDE the struck line on purpose: text-decoration propagates to
-			    descendants and a child cannot turn an ancestor's line off. */}
-			<section class="stack correction" aria-label="A claim about Georgia's exam, beside what Georgia DDS publishes">
-				{/*<h3 class="correction__title" id="correction-heading"><em>Don't settle for sorta</em></h3>*/}
+				<section class="stack correction" aria-label="A claim about Georgia's exam, beside what Georgia DDS publishes">
+					{/*<h3 class="correction__title" id="correction-heading"><em>Don't settle for sorta</em></h3>*/}
 
-				{/* <p>Others often muddy important details, like with Georgia's Knowledge Exam.</p> */}
+					{/* <p>Others often muddy important details, like with Georgia's Knowledge Exam.</p> */}
 
-				{/* Exhibited as the problem, never cited as evidence - this must never enter the sources registry.
-				    Trimmed to two contiguous fragments; nothing dropped carried a qualifier. */}
-				<figure class="correction__evidence">
-					<div class="correction__browser">
-						<div class="correction__chrome">
-							<span class="correction__dots" aria-hidden="true"></span>
-							<div class="correction__bar">
-								<svg class="correction__glyph" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
-									<circle cx="7" cy="7" r="4.5" fill="none" stroke="currentColor" stroke-width="1.6" />
-									<line
-										x1="10.6"
-										y1="10.6"
-										x2="14"
-										y2="14"
-										stroke="currentColor"
-										stroke-width="1.6"
-										stroke-linecap="round"
-									/>
-								</svg>
-								<span class="correction__search">georgia motorcycle exam questions</span>
+					{/* Exhibited as the problem, never cited as evidence - this must never enter the sources registry.
+					    Trimmed to two contiguous fragments; nothing dropped carried a qualifier. */}
+					<figure class="correction__evidence">
+						<div class="correction__browser">
+							<div class="correction__chrome">
+								<span class="correction__dots" aria-hidden="true"></span>
+								<div class="correction__bar">
+									<svg class="correction__glyph" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+										<circle cx="7" cy="7" r="4.5" fill="none" stroke="currentColor" stroke-width="1.6" />
+										<line
+											x1="10.6"
+											y1="10.6"
+											x2="14"
+											y2="14"
+											stroke="currentColor"
+											stroke-width="1.6"
+											stroke-linecap="round"
+										/>
+									</svg>
+									<a class="correction__search" href={searchUrl} target="_blank" rel="noopener noreferrer"
+										><span class="visually-hidden">Search for </span>{SEARCH_QUERY}</a
+									>
+								</div>
 							</div>
+							<blockquote class="correction__overview">
+								&#8230;the Class M motorcycle knowledge test consists of 20 multiple-choice
+								questions&#8230; You must answer at least 15 questions correctly (75% to 80%) to
+								pass.
+							</blockquote>
 						</div>
-						<blockquote class="correction__overview">
-							&#8230;the Class M motorcycle knowledge test consists of 20 multiple-choice
-							questions&#8230; You must answer at least 15 questions correctly (75% to 80%) to
-							pass.
+						<p class="correction__label">What an AI overview claimed, searched Oct. 13, 2026</p>
+					</figure>
+
+					<figure class="correction__evidence">
+						{/* A window onto their page. The address bar is the block's ONLY attribution now, so it is
+						    a real link and only the dots are hidden - see the note on .correction__url. */}
+						<div class="correction__browser">
+							<div class="correction__chrome">
+								<span class="correction__dots" aria-hidden="true"></span>
+								<div class="correction__bar">
+									<a
+										class="correction__url"
+										href={correctionSource.url}
+										target="_blank"
+										rel="noopener noreferrer"
+									>
+										{/* The visible text is a bare URL, which is a poor accessible name on its own. The
+										    prefix is included in the name, so WCAG 2.5.3 still holds. */}
+										<span class="visually-hidden">Source: </span><span class="correction__host"
+											>{correctionUrl.host}</span
+										>{correctionUrl.pathname}
+									</a>
+								</div>
+							</div>
+							{/* Verbatim, and set in the publisher's own face - see .correction__quote in global.css. */}
+							<blockquote class="correction__quote" cite={correctionSource.url}>
+								The Knowledge Exam includes <span class="key-mark">two tests</span>: the Road Rules
+								Test and the Road Signs Test, both requiring a minimum score of 15 out of 20 to pass.
+							</blockquote>
+						</div>
+						{/*<figcaption class="correction__source">
+							<a href={correctionSource.url} target="_blank" rel="noopener noreferrer">
+								{correctionSource.title}
+							</a>
+							<span class="correction__meta">
+								{correctionSource.publisher}, verified {correctionVerified}
+							</span>
+						</figcaption>*/}
+						<p class="correction__label">What GA DDS actually publishes, first verified Aug. 14, 2026</p>
+					</figure>
+				</section>
+			</div>
+
+			<div class="split">
+				<section class="stack" aria-labelledby="records-heading">
+					<h2 class="section-title section-title--lg baseline-drop" id="records-heading">When the answer isn't published, LanternCert <span class="text-accent">asks</span></h2>
+					<div class="prose">
+						<p>
+							Some details never make it into an agency's handbook or onto its website,
+							like how many questions are on its exam.
+						</p>
+						<p>
+							Where it counts, LanternCert asks the agency directly with a public records request.
+							<a class="text-key" href="/records">Every reply gets posted in full</a>, so you can read the answer in the agency's own words.
+						</p>
+					</div>
+				</section>
+
+				{/* The reply laid on a folder: its own header, the answer verbatim, and everything between it abstracted. */}
+				<figure class="reply-sheet">
+					<div class="reply-sheet__folder">
+						<a class="reply-sheet__tab" href="/records"><img src="/favicon.svg" alt="" width="12" height="12" />Records</a>
+					</div>
+					<div class="reply-sheet__paper">
+						<dl class="reply-sheet__head">
+							<dt>Subject</dt>
+							<dd><a href={recordHref}><span class="visually-hidden">Read the full reply, </span>{record.data.artifactTitle}</a></dd>
+							<dt>From</dt>
+							<dd><span class="reply-sheet__redact">Redacted</span>@dmv.ca.gov</dd>
+						</dl>
+						<blockquote class="reply-sheet__body stack" cite={recordHref}>
+							<div class="reply-sheet__elided" aria-hidden="true">
+								{squiggles.before.map((line) => (
+									<svg class="reply-sheet__squiggle" viewBox={line.viewBox} preserveAspectRatio="none"><path d={line.d} /></svg>
+								))}
+							</div>
+							<p data-type-in>
+								<b>However, The Department can share that the Motorcycle written testing is
+								<span class="key-mark">comprised of 25 questions</span>&#8230;</b>
+							</p>
+							<div class="reply-sheet__elided" aria-hidden="true">
+								{squiggles.after.map((line) => (
+									<svg class="reply-sheet__squiggle" viewBox={line.viewBox} preserveAspectRatio="none"><path d={line.d} /></svg>
+								))}
+							</div>
+							<p class="reply-sheet__sign">
+								<span><b class="reply-sheet__redact">Redacted</b> | Analyst II</span>
+								<span>Legal Affairs Division</span>
+								<span>{record.data.agency}</span>
+							</p>
 						</blockquote>
 					</div>
-					<p class="correction__label">What an AI overview claimed, searched August 23, 2026</p>
+					<figcaption class="reply-sheet__label">
+						What CA DMV answered, received <time datetime={record.data.date}>{recordDate}</time>
+					</figcaption>
 				</figure>
-
-				<figure class="correction__evidence">
-					{/* A window onto their page. The address bar is the block's ONLY attribution now, so it is
-					    a real link and only the dots are hidden - see the note on .correction__url. */}
-					<div class="correction__browser">
-						<div class="correction__chrome">
-							<span class="correction__dots" aria-hidden="true"></span>
-							<div class="correction__bar">
-								<a
-									class="correction__url"
-									href={correctionSource.url}
-									target="_blank"
-									rel="noopener noreferrer"
-								>
-									{/* The visible text is a bare URL, which is a poor accessible name on its own. The
-									    prefix is included in the name, so WCAG 2.5.3 still holds. */}
-									<span class="visually-hidden">Source: </span><span class="correction__host"
-										>{correctionUrl.host}</span
-									>{correctionUrl.pathname}
-								</a>
-							</div>
-						</div>
-						{/* Verbatim, and set in the publisher's own face - see .correction__quote in global.css. */}
-						<blockquote class="correction__quote" cite={correctionSource.url}>
-							The Knowledge Exam includes <span class="correction__key">two tests</span>: the Road Rules
-							Test and the Road Signs Test, both requiring a minimum score of 15 out of 20 to pass.
-						</blockquote>
-					</div>
-					{/*<figcaption class="correction__source">
-						<a href={correctionSource.url} target="_blank" rel="noopener noreferrer">
-							{correctionSource.title}
-						</a>
-						<span class="correction__meta">
-							{correctionSource.publisher}, verified {correctionVerified}
-						</span>
-					</figcaption>*/}
-					<p class="correction__label">What GA DDS actually publishes, first verified August 14, 2026</p>
-				</figure>
-			</section>
+			</div>
 		</div>
 
 		<section class="stack band band--wash" aria-labelledby="certs-heading" id="certifications">
@@ -269,7 +353,9 @@ for (const size of rowSizes) {
 <script>
 	import { initHeroArt } from "../scripts/hero-art.js";
 	import { initCorrection } from "../scripts/correction.js";
+	import { initReplySheet } from "../scripts/reply-sheet.js";
 
 	initHeroArt();
 	initCorrection();
+	initReplySheet();
 </script>
