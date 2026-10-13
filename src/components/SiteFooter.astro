@@ -10,8 +10,11 @@ const year = new Date().getFullYear();
 		</p>
 		<div class="site-footer__meta">
 			<p>
-				&copy; {year} LanternCert <span class="sep">|</span>
-				<a href="/about#privacy">Privacy and usage policy</a>
+				<span class="site-footer__item">&copy; {year} LanternCert</span>
+				<span class="sep" aria-hidden="true">|</span>
+				<span class="site-footer__item"><a href="/records">Records requested from agencies</a></span>
+				<span class="sep" aria-hidden="true">|</span>
+				<span class="site-footer__item"><a href="/about#privacy">Privacy and usage policy</a></span>
 			</p>
 			{/* Hidden by default so a short page never renders it, then revealed if the page scrolls. */}
 			<p class="site-footer__top" hidden><a href="#main">Back to top</a></p>

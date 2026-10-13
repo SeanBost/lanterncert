@@ -14,14 +14,15 @@ const { title, description, intro, date } = record.data;
 
 <Layout title={title} description={description}>
 	<div class="stack-lg col-center">
+		{/* data-snapshot marks the only text the source snapshot keeps; data-handling.md §2, Hosted records. */}
 		<div class="stack">
 			<h1 class="page-title">{title}</h1>
-			<div class="prose">
+			<div class="prose" data-snapshot>
 				<p>{intro}</p>
 			</div>
 		</div>
 
-		<figure>
+		<figure data-snapshot>
 			{/* set:html because the fragment is the hosted record itself, the same file the download serves. */}
 			<div class="record__doc framed" set:html={record.html} />
 			<figcaption class="caption record__caption text-balance">
@@ -33,6 +34,10 @@ const { title, description, intro, date } = record.data;
 			{/* Hidden until src/scripts/copy-link.js finds a clipboard to write to. */}
 			<Button data-copy-link aria-live="polite" hidden>Copy link</Button>
 			<Button href={downloadPath(record.id)} download={`${record.id}.html`}>Download a copy</Button>
+		</div>
+
+		<div class="prose">
+			<p><a href="/records">See all records requested from agencies</a></p>
 		</div>
 	</div>
 </Layout>

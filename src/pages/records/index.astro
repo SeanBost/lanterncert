@@ -1,0 +1,69 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { recordPath, recordStateLabel, recordsByCert } from "../../lib/records.js";
+import { formatDate } from "../../lib/format-fact.js";
+
+const groups = await recordsByCert();
+---
+
+<Layout
+	title="Records requested from agencies"
+	description="Answers that agencies don't publish anywhere else, requested directly by LanternCert and shared here in full."
+>
+	<div class="stack-lg col-center">
+		<div class="stack">
+			<h1 class="page-title">Records requested from agencies</h1>
+			<div class="prose">
+				<p>
+					Some important answers aren't published anywhere, so LanternCert asks the agency directly. Their
+					responses are shared here in full, with personal info redacted, and get cited like any other
+					source. If a request reference number exists, it's kept so that anyone can request the same
+					record to verify it.
+				</p>
+			</div>
+		</div>
+
+		{/* role="list" restores the semantics Safari drops from a list-style: none list. */}
+		{
+			groups.length > 0 && (
+				<ul class="row-list accent-edge" role="list">
+					{groups.map(({ cert, entries }) => (
+						<li>
+							<h2 class="row-list__title">
+								{/* Decorative - the cert's name beside it says everything the mark does. */}
+								<span class="row-list__mark" aria-hidden="true">{cert.emoji}</span>
+								{cert.name}
+							</h2>
+							<ul class="source-list" role="list">
+								{entries.map(({ record, state }) => (
+									<li>
+										<p class="source-list__title">
+											<a href={recordPath(record.id)}>{record.data.title}</a>
+										</p>
+										{/* Every part leads with its own separator; the line clips whichever one starts a row. */}
+										<span class="source-list__meta source-list__verify">
+											<span class="source-list__parts">
+												<span class="source-list__part">
+													<span class="source-list__sep" aria-hidden="true">|</span>
+													<span>{recordStateLabel(state)}</span>
+												</span>
+												<span class="source-list__part">
+													<span class="source-list__sep" aria-hidden="true">|</span>
+													<span>{record.data.agency}</span>
+												</span>
+												<span class="source-list__part">
+													<span class="source-list__sep" aria-hidden="true">|</span>
+													<span>sent <time datetime={record.data.date}>{formatDate(record.data.date)}</time></span>
+												</span>
+											</span>
+										</span>
+									</li>
+								))}
+							</ul>
+						</li>
+					))}
+				</ul>
+			)
+		}
+	</div>
+</Layout>

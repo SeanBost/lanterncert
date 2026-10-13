@@ -16,7 +16,7 @@ const faqs = [
 	},
 	{
 		q: "Where does the information come from?",
-		a: `<strong class="text-key">From the official agencies that authorize and oversee certifications</strong>. This typically means your state's government, authorized third parties, and their publications and statutes. Every fact and question answer links to an authoritative document backing it up; ${sources.length} vetted and included so far.`,
+		a: `<strong class="text-key">From the official agencies that authorize and oversee certifications</strong>. This typically means your state's government, authorized third parties, and their publications and statutes. Sometimes when essential info isn't available online, LanternCert will formally request it then publish agency responses on <a href="/records">records pages</a>. Every fact and question answer links to an authoritative document backing it up; ${sources.length} vetted and included so far.`,
 	},
 	{
 		q: "How do I know the information is current?",
@@ -76,7 +76,7 @@ const faqSchema = {
 		</div>
 
 		<section class="stack framed" aria-labelledby="faq-heading">
-			<h2 class="section-title section-title--lg" id="faq-heading">Important questions / FAQ</h2>
+			<h2 class="section-title" id="faq-heading">Important questions / FAQ</h2>
 			<ul class="faq">
 				{
 					faqs.map((faq, i) => (
@@ -93,7 +93,7 @@ const faqSchema = {
 		</section>
 
 		<section class="stack" aria-labelledby="privacy-heading" id="privacy">
-			<h2 class="section-title section-title--lg" id="privacy-heading">Privacy and usage</h2>
+			<h2 class="section-title" id="privacy-heading">Privacy and usage</h2>
 			{/* Hardcoded - the policy changes only by hand, so nothing should be able to move this. */}
 			<p class="caption"><em>Last updated <time datetime="2026-08-27">August 27, 2026</time></em></p>
 			<div class="prose">

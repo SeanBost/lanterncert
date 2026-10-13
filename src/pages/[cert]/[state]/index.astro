@@ -308,7 +308,7 @@ const quickLinks = [
 
 		{config.hasExam && (
 		<section class="stack band band--warm" aria-labelledby="modes-heading">
-			<h2 class="section-title section-title--lg band-warm-blur" id="modes-heading">
+			<h2 class="section-title section-title--lg" id="modes-heading">
 				Prepare to <span class="text-accent">pass</span> your {examLabel}
 			</h2>
 			{/* An ordered list - the three are a progression, not a menu. --lit expects exactly three. */}
@@ -334,7 +334,7 @@ const quickLinks = [
 			</ol>
 			{
 				(practiceExamUrl || courseUrl) && (
-					<div class="prose band-warm-blur">
+					<div class="prose">
 						{/* The period rides inside the expression - a newline before it renders as a space. */}
 						{/* Full band width, not .col-split-main - each is one sentence and should not wrap. */}
 						{practiceExamUrl && (
@@ -368,14 +368,16 @@ const quickLinks = [
 								</a>
 							</p>
 							<span class="source-list__meta">{source.description}</span>
-							{/* Separators are their own spans so the italic can skip them. */}
+							{/* Every part leads with its own separator; the line clips whichever one starts a row. */}
 							<span class="source-list__meta source-list__verify">
-								{sourceMetaParts(source).map((part, i) => (
-									<Fragment>
-										{i > 0 && <span class="source-list__sep">{" | "}</span>}
-										{part}
-									</Fragment>
-								))}
+								<span class="source-list__parts">
+									{sourceMetaParts(source).map((part) => (
+										<span class="source-list__part">
+											<span class="source-list__sep" aria-hidden="true">|</span>
+											<span>{part}</span>
+										</span>
+									))}
+								</span>
 							</span>
 						</li>
 					))

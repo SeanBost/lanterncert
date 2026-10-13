@@ -141,8 +141,6 @@ img, svg {
   --color-focus: var(--color-orange-dark);
   /* The one warm surface the lit bands and the footer are all filled with. */
   --band-warm-fill: color-mix(in srgb, var(--color-yellow-offwhite) 5%, var(--color-yellow-nearwhite));
-  /* The pane set behind text that needs a lit band quieted under it. */
-  --color-band-warm-blur: var(--white);
   /* A tint of the hover fill, so a resting chip reads as the quiet end of the same control. */
   --color-chip: color-mix(in srgb, var(--color-orange-offwhite) 90%, var(--color-orange));
   /* The lit end of every warm ramp - the swept h1 word and the nav CTA take the same light. */
@@ -175,9 +173,6 @@ img, svg {
   --shadow-control:
     0 1px 2px -1px color-mix(in srgb, var(--shadow-hue) 8%, transparent),
     0 3px 4px -4px color-mix(in srgb, var(--shadow-hue) 16%, transparent);
-  /* Alpha and edge feather of the pane; --color-band-warm-blur carries the tint. */
-  --band-warm-blur-opacity: 45%;
-  --band-warm-blur-radius: 16px;
   --standard-border: 1px solid var(--color-border);
   --header-h: 3.75rem;
   /* Desktop only. Deepens the band below the centered row, so it never moves the logo or the nav.
@@ -190,9 +185,10 @@ img, svg {
   --focus-ring: 3px solid var(--color-focus);
   --focus-offset: 2px;
 
-  /* The frame both card types are drawn by - the homepage proof cards and the state page's prep
-     cards. One place to tune, so the two can never drift apart. */
-  --frame-w: 5px;
+  /* The site's one line weight: the nav underline, the accent edge and every frame ring. */
+  --line-w: 3px;
+  /* The homepage browser cards' shell: its edge, pane seam and the air around the pill. */
+  --browser-w: 5px;
   /* The wedge that grows across a lit control on hover. Both controls carry the same one. */
   --splash-fill: var(--color-accent-hover);
   /* Every halo on the site is this hue - the strength is the only thing that changes per surface. */
@@ -632,7 +628,7 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
   left: var(--nav-pad-x);
   right: var(--nav-pad-x);
   bottom: calc(-1 * var(--nav-underline-drop));
-  height: 3px;
+  height: var(--line-w);
   background-image: linear-gradient(90deg, var(--accent-line-stops));
   clip-path: inset(0 50% 0 50%);
 }
@@ -695,9 +691,22 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
 
 .site-footer__meta {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: var(--space-2) var(--space-4);
+  flex-direction: column;
+}
+
+/* One per line on a phone, padded apart as touch targets. */
+.site-footer__item {
+  display: block;
+  padding-block: var(--space-2);
+}
+
+/* Padding only: a display value here would beat the UA's [hidden] rule the script relies on. */
+.site-footer__top {
+  padding-block: var(--space-2);
+}
+
+.site-footer__meta .sep {
+  display: none;
 }
 
 /* The chrome's links carry the page's ink rather than a link hue. */
@@ -762,7 +771,7 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
    the ring, so an unsupported color-mix costs the ring and nothing else. */
 .framed, .card-grid--lit .card {
   box-shadow: var(--shadow-card);
-  border: var(--frame-w) solid transparent;
+  border: var(--line-w) solid transparent;
   background-color: var(--white);
   background-image:
     linear-gradient(var(--white) 0 0),
@@ -835,7 +844,7 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
   border-radius: 0 var(--radius-md) var(--radius-md) 0;
   /* Dark to light as read, matching the lit grid's sweep on the state pages. */
   background-image: linear-gradient(180deg, var(--accent-line-stops));
-  background-size: 5px 100%;
+  background-size: var(--line-w) 100%;
   background-repeat: no-repeat;
   background-position: left top;
 }
@@ -1131,15 +1140,37 @@ ol.source-list > li::before {
   font-weight: var(--weight-normal);
 }
 
+/* Clips the separator that leads each line, so a wrapped meta line never starts or ends on one. */
 .source-list__verify {
   font-style: italic;
+  overflow: hidden;
 }
 
-/* Upright inside the italic line, so the separators stay separators rather than joining the text.
-   The markup keeps a space each side, which is the row's only break opportunity. */
+/* Pulled left by exactly one separator, which is what puts every line's leading one under the clip. */
+.source-list__parts {
+  --sep-w: 1.1em;
+  display: flex;
+  flex-wrap: wrap;
+  margin-inline-start: calc(-1 * var(--sep-w));
+}
+
+/* Separator then text, so a part that wraps inside itself continues beside its separator, not under it. */
+.source-list__part {
+  display: flex;
+}
+
+/* Upright inside the italic line, so the separators stay separators rather than joining the text. */
 .source-list__sep {
+  flex: none;
+  display: inline-block;
+  width: var(--sep-w);
+  text-align: center;
   font-style: normal;
-  margin-inline: var(--sep-gap);
+}
+
+/* Nested in a row, flush under the row's title the way the homepage's blurb sits. */
+.row-list ul.source-list {
+  padding-left: 0;
 }
 
 /* The homepage's proof block - two quoted claims, each inside the chrome of where it came from. */
@@ -1162,13 +1193,13 @@ ol.source-list > li::before {
   font-weight: var(--weight-semi);
 }
 
-/* A window onto the publisher's page. --frame-w is the edge, the seam and the air around the pill. */
+/* A window onto the publisher's page. --browser-w is the edge, the seam and the air around the pill. */
 .correction__browser {
   box-shadow: var(--shadow-card);
   display: flex;
   flex-direction: column;
-  gap: var(--frame-w);
-  padding: var(--frame-w);
+  gap: var(--browser-w);
+  padding: var(--browser-w);
   border-radius: var(--radius-md);
   background-color: var(--color-yellow-offwhite);
   background-image: var(--frame-gradient);
@@ -1190,7 +1221,7 @@ ol.source-list > li::before {
 }
 
 /* The dots' row on the shell. No vertical padding on purpose: the frame's own padding above and the
-   gap below are what put --frame-w of air on each side of the pill, from the single knob. */
+   gap below are what put --browser-w of air on each side of the pill, from the single knob. */
 .correction__chrome {
   display: flex;
   align-items: center;
@@ -1798,39 +1829,6 @@ ul.source-wall__row {
   margin-top: var(--space-6);
 }
 
-/* Quiets a textured band under a block of text. Sits on any block inside one, heading and all. */
-.band-warm-blur {
-  position: relative;
-  isolation: isolate;
-}
-
-/* The pane, feathered to nothing at its edges so it dissolves into the band instead of drawing a box.
-   One gradient per axis and their alphas multiply - drop either and the other edge turns into a line. */
-.band-warm-blur::before {
-  --pane-tint: color-mix(in srgb, var(--color-band-warm-blur) var(--band-warm-blur-opacity), transparent);
-  --pane-feather: calc(var(--band-warm-blur-radius) * 2);
-  content: "";
-  position: absolute;
-  inset: calc(var(--band-warm-blur-radius) * -1);
-  z-index: -1;
-  background-image: linear-gradient(
-    to right,
-    transparent,
-    var(--pane-tint) var(--pane-feather),
-    var(--pane-tint) calc(100% - var(--pane-feather)),
-    transparent
-  );
-  mask-image: linear-gradient(
-    to bottom,
-    transparent,
-    var(--black) var(--pane-feather),
-    var(--black) calc(100% - var(--pane-feather)),
-    transparent
-  );
-  mask-repeat: no-repeat;
-  pointer-events: none;
-}
-
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -1978,6 +1976,25 @@ ul.source-wall__row {
   /* Opens left to right on the inline nav, where the stacked mobile panel opens from its center. */
   .site-nav__list a::after {
     clip-path: inset(0 100% 0 0);
+  }
+
+  .site-footer__meta {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--space-2) var(--space-4);
+  }
+
+  .site-footer__item, .site-footer__top {
+    padding-block: 0;
+  }
+
+  .site-footer__item {
+    display: inline;
+  }
+
+  .site-footer__meta .sep {
+    display: inline;
   }
 }
 
@@ -2164,29 +2181,14 @@ ul.source-wall__row {
    all of it looked right. Kept whole so a later tweak starts from working code
    rather than a reconstruction. Nothing below is live.
 
-   1. The blur pane. Replaced by the two crossed gradients in .band-warm-blur
-      ::before above. Restoring it means deleting that rule's background-image,
-      mask-image and mask-repeat and pasting this back.
-
-.band-warm-blur::before {
-  content: "";
-  position: absolute;
-  inset: calc(var(--band-warm-blur-radius) * -1);
-  z-index: -1;
-  border-radius: var(--radius-xl);
-  background-color: color-mix(in srgb, var(--color-band-warm-blur) var(--band-warm-blur-opacity), transparent);
-  filter: blur(var(--band-warm-blur-radius));
-  pointer-events: none;
-}
-
-   2. The vector beam mask. The PNG beside it is rasterized from this same SVG,
+   1. The vector beam mask. The PNG beside it is rasterized from this same SVG,
       so the artwork is identical - the SVG carries an feGaussianBlur inside an
       SVG <mask> that Gecko runs on the CPU. The file is no longer in
       public/assets; the generator holds it.
 
     mask-image: url("/assets/band-beams.svg");
 
-   3. The white seam glow, cast by a warm band's NEIGHBORS onto their facing
+   2. The white seam glow, cast by a warm band's NEIGHBORS onto their facing
       edges. It lightened them toward white, so it went dark the day
       --color-page resolved to --white and has painted nothing since. It needs a
       page color that is not white before it does anything at all.

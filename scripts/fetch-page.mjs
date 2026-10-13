@@ -203,8 +203,27 @@ function renderWithChrome(url) {
   });
 }
 
+/** The inner HTML of every element marked data-snapshot, in page order; the whole page when none is. */
+export function snapshotRegions(html) {
+  const opener = /<([a-z][a-z0-9]*)\b[^>]*\sdata-snapshot\b[^>]*>/gi;
+  const regions = [];
+  for (let open; (open = opener.exec(html)); ) {
+    const tag = new RegExp(`<(/?)${open[1]}\\b[^>]*>`, "gi");
+    tag.lastIndex = opener.lastIndex;
+    for (let depth = 1, m; (m = tag.exec(html)); ) {
+      depth += m[1] ? -1 : 1;
+      if (depth === 0) {
+        regions.push(html.slice(opener.lastIndex, m.index));
+        opener.lastIndex = tag.lastIndex;
+        break;
+      }
+    }
+  }
+  return regions.length > 0 ? regions.join(" ") : html;
+}
+
 export function extractText(html) {
-  return html
+  return snapshotRegions(html)
     .replace(/<script[\s\S]*?<\/script>/gi, " ")
     .replace(/<style[\s\S]*?<\/style>/gi, " ")
     .replace(/<noscript[\s\S]*?<\/noscript>/gi, " ")

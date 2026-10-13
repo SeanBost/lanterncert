@@ -248,8 +248,10 @@ and the proposed JSON. Wait.
   it is what `--proposed` and `--resolve` are run against.** Build it as a copy of the bank with the
   fragment inserted — **never by reserializing**, which destroys the one-line choice form.
 
-**7 · Apply** — only after approval. Write the bank with targeted edits, update the worklist, and
-write any approved guide-scaffold changes.
+**7 · Apply** — only after approval. Write the bank with targeted edits, stage any approved
+picture-only question (*Question art* below), update the worklist, and write any approved
+guide-scaffold changes. **Then delete both JSON files and any saved script output**; the report is
+the record of the run.
 
 **8 · Art** — only after approval, and only for questions that were approved. *Question art* below.
 
