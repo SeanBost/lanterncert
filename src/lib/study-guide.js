@@ -41,7 +41,7 @@ export function guideForState(stateSlug, { scaffold, questions, topicOrder, ctx 
       return {
         topic,
         opener: scaffold[topic].opener,
-        // Ungrouped facts sit above the first heading until a grouping pass places them. §4c rule 3.
+        // Ungrouped facts render above the first heading. §4c rule 3.
         ungrouped: factsFrom(here.filter((q) => !q.guide.group)),
         groups,
       };

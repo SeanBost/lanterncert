@@ -5,7 +5,7 @@
     "positioning": "A cheat sheet, not a manual. It states what a rider needs in order to pass and points at the agency document for everything behind it. Never comprehensive, never explanatory, and it may never read as a substitute for the state manual or a course.",
     "consequence": "The guide can never carry something the bank does not test. A fact worth reading is a fact worth asking, so anything the guide should say has to be authored as a question with a `guide` block.",
     "shape": "A topic holds an `opener` and an ordered list of `groups`. A group holds an `id`, a `heading`, a `leadIn` and optional `media`. Group order is array order, and `groups` may be empty while a topic is being authored.",
-    "membership": "A question joins a group through `guide.group` and sorts inside it by `guide.order`. A null group is legal and renders above the topic's first heading, so questions can be authored before the grouping is settled. There is no manifest of question ids here, deliberately: it would duplicate what the question already declares, and two owners for one fact stop agreeing.",
+    "membership": "A question joins a group through `guide.group` and sorts inside it by `guide.order`, and every new fact either joins a group or proposes one. A null group stays legal and renders above the topic's first heading. There is no manifest of question ids here, deliberately: it would duplicate what the question already declares, and two owners for one fact stop agreeing.",
     "ordering": "`guide.order` is sparse - 10, 20, 30 - so a fact can be inserted between two others without renumbering the rest.",
     "kinds": "`guide.kind` decides how a fact renders: `rule` is a bare assertion on one line, `value` is a label and a value rendered into a dl, `steps` is an ordered procedure rendered into an ol. Mixing kinds is what stops a section reading as a wall of declarative sentences.",
     "text": "`guide.text` is the fact as the guide states it. Null falls back to the question's explanation, which under §5 rule 6b is the same assertion - so a question only carries its own `text` where the guide wants it shorter or shaped for a dl.",
@@ -13,27 +13,193 @@
     "scoping": "A section resolves by resolving its questions, so scope needs no separate expression here. A group whose questions all resolve away renders nothing, which means a leadIn has to survive its group being only partly filled.",
     "media": "A figure attaches to a GROUP and earns its place when the group is spatial or sequential - geometry, position, formation, or a sequence of actions. Never for a value or a rule. Signs are the exception: the sign IS the fact, so that image rides the question's own media.",
     "catchAll": "The catch-all topic has no entry here. It carries weight 0 in every state, so it reaches no guide; it earns an opener the day a state weights it above zero.",
-    "status": "BAREBONES. Every topic carries an opener so the guide renders from the first question authored into it. Only signs-and-markings and space-management carry groups; every other topic collects its facts ungrouped until a grouping pass places them."
+    "status": "GROUPED. Every topic carries an opener and groups, and every fact sits in one."
   },
 
   "fit-to-ride": {
     "opener": "Two questions before the engine starts: whether the law lets you ride, and whether your body and mind are in shape to.",
-    "groups": []
+    "groups": [
+      {
+        "id": "licensing",
+        "heading": "Licenses and permits",
+        "leadIn": "The license or permit a motorcycle calls for, and what riding on a permit still rules out.",
+        "media": null
+      },
+      {
+        "id": "alcohol",
+        "heading": "How alcohol affects your riding",
+        "leadIn": "What alcohol does to a rider, how it builds up in the blood, and how long it takes to leave.",
+        "media": null
+      },
+      {
+        "id": "drugs",
+        "heading": "Medicines and other drugs",
+        "leadIn": "What medicines and other drugs can do to your riding, on their own or with alcohol.",
+        "media": null
+      },
+      {
+        "id": "the-law",
+        "heading": "Impaired riding and the law",
+        "leadIn": "Where the law draws the line on riding impaired.",
+        "media": null
+      },
+      {
+        "id": "staying-alert",
+        "heading": "Staying alert",
+        "leadIn": "Being sober is only part of being fit to ride.",
+        "media": null
+      }
+    ]
   },
 
   "gear-and-bike-check": {
     "opener": "Everything settled before the bike moves: what protects you in a fall, and what tells you the machine is safe to take out.",
-    "groups": []
+    "groups": [
+      {
+        "id": "helmets",
+        "heading": "Helmets",
+        "leadIn": "Who the law says must wear one, and how to choose and wear one that protects you.",
+        "media": null
+      },
+      {
+        "id": "eye-and-face-protection",
+        "heading": "Eye and face protection",
+        "leadIn": "Choosing protection for your eyes and face, and when to switch it.",
+        "media": null
+      },
+      {
+        "id": "clothing-and-hearing",
+        "heading": "Clothing and hearing",
+        "leadIn": "What to wear from the neck down, and what to put in your ears.",
+        "media": null
+      },
+      {
+        "id": "knowing-your-motorcycle",
+        "heading": "Knowing your motorcycle",
+        "leadIn": "Whether a motorcycle fits you, and how well you know it before you take it out.",
+        "media": null
+      },
+      {
+        "id": "pre-ride-check",
+        "heading": "The pre-ride check",
+        "leadIn": "What to look at on the motorcycle, and what you should find.",
+        "media": null
+      }
+    ]
   },
 
   "basic-control": {
     "opener": "The controls a motorcycle asks for that a car never does, and the habits that make reaching for them automatic.",
-    "groups": []
+    "groups": [
+      {
+        "id": "body-position",
+        "heading": "Body position",
+        "leadIn": "How to sit on the motorcycle, and where your hands, knees and feet belong.",
+        "media": null
+      },
+      {
+        "id": "clutch-and-gearshift",
+        "heading": "The clutch and the gearshift",
+        "leadIn": "Working the two controls that get the motorcycle moving and keep it in the right gear.",
+        "media": null
+      },
+      {
+        "id": "shifting-down",
+        "heading": "Shifting down",
+        "leadIn": "When to change down, and how to do it without upsetting the motorcycle.",
+        "media": null
+      },
+      {
+        "id": "braking",
+        "heading": "Braking",
+        "leadIn": "What each brake contributes, and how to apply it.",
+        "media": null
+      },
+      {
+        "id": "abs-and-linked-brakes",
+        "heading": "Anti-lock and linked brakes",
+        "leadIn": "What these systems do when you brake, and what they still leave to you.",
+        "media": null
+      },
+      {
+        "id": "turning",
+        "heading": "Turning",
+        "leadIn": "From the speed you carry into a turn to the throttle you hold through it.",
+        "media": null
+      },
+      {
+        "id": "curves",
+        "heading": "Curves",
+        "leadIn": "Reading a curve before you are in it, and choosing a path through it.",
+        "media": null
+      },
+      {
+        "id": "quick-stops",
+        "heading": "Stopping quickly",
+        "leadIn": "The hardest stop a motorcycle can make, upright and in a straight line.",
+        "media": null
+      },
+      {
+        "id": "skids",
+        "heading": "Skids",
+        "leadIn": "When a wheel locks, and what to do about it.",
+        "media": null
+      },
+      {
+        "id": "braking-in-a-curve",
+        "heading": "Braking in a curve",
+        "leadIn": "Stopping when the motorcycle is leaned over.",
+        "media": null
+      },
+      {
+        "id": "swerving",
+        "heading": "Swerving",
+        "leadIn": "How to get around an obstacle and back on course.",
+        "media": null
+      }
+    ]
   },
 
   "visibility-and-communication": {
     "opener": "Most collisions between a car and a motorcycle start with a driver who never saw one. Being seen is something a rider does on purpose.",
-    "groups": []
+    "groups": [
+      {
+        "id": "why-drivers-miss-motorcycles",
+        "heading": "Why drivers miss motorcycles",
+        "leadIn": "What makes a motorcycle easy to overlook in traffic.",
+        "media": null
+      },
+      {
+        "id": "dressing-to-be-seen",
+        "heading": "Dressing to be seen",
+        "leadIn": "The colors and materials that help drivers pick you out.",
+        "media": null
+      },
+      {
+        "id": "headlight",
+        "heading": "Headlight",
+        "leadIn": "When to have the headlight on, and which beam to use.",
+        "media": null
+      },
+      {
+        "id": "signals-and-brake-light",
+        "heading": "Signals and brake light",
+        "leadIn": "Telling drivers what you are about to do, early enough for them to act on it.",
+        "media": null
+      },
+      {
+        "id": "mirrors-and-head-checks",
+        "heading": "Mirrors and head checks",
+        "leadIn": "Keeping track of what is behind and beside you.",
+        "media": null
+      },
+      {
+        "id": "horn",
+        "heading": "Horn",
+        "leadIn": "When to sound it, and how much to trust it.",
+        "media": null
+      }
+    ]
   },
 
   "space-management": {
@@ -50,23 +216,140 @@
         "heading": "Where to ride in the lane",
         "leadIn": "A lane is wider than a motorcycle needs, and the whole of it is yours to use.",
         "media": null
+      },
+      {
+        "id": "traffic-around-you",
+        "heading": "Traffic around you",
+        "leadIn": "The vehicles beside you, behind you and merging toward you, and the room each one needs.",
+        "media": null
+      },
+      {
+        "id": "passing",
+        "heading": "Passing",
+        "leadIn": "How to get past a slower vehicle.",
+        "media": null
+      },
+      {
+        "id": "group-riding",
+        "heading": "Riding in a group",
+        "leadIn": "Who rides where in a group, and how the formation changes along the way.",
+        "media": null
       }
     ]
   },
 
   "search-and-strategy": {
     "opener": "Looking far enough ahead that you still have a choice left by the time you need one.",
-    "groups": []
+    "groups": [
+      {
+        "id": "searching-and-planning",
+        "heading": "Searching and planning",
+        "leadIn": "Spotting trouble early, and deciding what to do about it.",
+        "media": null
+      },
+      {
+        "id": "intersections",
+        "heading": "Intersections",
+        "leadIn": "How to ride where another vehicle could cross your path.",
+        "media": null
+      },
+      {
+        "id": "blind-intersections",
+        "heading": "Blind intersections",
+        "leadIn": "When something blocks your view of the cross street.",
+        "media": null
+      },
+      {
+        "id": "parked-cars",
+        "heading": "Passing parked cars",
+        "leadIn": "Riding past a row of parked cars, and the surprises it can hold.",
+        "media": null
+      }
+    ]
   },
 
   "hazards-and-surfaces": {
     "opener": "What the road puts under your tires and into your path, and what to do when the bike itself lets you down.",
-    "groups": []
+    "groups": [
+      {
+        "id": "slippery-surfaces",
+        "heading": "Slippery surfaces",
+        "leadIn": "Surfaces that give your tires less grip, and how to ride them.",
+        "media": null
+      },
+      {
+        "id": "obstacles-and-uneven-pavement",
+        "heading": "Obstacles, tracks and uneven pavement",
+        "leadIn": "How to ride over what the road puts in your way.",
+        "media": null
+      },
+      {
+        "id": "railroad-crossings",
+        "heading": "Railroad crossings",
+        "leadIn": "What a railroad crossing asks of you.",
+        "media": null
+      },
+      {
+        "id": "riding-at-night",
+        "heading": "Riding at night",
+        "leadIn": "What changes after dark, from your speed to your beam.",
+        "media": null
+      },
+      {
+        "id": "wind-and-weather",
+        "heading": "Wind and weather",
+        "leadIn": "What wind and weather do to the motorcycle and to you.",
+        "media": null
+      },
+      {
+        "id": "animals-and-flying-objects",
+        "heading": "Animals and flying objects",
+        "leadIn": "Animals in the road, and objects that fly up at you.",
+        "media": null
+      },
+      {
+        "id": "mechanical-problems",
+        "heading": "Mechanical problems",
+        "leadIn": "Recognizing a mechanical problem on the move, and getting stopped safely.",
+        "media": null
+      },
+      {
+        "id": "leaving-the-road",
+        "heading": "Leaving the road",
+        "leadIn": "Getting off the road safely when you need to stop.",
+        "media": null
+      }
+    ]
   },
 
   "passengers-and-cargo": {
     "opener": "A passenger or a load changes how the bike steers, leans and stops. Both are set up before you pull away, not after.",
-    "groups": []
+    "groups": [
+      {
+        "id": "before-a-passenger",
+        "heading": "Before you carry a passenger",
+        "leadIn": "What the rider, the motorcycle and the passenger each need first.",
+        "media": null
+      },
+      {
+        "id": "preparing-your-passenger",
+        "heading": "Getting your passenger ready",
+        "leadIn": "Where a passenger sits, how they hold on, and what they do while you ride.",
+        "media": null
+      },
+      {
+        "id": "riding-with-a-passenger",
+        "heading": "Riding with a passenger",
+        "leadIn": "What changes once the passenger is aboard.",
+        "media": null
+      },
+      {
+        "id": "cargo",
+        "heading": "Carrying a load",
+        "leadIn": "Packing, fastening and riding with a load.",
+        "media": null
+      }
+    ]
   },
 
   "signs-and-markings": {
@@ -159,7 +442,7 @@
       {
         "id": "phones-headphones-and-conduct",
         "heading": "Phones, headphones and conduct",
-        "leadIn": "What the law bars while you ride: holding a phone, headphones that cut out traffic, and driving to intimidate.",
+        "leadIn": "What the law bars while you ride: a phone in your hand, headphones that shut out traffic, and riding that puts others at risk.",
         "media": null
       },
       {
@@ -170,8 +453,8 @@
       },
       {
         "id": "expressways",
-        "heading": "Expressways",
-        "leadIn": "Joining an expressway, the lanes on it, and when you may stop on its shoulder.",
+        "heading": "Freeways and expressways",
+        "leadIn": "What the law expects on a freeway or expressway, including which lanes a motorcycle may use.",
         "media": null
       },
       {

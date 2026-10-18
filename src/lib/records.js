@@ -70,7 +70,7 @@ export async function recordsByCert() {
 }
 
 /** The caption's words before its date, shared so the page and the download read alike. */
-export const captionLead = ({ artifactTitle, agency }) => `${artifactTitle} from the ${agency}, sent`;
+export const captionLead = ({ artifactTitle, agency }) => `${artifactTitle} from the ${agency}, received`;
 
 /** The fragment as a standalone document, styled inline so it reads the same opened from disk. */
 export function recordDocument(record) {

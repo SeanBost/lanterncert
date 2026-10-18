@@ -6,12 +6,11 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { scopeTokens } from "../src/lib/applies-to.js";
+import { creditOf } from "../src/lib/image-credit.js";
 import { topicShares, weightsForState } from "../src/lib/topic-weights.js";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const QUOTA_MULTIPLIER = 1.5;
-// Two images per topic per state, so a guide section is never a wall of text. Signs carry their own.
-const IMAGES_PER_TOPIC = 2;
 
 function loadJson(path, required = true) {
   if (!existsSync(path)) {
@@ -109,9 +108,8 @@ function mockLength(slug) {
   return facts[slug].exam?.questionCount?.value ?? certConfig.testDefaults?.questionCount ?? null;
 }
 
-// ── variantGroup coverage ────────────────────────────────────────────────────
-// Builds a variantGroup x state matrix of what each group reaches.
-// Gaps report and never block. data-handling.md ▸ Questions §5b.
+// ── variantGroup links ───────────────────────────────────────────────────────
+// Builds a variantGroup x state matrix of each state's version, or the guard barring one. data-handling.md §5b.
 const groups = new Map();
 for (const q of bank) {
   if (!q.meta.variantGroup) continue;
@@ -119,58 +117,57 @@ for (const q of bank) {
   groups.get(q.meta.variantGroup).push(q);
 }
 
-const declared = exclusions.variantGroups ?? {};
-// Without it every deliberate gap reads as undeclared, so the run says which mode it is in.
+const guards = exclusions.variantGroups ?? {};
+// Notes a missing exclusions file, which leaves every guard unchecked.
 if (!existsSync(exclusionsPath)) {
-  note("variant-coverage", `no exclusions file at ${exclusionsPath} — every gap will read as undeclared`);
+  note("variant-links", `no exclusions file at ${exclusionsPath} — no guard will print or be checked`);
 }
 
-// Collects null-group questions that miss at least one state with facts.
-const narrow = bank.filter(
-  (q) => !q.meta.variantGroup && stateSlugs.some((slug) => !resolvedFor[slug].includes(q)),
-);
-
-const coverageRows = [];
-let owedTotal = 0;
-let declaredTotal = 0;
+const linkRows = [];
+let guardTotal = 0;
 for (const [group, members] of groups) {
   const cells = stateSlugs.map((slug) => {
     const hit = resolvedFor[slug].find((q) => q.meta.variantGroup === group);
-    if (hit) return { text: hit.id.split("-").slice(-2).join("-"), owed: false };
-    if (declared[group]?.[slug]) {
-      declaredTotal += 1;
-      return { text: "declared", owed: false };
+    if (hit) return hit.id.split("-").slice(-2).join("-");
+    if (guards[group]?.[slug]) {
+      guardTotal += 1;
+      return "guard";
     }
-    owedTotal += 1;
-    return { text: "OWED", owed: true };
+    return "-";
   });
-  coverageRows.push({ group, cells, members: members.length });
+  linkRows.push({ group, cells });
+  if (members.length === 1 && !guards[group]) {
+    note("variant-links", `${group} has one member and no guard, so it links nothing — set ${members[0].id}'s group to null`);
+  }
 }
 
-function printCoverage() {
-  console.log("\nCOVERAGE — variantGroup x state, gaps are owed variants and never block");
-  if (!coverageRows.length) {
+function printLinks() {
+  console.log("\nLINKS — variantGroup x state, each state's version or the guard barring one");
+  if (!linkRows.length) {
     console.log("  no question carries a variantGroup yet");
   } else {
-    const width = Math.max(28, ...coverageRows.map((r) => r.group.length + 2));
+    const width = Math.max(28, ...linkRows.map((r) => r.group.length + 2));
     console.log("  " + "group".padEnd(width) + stateSlugs.map((s) => s.toUpperCase().padEnd(10)).join(""));
-    for (const row of coverageRows) {
-      console.log("  " + row.group.padEnd(width) + row.cells.map((c) => c.text.padEnd(10)).join(""));
+    for (const row of linkRows) {
+      console.log("  " + row.group.padEnd(width) + row.cells.map((c) => c.padEnd(10)).join(""));
     }
   }
-  console.log(
-    `  ${coverageRows.length} group(s) · ${owedTotal} owed · ${declaredTotal} declared · ${narrow.length} narrow with no group (--resolve lists what each state misses)`,
-  );
+  console.log(`  ${linkRows.length} group(s) · ${guardTotal} guard(s)`);
 }
 
-// An exclusion naming a group or state that no longer exists is a rule outliving its reason.
-for (const [group, byState] of Object.entries(declared)) {
+// Flags a guard naming a missing group or state, and any question reaching a state its guard bars.
+for (const [group, byState] of Object.entries(guards)) {
   if (!groups.has(group)) {
-    note("variant-coverage", `exclusions name variantGroup ${group}, which no question carries`);
+    note("variant-links", `a guard names variantGroup ${group}, which no question carries`);
     continue;
   }
   for (const slug of Object.keys(byState)) {
-    if (!(slug in facts)) note("variant-coverage", `exclusions name ${group}.${slug}, which has no facts`);
+    if (!(slug in facts)) {
+      note("variant-links", `a guard names ${group}.${slug}, which has no facts`);
+      continue;
+    }
+    const breach = resolvedAll[slug].find((q) => q.meta.variantGroup === group);
+    if (breach) problem("guard-breach", `${breach.id} reaches ${slug}, which a guard bars from ${group}`);
   }
 }
 
@@ -191,30 +188,6 @@ for (const slug of stateSlugs) {
     const have = resolvedFor[slug].filter((q) => q.meta.topic === topic).length;
     quotaRows.push({ slug, topic, have, target, short: Math.max(0, target - have) });
   }
-}
-
-// ── images per guide section ─────────────────────────────────────────────────
-// Reported per topic, and only once that topic has questions to hang art on.
-let unstartedTopics = 0;
-for (const topic of new Set(quotaRows.map((r) => r.topic))) {
-  const rows = quotaRows.filter((r) => r.topic === topic);
-  if (rows.every((r) => r.have === 0)) {
-    unstartedTopics++;
-    continue;
-  }
-  const short = rows
-    .map(({ slug }) => ({
-      slug,
-      art: resolvedFor[slug].filter((q) => q.meta.topic === topic && q.content.media).length,
-    }))
-    .filter((r) => r.art < IMAGES_PER_TOPIC);
-  if (short.length) {
-    const detail = short.map((r) => `${r.slug} ${r.art}`).join(", ");
-    note("images", `${topic} is under ${IMAGES_PER_TOPIC} art questions for: ${detail}`);
-  }
-}
-if (unstartedTopics) {
-  note("images", `${unstartedTopics} topic(s) have no questions yet, so their art is not assessed`);
 }
 
 // ── scope claims worth re-reading ────────────────────────────────────────────
@@ -261,9 +234,9 @@ for (const [topic, section] of Object.entries(guideScaffold)) {
   }
 }
 
-// A topic weighted 0 everywhere reaches no surface, so a question in it is authored for nobody.
+// Flags a topic weighted 0 in every state with facts, whatever the --state filter.
 for (const topic of Object.keys(topics)) {
-  const served = stateSlugs.some((slug) => weightsForState(slug, weights)[topic] > 0);
+  const served = Object.keys(facts).some((slug) => weightsForState(slug, weights)[topic] > 0);
   const held = bank.filter((q) => q.meta.topic === topic);
   if (!served && held.length) {
     note(
@@ -302,7 +275,7 @@ for (const q of bank) {
   const reached = Object.entries(resolvedAll)
     .filter(([, qs]) => qs.some((r) => r.id === q.id))
     .map(([slug]) => states[slug].abbreviation);
-  for (const key of [q.meta.source, q.content?.media?.imageCredit]) {
+  for (const key of [q.meta.source, creditOf(q.content?.media?.src)]) {
     const home = registry[key]?.state;
     if (!home || home === "multi") continue;
     const others = reached.filter((code) => code !== home);
@@ -391,7 +364,7 @@ const totals = stateSlugs.map((slug) => {
 console.log("  " + "TOTAL".padEnd(width) + totals.join(""));
 console.log(`  ${shortfall} question-slots still to author across every state and topic.`);
 
-printCoverage();
+printLinks();
 
 // Per state: the questions it resolves, then the ones it does not and the token that excluded them.
 if (flag("--resolve")) {

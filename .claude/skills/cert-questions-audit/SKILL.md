@@ -61,7 +61,7 @@ beside its passage *is* the expensive half.
 the reviewer decides**, including an obvious typo — the bank's three dates and its git history are a
 provenance record, and a silent fix corrupts it.
 
-**It does not add exclusions either.** A gap that should be declared is a report recommendation; the
+**It does not add guards either.** A state that should carry one is a report recommendation; the
 whole value of `blackbox/authoring/<cert>-exclusions.json` is that a person decided.
 
 **This run reaches no network, ever.** Every source it needs is already a snapshot in
@@ -96,7 +96,7 @@ registry and exclusions.
 rulings and barred terms, so a question breaking one is a finding the script cannot see.
 
 **1 · Run the script.** `node scripts/audit-questions.mjs <cert> [--state <code>] --resolve`. It owns
-every mechanical check — `variantGroup` coverage, the quota table, art per section, near-duplicate
+every mechanical check — `variantGroup` links and guards, the quota table, art per section, near-duplicate
 stems, ungrouped facts, unjoined groups, unserved topics, missing `sourceSection`.
 
 **`--resolve` prints what each state actually reads and what it does not reach**, which is where
@@ -166,16 +166,16 @@ How each check is run is in the technique file ▸ *The three shipping checks*.
 Findings carry exactly one, and the split follows `validate.mjs`'s format.
 
 - **PROBLEM** — a rider could be wrong. A keyed answer the source does not support, a defensible
-  distractor, a broken citation, a scope claim a covered document contradicts, an undeclared
-  coverage gap. **Exits non-zero when the script raises it; always leads the report when it does
+  distractor, a broken citation, a scope claim a covered document contradicts, a question
+  reaching a state a guard bars. **Exits non-zero when the script raises it; always leads the report when it does
   not.** **Every phase 3b finding is a PROBLEM too**, on a different ground: reproduced expression,
   a mark used as content, or copy that reads as generated is a risk to the site rather than to one
   rider, and it does not get graded by how few words it is.
 - **NOTE** — everything else. Quota shortfalls, art gaps, ungrouped facts, wording, a `sourceSection`
   that could be sharper. Real, and never urgent.
 - **ACCEPTED** — a known, deliberate deviation, declared at the top of the report so it prints every
-  run without crying wolf. A declared exclusion is the model: it keeps printing, and it never counts
-  as a finding.
+  run without crying wolf. A guard is the model: it keeps printing, and it never counts as a
+  finding.
 
 **Never promote a NOTE to make a run look productive, and never demote a PROBLEM because it is
 inconvenient to fix.**
@@ -188,7 +188,7 @@ real hole or immaterial · the severity of anything above.
 
 **Escalate:** a question whose answer is wrong (never quietly rewrite it) · two held documents
 disagreeing · a source that appears to have changed since its snapshot, which is `/cert-facts`'s job
-and not this run's · a gap that ought to become a declared exclusion · **a term that looks owned but
+and not this run's · a state that ought to carry a guard · **a term that looks owned but
 is not on the register**, which is a proposed addition to the cert's standards file and never a
 call made inside a report · **anything phase 3b turns up that the rules do not already answer**,
 since a fair-use judgment made once per question is exactly what §6 rule 10 exists to avoid.

@@ -16,9 +16,8 @@ const groups = await recordsByCert();
 			<div class="prose">
 				<p>
 					Some important answers aren't published anywhere, so LanternCert asks the agency directly. Their
-					responses are shared here in full, with personal info redacted, and get cited like any other
-					source. If a request reference number exists, it's kept so that anyone can request the same
-					record to verify it.
+					responses are shared here in full, with personal info redacted.
+					If a request reference number exists, it's kept so that anyone can request the same record.
 				</p>
 			</div>
 		</div>
@@ -53,7 +52,7 @@ const groups = await recordsByCert();
 												</span>
 												<span class="source-list__part">
 													<span class="source-list__sep" aria-hidden="true">|</span>
-													<span>sent <time datetime={record.data.date}>{formatDate(record.data.date)}</time></span>
+													<span>received <time datetime={record.data.date}>{formatDate(record.data.date)}</time></span>
 												</span>
 											</span>
 										</span>

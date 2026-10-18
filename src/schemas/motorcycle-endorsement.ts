@@ -12,6 +12,7 @@ import questionBank from "../content/questions/motorcycle-endorsement-questions.
 import guideScaffold from "../content/guide/motorcycle-endorsement-guide.json";
 import weights from "../content/weights/motorcycle-endorsement-weights.json";
 import states from "../content/states.json";
+import { ORIGINAL_ART, creditOf } from "../lib/image-credit.js";
 
 export const slug = "motorcycle-endorsement";
 
@@ -110,9 +111,10 @@ for (const [id, q] of Object.entries(questionBank) as [string, any][]) {
   if (src && !existsSync(new URL(`../../public${src}`, import.meta.url))) {
     fail(`points at a missing image, public${src}`);
   }
-  // The folder names the crediting document, so a miscredited image cannot ship.
-  if (src && src.split("/").at(-2) !== q.content?.media?.imageCredit) {
-    fail(`sits in a folder that is not its imageCredit "${q.content?.media?.imageCredit}"`);
+  // The folder is the credit, so an image filed under an unregistered document cannot ship.
+  const credit = creditOf(src);
+  if (src && credit !== ORIGINAL_ART && !(credit! in registry)) {
+    fail(`sits in "${credit}", which is neither a registry key nor "${ORIGINAL_ART}"`);
   }
   // Rejects a guide group the topic does not declare, which would render the fact nowhere.
   const group = q.guide?.group;
@@ -378,7 +380,6 @@ export function collections(kit: any) {
               alt: z.string().min(1),
               // Whether the question can be answered without seeing the image.
               neededForQ: z.boolean(),
-              imageCredit: sourceRef(),
             })
             .nullable(),
           choices: z

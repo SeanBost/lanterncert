@@ -81,10 +81,10 @@ which chunk to start from there rather than reaching for a finer flag.
 **Owns:** `src/content/questions/<cert>-questions.json`, `public/assets/questions/<credit>/`,
 `blackbox/working-materials/question-art/`, `blackbox/research/`.
 
-**Writes on approval only:** `src/content/guide/<cert>-guide.json` — and only to add or edit a
-group's `heading`, `leadIn` or `media`. **An `opener` is hand-written prose**; propose wording, never
-overwrite it. Also `blackbox/authoring/<cert>-exclusions.json`, where an approved deliberate gap is
-declared — **a gap only, never owed work**, which belongs in the worklist ledger. And
+**Writes on approval only:** `src/content/guide/<cert>-guide.json` — and only to add a group, or
+to edit a group's `heading`, `leadIn` or `media`. **An `opener` is hand-written prose**; propose wording, never
+overwrite it. Also `blackbox/authoring/<cert>-exclusions.json`, where an approved **guard** is
+declared: a state whose own documents carry a proposition that must still never get a version. And
 `blackbox/authoring/<cert>-standards.md`, only for a ruling raised at gate A and explicitly approved.
 
 Also on approval: `src/content/topics/`, `src/content/weights/`, `src/content/exams/`, `CLAUDE.md`,
@@ -170,15 +170,20 @@ Reading the floor as a stopping point once ended a run with most of its document
   the worklist doubles as the record of what was examined, which is what answers *"did anything
   testable get missed?"*
 
-**THEN DO THE SCOPE RECONNAISSANCE, BEFORE READING A SINGLE PASSAGE.** Work out which umbrellas can
-carry this document's content and which states each one reaches, and **name every state the document
-cannot honestly reach at all**. It costs one pass over the exams file and one grep per state, and it
-is what turns a mid-run surprise into a decision taken before any work rests on it.
+**CONFIRM THE STATE'S WHOLE CURRICULUM IS IN HAND before reading anything.** Name its motorcycle
+manual and every handbook that manual sends riders to, quoting the sentence that sends them, and
+check that each one is registered and has a snapshot. **A missing document stops the run** and is
+handed to `/cert-facts`, so no run reasons about a document nobody holds. A `--source` run on one
+state's document checks that state's curriculum the same way.
 
-- **A state the document cannot reach owes variants where its own manual teaches the content, and
-  nothing where it is silent. Either way that is a decision, not a discovery.** It
-  goes to gate A. **Finding this out mid-authoring is the failure** — by then questions are already
-  written against scopes that skip the state, and the answer is usually already recorded.
+**THEN DO THE SCOPE RECONNAISSANCE, BEFORE READING A SINGLE PASSAGE.** Work out which umbrellas can
+carry this document's content and which states each one reaches. It costs one pass over the exams
+file, and it is what turns a mid-run surprise into a decision taken before any work rests on it.
+
+- **Other states are checked against the bank, never against their own manuals**, except for a
+  widening, which reads every state the umbrella reaches (`data-handling.md` §5 rules 4a-iii and 5b).
+  **A state this document cannot reach is that state's own run's business**, not a decision for this
+  one.
 - **Read the cert's standards file and its diff or override register first**; both are scope work
   already done, and re-deriving it by hand is how a state-scoped value gets widened by accident.
 - Record the reconnaissance in the worklist as a short table: umbrella, states reached, bar to widen.
@@ -195,9 +200,10 @@ re-enumerating**, which is the whole point: enumeration is expensive, it is the 
 awkward material, and redoing it per gate invites quietly skipping whatever was hard last time.
 
 - **Write the ledger at phase 4, before authoring**, and update each entry's verdict at phase 7.
-- **A `queued` entry carries its scope EVIDENCE, one row per document the scope could reach** — the
-  phrase found, or an explicit note that the document is silent — so a resuming run does not re-read
-  every manual to rediscover what this run already established. **Never record the conclusion
+- **A `queued` entry carries its scope EVIDENCE, one row per document the scope reaches** — the
+  phrase found, or an explicit note that the document is silent — **plus what the bank search found**,
+  the group it joins or none, so a resuming run does not redo either to rediscover what this run
+  already established. **Never record the conclusion
   alone.** A scope token is derived, so it can be re-derived and re-checked; a token recorded by
   itself cannot be checked without redoing the work it summarizes, and an error in it then survives
   every later reading of the ledger.
@@ -229,8 +235,9 @@ How each unit is weighed is in the technique file ▸ *Enumerating a chunk*.
 **5 · Author, one question at a time.** Work the candidate list in order, following *Authoring one
 question* in the technique file. **Finish each question completely before starting the next.**
 Each question runs the same nine steps: quote the passage, decide its scope, write the stem, the
-choices, the explanation and the guide fact, write `sourceSection`, fill `meta`, then re-read the
-passage against the finished question.
+choices, the explanation and the guide fact with its group, write `sourceSection`, fill `meta`, then
+re-read the passage against the finished question. **Every guide fact gets a group**: it joins an
+existing one or proposes a new one, since no cert's group list is ever treated as finished.
 
 **A decision that surfaces here is appended to the brief, never folded into the question report.**
 Keep authoring around it — author what does not depend on the answer, and leave what does as
@@ -318,8 +325,8 @@ is `worked` when nothing in it is `queued`, and a source is finished when no chu
   capacity. **It takes no blocker, because nothing is blocking it** — the next gate authors it.
   Record the verified scope alongside it so a resuming run inherits that work.
 - **`deferred`** — testable, but genuinely **blocked**. Name the blocker. A source contradicting
-  itself is the worked example, and a deferral that is a standing decision belongs in
-  `blackbox/authoring/<cert>-exclusions.json` so the audit reads it as declared rather than missing.
+  itself is the worked example, and a deferral that is a standing decision becomes a guard in
+  `blackbox/authoring/<cert>-exclusions.json`, so no later run authors it.
 - **`rejected`** — not exam-relevant, not testable in four options, or not a valuable add past about
   twice the floor. Say which.
 
@@ -330,7 +337,8 @@ next run and the other needs a decision or an external event. Running out of gat
 ## Making calls
 
 **Decide:** which of several true facts is worth a question · how to word a stem · which distractors
-to use · whether a fact is one question or two · `kind` and `label` on a guide block · whether a
+to use · whether a fact is one question or two · `kind`, `label` and group on a guide block, joining
+a group or proposing a new one · whether a
 question needs art · whether a candidate is `rejected` or `deferred` · anything §5 or §4c already
 answers.
 
@@ -377,21 +385,21 @@ that appears to have changed since its snapshot.
 ## Question art
 
 **Only after approval, and only for approved questions.** Standards are `data-handling.md` §5 rules
-9–9e; per-image recipes live in `blackbox/working-materials/question-art/recipes.md`.
+9–9f.
 
 - **A picture-only question is approved before its art exists and waits whole** in
   `blackbox/working-materials/question-art/staged-questions.json`, `media` filled in, splicing into the
   bank the day its file exists. A question its stem can answer ships at once with `media: null`.
 
 - **Class A** reproduces an artifact a rider meets on the road — always SVG, the artifact's own
-  colors, accuracy is the whole job. **Class B** explains something — always a transparent PNG at
-  800x600, LanternCert palette, **no baked-in text ever**.
+  colors, accuracy is the whole job. **Class B** explains something — always a transparent SVG on an
+  800x600 viewBox, LanternCert palette, **no baked-in text ever**.
+- **Flag art only where the question turns on the picture**: where something sits, how it is laid out,
+  what order things happen in, or the road artifact itself. A picture of what the stem already says is
+  not flagged (§5 rule 9f).
 - **`alt` describes the image and never its meaning**, and is checked against the *choices*: it is
   only safe if it leaves every option still plausible (§5 rule 9b).
-- **Every image gets a recipe entry**, element by element, with every number marked SPEC, MEASURED or
-  EYE. **Art is reused across questions**, so never name a file after a question id.
-- **Build the generator at the third sign of a cert, not before** — knobs at the top, one script
-  emitting every sign, the shape `brand/mark.mjs` already proved.
+- **Art is reused across questions**, so never name a file after a question id.
 
 ## Pre-assembly checks
 
@@ -415,6 +423,7 @@ one-line paraphrase approves wording nobody read. Per question, in full and exac
 - **The explanation**, word for word, labeled **Explanation**.
 - **The guide fact, for EVERY question**, labeled **Guide fact** — the `guide` block's `text` word for
   word, or an explicit *same as the explanation* where `text` is null — with its `kind` and group.
+  A proposed new group shows its heading and lead-in word for word.
   **Never leave it implied.** The two are read by different people, and a gate that shows one leaves
   the reviewer to infer the other. **Keep those two labels fixed**, so a reviewer's reply can name
   either one without ambiguity.
@@ -423,8 +432,9 @@ one-line paraphrase approves wording nobody read. Per question, in full and exac
 
 **Plus the `meta` a reviewer needs to judge the question** — never the whole object, and never fields
 they cannot act on. `source` and `sourceSection`, because a citation is what makes the question
-trustworthy; `appliesTo`, because it decides who ever sees this; `variantGroup`, because `null` is a
-declaration and §5 rule 5b requires the reason stated at the gate; and `note` wherever it is not null,
+trustworthy; `appliesTo`, because it decides who ever sees this; `variantGroup`, because it
+says what the bank search found, and `null` means another state's version was looked for and is not
+there; and `note` wherever it is not null,
 because it shapes a field the reviewer is reading. **Dates, `idKey` and `sisterQuestions` stay out** of
 the terminal unless something about them is unusual — they are in the report and in the JSON.
 
@@ -455,8 +465,8 @@ it; a reader who stops after it has done the job the gate exists for. Sections, 
    says what the scope tokens actually did**, per state and per topic, including what each state does
    not reach and why. It is generated, never written: a hand-written account of who sees what is a
    second owner of the resolver's answer.
-4. **Guide impact** — which sections gained facts, which groups are proposed, what still renders
-   ungrouped.
+4. **Guide impact** — which group each new fact joins, every proposed group with its heading and
+   lead-in, and any fact left ungrouped with the reason.
 5. **Counts** — candidates by verdict; questions by topic and scope; art required; and quota
    movement per state, flagging any topic still under its floor; and how many candidates the
    count-only cuts removed.

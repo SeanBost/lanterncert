@@ -5,6 +5,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { ORIGINAL_ART, creditOf } from "../src/lib/image-credit.js";
 import { SNAPSHOT_MAX_AGE_DAYS, ageInDays, getPage } from "./fetch-page.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -56,7 +57,7 @@ function keysForIntro(cert) {
   return keys;
 }
 
-// Every question cites a source, and a sign question also credits its image to one.
+// Every question cites a source, and a reproduced image is credited to one by its folder.
 // Without this a source cited only by the bank reads as ORPHANED no matter how many questions use it.
 function keysForQuestions(cert) {
   const path = join(ROOT, "src", "content", "questions", `${cert}-questions.json`);
@@ -64,7 +65,8 @@ function keysForQuestions(cert) {
   const keys = new Set();
   for (const q of Object.values(JSON.parse(readFileSync(path, "utf8")))) {
     if (q?.meta?.source) keys.add(q.meta.source);
-    if (q?.content?.media?.imageCredit) keys.add(q.content.media.imageCredit);
+    const credit = creditOf(q?.content?.media?.src);
+    if (credit && credit !== ORIGINAL_ART) keys.add(credit);
   }
   return keys;
 }
