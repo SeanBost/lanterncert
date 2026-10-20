@@ -4,6 +4,7 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { SNAPSHOT_DIR } from "#paths";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 // Caps how many silent snapshots the summary lists by name.
@@ -41,7 +42,7 @@ if (!cert) {
   process.exit(1);
 }
 
-const dir = join(ROOT, "blackbox", "source-snapshots", cert);
+const dir = join(SNAPSHOT_DIR, cert);
 if (!existsSync(dir)) {
   console.error(`find-in-snapshots: no snapshots at ${dir}`);
   process.exit(1);

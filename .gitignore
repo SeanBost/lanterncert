@@ -6,7 +6,6 @@ CLAUDE.md
 
 # Build
 dist/
-builds/
 .astro/
 .vscode/
 node_modules/

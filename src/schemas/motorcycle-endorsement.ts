@@ -1,7 +1,8 @@
 // Everything specific to the motorcycle-endorsement cert. `kit` is PASSED IN from content.config.ts;
 // importing it back would catch the Zod consts in their TDZ.
 import { existsSync } from "node:fs";
-import { defineCollection, z } from "astro:content";
+import { defineCollection } from "astro:content";
+import { z } from "astro/zod";
 import { file } from "astro/loaders";
 
 import registry from "../content/sources/motorcycle-endorsement-sources.json";

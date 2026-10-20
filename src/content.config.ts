@@ -1,5 +1,6 @@
 // Universal schema machinery only; cert vocabulary lives in src/schemas/<cert>.ts.
-import { defineCollection, reference, z } from "astro:content";
+import { defineCollection, reference } from "astro:content";
+import { z } from "astro/zod";
 import { file } from "astro/loaders";
 import states from "./content/states.json";
 import * as motorcycleEndorsement from "./schemas/motorcycle-endorsement";

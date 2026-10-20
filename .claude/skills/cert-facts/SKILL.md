@@ -65,34 +65,33 @@ without their own argument they could only be revalidated as part of a full pass
 ## Owns / never touches
 
 **Owns:** `src/content/facts/<cert>-facts.json`, `src/content/sources/<cert>-sources.json`,
-`blackbox/source-notes/<cert>-source-notes.json`, `blackbox/source-snapshots/<cert>/`,
+`blackbox/sources/<cert>-source-notes.json`, `blackbox/sources/snapshots/<cert>/`,
 `blackbox/research/`.
 
 **The registry is public; the notes are not.** A proposed entry and its note are written together at
 the review gate but land in two files — the registry ships in the repo and renders on the site, the
 note never leaves `blackbox/`. Never put note-shaped reasoning in a registry field.
 
-**Never touches:** the question bank, any UI or route, `blackbox/sessions.md`, or git. Each has
+**Never touches:** the question bank, any UI or route, `blackbox/project/sessions.md`, or git. Each has
 another owner whose checks a run here would bypass.
 
-**Writes on approval only:** `CLAUDE.md`, `blackbox/data-handling.md` and
-`blackbox/strategy/project-plan.md`. **A run that finds a standard wrong or missing proposes the
+**Writes on approval only:** `CLAUDE.md` and `blackbox/docs/data-handling.md`. **A run that finds a standard wrong or missing proposes the
 change at the review gate and writes it once approved**, in the same session, since a rule changed
 in one file and not its owner is how the two drift. A new vocabulary value is a report item — it
 lands in `src/schemas/<cert>.ts` and `src/content/display/<cert>-display.json` together, by hand,
 never mid-run.
 
-**Writes freely:** `blackbox/todo.md`, for work the run finds owed elsewhere — another skill's job, a
+**Writes freely:** `blackbox/project/todo.md`, for work the run finds owed elsewhere — another skill's job, a
 follow-up run, a blocked fetch. **Owed work goes on the to-do list, never only into a report**, where
 nobody looks for it once the run is closed.
 
 ## Read first
 
-- **`blackbox/technique/cert-facts.md` — read it in full before phase 0, and stop if it is missing.**
+- **`blackbox/authoring/technique/cert-facts.md` — read it in full before phase 0, and stop if it is missing.**
   This file is the process: what a run does, in what order, and where it stops. That one is the
   technique each step applies, and it is not published. **A run on the process alone is not this
   skill.**
-- **`blackbox/data-handling.md` — the authority on every shape and rule.** Registry entry shape,
+- **`blackbox/docs/data-handling.md` — the authority on every shape and rule.** Registry entry shape,
   key format, dating and the fact contract all live there and are **not restated here**. This file covers execution only:
   what a run does, in what order, and where it stops.
 - **`blackbox/authoring/<cert>-standards.md` ▸ *Sources*** — **this cert's own source rulings**,
@@ -102,7 +101,7 @@ nobody looks for it once the run is closed.
 - **`src/schemas/<cert>.ts` ▸ `vocab`** — the complete set of allowed values for each constrained
   field, build-enforced. **This is the authority on vocabularies**; `data-handling.md` §4 ▸ *Field rules*
   says what each one means and `src/content/display/<cert>-display.json` what it reads as.
-- `CLAUDE.md` ▸ *The rules that must never be missed* and `blackbox/decisions.md` ▸ *Locked* —
+- `CLAUDE.md` ▸ *The rules that must never be missed* and `blackbox/docs/decisions.md` ▸ *Locked* —
   why the rules are what they are. `data-handling.md` §4 carries the null / `note` / `stateDetails` split.
 - **The most recent report in `blackbox/research/` for this state**, if one exists. It records what
   was already ruled out, and re-running settled research is the cheapest way to waste a pass.
@@ -120,9 +119,9 @@ report — do not refuse.
 **1 · Sweep.** `node scripts/audit-sources.mjs <cert> --state <code>` (omit `--state` for `all` or
 `--links`; `--state xx` for the cert-wide sources). This refreshes any snapshot older than 21 days and reports dangling refs, orphans,
 canonical drift and pages whose text changed since last time. **Never fetch a page yourself when a
-snapshot under 21 days old exists** — read `blackbox/source-snapshots/<cert>/<key>.json`. Both
+snapshot under 21 days old exists** — read `blackbox/sources/snapshots/<cert>/<key>.json`. Both
 snapshot stores are partitioned by cert slug; a new cert gets its directory in
-`source-snapshots/` **and** in `source-snapshots-history/`, even though the history one starts
+`sources/snapshots/` **and** in `sources/snapshot-history/`, even though the history one starts
 empty. Every avoidable request is load placed on a public agency for nothing.
 
 The sweep raises two re-dating flags, `REDATE` and `CURRENCY-STALE`. **Both are work items for this
@@ -190,7 +189,9 @@ vocabulary, and any snapshots. A state the facts file does not already hold is w
 separate, deliberate edit and never part of a research run. Bump `meta.dateVerified` to the run date if every sourced fact in
 that state was confirmed still accurate to its source this run — reading a snapshot under 21 days
 old counts, so a clean sweep over an untouched state qualifies. A partial pass, or any page that
-changed and was not re-read against the fact it backs, leaves the date alone.
+changed and was not re-read against the fact it backs, leaves the date alone. **Then move the state's
+earlier report** to `blackbox/zzz_old/junk-or-bloat/research/`, since this run's report supersedes it
+(*Report*).
 
 ## Verifying properly
 
@@ -348,8 +349,9 @@ Before writing the report, run every check in the technique file ▸ *Pre-assemb
 ## Report
 
 Write to `blackbox/research/<cert>-<state>-<YYYY-MM-DD>.md` and give a short summary in the
-terminal. If a report for that state and date already exists, suffix the filename rather than
-overwriting it — an earlier report may carry the record of what was applied.
+terminal, suffixing the filename if one exists for that state and date. **It supersedes the state's
+earlier report**, so it carries forward whatever that report still owned and this run did not redo:
+an open null's attempt log, a question still waiting on the reviewer.
 
 Sections, in order:
 

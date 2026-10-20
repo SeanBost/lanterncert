@@ -65,20 +65,20 @@ provenance record, and a silent fix corrupts it.
 whole value of `blackbox/authoring/<cert>-exclusions.json` is that a person decided.
 
 **This run reaches no network, ever.** Every source it needs is already a snapshot in
-`blackbox/source-snapshots/<cert>/`, and `audit-questions.mjs` makes no requests at all. **A
+`blackbox/sources/snapshots/<cert>/`, and `audit-questions.mjs` makes no requests at all. **A
 question whose snapshot looks stale or wrong is a report item for `/cert-facts`**, never a fetch
 from here — re-reading a live page is that skill's job and its request budget, not this one's.
 
 ## Read first
 
-- **`blackbox/technique/cert-questions-audit.md` — read it in full before phase 0, and stop if it is missing.**
+- **`blackbox/authoring/technique/cert-questions-audit.md` — read it in full before phase 0, and stop if it is missing.**
   This file is the process: what a run does, in what order, and where it stops. That one is the
   technique each step applies, and it is not published. **A run on the process alone is not this
   skill.**
-- **`blackbox/data-handling.md` ▸ *Questions* (§5) and ▸ *Study Guide* (§4c)** — what a correct
+- **`blackbox/docs/data-handling.md` ▸ *Questions* (§5) and ▸ *Study Guide* (§4c)** — what a correct
   question is. **Not restated here.**
-- **`blackbox/decisions.md` ▸ *The three modes*, and `CLAUDE.md` ▸ *Conventions*** — the voice rules a stem has to satisfy.
-- **`blackbox/data-handling.md` ▸ *Legal and authorship* (§6)** — copyright, fair use and the
+- **`blackbox/docs/decisions.md` ▸ *The three modes*, and `CLAUDE.md` ▸ *Conventions*** — the voice rules a stem has to satisfy.
+- **`blackbox/docs/data-handling.md` ▸ *Legal and authorship* (§6)** — copyright, fair use and the
   trademark bar. **Not restated here**, and it is what phase 3b is checking against.
 - **`blackbox/authoring/<cert>-standards.md`**, plus any source-diff or terminology register it
   names. **Most real scope defects are already enumerated there**, and a finding that contradicts a

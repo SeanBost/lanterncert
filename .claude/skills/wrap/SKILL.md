@@ -1,100 +1,29 @@
 ---
 name: wrap
-description: Close a working session — freeze a snapshot, write the session-log entry with its case-study block, reconcile the to-do list by deleting what is done, audit the comments touched, run the attribution and documentation checks, and fold anything durable into the operative docs. Stops at one review gate and writes nothing before approval. Invoked as /wrap.
+description: Close a working session - snapshot the private docs, bring every doc the session affected up to date, and add a session-log entry sized to what actually happened. Writes directly, with no review gate. Invoked as /wrap.
 ---
 
 # wrap
 
-Closes a session. **Every step below runs; none is optional and none is skipped for being quiet.**
+Closes a session while its context is still loaded. Docs are kept current during the work, so this is
+the last sweep before walking away, not the moment the project's memory gets written.
 
-## Altitude — read this before deciding anything
+1. **Snapshot** with `node blackbox/project/tools/snapshot-docs.mjs`, before any edit. It is the only undo for the
+   gitignored docs.
+2. **Make everything current.** Delete finished items from `blackbox/project/todo.md` and add newly owed ones.
+   Correct any doc line the session made untrue, and rewrite the spine's current state, which stays a
+   few lines. Rewrite what is out of date rather than adding beside it. A rule is written only when the session decided one;
+   lessons don't become rules.
+3. **Check the comments** in every code file the session edited: one line, saying what the code does.
+4. **Write the entry** at the top of `blackbox/project/sessions.md`, as `## <n> · <title> — <date>`.
+   - **Size it to the session.** A routine session is one to three lines; a big one gets what it
+     needs. No section is required.
+   - **What changed and what was decided**, a rejected option and its reason in a clause. Leave out
+     anything git, the doc history or `todo.md` already holds.
+   - **`📌 **Case study:**` and one sentence**, only when something happened worth telling: a reversal,
+     a correction, a call that went against instinct. Most sessions have none.
+   - **A next-session line** only when work stopped mid-task and `todo.md` doesn't say so.
+5. **If tracked files changed**, run `node blackbox/project/tools/check-attribution.mjs` and fix what it reports.
+6. **Report in a few lines.** Nothing waits for approval; corrections come after.
 
-**Wrapping is the moment the project's memory is written, and it is the step most often done from
-memory.** That is the whole reason this is a skill rather than a checklist in a document read a
-hundred thousand tokens earlier.
-
-- **The instruction to wrap IS the instruction to do all of it.** Don't ask which parts to run.
-- **Deleting is the work.** A to-do item that is finished comes out; ticking is not available and
-  neither is leaving it with a note. If a call must never be re-proposed it is a decision, and it
-  goes to the declined register with an ID rather than staying as a tombstone.
-- **A weak case-study entry is deleted in one line; an unrecorded one is gone forever.** Be generous,
-  and favor reversals, corrections, rejected alternatives and counterintuitive calls — those are
-  exactly what a tidied narrative loses, and they are the entries worth having a year from now.
-- **Report what actually happened, including what broke.** A wrap that reads like everything went
-  smoothly is a wrap that lost the interesting half.
-
-## Phases
-
-Run 1-5 uninterrupted. Stop at the gate. Write only what is approved.
-
-### 1 · Freeze
-
-```
-node blackbox/snapshot-docs.mjs
-```
-
-**Before any edit.** These files are gitignored, so the snapshot is their only undo. It commits to a
-private local history and does nothing when nothing has changed.
-
-### 2 · Gather
-
-Read the session's own diff and history — what changed, what was decided, what was abandoned. Then:
-
-```
-node blackbox/status.mjs
-node blackbox/doc-health.mjs
-node blackbox/check-doc-overlap.mjs
-node blackbox/check-attribution.mjs
-```
-
-**Read the findings; do not fix them yet.** They are inputs to the gate. A PROBLEM that appeared this
-session belongs in the entry as much as the work that caused it.
-
-### 3 · Audit the comments
-
-**Every comment in every file touched this session**, against the spine's *Conventions*: still
-accurate, still one line, still saying what the code does rather than why. A session of edits leaves
-stale and stacked comments behind as a matter of course, and a comment describing code that has since
-moved is worse than no comment.
-
-### 4 · Reconcile the to-do list
-
-For each item the session closed:
-
-- **Grep every core doc for the item's distinctive selector, filename or term first.** Deletion is
-  the one moment you know exactly what to grep for, and roughly a hundred pointers reach that file.
-- **Delete the item.** Part-done keeps only the part that is not, rewritten as an open item.
-- **A declined or accepted-as-built call moves to the declined register** with a new `D-NN` and the
-  load-bearing clause — not a summary of it.
-- **An item whose opening premise has gone stale is rewritten, not left standing.**
-
-Then check the bucket is still right, and regenerate the contents table if any section moved.
-
-### 5 · Draft the entry
-
-A `sessions.md` entry at the top, newest first, in the file's established shape: **Shipped** ·
-**Decided** · **Learned**, closing with a `📌 Case study` block.
-
-**Nothing is appended to the session log outside a wrap.**
-
-### GATE — propose, do not write
-
-Present, in one message:
-
-1. **The session-log entry**, in full.
-2. **The to-do reconciliation** — every deletion with the pointer check that cleared it, every
-   rewrite, every new `D-NN`.
-3. **Durable findings to fold into the operative docs** — each as a one-line rule naming the file
-   that should own it. **Propose; never write a standards change directly.**
-4. **What the four checks reported**, and which findings this session created.
-
-Wait for approval. **On approval, write everything in one pass and re-run the four checks** — the
-wrap's own edits can introduce a duplication or a dangling pointer, and that is exactly when nobody
-is looking.
-
-## Boundaries
-
-- **Owns:** `sessions.md`, `todo.md`, `decisions.md`, and the snapshot.
-- **Proposes but never writes without explicit approval:** any change to `data-handling.md`, the
-  spine, or a cert standards file.
-- **Never touches:** the question bank, the facts files, the sources registry, or anything in `src/`.
+Nothing is added to the session log outside a wrap.

@@ -1686,7 +1686,12 @@
     },
     "content": {
       "question": "Vehicles are traveling in the lanes on both sides of you. Where in your own lane is usually the best place to ride?",
-      "media": null,
+      "media": {
+        "type": "image",
+        "src": "/assets/questions/lanterncert/three-lanes-car-and-truck.svg",
+        "alt": "Top-down view of three lanes of traffic heading the same way. The middle lane is marked into three equal strips. A car travels in the lane on its left and a truck in the lane on its right.",
+        "neededForQ": false
+      },
       "choices": [
         { "id": "a", "text": "In the center of the lane" },
         { "id": "b", "text": "In the left third, where most riders sit by default" },
@@ -1788,7 +1793,12 @@
     },
     "content": {
       "question": "You are riding right beside a car in the next lane. What should you do?",
-      "media": null,
+      "media": {
+        "type": "image",
+        "src": "/assets/questions/lanterncert/two-lanes-beside-car.svg",
+        "alt": "Top-down view of two lanes heading the same way. A motorcycle rides level with the rear door of a car in the lane beside it.",
+        "neededForQ": false
+      },
       "choices": [
         { "id": "a", "text": "Change your speed until you are no longer beside it" },
         { "id": "b", "text": "Match its speed so its driver can keep track of you" },
@@ -2332,7 +2342,12 @@
     },
     "content": {
       "question": "About how far ahead should you search, to spot trouble early enough to plan for it?",
-      "media": null,
+      "media": {
+        "type": "image",
+        "src": "/assets/questions/lanterncert/search-bands-ahead.svg",
+        "alt": "Top-down view of a motorcycle in its lane, with a short shaded band just ahead of it and a second band much farther up the road.",
+        "neededForQ": false
+      },
       "choices": [
         { "id": "a", "text": "About 12 seconds" },
         { "id": "b", "text": "About 2 seconds" },
@@ -2502,7 +2517,12 @@
     },
     "content": {
       "question": "How far ahead does your immediate path reach, the stretch where a hazard would need a quick swerve or stop?",
-      "media": null,
+      "media": {
+        "type": "image",
+        "src": "/assets/questions/lanterncert/search-bands-ahead.svg",
+        "alt": "Top-down view of a motorcycle in its lane, with a short shaded band just ahead of it and a second band much farther up the road.",
+        "neededForQ": false
+      },
       "choices": [
         { "id": "a", "text": "About 4 seconds" },
         { "id": "b", "text": "About 2 seconds" },
@@ -2740,7 +2760,12 @@
     },
     "content": {
       "question": "A car coming the other way is waiting to turn left across your lane at the intersection ahead. As you ride through, which of these should you avoid?",
-      "media": null,
+      "media": {
+        "type": "image",
+        "src": "/assets/questions/lanterncert/intersection-oncoming-left-turn.svg",
+        "alt": "Top-down view of a four-way intersection. A motorcycle approaches from the bottom, and a car coming the other way waits in the middle, angled to turn left across the motorcycle's lane.",
+        "neededForQ": false
+      },
       "choices": [
         { "id": "a", "text": "Suddenly changing speed or position" },
         { "id": "b", "text": "Covering the clutch and both brakes" },
@@ -2842,7 +2867,12 @@
     },
     "content": {
       "question": "You have stopped at the stop line of a blind intersection, and buildings still hide the cross traffic. Where should you stop next to look?",
-      "media": null,
+      "media": {
+        "type": "image",
+        "src": "/assets/questions/lanterncert/blind-intersection-buildings.svg",
+        "alt": "Top-down view of a motorcycle stopped at a stop line. Buildings on the near corners hide the street crossing ahead.",
+        "neededForQ": false
+      },
       "choices": [
         { "id": "a", "text": "Just short of the cross lane, with your front wheel out of it" },
         { "id": "b", "text": "With your front wheel just into the cross lane, for a clearer view" },
@@ -3658,7 +3688,12 @@
     },
     "content": {
       "question": "Why turn your head and look before changing lanes, even after checking your mirrors?",
-      "media": null,
+      "media": {
+        "type": "image",
+        "src": "/assets/questions/lanterncert/head-check-lane-beside.svg",
+        "alt": "Top-down view of a motorcycle in its lane, with an empty lane beside and behind it.",
+        "neededForQ": false
+      },
       "choices": [
         { "id": "a", "text": "Motorcycles have blind spots that mirrors do not show" },
         { "id": "b", "text": "Turning your head tells drivers you are moving over" },
@@ -4236,7 +4271,12 @@
     },
     "content": {
       "question": "You need to swerve right around an obstacle, then carry on in your original direction. How do you use the handgrips?",
-      "media": null,
+      "media": {
+        "type": "image",
+        "src": "/assets/questions/lanterncert/swerve-object-in-lane.svg",
+        "alt": "Top-down view of a motorcycle approaching an object in its lane, with open space to the right of the object.",
+        "neededForQ": false
+      },
       "choices": [
         { "id": "a", "text": "Press the right grip to swerve, then the left grip once you are clear" },
         { "id": "b", "text": "Press the left grip to swerve, then the right grip once you are clear" },
@@ -4916,7 +4956,12 @@
     },
     "content": {
       "question": "Railroad tracks cross your road at an angle. How should you usually cross them?",
-      "media": null,
+      "media": {
+        "type": "image",
+        "src": "/assets/questions/lanterncert/rail-crossing-slant.svg",
+        "alt": "Top-down view of a motorcycle approaching railroad tracks that cross its lane at a slant, with a second lane beside it.",
+        "neededForQ": false
+      },
       "choices": [
         { "id": "a", "text": "Straight across, staying in your lane" },
         { "id": "b", "text": "Turn so you cross them at a right angle" },
@@ -4950,7 +4995,12 @@
     },
     "content": {
       "question": "A railroad or trolley track, or a pavement seam, runs alongside your path, and you need to cross it. What should you do?",
-      "media": null,
+      "media": {
+        "type": "image",
+        "src": "/assets/questions/lanterncert/pavement-seam-alongside.svg",
+        "alt": "Top-down view of a motorcycle riding just beside a pavement seam that runs along its lane.",
+        "neededForQ": false
+      },
       "choices": [
         { "id": "a", "text": "Move away, then cross at 45 degrees or more with a decisive turn" },
         { "id": "b", "text": "Edge across it gradually, keeping the angle as shallow as possible" },
@@ -5902,7 +5952,12 @@
     },
     "content": {
       "question": "Where should you carry a heavy load on your motorcycle?",
-      "media": null,
+      "media": {
+        "type": "image",
+        "src": "/assets/questions/lanterncert/load-side-view.svg",
+        "alt": "Side view of a motorcycle and rider, with the area over and behind the rear axle empty.",
+        "neededForQ": false
+      },
       "choices": [
         { "id": "a", "text": "Low down, and no farther back than the rear axle" },
         { "id": "b", "text": "High on a rack behind the seat, out of the way" },
@@ -6378,7 +6433,12 @@
     },
     "content": {
       "question": "Your group is passing a slower car one rider at a time. After the leader passes, where in the lane should the leader ride?",
-      "media": null,
+      "media": {
+        "type": "image",
+        "src": "/assets/questions/lanterncert/group-passing-staggered.svg",
+        "alt": "Top-down view of a group of motorcycles in staggered formation behind a car, with the leader pulling out to pass.",
+        "neededForQ": false
+      },
       "choices": [
         { "id": "a", "text": "The left side, holding passing speed" },
         { "id": "b", "text": "The right side, to make room for the next rider" },
@@ -7296,7 +7356,12 @@
     },
     "content": {
       "question": "You can see an eight-sided sign ahead, but you are still too far away to read it. Which sign is it?",
-      "media": null,
+      "media": {
+        "type": "image",
+        "src": "/assets/questions/xx-fhwa-mutcd/shape-octagon.svg",
+        "alt": "A plain eight-sided outline with no color or lettering.",
+        "neededForQ": false
+      },
       "choices": [
         { "id": "a", "text": "A stop sign" },
         { "id": "b", "text": "A yield sign" },
@@ -7330,7 +7395,12 @@
     },
     "content": {
       "question": "What does a sign shaped like a downward-pointing triangle tell you to do?",
-      "media": null,
+      "media": {
+        "type": "image",
+        "src": "/assets/questions/xx-fhwa-mutcd/shape-triangle-down.svg",
+        "alt": "A plain triangle outline, pointing down, with no color or lettering.",
+        "neededForQ": false
+      },
       "choices": [
         { "id": "a", "text": "Slow, stop if needed, and let other traffic go first" },
         { "id": "b", "text": "Go ahead first, since cross traffic must wait for you" },
@@ -7364,7 +7434,12 @@
     },
     "content": {
       "question": "What does a round sign beside the road warn you about?",
-      "media": null,
+      "media": {
+        "type": "image",
+        "src": "/assets/questions/xx-fhwa-mutcd/shape-circle.svg",
+        "alt": "A plain circle outline with no color or lettering.",
+        "neededForQ": false
+      },
       "choices": [
         { "id": "a", "text": "A railroad crossing coming up" },
         { "id": "b", "text": "A traffic circle coming up" },
@@ -7398,7 +7473,12 @@
     },
     "content": {
       "question": "A five-sided sign is shaped like the outline of a house, pointed at the top. What does it tell you?",
-      "media": null,
+      "media": {
+        "type": "image",
+        "src": "/assets/questions/xx-fhwa-mutcd/shape-pentagon.svg",
+        "alt": "A plain five-sided outline shaped like a house, pointed at the top, with no color or lettering.",
+        "neededForQ": false
+      },
       "choices": [
         { "id": "a", "text": "A school zone or school crossing is near" },
         { "id": "b", "text": "A playground is beside the road" },
@@ -7432,7 +7512,12 @@
     },
     "content": {
       "question": "What kind of message does a diamond-shaped sign carry?",
-      "media": null,
+      "media": {
+        "type": "image",
+        "src": "/assets/questions/xx-fhwa-mutcd/shape-diamond.svg",
+        "alt": "A plain diamond outline with no color or lettering.",
+        "neededForQ": false
+      },
       "choices": [
         { "id": "a", "text": "A warning about something on the road ahead" },
         { "id": "b", "text": "A law you must obey, such as a speed limit" },
@@ -7466,7 +7551,12 @@
     },
     "content": {
       "question": "A rectangular sign is taller than it is wide. What kind of message does it usually carry?",
-      "media": null,
+      "media": {
+        "type": "image",
+        "src": "/assets/questions/xx-fhwa-mutcd/shape-rectangle-upright.svg",
+        "alt": "A plain rectangle outline, taller than it is wide, with no color or lettering.",
+        "neededForQ": false
+      },
       "choices": [
         { "id": "a", "text": "A rule you are required by law to follow" },
         { "id": "b", "text": "Directions, distances or the names of places" },
@@ -7534,7 +7624,12 @@
     },
     "content": {
       "question": "A sign shows a picture inside a red circle, with a red line running diagonally across it. What does the sign tell you?",
-      "media": null,
+      "media": {
+        "type": "image",
+        "src": "/assets/questions/xx-fhwa-mutcd/r3-4-no-u-turn.svg",
+        "alt": "A white sign with a black U-turn arrow, crossed by a red circle and a red diagonal line.",
+        "neededForQ": false
+      },
       "choices": [
         { "id": "a", "text": "What the picture shows is not allowed" },
         { "id": "b", "text": "What the picture shows is allowed here" },
@@ -7670,7 +7765,12 @@
     },
     "content": {
       "question": "A DO NOT ENTER sign faces you where a road begins. What does the sign tell you about that road?",
-      "media": null,
+      "media": {
+        "type": "image",
+        "src": "/assets/questions/xx-fhwa-mutcd/r5-1-do-not-enter.svg",
+        "alt": "A red circle with a white bar across it and the words DO NOT ENTER.",
+        "neededForQ": false
+      },
       "choices": [
         { "id": "a", "text": "It carries one-way traffic coming at you" },
         { "id": "b", "text": "It is closed for road work ahead" },
@@ -7704,7 +7804,12 @@
     },
     "content": {
       "question": "You have turned onto a ramp, and a red sign reading WRONG WAY now faces you. What does it mean?",
-      "media": null,
+      "media": {
+        "type": "image",
+        "src": "/assets/questions/xx-fhwa-mutcd/r5-1a-wrong-way.svg",
+        "alt": "A red rectangular sign with white letters reading WRONG WAY.",
+        "neededForQ": false
+      },
       "choices": [
         { "id": "a", "text": "You are riding against the flow of traffic" },
         { "id": "b", "text": "You have missed your exit and should take the next" },
@@ -7738,7 +7843,12 @@
     },
     "content": {
       "question": "At a corner, the street you want to turn onto has a ONE WAY sign whose arrow points to your right. Which way may you turn onto it?",
-      "media": null,
+      "media": {
+        "type": "image",
+        "src": "/assets/questions/xx-fhwa-mutcd/r6-1-one-way-right.svg",
+        "alt": "A black and white ONE WAY sign with its arrow pointing right.",
+        "neededForQ": false
+      },
       "choices": [
         { "id": "a", "text": "Right, the way the arrow points" },
         { "id": "b", "text": "Left, since the arrow shows oncoming traffic" },
@@ -7772,7 +7882,12 @@
     },
     "content": {
       "question": "You are stopped at a red light, waiting to turn right, and a sign by the signal reads NO TURN ON RED. Nothing is coming. What does the sign mean for you?",
-      "media": null,
+      "media": {
+        "type": "image",
+        "src": "/assets/questions/xx-fhwa-mutcd/r10-11-no-turn-on-red.svg",
+        "alt": "A white rectangular sign with black letters reading NO TURN ON RED.",
+        "neededForQ": false
+      },
       "choices": [
         { "id": "a", "text": "You must wait for a signal that allows the turn" },
         { "id": "b", "text": "You may turn now that you have fully stopped" },
@@ -7801,12 +7916,17 @@
       "sourceSection": "Section 2C.40, Reduced Speed Limit Ahead signs.",
       "note": null,
       "dateCreated": "2026-10-04",
-      "lastEdited": null,
+      "lastEdited": "2026-10-18",
       "lastVerified": "2026-10-16"
     },
     "content": {
-      "question": "You pass a sign reading REDUCED SPEED LIMIT AHEAD. Where does the lower limit take effect?",
-      "media": null,
+      "question": "You pass a yellow diamond sign showing an upward arrow above a speed limit sign. Where does the lower limit take effect?",
+      "media": {
+        "type": "image",
+        "src": "/assets/questions/xx-fhwa-mutcd/w3-5-reduced-speed-limit-ahead.svg",
+        "alt": "A yellow diamond sign showing a black arrow pointing up above a white sign reading SPEED LIMIT 55.",
+        "neededForQ": false
+      },
       "choices": [
         { "id": "a", "text": "At the speed limit sign posted farther along" },
         { "id": "b", "text": "Right here, at the sign you have just passed" },
@@ -7820,7 +7940,7 @@
       "group": "speed",
       "order": 10,
       "kind": "value",
-      "label": "REDUCED SPEED LIMIT AHEAD",
+      "label": "Reduced speed limit ahead",
       "text": "A lower limit starts at the speed limit sign ahead. Slow down in time."
     }
   },
@@ -7874,7 +7994,12 @@
     },
     "content": {
       "question": "Below a yellow curve warning sign is a small plaque showing a speed lower than the road's posted limit. What does that speed tell you?",
-      "media": null,
+      "media": {
+        "type": "image",
+        "src": "/assets/questions/xx-fhwa-mutcd/w1-2-curve-advisory-speed.svg",
+        "alt": "A yellow curve warning sign with a smaller yellow plaque beneath it reading 35 MPH.",
+        "neededForQ": false
+      },
       "choices": [
         { "id": "a", "text": "A recommended speed for taking the curve" },
         { "id": "b", "text": "A new speed limit that applies from here on" },
@@ -14350,6 +14475,513 @@
       "kind": "rule",
       "label": null,
       "text": "Riding gloves should be leather or another equally durable material."
+    }
+  },
+  "mot-all-9-318": {
+    "meta": {
+      "idKey": "318",
+      "appliesTo": "ALL",
+      "variantGroup": null,
+      "sisterQuestions": null,
+      "topic": "signs-and-markings",
+      "source": "xx-fhwa-mutcd",
+      "sourceSection": "Section 2C.07, horizontal alignment signs; Figure 2C-1.",
+      "note": null,
+      "dateCreated": "2026-10-09",
+      "lastEdited": null,
+      "lastVerified": "2026-10-09"
+    },
+    "content": {
+      "question": "Riding a quiet rural road, you pass this sign. What does it warn you of?",
+      "media": {
+        "type": "image",
+        "src": "/assets/questions/xx-fhwa-mutcd/w1-1-turn-right.svg",
+        "alt": "A yellow diamond sign with a black arrow that bends to the right at a right angle.",
+        "neededForQ": true
+      },
+      "choices": [
+        { "id": "a", "text": "A sharp turn to the right ahead" },
+        { "id": "b", "text": "A gentle curve to the right ahead" },
+        { "id": "c", "text": "A side road joining from the right" },
+        { "id": "d", "text": "A right turn required at the next road" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "The arrow's right-angle bend marks a sharp turn to the right. A gentler bend gets the curve sign, whose arrow bends gradually."
+    },
+    "guide": {
+      "group": "warning",
+      "order": 10,
+      "kind": "value",
+      "label": "Turn sign",
+      "text": "A sharp turn ahead, in the direction the arrow bends."
+    }
+  },
+  "mot-all-9-319": {
+    "meta": {
+      "idKey": "319",
+      "appliesTo": "ALL",
+      "variantGroup": null,
+      "sisterQuestions": null,
+      "topic": "signs-and-markings",
+      "source": "xx-fhwa-mutcd",
+      "sourceSection": "Section 2C.07, horizontal alignment signs; Figure 2C-1.",
+      "note": null,
+      "dateCreated": "2026-10-09",
+      "lastEdited": null,
+      "lastVerified": "2026-10-09"
+    },
+    "content": {
+      "question": "Leaving town on a state highway, you pass this sign. What lies ahead?",
+      "media": {
+        "type": "image",
+        "src": "/assets/questions/xx-fhwa-mutcd/w1-5-winding-road.svg",
+        "alt": "A yellow diamond sign with a black arrow that snakes upward through several bends.",
+        "neededForQ": true
+      },
+      "choices": [
+        { "id": "a", "text": "Several bends close together ahead" },
+        { "id": "b", "text": "One sharp bend ahead" },
+        { "id": "c", "text": "A slippery stretch of road ahead" },
+        { "id": "d", "text": "The road narrows ahead" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "The winding road sign warns of three or more bends close together ahead."
+    },
+    "guide": {
+      "group": "warning",
+      "order": 20,
+      "kind": "value",
+      "label": "Winding road sign",
+      "text": "Three or more bends close together ahead."
+    }
+  },
+  "mot-all-9-320": {
+    "meta": {
+      "idKey": "320",
+      "appliesTo": "ALL",
+      "variantGroup": null,
+      "sisterQuestions": null,
+      "topic": "signs-and-markings",
+      "source": "xx-fhwa-mutcd",
+      "sourceSection": "Section 2C.41, intersection warning signs; Figure 2C-10.",
+      "note": null,
+      "dateCreated": "2026-10-09",
+      "lastEdited": null,
+      "lastVerified": "2026-10-09"
+    },
+    "content": {
+      "question": "This sign appears beside the highway ahead of you. What is it telling you?",
+      "media": {
+        "type": "image",
+        "src": "/assets/questions/xx-fhwa-mutcd/w2-2-side-road-right.svg",
+        "alt": "A yellow diamond sign with a black vertical line and a shorter line meeting it from the right.",
+        "neededForQ": true
+      },
+      "choices": [
+        { "id": "a", "text": "A side road joins from the right ahead" },
+        { "id": "b", "text": "Another road crosses yours ahead" },
+        { "id": "c", "text": "Traffic merges in from the right ahead" },
+        { "id": "d", "text": "Your road ends ahead at a crossing road" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "This sign warns that a side road enters from the right ahead, so watch for vehicles turning into or out of it."
+    },
+    "guide": {
+      "group": "warning",
+      "order": 30,
+      "kind": "value",
+      "label": "Side road sign",
+      "text": "A road joins from the side shown. Watch for traffic turning in or out."
+    }
+  },
+  "mot-all-9-321": {
+    "meta": {
+      "idKey": "321",
+      "appliesTo": "ALL",
+      "variantGroup": null,
+      "sisterQuestions": null,
+      "topic": "signs-and-markings",
+      "source": "xx-fhwa-mutcd",
+      "sourceSection": "Section 2C.41, intersection warning signs; Figure 2C-10.",
+      "note": null,
+      "dateCreated": "2026-10-09",
+      "lastEdited": null,
+      "lastVerified": "2026-10-09"
+    },
+    "content": {
+      "question": "Riding a quiet county road, you come to this sign. What does it tell you?",
+      "media": {
+        "type": "image",
+        "src": "/assets/questions/xx-fhwa-mutcd/w2-4-t-intersection.svg",
+        "alt": "A yellow diamond sign with a black symbol shaped like a capital T.",
+        "neededForQ": true
+      },
+      "choices": [
+        { "id": "a", "text": "Your road ends ahead, so you must turn" },
+        { "id": "b", "text": "Another road crosses yours ahead" },
+        { "id": "c", "text": "A side road joins from the left or right" },
+        { "id": "d", "text": "The road narrows to a single lane" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "The T-intersection sign warns that the road you are on ends ahead at a crossing road, so you will have to turn one way or the other."
+    },
+    "guide": {
+      "group": "warning",
+      "order": 40,
+      "kind": "value",
+      "label": "T-intersection sign",
+      "text": "Your road ends ahead at a crossing road, and you will have to turn."
+    }
+  },
+  "mot-all-9-322": {
+    "meta": {
+      "idKey": "322",
+      "appliesTo": "ALL",
+      "variantGroup": null,
+      "sisterQuestions": null,
+      "topic": "signs-and-markings",
+      "source": "xx-fhwa-mutcd",
+      "sourceSection": "Section 2C.21, Divided Highway Ends sign; Figure 2C-6.",
+      "note": null,
+      "dateCreated": "2026-10-09",
+      "lastEdited": null,
+      "lastVerified": "2026-10-09"
+    },
+    "content": {
+      "question": "This sign stands beside the highway you are on. What change does it warn of?",
+      "media": {
+        "type": "image",
+        "src": "/assets/questions/xx-fhwa-mutcd/w6-2-divided-highway-ends.svg",
+        "alt": "A yellow diamond sign showing a black island at the bottom center, with a downward arrow on its left and an upward arrow on its right that curve in toward each other above it.",
+        "neededForQ": true
+      },
+      "choices": [
+        { "id": "a", "text": "The median ends, and two-way traffic begins" },
+        { "id": "b", "text": "A median begins, splitting the two directions" },
+        { "id": "c", "text": "Keep to the right of an island ahead" },
+        { "id": "d", "text": "The road gets narrower ahead" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "This sign warns that the divided highway ends ahead. The median stops, and from there traffic in both directions shares one road."
+    },
+    "guide": {
+      "group": "warning",
+      "order": 50,
+      "kind": "value",
+      "label": "Divided highway ends sign",
+      "text": "The median stops ahead, and two-way traffic begins."
+    }
+  },
+  "mot-all-9-323": {
+    "meta": {
+      "idKey": "323",
+      "appliesTo": "ALL",
+      "variantGroup": null,
+      "sisterQuestions": null,
+      "topic": "signs-and-markings",
+      "source": "xx-fhwa-mutcd",
+      "sourceSection": "Section 2C.51, Two-Way Traffic sign; Figure 2C-11.",
+      "note": null,
+      "dateCreated": "2026-10-09",
+      "lastEdited": null,
+      "lastVerified": "2026-10-09"
+    },
+    "content": {
+      "question": "What should you be ready for after passing this sign?",
+      "media": {
+        "type": "image",
+        "src": "/assets/questions/xx-fhwa-mutcd/w6-3-two-way-traffic.svg",
+        "alt": "A yellow diamond sign with two black arrows side by side, one pointing up and one pointing down.",
+        "neededForQ": true
+      },
+      "choices": [
+        { "id": "a", "text": "Traffic moving both ways on the road ahead" },
+        { "id": "b", "text": "Traffic may pass on either side of an island" },
+        { "id": "c", "text": "A divided highway with a median begins" },
+        { "id": "d", "text": "Traffic merging in from both sides" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "The two-way traffic sign warns that you are moving onto a road where traffic runs in both directions, often after a one-way or divided stretch."
+    },
+    "guide": {
+      "group": "warning",
+      "order": 60,
+      "kind": "value",
+      "label": "Two-way traffic sign",
+      "text": "Traffic in both directions ahead, often after a divided or one-way stretch."
+    }
+  },
+  "mot-all-9-324": {
+    "meta": {
+      "idKey": "324",
+      "appliesTo": "ALL",
+      "variantGroup": null,
+      "sisterQuestions": null,
+      "topic": "signs-and-markings",
+      "source": "xx-fhwa-mutcd",
+      "sourceSection": "Section 2C.35, advance traffic control signs; Figure 2C-8.",
+      "note": null,
+      "dateCreated": "2026-10-09",
+      "lastEdited": null,
+      "lastVerified": "2026-10-09"
+    },
+    "content": {
+      "question": "This sign comes up before a sharp bend on a back road. What does it tell you?",
+      "media": {
+        "type": "image",
+        "src": "/assets/questions/xx-fhwa-mutcd/w3-1-stop-ahead.svg",
+        "alt": "A yellow diamond sign showing a small red eight-sided shape with a black arrow above it, pointing up.",
+        "neededForQ": true
+      },
+      "choices": [
+        { "id": "a", "text": "A stop sign is ahead, so begin slowing" },
+        { "id": "b", "text": "Stop right here, at this sign" },
+        { "id": "c", "text": "A yield sign is ahead, so be ready to yield" },
+        { "id": "d", "text": "A traffic signal is ahead" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "This sign warns of a stop sign ahead that you may not see in time, often because of a curve or a hill. Begin slowing for it."
+    },
+    "guide": {
+      "group": "warning",
+      "order": 70,
+      "kind": "value",
+      "label": "Stop ahead sign",
+      "text": "A stop sign is coming up that you may not see yet. Start slowing."
+    }
+  },
+  "mot-all-9-325": {
+    "meta": {
+      "idKey": "325",
+      "appliesTo": "ALL",
+      "variantGroup": null,
+      "sisterQuestions": null,
+      "topic": "signs-and-markings",
+      "source": "xx-fhwa-mutcd",
+      "sourceSection": "Section 2C.35, advance traffic control signs; Figure 2C-8.",
+      "note": null,
+      "dateCreated": "2026-10-09",
+      "lastEdited": null,
+      "lastVerified": "2026-10-09"
+    },
+    "content": {
+      "question": "Coming over the top of a rise, you see this sign. What is ahead?",
+      "media": {
+        "type": "image",
+        "src": "/assets/questions/xx-fhwa-mutcd/w3-3-signal-ahead.svg",
+        "alt": "A yellow diamond sign showing a traffic light with red, yellow and green lenses.",
+        "neededForQ": true
+      },
+      "choices": [
+        { "id": "a", "text": "A traffic signal is ahead" },
+        { "id": "b", "text": "A railroad crossing with lights is ahead" },
+        { "id": "c", "text": "A school zone with flashing lights is ahead" },
+        { "id": "d", "text": "A stop sign is ahead" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "This sign warns of a traffic signal ahead, posted where you might not see the signal in time to react to it."
+    },
+    "guide": {
+      "group": "warning",
+      "order": 80,
+      "kind": "value",
+      "label": "Signal ahead sign",
+      "text": "A traffic signal is coming up that you may not see yet."
+    }
+  },
+  "mot-all-9-326": {
+    "meta": {
+      "idKey": "326",
+      "appliesTo": "ALL",
+      "variantGroup": null,
+      "sisterQuestions": null,
+      "topic": "signs-and-markings",
+      "source": "xx-fhwa-mutcd",
+      "sourceSection": "Section 2C.45, Merge signs; Figure 2C-11.",
+      "note": null,
+      "dateCreated": "2026-10-09",
+      "lastEdited": null,
+      "lastVerified": "2026-10-09"
+    },
+    "content": {
+      "question": "Riding in the right lane of a highway, you pass this sign. What should you be ready for?",
+      "media": {
+        "type": "image",
+        "src": "/assets/questions/xx-fhwa-mutcd/w4-1-merge-right.svg",
+        "alt": "A yellow diamond sign with a black upward arrow and a curved line joining it from the lower right.",
+        "neededForQ": true
+      },
+      "choices": [
+        { "id": "a", "text": "Traffic from another road joins yours from the right" },
+        { "id": "b", "text": "Your lane ends ahead, so you must move left" },
+        { "id": "c", "text": "A new lane is added on the right ahead" },
+        { "id": "d", "text": "A side road crosses yours from the right" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "The merge sign warns that traffic from another road will merge into yours from the side shown. A lane that ends gets a different sign."
+    },
+    "guide": {
+      "group": "warning",
+      "order": 90,
+      "kind": "value",
+      "label": "Merge sign",
+      "text": "Traffic from another road joins yours from the side shown."
+    }
+  },
+  "mot-all-9-327": {
+    "meta": {
+      "idKey": "327",
+      "appliesTo": "ALL",
+      "variantGroup": null,
+      "sisterQuestions": null,
+      "topic": "signs-and-markings",
+      "source": "xx-fhwa-mutcd",
+      "sourceSection": "Section 2C.47, Lane Ends signs; Figure 2C-11.",
+      "note": null,
+      "dateCreated": "2026-10-09",
+      "lastEdited": null,
+      "lastVerified": "2026-10-09"
+    },
+    "content": {
+      "question": "You are riding in the right-hand lane of a multi-lane road and see this sign. What does it mean for you?",
+      "media": {
+        "type": "image",
+        "src": "/assets/questions/xx-fhwa-mutcd/w4-2-lane-ends-right.svg",
+        "alt": "A yellow diamond sign showing a solid black line on the left and, on the right, a line that angles in toward it partway up, with a short dashed line between them below the angle.",
+        "neededForQ": true
+      },
+      "choices": [
+        { "id": "a", "text": "Your lane ends ahead, so you must merge left" },
+        { "id": "b", "text": "Traffic will merge into yours from the right" },
+        { "id": "c", "text": "The road bends gently to the left ahead" },
+        { "id": "d", "text": "A left-turn lane opens up ahead" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "This sign warns that the number of lanes drops ahead. If yours is the lane that ends, you have to merge into the lane beside it."
+    },
+    "guide": {
+      "group": "warning",
+      "order": 100,
+      "kind": "value",
+      "label": "Lane ends sign",
+      "text": "A lane ends ahead. Traffic in it must merge into the next lane."
+    }
+  },
+  "mot-all-9-328": {
+    "meta": {
+      "idKey": "328",
+      "appliesTo": "ALL",
+      "variantGroup": null,
+      "sisterQuestions": null,
+      "topic": "signs-and-markings",
+      "source": "xx-fhwa-mutcd",
+      "sourceSection": "Section 2C.30, surface condition signs; Figure 2C-7.",
+      "note": null,
+      "dateCreated": "2026-10-09",
+      "lastEdited": null,
+      "lastVerified": "2026-10-09"
+    },
+    "content": {
+      "question": "You see this sign on a road you are riding for the first time. What should you know about the road ahead?",
+      "media": {
+        "type": "image",
+        "src": "/assets/questions/xx-fhwa-mutcd/w8-5-slippery-when-wet.svg",
+        "alt": "A yellow diamond sign showing a black car with two wavy lines trailing behind it.",
+        "neededForQ": true
+      },
+      "choices": [
+        { "id": "a", "text": "It can be slippery when wet" },
+        { "id": "b", "text": "It has several bends close together" },
+        { "id": "c", "text": "It has loose gravel on it" },
+        { "id": "d", "text": "It has a rough, broken surface" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "This sign warns of a stretch of road that can be unexpectedly slippery when it is wet."
+    },
+    "guide": {
+      "group": "warning",
+      "order": 110,
+      "kind": "value",
+      "label": "Slippery when wet sign",
+      "text": "The road ahead can be slippery when wet."
+    }
+  },
+  "mot-all-9-329": {
+    "meta": {
+      "idKey": "329",
+      "appliesTo": "ALL",
+      "variantGroup": null,
+      "sisterQuestions": null,
+      "topic": "signs-and-markings",
+      "source": "xx-fhwa-mutcd",
+      "sourceSection": "Section 2C.14, Hill signs; Figure 2C-5.",
+      "note": null,
+      "dateCreated": "2026-10-09",
+      "lastEdited": null,
+      "lastVerified": "2026-10-09"
+    },
+    "content": {
+      "question": "Riding along a rural highway, you pass this sign. What is it warning you about?",
+      "media": {
+        "type": "image",
+        "src": "/assets/questions/xx-fhwa-mutcd/w7-1-hill.svg",
+        "alt": "A yellow diamond sign showing a black truck on a slope that drops to the right.",
+        "neededForQ": true
+      },
+      "choices": [
+        { "id": "a", "text": "A steep downhill grade ahead" },
+        { "id": "b", "text": "Trucks crossing the road ahead" },
+        { "id": "c", "text": "A runaway truck ramp ahead" },
+        { "id": "d", "text": "A lane for slow trucks ahead" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "The hill sign warns of a downgrade long or steep enough to call for special care on the way down."
+    },
+    "guide": {
+      "group": "warning",
+      "order": 120,
+      "kind": "value",
+      "label": "Hill sign",
+      "text": "A steep or long downgrade ahead."
+    }
+  },
+  "mot-all-9-340": {
+    "meta": {
+      "idKey": "340",
+      "appliesTo": "ALL",
+      "variantGroup": null,
+      "sisterQuestions": null,
+      "topic": "signs-and-markings",
+      "source": "xx-fhwa-mutcd",
+      "sourceSection": "Section 2B.39, Keep Right and Keep Left signs; Figure 2B-10.",
+      "note": null,
+      "dateCreated": "2026-10-09",
+      "lastEdited": null,
+      "lastVerified": "2026-10-09"
+    },
+    "content": {
+      "question": "This sign stands at the near end of a raised island in the middle of the road. What does it tell you?",
+      "media": {
+        "type": "image",
+        "src": "/assets/questions/xx-fhwa-mutcd/r4-7-keep-right.svg",
+        "alt": "A white upright rectangular sign showing a black arrow that curves up past the right side of a black shield-shaped island.",
+        "neededForQ": true
+      },
+      "choices": [
+        { "id": "a", "text": "Pass the island only on its right side" },
+        { "id": "b", "text": "Pass the island only on its left side" },
+        { "id": "c", "text": "Pass on either side of the island" },
+        { "id": "d", "text": "Stop and yield before passing the island" }
+      ],
+      "correctAnswer": "a",
+      "explanation": "The keep right sign means traffic must pass only to the right of the island or obstruction it stands on."
+    },
+    "guide": {
+      "group": "regulatory",
+      "order": 65,
+      "kind": "value",
+      "label": "Keep right sign",
+      "text": "Pass only to the right of the island or obstruction."
     }
   }
 }

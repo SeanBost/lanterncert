@@ -374,6 +374,12 @@
         "media": null
       },
       {
+        "id": "warning",
+        "heading": "Warning signs",
+        "leadIn": "Yellow warning signs say what the road ahead holds, from bends and hills to merging traffic and lanes that end.",
+        "media": null
+      },
+      {
         "id": "speed",
         "heading": "Speed signs",
         "leadIn": "Some speed signs set a limit, and others give notice of one or recommend a speed. The words on the sign say which.",

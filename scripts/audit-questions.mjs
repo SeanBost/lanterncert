@@ -4,6 +4,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { exclusionsFile } from "#paths";
 
 import { scopeTokens } from "../src/lib/applies-to.js";
 import { creditOf } from "../src/lib/image-credit.js";
@@ -64,7 +65,7 @@ const questionBank = proposedPath ? loadJson(resolve(proposedPath)) : liveBank;
 const newIds = new Set(Object.keys(questionBank).filter((id) => !(id in liveBank)));
 const guideScaffold = loadJson(content("guide"));
 // Optional and private, so a checkout without it still runs — but silently, which is the trap.
-const exclusionsPath = join(ROOT, "blackbox", "authoring", `${cert}-exclusions.json`);
+const exclusionsPath = exclusionsFile(cert);
 const exclusions = loadJson(exclusionsPath, false) ?? {};
 
 const only = value("--state");

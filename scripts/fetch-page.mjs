@@ -8,12 +8,9 @@ import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { inflateSync } from "node:zlib";
+import { PRIMARY_SOURCE_DIR, REQUEST_GUARD, SNAPSHOT_DIR, SNAPSHOT_HISTORY_DIR } from "#paths";
 
-const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-
-export const SNAPSHOT_DIR = join(ROOT, "blackbox", "source-snapshots");
-export const SNAPSHOT_HISTORY_DIR = join(ROOT, "blackbox", "source-snapshots-history");
-export const PRIMARY_SOURCE_DIR = join(ROOT, "blackbox", "primary-sources");
+export { PRIMARY_SOURCE_DIR, SNAPSHOT_DIR, SNAPSHOT_HISTORY_DIR };
 export const SNAPSHOT_MAX_AGE_DAYS = 21;
 
 // Every request is a chance to trip a bot rule, so they are spaced and never made in parallel.
@@ -21,7 +18,7 @@ const REQUEST_SPACING_MS = 2000;
 
 // ================== REQUEST GUARD - THE KNOBS LIVE HERE ==================
 // How hard this tool may lean on ONE host. Raising any of these is a decision about somebody
-// else's server, not a performance setting. State persists in blackbox/request-guard.json,
+// else's server, not a performance setting. State persists in blackbox/sources/request-guard.json,
 // because every invocation is its own process and in-memory counters would reset each time.
 const GUARD = {
   // Failed attempts in a row against one host before it is refused outright.
@@ -74,7 +71,7 @@ function findChrome() {
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-const GUARD_STATE = join(ROOT, "blackbox", "request-guard.json");
+const GUARD_STATE = REQUEST_GUARD;
 
 function hostOf(url) {
   try {
@@ -338,7 +335,7 @@ function today() {
 }
 
 // Chrome renders a PDF into its viewer shell, not into text, so binaries are saved to
-// primary-sources/ instead and read from there. The snapshot holds the digest, never the document.
+// sources/documents/ instead and read from there. The snapshot holds the digest, never the document.
 async function fetchBinaryMeta(url, cert, key) {
   await space(url);
   let res = await fetch(url, { headers: { "User-Agent": USER_AGENT } });

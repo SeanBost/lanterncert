@@ -116,9 +116,6 @@ npm run preview  # serve the built /dist locally
 Check builds with `npm run preview` rather than opening `/dist/index.html` directly, since absolute
 asset paths break over `file://`.
 
-`npm run build` also archives a dated zip of `/dist` into `/builds` via the `postbuild` hook. It's a
-local version record, gitignored, and the script no-ops on CI.
-
 ## Deploying
 
 Push to `main`. Cloudflare Pages watches the repo, runs `npm run build` on its own builders, and

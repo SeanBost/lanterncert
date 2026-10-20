@@ -79,7 +79,7 @@ which chunk to start from there rather than reaching for a finer flag.
 ## Owns / never touches
 
 **Owns:** `src/content/questions/<cert>-questions.json`, `public/assets/questions/<credit>/`,
-`blackbox/working-materials/question-art/`, `blackbox/research/`.
+`blackbox/authoring/question-art/`, `blackbox/research/`.
 
 **Writes on approval only:** `src/content/guide/<cert>-guide.json` — and only to add a group, or
 to edit a group's `heading`, `leadIn` or `media`. **An `opener` is hand-written prose**; propose wording, never
@@ -87,15 +87,15 @@ overwrite it. Also `blackbox/authoring/<cert>-exclusions.json`, where an approve
 declared: a state whose own documents carry a proposition that must still never get a version. And
 `blackbox/authoring/<cert>-standards.md`, only for a ruling raised at gate A and explicitly approved.
 
-Also on approval: `src/content/topics/`, `src/content/weights/`, `src/content/exams/`, `CLAUDE.md`,
-`blackbox/data-handling.md` and `blackbox/strategy/project-plan.md`. **A rule changed at a gate is
+Also on approval: `src/content/topics/`, `src/content/weights/`, `src/content/exams/`, `CLAUDE.md`
+and `blackbox/docs/data-handling.md`. **A rule changed at a gate is
 written to `data-handling.md` in the same session**, never left for later.
 
-**Writes freely:** `blackbox/todo.md`, for work the run finds owed elsewhere — another skill's job, a
+**Writes freely:** `blackbox/project/todo.md`, for work the run finds owed elsewhere — another skill's job, a
 follow-up run, a document that needs fetching. **Owed work goes on the to-do list, never only into the
 brief**, where nobody looks for it once the run is closed.
 
-**Never touches:** the facts file, the sources registry, any UI or route, `blackbox/sessions.md`, or
+**Never touches:** the facts file, the sources registry, any UI or route, `blackbox/project/sessions.md`, or
 git. Each has another owner whose checks a run here would bypass.
 
 **A run that needs a change it may not make on its own proposes it at a gate and continues.** Five
@@ -114,7 +114,7 @@ cases will come up:
 
 ## Read first
 
-- **`blackbox/technique/cert-questions.md` — read it in full before phase 0, and stop if it is missing.**
+- **`blackbox/authoring/technique/cert-questions.md` — read it in full before phase 0, and stop if it is missing.**
   This file is the process: what a run does, in what order, and where it stops. That one is the
   technique each step applies, and it is not published. **A run on the process alone is not this
   skill.**
@@ -122,10 +122,10 @@ cases will come up:
   read on a run. Scope instances, barred terms, which sources are independent texts. `data-handling.md`
   owns the rule; **this file owns which cases it has already been applied to**, and a run that skips it
   re-derives a scope decision already made.
-- **`blackbox/data-handling.md` ▸ *Questions* (§5), ▸ *Study Guide* (§4c) and ▸ *Legal and authorship* (§6)** — the authority on
+- **`blackbox/docs/data-handling.md` ▸ *Questions* (§5), ▸ *Study Guide* (§4c) and ▸ *Legal and authorship* (§6)** — the authority on
   every shape and rule, **not restated here.** This file covers execution only: what a run does, in
   what order, and where it stops. §5 rule 4 and 4a govern scope, rule 13 the quota, §4c the guide.
-- **`blackbox/decisions.md` ▸ *The three modes*, and `CLAUDE.md` ▸ *The rules that must never be missed*, ▸ *Conventions*** — the
+- **`blackbox/docs/decisions.md` ▸ *The three modes*, and `CLAUDE.md` ▸ *The rules that must never be missed*, ▸ *Conventions*** — the
   reasoning, the voice rules, and the test/exam split that binds every stem you write.
 - **The existing bank.** Read every question in the topic you are about to author for, in full. It is
   the worked example, and it is the only way to know what is already covered.
@@ -216,7 +216,7 @@ below has its shape. **If reconnaissance surfaced no decisions, say so in one li
 without stopping** — an empty gate is a gate nobody reads next time.
 
 **3 · Read one chunk.** Read the passage in full from the snapshot at
-`blackbox/source-snapshots/<cert>/<key>.json`, never from memory and never from a summary. **Never
+`blackbox/sources/snapshots/<cert>/<key>.json`, never from memory and never from a summary. **Never
 fetch a page in this skill** — a snapshot under 21 days old is the source of truth, and refreshing
 one is `/cert-facts`'s job.
 
@@ -257,8 +257,11 @@ and the proposed JSON. Wait.
 
 **7 · Apply** — only after approval. Write the bank with targeted edits, stage any approved
 picture-only question (*Question art* below), update the worklist, and write any approved
-guide-scaffold changes. **Then delete both JSON files and any saved script output**; the report is
-the record of the run.
+guide-scaffold changes. **Then delete both JSON files and any saved script output, and move the
+target's earlier question report** to `blackbox/zzz_old/junk-or-bloat/research/`, since this run's
+report supersedes it (*Report*). The decisions brief moves there too once every item in it is answered
+and written where it belongs. The worklist stays while a run can resume it or a reprint can inherit
+its ledger.
 
 **8 · Art** — only after approval, and only for questions that were approved. *Question art* below.
 
@@ -388,7 +391,7 @@ that appears to have changed since its snapshot.
 9–9f.
 
 - **A picture-only question is approved before its art exists and waits whole** in
-  `blackbox/working-materials/question-art/staged-questions.json`, `media` filled in, splicing into the
+  `blackbox/authoring/question-art/staged-questions.json`, `media` filled in, splicing into the
   bank the day its file exists. A question its stem can answer ships at once with `media: null`.
 
 - **Class A** reproduces an artifact a rider meets on the road — always SVG, the artifact's own
@@ -410,7 +413,8 @@ them are scripts whose output goes in the report: `node scripts/audit-questions.
 ## Report
 
 Write to `blackbox/research/<cert>-questions-<target>-<YYYY-MM-DD>.md`. Suffix rather than overwrite
-an existing report for the same target and date.
+an existing report for the same target and date. **It supersedes the target's earlier question
+report**, so it carries forward whatever that report still owned and this run did not redo.
 
 ### What the terminal carries at gate B
 
