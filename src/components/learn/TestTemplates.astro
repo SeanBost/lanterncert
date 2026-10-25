@@ -1,0 +1,222 @@
+---
+// The Mock Test's screens as templates, cloned and filled by scripts/learn/test.js. The format is
+// settled at build, so the intro's sentence and its source links render here.
+
+/** @type {{ kicker: string, heading: string, format: any, intro: { lede: { text: string, source?: any, key?: boolean }[], note: string | null } }} */
+const { kicker, heading, format, intro } = Astro.props;
+const minutes = format.minutes.value;
+---
+
+<template id="tpl-test-intro">
+	<div class="test-sheet">
+		<div class="stack">
+			<h1 class="page-title tool-title" tabindex="-1" data-slot="heading">
+				<span class="visually-hidden">{kicker}</span> Mock Test
+			</h1>
+			<p class="test-sheet__lede">
+				{intro.lede.map((part) =>
+					part.source ? (
+						<a href={part.source.url} target="_blank" rel="noopener noreferrer">{part.text}</a>
+					) : part.key ? (
+						<strong class="text-key">{part.text}</strong>
+					) : (
+						part.text
+					),
+				)}
+			</p>
+			{intro.note && <p class="test-sheet__lede">{intro.note}</p>}
+		</div>
+
+		<fieldset class="option-group">
+			<legend class="facts__group">Timing</legend>
+			<div class="option-group__row">
+				<label class="option">
+					<input type="radio" name="timing" value="timed" checked />
+					<span>{`Timed, ${minutes} ${minutes === 1 ? "minute" : "minutes"}`}</span>
+				</label>
+				<label class="option">
+					<input type="radio" name="timing" value="untimed" />
+					<span>Untimed</span>
+				</label>
+			</div>
+		</fieldset>
+
+		<p><button class="btn btn--block" type="button" data-action="start">Start the test</button></p>
+	</div>
+	{/* Below 1248, where there is no footer: the legal line, held at the stage's foot. */}
+	<p class="caption test-legal tool-legal">
+		LanternCert is free supporting material, not legal advice. Always confirm requirements with your
+		state's official agencies.
+	</p>
+</template>
+
+{/* The running test; from 1248 the navigator is the sidebar, in the cards' grid. */}
+<template id="tpl-test-run">
+	<div class="testrun tool-split">
+		<h1 class="visually-hidden" tabindex="-1" data-slot="heading">{heading}</h1>
+		<aside class="testrun__side tool-side" aria-labelledby="test-side-title">
+			<h2 class="side-title" id="test-side-title">Questions</h2>
+			<p class="testrun__summary" data-slot="side-summary"></p>
+			<ol class="nav-grid" data-slot="side-grid"></ol>
+			<ul class="nav-legend" aria-hidden="true">
+				<li><span class="nav-cell nav-cell--answered">1</span>Answered</li>
+				<li><span class="nav-cell nav-cell--flagged">1</span>Flagged</li>
+				<li><span class="nav-cell">1</span>Not answered</li>
+			</ul>
+			<button class="btn btn--block" type="button" data-action="submit">Submit</button>
+		</aside>
+		<div class="testrun__main">
+			{/* The answered share; the navigator's summary and the bar button's name say it in words. */}
+			<div class="testrun__progress" data-slot="progress" aria-hidden="true"><span></span></div>
+			<article class="qcard qcard--test">
+				<div class="qcard__face">
+					<div class="qcard__top">
+						<p class="qcard__count" data-slot="count"></p>
+						<button class="tool-btn tool-btn--sm flag-btn" type="button" aria-pressed="false" data-action="flag">
+							<svg class="flag-btn__glyph" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 14.5V2m0 .5h8l-2 3 2 3h-8" /></svg>
+							<span data-slot="flag-label">Flag for review</span>
+						</button>
+					</div>
+					<fieldset class="qcard__fieldset">
+						<legend class="qcard__stem" tabindex="-1" data-slot="stem"></legend>
+						<div class="qcard__figure" data-slot="figure"></div>
+						<div class="tiles" data-slot="tiles"></div>
+					</fieldset>
+					<div class="qcard__foot">
+						<button class="tool-btn" type="button" data-action="prev">Previous</button>
+						<button class="tool-btn qcard__questions" type="button" data-action="navigator" aria-haspopup="dialog">Questions</button>
+						<button class="btn" type="button" data-action="next">Next</button>
+					</div>
+				</div>
+			</article>
+			<p class="shortcuts">Keys: <kbd>A</kbd> to <kbd>D</kbd> or <kbd>1</kbd> to <kbd>4</kbd> to choose, <kbd>F</kbd> to flag, <kbd>←</kbd> <kbd>→</kbd> to move, <kbd>Enter</kbd> for the next question</p>
+		</div>
+		<p class="visually-hidden" aria-live="polite" data-slot="live"></p>
+	</div>
+</template>
+
+<template id="tpl-radio">
+	<label class="tile tile--radio">
+		<input class="tile__input" type="radio" />
+		<span class="tile__key" aria-hidden="true"></span>
+		<span class="tile__text" data-slot="text"></span>
+	</label>
+</template>
+
+<template id="tpl-test-results">
+	<div class="results">
+		<div class="test-sheet results__head">
+			<h1 class="page-title tool-title" tabindex="-1" data-slot="heading">
+				<span class="visually-hidden">{kicker}</span> Mock Test
+			</h1>
+			<div class="results__score">
+				<p class="results__verdict" data-slot="verdict"></p>
+				<p class="results__pct" data-slot="pct"></p>
+				<div class="results__line">
+					<p data-slot="line"></p>
+					<p class="caption" data-slot="pass-from"></p>
+				</div>
+			</div>
+			<p class="results__a" data-slot="a">That's <span class="page-title__accent sweep-in">an A.</span></p>
+		</div>
+
+		{/* The next steps, then the per-topic detail. */}
+		<section class="test-sheet" aria-labelledby="results-review-title">
+			<h2 class="section-title" id="results-review-title">Review</h2>
+			<div class="button-row" data-slot="review"></div>
+		</section>
+
+		<div class="test-sheet">
+			<div class="button-row">
+				<button class="tool-btn" type="button" data-action="retake">Retake this test</button>
+				<button class="tool-btn" type="button" data-action="new">Take a new test</button>
+			</div>
+		</div>
+
+		<section class="test-sheet" aria-labelledby="results-topics-title">
+			<h2 class="section-title" id="results-topics-title">By topic</h2>
+			<ul class="row-list topic-scores" data-slot="topics"></ul>
+		</section>
+		<p class="visually-hidden" aria-live="polite" data-slot="live"></p>
+	</div>
+</template>
+
+<template id="tpl-topic-score">
+	<li class="topic-scores__row">
+		<span class="topic-scores__line">
+			<span class="topic-scores__name"><span aria-hidden="true" data-slot="emoji"></span><span data-slot="name"></span></span>
+			<span class="topic-scores__count" data-slot="count"></span>
+		</span>
+		<span class="topic-scores__line">
+			<span class="pips" data-slot="pips" aria-hidden="true"></span>
+			<span class="topic-scores__links">
+				<a class="chip" data-slot="read" data-learn></a>
+				<a class="chip" data-slot="practice" data-learn></a>
+			</span>
+		</span>
+	</li>
+</template>
+
+{/* A reviewed question reads as an answered practice card: the pick and the right answer, then the sheet. */}
+<template id="tpl-test-review">
+	<h1 class="visually-hidden" tabindex="-1" data-slot="heading">{heading} review</h1>
+	<div class="review">
+		<div class="review__stage">
+			<article class="qcard qcard--review">
+				<div class="qcard__face">
+					<div class="qcard__top">
+						<p class="qcard__count" data-slot="count"></p>
+						<p class="topic-chip"><span aria-hidden="true" data-slot="emoji"></span><span data-slot="topic"></span></p>
+					</div>
+					<h2 class="qcard__stem" data-slot="stem"></h2>
+					<div class="qcard__figure" data-slot="figure"></div>
+					<ol class="tiles" data-slot="tiles"></ol>
+				</div>
+			</article>
+		</div>
+		<div class="answer" data-slot="answer" role="region" aria-label="Answer">
+			<div class="answer__body">
+				<p class="answer__verdict" data-slot="verdict"></p>
+				<p class="answer__why" data-slot="why"></p>
+			</div>
+			<div class="answer__aside">
+				<div class="answer__source" data-slot="source"></div>
+				<p class="answer__credit" data-slot="credit" hidden></p>
+				<div class="answer__actions">
+					<a class="answer__guide" href="#" data-slot="guide-link" data-learn>Read it in the Study Guide</a>
+				</div>
+				<div class="answer__nav">
+					<button class="tool-btn" type="button" data-action="prev">Previous</button>
+					<button class="btn" type="button" data-action="next">Next</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</template>
+
+<dialog class="sheet" id="test-navigator" aria-labelledby="test-nav-title">
+	<div class="sheet__head">
+		<h2 class="sheet__title" id="test-nav-title">Questions</h2>
+		<button class="sheet__close" type="button" data-close aria-label="Close">
+			<span aria-hidden="true">×</span>
+		</button>
+	</div>
+	<p class="caption" data-slot="summary"></p>
+	<ol class="nav-grid" data-slot="grid"></ol>
+	<ul class="nav-legend" aria-hidden="true">
+		<li><span class="nav-cell nav-cell--answered">1</span>Answered</li>
+		<li><span class="nav-cell nav-cell--flagged">1</span>Flagged</li>
+		<li><span class="nav-cell">1</span>Not answered</li>
+	</ul>
+	<div class="sheet__actions">
+		<button class="btn" type="button" data-action="submit">Submit</button>
+	</div>
+</dialog>
+
+<dialog class="sheet sheet--alert" id="test-timeup" role="alertdialog" aria-labelledby="test-timeup-title" aria-describedby="test-timeup-body">
+	<h2 class="sheet__title" id="test-timeup-title">Time's up</h2>
+	<p id="test-timeup-body">Your answers have been submitted.</p>
+	<div class="sheet__actions">
+		<button class="btn" type="button" data-action="results" autofocus>See results</button>
+	</div>
+</dialog>

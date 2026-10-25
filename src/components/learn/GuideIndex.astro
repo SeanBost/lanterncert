@@ -1,0 +1,22 @@
+---
+// The guide's topic index, rendered twice: the sidebar and the Topics sheet. `current` is the page shown.
+const { topics, labelId, current = null } = Astro.props;
+---
+
+<nav class="guide-index" aria-labelledby={labelId}>
+	<ol class="guide-index__list">
+		{topics.map((topic) => (
+			<li>
+				<a
+					class="guide-index__link"
+					href={`#${topic.slug}`}
+					data-topic={topic.slug}
+					aria-current={topic.slug === current ? "page" : undefined}
+				>
+					<span class="guide-index__emoji" aria-hidden="true">{topic.emoji}</span>
+					<span class="guide-index__name">{topic.name}</span>
+				</a>
+			</li>
+		))}
+	</ol>
+</nav>

@@ -8810,7 +8810,7 @@
       "sourceSection": "Section 5, Traffic Laws, under Laws Governing Right-of-Way.",
       "note": null,
       "dateCreated": "2026-10-05",
-      "lastEdited": "2026-10-16",
+      "lastEdited": "2026-10-25",
       "lastVerified": "2026-10-16"
     },
     "content": {
@@ -8818,7 +8818,7 @@
       "media": null,
       "choices": [
         { "id": "a", "text": "It will soon stop, so ease off and get ready to stop too" },
-        { "id": "b", "text": "It has stopped to unload, so you must stop right away" },
+        { "id": "b", "text": "It has stopped to let passengers on or off, so you must stop right away" },
         { "id": "c", "text": "It is pulling away, so you may pass it with care" },
         { "id": "d", "text": "It is turning soon, so you may pass it on the left" }
       ],

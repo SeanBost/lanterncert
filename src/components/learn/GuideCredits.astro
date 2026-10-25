@@ -1,0 +1,23 @@
+---
+// The credit line closing a guide group that carries figures: each document once, then LanternCert's own art.
+/** @type {{ credits: { documents: { title: string, url: string }[], original: boolean } }} */
+const { credits } = Astro.props;
+const shown = credits.documents.length > 0 || credits.original;
+---
+
+{shown && (
+	<p class="guide-group__credit">
+		{credits.documents.map((doc, i) => (
+			<Fragment>
+				{i > 0 && <span class="sep" aria-hidden="true">·</span>}
+				Reproduced from the <a href={doc.url} target="_blank" rel="noopener noreferrer">{doc.title}</a>
+			</Fragment>
+		))}
+		{credits.original && (
+			<Fragment>
+				{credits.documents.length > 0 && <span class="sep" aria-hidden="true">·</span>}
+				Diagrams: LanternCert
+			</Fragment>
+		)}
+	</p>
+)}

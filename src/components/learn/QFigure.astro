@@ -1,0 +1,37 @@
+---
+// A question image in its frame, with the credit bar beneath. With no media it renders the empty
+// template scripts/learn/question.js fills, so the guide and the cards share one markup.
+const {
+	media = null,
+	// The registry entry a reproduction is credited to; null for LanternCert's own diagram.
+	credit = null,
+	caption = true,
+	class: className = undefined,
+} = Astro.props;
+
+const shape = media ? (media.w === media.h ? "square" : "wide") : undefined;
+---
+
+<figure class:list={["q-figure", className]} data-shape={shape}>
+	<div class="q-figure__frame">
+		<img
+			class="q-figure__img"
+			data-slot="img"
+			src={media?.src}
+			alt={media?.alt}
+			width={media?.w}
+			height={media?.h}
+			loading={media ? "lazy" : undefined}
+			decoding="async"
+		/>
+	</div>
+	{caption && (
+		<figcaption class="q-figure__caption" data-slot="caption">
+			{credit ? (
+				<Fragment>From the <a href={credit.url} target="_blank" rel="noopener noreferrer">{credit.title}</a></Fragment>
+			) : (
+				media && "Diagram: LanternCert"
+			)}
+		</figcaption>
+	)}
+</figure>

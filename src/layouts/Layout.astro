@@ -15,6 +15,11 @@ const {
 	fonts = [],
 	// A JSON-LD object rendered into <head>, built from the data the page already renders.
 	schema = null,
+	// The study tool passes false for both and slots its own chrome.
+	header = true,
+	footer = true,
+	// A modifier on <main>, for a page that is not a column of bands.
+	mainClass = "",
 } = Astro.props;
 
 // Title standard: "[brief self-describing title] - LanternCert", homepage excepted.
@@ -46,6 +51,7 @@ const canonical = new URL(path, site.url).href;
 			document.documentElement.toggleAttribute("data-scrolled", !atTop);
 			document.documentElement.toggleAttribute("data-at-top", atTop);
 		</script>
+		<slot name="head" />
 
 		<meta name="generator" content={Astro.generator} />
 		{/* Every browser but Safari prefers the vector; the .ico is the fallback, not a duplicate. */}
@@ -81,11 +87,11 @@ const canonical = new URL(path, site.url).href;
 	</head>
 	<body>
 		<a class="skip-link" href="#main">Skip to content</a>
-		<SiteHeader />
-		<main id="main" class="page">
+		{header ? <SiteHeader /> : <slot name="header" />}
+		<main id="main" class:list={["page", mainClass]}>
 			<slot />
 		</main>
-		<SiteFooter />
+		{footer ? <SiteFooter /> : <slot name="footer" />}
 
 		<script>
 			import { initGlobal } from "../scripts/global.js";

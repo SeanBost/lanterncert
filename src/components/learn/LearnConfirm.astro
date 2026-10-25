@@ -1,0 +1,12 @@
+---
+// The one confirm prompt, filled by scripts/learn/dialog.js. The safe answer is the primary and takes focus.
+---
+
+<dialog class="sheet sheet--alert" id="learn-confirm" role="alertdialog" aria-labelledby="learn-confirm-title" aria-describedby="learn-confirm-body">
+	<h2 class="sheet__title" id="learn-confirm-title"></h2>
+	<p id="learn-confirm-body"></p>
+	<div class="sheet__actions">
+		<button class="btn" type="button" data-answer="cancel" autofocus></button>
+		<button class="tool-btn" type="button" data-answer="confirm"></button>
+	</div>
+</dialog>

@@ -4,8 +4,8 @@ A free, no-strings certification-prep site at [lanterncert.com](https://lanternc
 
 **Watch it get built:** [lanterncert.com/homepage-to-come](https://lanterncert.com/homepage-to-come/)
 
-**Status: pre-alpha.** The scaffold, content pipeline and deploy pipeline are all live; what's
-published at the root domain is a placeholder, not a finished product.
+**Status: near-alpha.** An initial version of test content and infra is almost ready; what's
+published at the root domain is a placeholder, not the finished product.
 
 ## What it is
 
@@ -88,7 +88,7 @@ src/
     weights/           how heavily a state tests each topic
     questions/         the question bank, along with each question's metadata and explanations
     guide/             Study Guide copy
-    intro/             the state-page article copy: a cert-specific template dynamically filled per state
+    intro/             the state-page article copy: cert-specific and dynamically filled per state
     display/           the user-facing phrasing that each coded fact value maps to
   content.config.ts    the content collections and the checks that span files
   schemas/             the content contract every file is validated against
@@ -103,18 +103,6 @@ public/                static assets, copied verbatim
 scripts/               content-research, audit and render-check tooling
 .claude/skills/        the research, authoring and audit workflows
 ```
-
-## Commands
-
-```bash
-npm install      # first time only; requires Node 24 (see .nvmrc)
-npm run dev      # dev server at http://localhost:4321
-npm run build    # static build into /dist
-npm run preview  # serve the built /dist locally
-```
-
-Check builds with `npm run preview` rather than opening `/dist/index.html` directly, since absolute
-asset paths break over `file://`.
 
 ## Deploying
 

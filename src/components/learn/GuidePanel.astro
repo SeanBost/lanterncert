@@ -1,0 +1,273 @@
+---
+// The Study Guide as static HTML: topic index, an overview, one section per topic, then the end matter.
+// One page shows at a time, with only the sources it cites; scripts/learn/guide.js switches between them.
+import { getCollection } from "astro:content";
+import { certGuide, loadSourceEntries } from "../../lib/cert-data.js";
+import { guideForState } from "../../lib/study-guide.js";
+import { formatDate } from "../../lib/format-fact.js";
+import { sourceMetaParts } from "../../lib/format-source.js";
+import states from "../../content/states.json";
+import FactRun from "./FactRun.astro";
+import GuideCredits from "./GuideCredits.astro";
+import GuideIndex from "./GuideIndex.astro";
+import GuidePager from "./GuidePager.astro";
+
+/** @type {{ cert: string, state: string, info: any, facts: any, pool: any, learn: string }} */
+const { cert, state, info, facts, pool, learn } = Astro.props;
+const term = facts.meta.localTerm;
+
+const exams = Object.fromEntries((await getCollection(`${cert}-exams`)).map((e) => [e.id, e.data]));
+const questions = (await getCollection(`${cert}-questions`)).map((q) => ({
+	id: q.id,
+	appliesTo: q.data.meta.appliesTo,
+	topic: q.data.meta.topic,
+	...q.data,
+}));
+
+// Curriculum order: the pool lists served topics by `num`.
+const sections = guideForState(state, {
+	scaffold: certGuide(cert),
+	questions,
+	topicOrder: pool.topics.map((t) => t.slug),
+	ctx: { states, facts: { [state]: facts }, exams },
+});
+
+const served = new Map(pool.questions.map((q) => [q.k, q]));
+const topicMeta = new Map(pool.topics.map((t) => [t.slug, t]));
+
+/** @param {number} n */
+const quotaText = (n) =>
+	n === 0 ? "Not on the Mock Test" : `${n} Mock Test ${n === 1 ? "question" : "questions"}`;
+
+// A source takes its number the first time it appears down the guide, which is also the list's order.
+const citations = new Map();
+/** @param {string} id */
+const cite = (id) => {
+	if (!citations.has(id)) citations.set(id, citations.size + 1);
+	return citations.get(id);
+};
+
+/** Consecutive facts of one kind as one list, so a mixed group keeps real list semantics. */
+const runsOf = (list) =>
+	list.reduce((runs, fact) => {
+		const last = runs.at(-1);
+		if (last?.kind === fact.kind) last.facts.push(fact);
+		else runs.push({ kind: fact.kind, facts: [fact] });
+		return runs;
+	}, []);
+
+const decorate = (fact) => {
+	const media = served.get(fact.idKey)?.media ?? null;
+	return {
+		...fact,
+		cite: cite(fact.source.id),
+		media,
+		credit: media?.credit == null ? null : pool.sources[media.credit],
+	};
+};
+
+/** One credit line for a group's figures, each document once, LanternCert's own art last. */
+const creditsOf = (facts) => {
+	const pictured = facts.filter((f) => f.media);
+	const documents = [...new Map(pictured.filter((f) => f.credit).map((f) => [f.credit.url, f.credit])).values()];
+	return { documents, original: pictured.some((f) => !f.credit) };
+};
+
+const topicsShown = sections.map((section) => {
+	const meta = topicMeta.get(section.topic);
+	const ungrouped = section.ungrouped.map(decorate);
+	const groups = section.groups.map((group) => {
+		const facts = group.facts.map(decorate);
+		// Every fact pictured: a sheet of tiles, signs reading like flashcards.
+		return { ...group, tiles: facts.every((f) => f.media), runs: runsOf(facts), credits: creditsOf(facts) };
+	});
+	const count = ungrouped.length + groups.reduce((n, g) => n + g.runs.reduce((m, r) => m + r.facts.length, 0), 0);
+	return {
+		slug: section.topic,
+		name: meta.name,
+		emoji: meta.emoji,
+		opener: section.opener,
+		quota: pool.quota[section.topic] ?? 0,
+		quotaText: quotaText(pool.quota[section.topic] ?? 0),
+		count,
+		ungrouped: runsOf(ungrouped),
+		ungroupedCredits: creditsOf(ungrouped),
+		groups,
+	};
+});
+
+const factsOf = (t) => [...t.ungrouped.flatMap((r) => r.facts), ...t.groups.flatMap((g) => g.runs.flatMap((r) => r.facts))];
+const allFacts = topicsShown.flatMap(factsOf);
+
+/** Each source id to the topics citing it, so a topic shows only its own sources. */
+const citedBy = new Map();
+for (const topic of topicsShown) {
+	for (const fact of factsOf(topic)) {
+		if (!citedBy.has(fact.source.id)) citedBy.set(fact.source.id, new Set());
+		citedBy.get(fact.source.id).add(topic.slug);
+	}
+}
+const first = topicsShown[0]?.slug;
+// The first page: what the guide is and how to use it, ahead of the topics in the index and the pager.
+const overview = { slug: "overview", name: "Overview", emoji: "📖" };
+const pages = [overview, ...topicsShown];
+
+// Every topic holding at least a quarter of the Mock Test, named in the overview.
+const testCount = pool.format.count.value;
+const heavy = topicsShown.filter((t) => t.quota * 4 >= testCount);
+const heavyCount = heavy.reduce((n, t) => n + t.quota, 0);
+// A floor, so it stays true for every line shown.
+const verifiedFloor = allFacts.map((f) => f.verified).sort()[0];
+
+const cited = await loadSourceEntries(cert, [...citations.keys()]);
+if (cited.length !== citations.size) {
+	const missing = [...citations.keys()].filter((id) => !cited.some((s) => s.id === id));
+	throw new Error(`${state} guide: cited source not in the registry - ${missing.join(", ")}`);
+}
+
+const cards = `${learn}?mode=cards`;
+---
+
+<div class="guide">
+	<aside class="guide__index">
+		<h2 class="guide-index__title" id="guide-index-title">Topics</h2>
+		<GuideIndex topics={pages} labelId="guide-index-title" current={overview.slug} />
+	</aside>
+
+	<div class="guide__body">
+		<div class="guide__pages">
+			{/* The page's one h1: it heads the overview and stays in the outline, out of sight, under a topic. */}
+			<h1 class="page-title tool-title guide__title" id="guide-title" tabindex="-1">
+				<span class="visually-hidden">{info.name} {term} Study Guide: </span>Prepare to <span class="page-title__accent sweep-in">pass</span>
+			</h1>
+
+			<section class="guide-topic guide-topic--overview" id={overview.slug}>
+				{verifiedFloor && (
+					<p class="caption"><em>Every line verified against its source on or after {formatDate(verifiedFloor)}.</em></p>
+				)}
+				<p class="guide-overview__text">
+					A crash course in what the <strong class="text-key">{info.name} {term}</strong> test covers, in {topicsShown.length}
+					topics. It doesn't replace the official manual or a riding course.
+				</p>
+				<p class="guide-overview__text">
+					Topics follow the order the manuals teach them. Each shows its share of the Mock Test and ends with
+					Practice Cards for just that topic.
+					{heavy.length > 0 && (
+						<>
+							{" "}
+							{heavy.map((t, i) => (
+								<>{i > 0 && (i === heavy.length - 1 ? " and " : ", ")}<a class="ink-link" href={`#${t.slug}`}>{t.name}</a></>
+							))}
+							{` ${heavy.length === 1 ? "makes" : "make"} up ${heavyCount} of the Mock Test's ${testCount} questions.`}
+						</>
+					)}
+				</p>
+				<p class="guide-overview__text">
+					Every line cites the document it comes from, and those documents hold the full material.
+				</p>
+				<GuidePager next={pages[1]} />
+			</section>
+
+			{topicsShown.map((topic, i) => (
+				<section class="guide-topic" id={topic.slug} hidden>
+					<div class="guide-topic__head">
+						<h2 class="section-title guide-topic__title" tabindex="-1">
+							<span aria-hidden="true">{topic.emoji}</span>{topic.name}
+						</h2>
+						<p class="guide-topic__opener">{topic.opener}</p>
+						<p class="caption guide-topic__meta">
+							{topic.count} {topic.count === 1 ? "fact" : "facts"}<span class="sep" aria-hidden="true">·</span><span class="visually-hidden">, </span>{topic.quotaText}
+						</p>
+					</div>
+	
+					{topic.ungrouped.length > 0 && (
+						<div class="guide-group">
+							{topic.ungrouped.map((run) => <FactRun run={run} />)}
+							<GuideCredits credits={topic.ungroupedCredits} />
+						</div>
+					)}
+	
+					{topic.groups.map((group) => (
+						<div class="guide-group">
+							<div class="guide-group__head">
+								<h3 class="facts__group">{group.heading}</h3>
+								<p class="guide-group__lead">{group.leadIn}</p>
+							</div>
+							{group.runs.map((run) => <FactRun run={run} tiles={group.tiles} />)}
+							<GuideCredits credits={group.credits} />
+						</div>
+					))}
+	
+					<GuidePager prev={pages[i]} next={pages[i + 2]} />
+				</section>
+			))}
+		</div>
+
+		<section class="guide-next" aria-labelledby="guide-next-title">
+			<h2 class="section-title" id="guide-next-title">Ready to see what stuck?</h2>
+			{/* Practice this topic follows the topic shown; scripts/learn/guide.js repoints it and its emoji. */}
+			<div class="guide-next__actions">
+				<a class="btn" href={cards} data-learn>Start Practice Cards</a>
+				<a class="btn" href={`${cards}&topics=${first}`} data-learn data-practice-topic>
+					Practice this topic <span aria-hidden="true" data-slot="emoji">{topicsShown[0]?.emoji}</span>
+				</a>
+			</div>
+		</section>
+
+		<section class="guide-sources stack" aria-labelledby="sources-title">
+			<h2 class="section-title" id="sources-title">Sources</h2>
+			<ol class="source-list accent-edge" role="list">
+				{cited.map((source) => (
+					<li
+						id={`source-${citations.get(source.id)}`}
+						value={citations.get(source.id)}
+						data-topics={[...citedBy.get(source.id)].join(" ")}
+						hidden={!citedBy.get(source.id).has(first)}
+					>
+						<p class="source-list__title">
+							<a href={source.url} target="_blank" rel="noopener noreferrer">{source.title}</a>
+						</p>
+						<span class="source-list__meta">{source.description}</span>
+						<span class="source-list__meta source-list__verify">
+							<span class="source-list__parts">
+								{sourceMetaParts(source).map((part) => (
+									<span class="source-list__part">
+										<span class="source-list__sep" aria-hidden="true">|</span>
+										<span>{part}</span>
+									</span>
+								))}
+							</span>
+						</span>
+					</li>
+				))}
+			</ol>
+		</section>
+
+		<p class="caption guide-legal tool-legal">
+			LanternCert is free supporting material, not legal advice. Always confirm requirements with your
+			state's official agencies.
+		</p>
+
+		{/* Before first paint: a link into another topic shows that topic, not the first. scripts/learn/guide.js owns it after. */}
+		<script is:inline>
+			(() => {
+				const id = decodeURIComponent(location.hash.slice(1));
+				const target = id && document.getElementById(id);
+				const topic = target && (target.closest(".guide-topic") ?? document.getElementById(target.dataset.topics?.split(" ")[0] ?? ""));
+				if (!topic || !topic.hidden) return;
+				for (const section of document.querySelectorAll(".guide-topic")) section.hidden = section !== topic;
+				for (const li of document.querySelectorAll(".guide-sources li[data-topics]")) li.hidden = !li.dataset.topics.split(" ").includes(topic.id);
+			})();
+		</script>
+	</div>
+
+	<dialog class="sheet sheet--index" id="guide-index-sheet" aria-labelledby="guide-sheet-title">
+		<div class="sheet__head">
+			<h2 class="sheet__title" id="guide-sheet-title">Topics</h2>
+			<button class="sheet__close" type="button" data-close aria-label="Close">
+				<span aria-hidden="true">×</span>
+			</button>
+		</div>
+		<GuideIndex topics={pages} labelId="guide-sheet-title" current={overview.slug} />
+	</dialog>
+</div>

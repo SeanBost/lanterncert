@@ -1,0 +1,22 @@
+---
+// The foot of a guide page: chips linking to the neighboring pages, each with its emoji and a chevron.
+/** @type {{ prev?: { slug: string, name: string, emoji: string }, next?: { slug: string, name: string, emoji: string } }} */
+const { prev, next } = Astro.props;
+---
+
+<div class="guide-topic__foot guide-pager">
+	{prev && (
+		<a class="chip guide-pager__link" href={`#${prev.slug}`}>
+			<span class="guide-pager__chevron" aria-hidden="true"></span>
+			<span aria-hidden="true">{prev.emoji}</span>
+			<span><span class="visually-hidden">Previous topic: </span>{prev.name}</span>
+		</a>
+	)}
+	{next && (
+		<a class="chip guide-pager__link guide-pager__link--next" href={`#${next.slug}`}>
+			<span aria-hidden="true">{next.emoji}</span>
+			<span><span class="visually-hidden">Next topic: </span>{next.name}</span>
+			<span class="guide-pager__chevron" aria-hidden="true"></span>
+		</a>
+	)}
+</div>

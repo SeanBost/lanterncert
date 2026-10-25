@@ -1,0 +1,64 @@
+---
+// One run of consecutive guide facts of one kind, as the list its kind calls for. data-handling.md §4c rule 5.
+import QFigure from "./QFigure.astro";
+
+/** @type {{ run: { kind: string, facts: any[] }, tiles?: boolean }} */
+const { run, tiles = false } = Astro.props;
+const factId = (fact) => `fact-${fact.idKey}`;
+---
+
+{/* Each list item ends on its citation, held to the text by a word joiner so it never wraps alone. */}
+{tiles ? (
+	run.kind === "value" ? (
+		<dl class="guide-tiles">
+			{run.facts.map((fact) => (
+				<div class="guide-fact guide-tile" id={factId(fact)}>
+					<dt class="guide-tile__label">{fact.label}</dt>
+					<dd class="guide-tile__text">{fact.text}{"\u2060"}<a class="cite" href={`#source-${fact.cite}`}>[{fact.cite}]</a></dd>
+					<dd class="guide-tile__figure"><QFigure media={fact.media} credit={fact.credit} caption={false} /></dd>
+				</div>
+			))}
+		</dl>
+	) : (
+		<ul class="guide-tiles">
+			{run.facts.map((fact) => (
+				<li class="guide-fact guide-tile" id={factId(fact)}>
+					<p class="guide-tile__text">{fact.text}{"\u2060"}<a class="cite" href={`#source-${fact.cite}`}>[{fact.cite}]</a></p>
+					<div class="guide-tile__figure"><QFigure media={fact.media} credit={fact.credit} caption={false} /></div>
+				</li>
+			))}
+		</ul>
+	)
+) : run.kind === "value" ? (
+	<dl class="guide-values">
+		{run.facts.map((fact) => (
+			<div class:list={["guide-fact", "guide-values__row", fact.media && "guide-fact--pictured"]} id={factId(fact)}>
+				<dt>{fact.label}</dt>
+				<dd>{fact.text}{"\u2060"}<a class="cite" href={`#source-${fact.cite}`}>[{fact.cite}]</a></dd>
+				{fact.media && <dd class="guide-fact__figure"><QFigure media={fact.media} credit={fact.credit} caption={false} /></dd>}
+			</div>
+		))}
+	</dl>
+) : (
+	<Fragment>
+		{run.kind === "steps" ? (
+			<ol class="guide-steps">
+				{run.facts.map((fact) => (
+					<li class:list={["guide-fact", fact.media && "guide-fact--pictured"]} id={factId(fact)}>
+						<span class="guide-fact__text">{fact.text}{"\u2060"}<a class="cite" href={`#source-${fact.cite}`}>[{fact.cite}]</a></span>
+						{fact.media && <QFigure class="guide-fact__figure" media={fact.media} credit={fact.credit} caption={false} />}
+					</li>
+				))}
+			</ol>
+		) : (
+			<ul class="guide-rules">
+				{run.facts.map((fact) => (
+					<li class:list={["guide-fact", fact.media && "guide-fact--pictured"]} id={factId(fact)}>
+						<span class="guide-fact__text">{fact.text}{"\u2060"}<a class="cite" href={`#source-${fact.cite}`}>[{fact.cite}]</a></span>
+						{fact.media && <QFigure class="guide-fact__figure" media={fact.media} credit={fact.credit} caption={false} />}
+					</li>
+				))}
+			</ul>
+		)}
+	</Fragment>
+)}

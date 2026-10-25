@@ -1,0 +1,232 @@
+---
+import Layout from "../../../../layouts/Layout.astro";
+import Brand from "../../../../components/Brand.astro";
+import GuidePanel from "../../../../components/learn/GuidePanel.astro";
+import CardTemplates from "../../../../components/learn/CardTemplates.astro";
+import TestTemplates from "../../../../components/learn/TestTemplates.astro";
+import LearnConfirm from "../../../../components/learn/LearnConfirm.astro";
+import {
+	certNoindex,
+	certStatePaths,
+	examUnpublished,
+	loadSourceEntries,
+	loadState,
+	stateInfo,
+	tokenDisplay,
+} from "../../../../lib/cert-data.js";
+import { poolForState } from "../../../../lib/learn-pool.js";
+import { fixArticles } from "../../../../lib/articles.js";
+import "../../../../styles/learn.css";
+
+export async function getStaticPaths() {
+	return await certStatePaths({ examOnly: true });
+}
+
+const { cert, state } = Astro.params;
+const info = stateInfo(state);
+const facts = await loadState(cert, state);
+const term = facts.meta.localTerm;
+const pool = await poolForState(cert, state);
+const format = pool.format;
+
+const year = new Date().getFullYear();
+const base = `/${cert}/${state}`;
+const learn = `${base}/learn`;
+const kicker = `${info.name} ${term}`;
+
+// The intro's sentence as { text, source?, key? } parts: the state and term keyed, published figures linked.
+const token = tokenDisplay(cert, facts, { stateName: info.name, stateCode: info.abbreviation });
+const examLong = token("examType", facts.exam.examType, "long");
+const pct = (n) => `${n}%`;
+const minutesText = (n) => `${n} ${n === 1 ? "minute" : "minutes"}`;
+const [countFrom, passFrom, minutesFrom] = await Promise.all(
+	[format.count, format.pass, format.minutes].map(async (field) =>
+		field.ours || !field.source ? null : ((await loadSourceEntries(cert, [field.source]))[0] ?? null),
+	),
+);
+const figures = [
+	!format.count.ours && { text: `${format.count.value} questions`, source: countFrom },
+	!format.pass.ours && { text: `${pct(format.pass.value)} to pass`, source: passFrom },
+	!format.minutes.ours && { text: minutesText(format.minutes.value), source: minutesFrom },
+].filter(Boolean);
+// Figures from one document share one link.
+const oneSource = figures.length > 1 && figures.every((f) => f.source && f.source.url === figures[0].source?.url);
+const shape = oneSource
+	? [{ text: figures.map((f) => f.text).join(", "), source: figures[0].source }]
+	: figures.flatMap((f, i) => (i ? [{ text: ", " }, f] : [f]));
+
+const ownFormat = examUnpublished(facts) || !examLong || figures.length === 0;
+const opener = [{ text: "To earn their " }, { text: kicker, key: true }];
+let lede;
+if (ownFormat) {
+	// The state's test as its facts name it, then the format this Mock Test chose.
+	const takes = fixArticles(`riders take a ${examLong ?? "knowledge test"}`);
+	lede = [...opener, { text: `, ${takes}, and ${info.name} sets no statewide format for it. LanternCert's Mock Test follows a common format: ${format.count.value} questions, ${pct(format.pass.value)} to pass.` }];
+} else {
+	lede = [...opener, { text: `, riders take the ${examLong}: ` }, ...shape, { text: "." }];
+	if (format.count.ours) lede.push({ text: ` No question count is published, so this Mock Test sets one: ${format.count.value}.` });
+	if (format.pass.ours) lede.push({ text: ` No pass mark is published, so this Mock Test sets one: ${pct(format.pass.value)}.` });
+}
+
+const sections = facts.exam.examSectionNames.value?.toLowerCase();
+const note = format.sectioned
+	? `${info.name} scores ${sections ?? "its test in sections"}${sections ? " as separate sections" : ""}. This test scores all ${format.count.value} together.`
+	: null;
+
+// What the scripts need before the pool lands: names, the format and where the pool is.
+const data = {
+	cert,
+	state,
+	stateName: info.name,
+	term,
+	base,
+	learn,
+	poolUrl: `${learn}/pool.json`,
+	format: {
+		count: format.count.value,
+		pass: format.pass.value,
+		minutes: format.minutes.value,
+		needed: format.needed,
+	},
+	passFrom: passFrom ? { title: passFrom.title, url: passFrom.url } : null,
+};
+
+const modes = [
+	{ mode: "guide", href: learn, emoji: "📖", lead: "Study ", label: "Guide" },
+	{ mode: "cards", href: `${learn}?mode=cards`, emoji: "🃏", lead: "Practice ", label: "Cards" },
+	{ mode: "test", href: `${learn}?mode=test`, emoji: "📝", lead: "Mock ", label: "Test" },
+];
+---
+
+<Layout
+	title={`${kicker} Study Guide and Mock Test`}
+	description={`A free ${kicker} Study Guide with Practice Cards and a timed Mock Test, and a cited source behind every answer.`}
+	noindex={certNoindex(cert, facts)}
+	header={false}
+	footer={false}
+	mainClass="page--tool"
+>
+	{/* Sets the mode before first paint, so cards or the test never flash the guide. scripts/learn/shell.js owns it after. */}
+	<script slot="head" is:inline>
+		(() => {
+			const mode = new URLSearchParams(location.search).get("mode");
+			document.documentElement.dataset.learnMode = mode === "cards" || mode === "test" ? mode : "guide";
+		})();
+	</script>
+
+	<script type="application/json" id="learn-data" is:inline set:html={JSON.stringify(data).replaceAll("<", "\\u003c")} />
+
+	<header class="tool-bar" slot="header">
+		<div class="tool-bar__inner">
+			<div class="tool-bar__start">
+				<Brand />
+				<a class="tool-bar__back" href={base}>
+					<span class="tool-bar__chevron" aria-hidden="true"></span>
+					<span><span class="visually-hidden">Back to </span>{info.name}<span class="tool-bar__term"> {term}</span></span>
+				</a>
+			</div>
+
+			<nav class="mode-switch" aria-label="Study modes">
+				<ul class="mode-switch__list">
+					{modes.map((m) => (
+						<li>
+							<a
+								class="mode-switch__link"
+								href={m.href}
+								data-mode={m.mode}
+								data-learn
+								aria-current={m.mode === "guide" ? "page" : undefined}
+							>
+								<span class="mode-switch__emoji" aria-hidden="true">{m.emoji}</span>
+								<span><span class="mode-switch__lead">{m.lead}</span>{m.label}</span>
+							</a>
+						</li>
+					))}
+				</ul>
+			</nav>
+
+			<div class="tool-bar__end">
+				<div class="tool-bar__group" data-tools="guide" hidden>
+					<button class="tool-btn" type="button" data-action="topics" aria-haspopup="dialog" aria-controls="guide-index-sheet">
+						<svg class="tool-btn__glyph" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 4h12M2 8h12M2 12h8" /></svg>
+						Topics
+					</button>
+				</div>
+				<div class="tool-bar__group" data-tools="cards" hidden>
+					<button class="tool-btn" type="button" data-action="filter" aria-haspopup="dialog" aria-controls="cards-filter">
+						<svg class="tool-btn__glyph" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 4h12M2 8h12M2 12h8" /></svg>
+						Topics<span class="visually-hidden" data-slot="filter-summary">, All topics</span>
+					</button>
+				</div>
+				<div class="tool-bar__group" data-tools="test" hidden>
+					<p class="timer" role="timer" data-slot="timer" hidden>
+						<svg class="timer__glyph" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="9" r="5.5" /><path d="M8 6v3l2 1.5M6.5 2h3" /></svg>
+						<span data-slot="timer-text"></span>
+					</p>
+					<button class="tool-btn tool-bar__questions" type="button" data-action="navigator" aria-haspopup="dialog" aria-controls="test-navigator" hidden>
+						Questions<span class="visually-hidden" data-slot="answered"></span>
+					</button>
+					<button class="tool-btn" type="button" data-action="results" hidden>Back to results</button>
+				</div>
+				<nav class="tool-bar__site" aria-label="Main">
+					<ul class="site-nav__list">
+						<li><a href="/progress">My Progress</a></li>
+					</ul>
+				</nav>
+			</div>
+		</div>
+	</header>
+
+	<p class="tool-notice" data-slot="storage-notice" hidden>
+		This browser isn't saving progress, so answers won't carry over to next time. Everything else works.
+		<button class="text-btn" type="button" data-action="dismiss-notice">Dismiss</button>
+	</p>
+
+	<div class="stage">
+		<div class="panel panel--guide" id="panel-guide" data-panel="guide">
+			<GuidePanel cert={cert} state={state} info={info} facts={facts} pool={pool} learn={learn} />
+		</div>
+		{/* The skeletons stand in until a mode's script and the pool land. */}
+		{/* Cards and the test take focus anywhere in their stage, so their keys work after any click inside it. */}
+		<div class="panel panel--cards" id="panel-cards" data-panel="cards" tabindex="-1" hidden>
+			<div class="skeleton">
+				<div class="skeleton__card">
+					<p class="caption" data-slot="status">Loading questions</p>
+				</div>
+			</div>
+		</div>
+		<div class="panel panel--test" id="panel-test" data-panel="test" tabindex="-1" hidden>
+			<div class="skeleton">
+				<div class="skeleton__card">
+					<p class="caption" data-slot="status">Loading questions</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<template id="tpl-load-error">
+		<div class="skeleton__card skeleton__card--error">
+			<p>The questions didn't load. Check your connection, then try again.</p>
+			<p><button class="btn" type="button" data-action="retry">Try again</button></p>
+		</div>
+	</template>
+
+	<CardTemplates heading={`${kicker} Practice Cards`} topics={pool.topics} />
+	<TestTemplates kicker={kicker} heading={`${kicker} Mock Test`} format={format} intro={{ lede, note }} />
+
+	<LearnConfirm />
+
+	<footer class="tool-foot" slot="footer">
+		<p class="tool-foot__line">
+			<span>&copy; {year} LanternCert</span>
+			<span class="sep" aria-hidden="true">|</span>
+			<span>LanternCert is free supporting material, not legal advice. Always confirm requirements with your state's official agencies.</span>
+		</p>
+	</footer>
+</Layout>
+
+<script>
+	import { initLearn } from "../../../../scripts/learn/shell.js";
+
+	initLearn();
+</script>

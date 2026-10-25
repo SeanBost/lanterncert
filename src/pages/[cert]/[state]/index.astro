@@ -163,11 +163,11 @@ if (cited.length !== citations.size) {
 	throw new Error(`${state}: cited source not in the registry - ${missing.join(", ")}`);
 }
 
-// Order is the progression, and the three names are proper nouns. All three prepare a rider for an
-// exam, so a cert without one offers none of them and generates none of their routes.
+// Order is the progression, and the three names are proper nouns: the study tool's modes. All three
+// prepare a rider for an exam, so a cert without one offers none of them and generates no tool.
 const modes = !config.hasExam ? [] : [
 	{
-		href: `${base}/guide`,
+		href: `${base}/learn`,
 		title: "Study Guide",
 		emoji: "📖",
 		icon: "book",
@@ -175,7 +175,7 @@ const modes = !config.hasExam ? [] : [
 		blurb: "Start here. Read a crash course on the material, sorted by topic, with the source behind every section.",
 	},
 	{
-		href: `${base}/practice`,
+		href: `${base}/learn?mode=cards`,
 		title: "Practice Cards",
 		emoji: "🃏",
 		icon: "cards",
@@ -183,7 +183,7 @@ const modes = !config.hasExam ? [] : [
 		blurb: "Answer one question at a time, untimed. Every answer comes with the reason why and the source.",
 	},
 	{
-		href: `${base}/test`,
+		href: `${base}/learn?mode=test`,
 		title: "Mock Test",
 		emoji: "📝",
 		icon: "pencil",

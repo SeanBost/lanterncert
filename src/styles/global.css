@@ -183,6 +183,12 @@ img, svg {
   /* The whole height the fixed header occupies. body clears it, the first band pulls back up under
      it, and scroll-padding-top lands an anchor below it - change this and all three follow. */
   --header-clear: var(--header-h);
+  /* The frosted band's knobs, shared by the site header and the study tool's bar. How much of the band's color shows over the blur. */
+  --header-alpha: 72%;
+  /* How white the band goes once scrolled, over the blur. The dial for legibility. */
+  --header-veil-max: 33%;
+  /* Backdrop blur radius, kept low: raising it costs Firefox scroll frames and costs Chrome nothing. */
+  --header-blur: 8px;
 
   --focus-ring: 3px solid var(--color-focus);
   --focus-offset: 2px;
@@ -453,10 +459,6 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
   /* The scrolled shadow's two knobs. Its color is applied by the [data-scrolled] rule below. */
   --header-shadow-tint: 8%;
   --header-shadow-geometry: 0 3px 6px;
-  /* How white the band goes once scrolled, over the blur. The dial for legibility. */
-  --header-veil-max: 33%;
-  /* Backdrop blur radius, kept low: raising it costs Firefox scroll frames and costs Chrome nothing. */
-  --header-blur: 8px;
   position: fixed;
   top: 0;
   left: 0;
@@ -472,7 +474,7 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
   /* background-image paints ABOVE background-color, so the veil lands on top of the blurred backdrop
      rather than under it. Its own layer, so the two alphas stay independently tunable. */
   .site-header {
-    background-color: color-mix(in srgb, var(--color-header) 72%, transparent);
+    background-color: color-mix(in srgb, var(--color-header) var(--header-alpha), transparent);
     background-image: linear-gradient(
       color-mix(in srgb, var(--white) var(--header-veil), transparent),
       color-mix(in srgb, var(--white) var(--header-veil), transparent)
@@ -655,6 +657,19 @@ a:hover, a:focus-visible, a:active, .source-tile:hover .source-tile__host {
   border-radius: var(--radius-md);
   background-color: var(--cta-fill);
   line-height: var(--leading-tight);
+}
+
+/* As a link it keeps the button's type and colors, outranking the nav links', and takes none of their underline. */
+.site-nav__list a.site-nav__cta, .site-nav__list a.site-nav__cta:visited {
+  color: var(--color-accent-ink);
+}
+
+.site-nav__list a.site-nav__cta:hover {
+  color: var(--color-accent-hover-ink);
+}
+
+.site-nav__list a.site-nav__cta::after {
+  content: none;
 }
 
 /* The fill is already the focus hue, so the ring is drawn in ink to stay visible beside it. */

@@ -12,7 +12,9 @@
       "blurb": "Requirements, costs, course and exam details, plus practice questions derived from each state's own manual.",
       "timeToCertify": "Under a week",
       "testDefaults": {
-        "questionCount": 25
+        "questionCount": 25,
+        "passingScorePercent": 80,
+        "minutesPerQuestion": 1
       },
       "hasExam": true,
       "stateDependent": true,

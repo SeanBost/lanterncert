@@ -13,11 +13,13 @@ function factsFrom(questions) {
     .sort((a, b) => a.guide.order - b.guide.order || Number(a.meta.idKey) - Number(b.meta.idKey))
     .map((q) => ({
       id: q.id,
+      idKey: q.meta.idKey,
       kind: q.guide.kind,
       label: q.guide.label,
       text: factText(q),
       source: q.meta.source,
       sourceSection: q.meta.sourceSection,
+      verified: q.meta.lastVerified,
       media: q.content.media,
     }));
 }

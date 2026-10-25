@@ -1,3 +1,7 @@
 # Pre-launch blanket noindex. Deleted at launch; /q/[id] keeps its own permanent per-page noindex.
 /*
   X-Robots-Tag: noindex
+
+# Permanent: each state's question pool is data for the study tool, never a page.
+/:cert/:state/learn/pool.json
+  X-Robots-Tag: noindex

@@ -1,0 +1,150 @@
+---
+// Practice Cards' markup as templates, cloned and filled by scripts/learn/cards.js.
+import QFigure from "./QFigure.astro";
+
+/** @type {{ heading: string, topics: any[] }} */
+const { heading, topics } = Astro.props;
+---
+
+{/* The deck, its answer sheet, and from 1248 the topics beside it. */}
+<template id="tpl-cards">
+	<div class="cards tool-split">
+		<h1 class="visually-hidden" tabindex="-1" data-slot="heading">{heading}</h1>
+		<aside class="cards__side tool-side" aria-labelledby="cards-side-title">
+			<h2 class="side-title" id="cards-side-title">Topics</h2>
+			<div class="cards__bulk">
+				<button class="text-btn" type="button" data-action="all">Select all</button>
+				<button class="text-btn" type="button" data-action="none">Clear</button>
+			</div>
+			<fieldset class="side-checks" aria-labelledby="cards-side-title">
+				{topics.map((topic) => (
+					<label class="side-check">
+						<input type="checkbox" name="topic" value={topic.slug} checked />
+						<span class="side-check__emoji" aria-hidden="true">{topic.emoji}</span>
+						<span class="side-check__name">{topic.name}</span>
+					</label>
+				))}
+			</fieldset>
+			<div class="cards__missed" data-slot="missed-row">
+				<label class="switch">
+					<input type="checkbox" role="switch" name="missed" aria-describedby="cards-side-missed-note" />
+					<span>Only questions I've missed (<span data-slot="missed-count">0</span>)</span>
+				</label>
+				<p class="caption" id="cards-side-missed-note" data-slot="missed-note" hidden>Nothing missed yet</p>
+			</div>
+			<p class="filter__error" data-slot="error" hidden>Pick at least one topic</p>
+		</aside>
+		{/* The sheet shares the stage's grid cell, docked at its foot. */}
+		<div class="cards__main">
+			<div class="cards__stage">
+				<p class="cards__practicing" data-slot="practicing"></p>
+				<div class="deck" data-slot="deck"></div>
+				<p class="shortcuts">Keys: <kbd>A</kbd> to <kbd>D</kbd> or <kbd>1</kbd> to <kbd>4</kbd> to choose, <kbd>Enter</kbd> or <kbd>→</kbd> for the next card</p>
+			</div>
+			<div class="answer" data-slot="answer" role="region" aria-label="Answer" hidden>
+				<div class="answer__body">
+					<p class="answer__verdict" data-slot="verdict"></p>
+					<p class="answer__why" data-slot="why"></p>
+				</div>
+				<div class="answer__aside">
+					<div class="answer__source" data-slot="source"></div>
+					<p class="answer__credit" data-slot="credit" hidden></p>
+					<div class="answer__actions">
+						<a class="answer__guide" href="#" data-slot="guide-link" data-learn>Read it in the Study Guide</a>
+						<button class="btn answer__next" type="button" data-action="next">Next card</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<p class="visually-hidden" aria-live="polite" data-slot="live"></p>
+	</div>
+</template>
+
+{/* One face: the question and its choices; grid areas place a figure. The answer opens in the sheet. */}
+<template id="tpl-card">
+	<article class="qcard qcard--practice">
+		<div class="qcard__face">
+			<div class="qcard__top">
+				<p class="topic-chip"><span aria-hidden="true" data-slot="emoji"></span><span data-slot="topic"></span></p>
+			</div>
+			<h2 class="qcard__stem" data-slot="stem"></h2>
+			<div class="qcard__figure" data-slot="figure"></div>
+			<div class="tiles" role="group" data-slot="tiles"></div>
+		</div>
+	</article>
+</template>
+
+{/* The end card and the empty missed deck: a card with a message and its actions. */}
+<template id="tpl-card-note">
+	<article class="qcard qcard--note">
+		<div class="qcard__face">
+			<h2 class="qcard__note-title" tabindex="-1" data-slot="title"></h2>
+			<p class="qcard__note-text" data-slot="text" hidden></p>
+			<div class="qcard__actions" data-slot="actions"></div>
+		</div>
+	</article>
+</template>
+
+<template id="tpl-tile">
+	<button class="tile" type="button">
+		<span class="tile__key" aria-hidden="true"></span>
+		<span class="tile__text" data-slot="text"></span>
+		<span class="tile__verdict" data-slot="verdict"></span>
+	</button>
+</template>
+
+<template id="tpl-figure">
+	<QFigure />
+</template>
+
+<template id="tpl-source">
+	{/* Inside a template the build drops whitespace between tags, so each space is written out. */}
+	<p class="source-line">
+		<span class="source-line__lead"><strong>Source:</strong>{" "}<a data-slot="link" target="_blank" rel="noopener noreferrer"></a></span>
+		<span class="source-line__meta"><span data-slot="section"></span>{" "}<span data-slot="verified"></span></span>
+	</p>
+</template>
+
+<dialog class="sheet" id="cards-filter" aria-labelledby="cards-filter-title">
+	<form class="sheet__form" method="dialog">
+		<div class="sheet__head">
+			<h2 class="sheet__title" id="cards-filter-title">Choose your cards</h2>
+			<button class="sheet__close" type="submit" value="close" aria-label="Close">
+				<span aria-hidden="true">×</span>
+			</button>
+		</div>
+		<fieldset class="filter-topics">
+			<legend class="facts__group">Topics</legend>
+			<div class="filter-topics__bulk">
+				<button class="text-btn" type="button" data-action="all">Select all</button>
+				<button class="text-btn" type="button" data-action="none">Clear</button>
+			</div>
+			<ul class="check-list">
+				{topics.map((topic) => (
+					<li>
+						<label class="check">
+							<input type="checkbox" name="topic" value={topic.slug} checked />
+							<span class="check__emoji" aria-hidden="true">{topic.emoji}</span>
+							<span class="check__text">
+								<span class="check__name">{topic.name}</span>
+								<span class="check__meta"><span class="visually-hidden">, </span>{topic.count} cards</span>
+							</span>
+						</label>
+					</li>
+				))}
+			</ul>
+		</fieldset>
+		<div class="filter-missed" data-slot="missed-row">
+			<label class="switch">
+				<input type="checkbox" role="switch" name="missed" aria-describedby="cards-filter-missed-note" />
+				<span>Only questions I've missed (<span data-slot="missed-count">0</span>)</span>
+			</label>
+			<p class="caption" id="cards-filter-missed-note" data-slot="missed-note" hidden>Nothing missed yet</p>
+		</div>
+		<p class="filter__error" data-slot="error" hidden>Pick at least one topic</p>
+		{/* A change applies as it's made, so the sheet only needs closing. */}
+		<div class="sheet__actions">
+			<button class="btn" type="submit" value="close">Show cards</button>
+		</div>
+	</form>
+</dialog>

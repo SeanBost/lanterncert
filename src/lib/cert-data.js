@@ -30,12 +30,21 @@ for (const [key, config] of Object.entries(certs)) {
       throw new Error(`site-config.json ▸ certTypes ▸ ${key}: "${field}" must be a boolean`);
     }
   }
-  // The Mock Test's length where a state publishes none. It may never render as a state fact.
-  const fallbackCount = config.testDefaults?.questionCount;
-  if (config.hasExam && !(Number.isInteger(fallbackCount) && fallbackCount > 0)) {
-    throw new Error(
-      `site-config.json ▸ certTypes ▸ ${key}: an exam cert needs a positive testDefaults.questionCount`,
-    );
+  // The Mock Test's format where a state publishes none. It may never render as a state fact.
+  if (config.hasExam) {
+    const { questionCount, passingScorePercent, minutesPerQuestion } = config.testDefaults ?? {};
+    const fail = (rule) => {
+      throw new Error(`site-config.json ▸ certTypes ▸ ${key}: an exam cert needs ${rule}`);
+    };
+    if (!(Number.isInteger(questionCount) && questionCount > 0)) {
+      fail("a positive integer testDefaults.questionCount");
+    }
+    if (!(Number.isInteger(passingScorePercent) && passingScorePercent > 0 && passingScorePercent <= 100)) {
+      fail("an integer testDefaults.passingScorePercent from 1 to 100");
+    }
+    if (!(typeof minutesPerQuestion === "number" && minutesPerQuestion > 0)) {
+      fail("a positive testDefaults.minutesPerQuestion");
+    }
   }
 }
 
@@ -49,9 +58,35 @@ export function resolveCert(input) {
   return Object.keys(certs).find((key) => certs[key].slugShort === input) ?? null;
 }
 
+/**
+ * The Mock Test's shape, each field resolved on its own: the state's figure where published, the
+ * cert's default where not. data-handling.md ▸ Site config rule 11.
+ * @returns {{ count: Resolved, pass: Resolved, minutes: Resolved, needed: number, sectioned: boolean } | null}
+ * @typedef {{ value: number, ours: boolean, source: string | null }} Resolved
+ */
+export function mockTestFormat(cert, facts) {
+  const defaults = certConfig(cert)?.testDefaults;
+  if (!defaults) return null;
+  /** @type {(fact: any, fallback: number) => Resolved} */
+  const pick = (fact, fallback) =>
+    fact?.value == null
+      ? { value: fallback, ours: true, source: null }
+      : { value: fact.value, ours: false, source: fact.source?.id ?? null };
+  const count = pick(facts?.exam?.questionCount, defaults.questionCount);
+  const pass = pick(facts?.exam?.passingScorePercent, defaults.passingScorePercent);
+  const minutes = pick(facts?.exam?.timeLimitMinutes, Math.ceil(count.value * defaults.minutesPerQuestion));
+  return {
+    count,
+    pass,
+    minutes,
+    needed: Math.ceil((pass.value * count.value) / 100),
+    sectioned: facts?.exam?.isExamSectioned?.value === true,
+  };
+}
+
 /** The Mock Test's question count: the state's own where published, the cert's fallback where not. */
 export function mockTestLength(cert, facts) {
-  return facts?.exam?.questionCount?.value ?? certConfig(cert)?.testDefaults?.questionCount ?? null;
+  return mockTestFormat(cert, facts)?.count.value ?? null;
 }
 
 /** The certs a reader may be linked to. Every other cert still builds, unlinked and noindex. */
@@ -85,6 +120,17 @@ const intros = Object.fromEntries(
 
 export function certIntro(cert) {
   return intros[cert] ?? null;
+}
+
+// The Study Guide's prose scaffolding per cert, validated at module load by the cert schema.
+const guides = Object.fromEntries(
+  Object.entries(import.meta.glob("../content/guide/*-guide.json", { eager: true })).map(
+    ([path, mod]) => [path.match(/([^/]+)-guide\.json$/)[1], mod.default],
+  ),
+);
+
+export function certGuide(cert) {
+  return guides[cert] ?? null;
 }
 
 const stateCodes = new Set(Object.values(states).map((s) => s.abbreviation));

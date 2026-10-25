@@ -1,0 +1,2727 @@
+/* ==========================================================================
+   LanternCert — the study tool at /[cert]/[state]/learn. Mobile-first.
+   Reads global.css's tokens and never declares a hex.
+
+   1. Tokens
+   2. The shell
+   3. Controls
+   4. Study Guide
+   5. Question parts
+   6. Practice Cards
+   7. Mock Test
+   8. Sheets
+   9. Breakpoints
+   10. Motion
+   ========================================================================== */
+
+/* 1. Tokens --------------------------------------------------------------- */
+
+:root {
+  /* The chrome's heights until scripts/learn/shell.js measures them: two bar rows on a phone, one from 768; the footer from 1248. */
+  --bar-h: 6.375rem;
+  --bar-pad: 0.375rem;
+  --bar-control: 2.25rem;
+  --foot-h: 0px;
+
+  /* Roles, each resolving to a decided color. */
+  --color-stage: var(--band-warm-fill);
+  --color-correct-fill: var(--color-yellow-offwhite);
+  --color-correct-ink: var(--color-orange-dark);
+  --color-selected: var(--color-accent);
+  --color-selected-ink: var(--color-accent-ink);
+  --color-scrim: color-mix(in srgb, var(--color-ink) 33%, transparent);
+
+  /* Card and figure sizes. Viewport units size heights only, never type. */
+  --qcard-w: 42rem;
+  --qcard-w-media: 60rem;
+  --figure-max: clamp(8rem, 32svh, 16rem);
+  --figure-max-aside: clamp(6rem, 24svh, 12rem);
+  --guide-index-w: 16rem;
+  --leading-fact: 1.45;
+
+  /* Motion knobs; scripts/learn/ reads the fade, next, fold and pulse. */
+  --dur-switch: 150ms;
+  --dur-press: 80ms;
+  --dur-verdict: 300ms;
+  --dur-check: 250ms;
+  --dur-fade: 150ms;
+  --dur-next: 220ms;
+  --dur-fold-fade: 120ms;
+  --dur-fold: 160ms;
+  --dur-pulse: 600ms;
+  --dur-bloom: 1.2s;
+}
+
+/* 2. The shell ------------------------------------------------------------ */
+
+/* No fixed header to clear; anchors and focus land clear of the bar and the footer. The page is the stage's warm field. */
+:root:has(.page--tool) {
+  --header-clear: 0px;
+  scroll-padding-top: calc(var(--bar-h) + var(--space-4));
+  scroll-padding-bottom: var(--foot-h);
+  background-color: var(--color-stage);
+  /* The scrollbar's room, held in every mode. */
+  scrollbar-gutter: stable;
+}
+
+/* The bar and footer hold the window's edges; the stage takes what is left between them. */
+body:has(.page--tool) {
+  min-height: 100dvh;
+  background-color: var(--color-stage);
+}
+
+/* The tool fills the window between the chrome; its panels set their own width. */
+.page--tool {
+  max-width: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* The tool's header, in place of the site's: held at the window's top at every width. Its scrolled shadow is its edge. */
+.tool-bar {
+  position: sticky;
+  top: 0;
+  z-index: 15;
+  box-shadow: 0 3px 6px transparent;
+}
+
+/* The bar and the footer: the page's own color, opaque where it can't blur. */
+.tool-bar, .tool-foot {
+  background-color: var(--color-stage);
+}
+
+/* The site header's frost in the page's own color, on the bar and the footer. */
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .tool-bar, .tool-foot {
+    background-color: color-mix(in srgb, var(--color-stage) var(--header-alpha), transparent);
+    background-image: linear-gradient(color-mix(in srgb, var(--color-stage) var(--header-veil-max), transparent) 0 0);
+    -webkit-backdrop-filter: blur(var(--header-blur));
+    backdrop-filter: blur(var(--header-blur));
+  }
+}
+
+:root[data-scrolled] .tool-bar {
+  box-shadow: 0 3px 6px color-mix(in srgb, var(--color-ink) 8%, transparent);
+}
+
+.tool-bar__inner {
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding: var(--bar-pad) var(--gutter);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: "back tools" "switch switch";
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+}
+
+.tool-bar__start {
+  grid-area: back;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+}
+
+/* The wordmark and the site link join the bar from 1248; below, the bar is the tool alone. */
+.tool-bar .site-header__brand, .tool-bar__site {
+  display: none;
+}
+
+.tool-bar__back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--bar-control);
+  font-weight: var(--weight-med);
+  line-height: var(--leading-tight);
+}
+
+/* A chrome link: ink at rest, a step up the ramp on hover, the base rules' underline. */
+.tool-bar__back:is(:link, :visited) {
+  color: var(--color-ink);
+}
+
+/* The :visited half outranks the base a:visited:hover, so a visited link never turns purple. */
+.tool-bar__back:is(:link, :visited):is(:hover, :focus-visible) {
+  color: var(--color-ink-hover);
+}
+
+/* The disclosure chevron's two borders, turned to point back. */
+.tool-bar__chevron {
+  flex: none;
+  width: 0.5em;
+  height: 0.5em;
+  border-left: 2.5px solid var(--color-orange-dark);
+  border-bottom: 2.5px solid var(--color-orange-dark);
+  transform: rotate(45deg);
+  margin-left: 0.15em;
+}
+
+/* The term joins the state name from 1248; below it, the accessible name keeps it. */
+.tool-bar__term {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.mode-switch {
+  grid-area: switch;
+}
+
+/* A segmented control: three links on the chip's fill inside the frame ring, the current one filled. */
+ul.mode-switch__list {
+  display: flex;
+  border: var(--line-w) solid transparent;
+  border-radius: var(--radius-lg);
+  background-color: var(--color-chip);
+  background-image: linear-gradient(var(--color-chip) 0 0), var(--frame-gradient);
+  background-origin: padding-box, border-box;
+  background-clip: padding-box, border-box;
+  box-shadow: var(--shadow-control);
+}
+
+.mode-switch__list > li {
+  flex: 1 1 0;
+  display: flex;
+}
+
+/* Its hover wedge is the root's orange, as a chip's is. */
+.mode-switch__link {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 2.75rem;
+  padding: 0 var(--space-2);
+  border-radius: calc(var(--radius-lg) - var(--line-w));
+  background-image: linear-gradient(135deg, var(--splash-fill) calc(var(--splash) - 30%), transparent var(--splash));
+  font-weight: var(--weight-semi);
+  line-height: var(--leading-tight);
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.mode-switch__link:is(:link, :visited) {
+  color: var(--color-ink);
+}
+
+.mode-switch__link:is(:link, :visited):is(:hover, :focus-visible) {
+  --splash: 130%;
+  color: var(--color-ink);
+  text-decoration: none;
+}
+
+/* Keyed on the mode the page shows, which the head script sets before first paint. */
+:root:not([data-learn-mode]) .mode-switch__link[data-mode="guide"],
+:root[data-learn-mode="guide"] .mode-switch__link[data-mode="guide"],
+:root[data-learn-mode="cards"] .mode-switch__link[data-mode="cards"],
+:root[data-learn-mode="test"] .mode-switch__link[data-mode="test"] {
+  --splash: 0%;
+  background-color: var(--color-selected);
+  color: var(--color-selected-ink);
+  cursor: default;
+}
+
+/* The full mode name stays in the accessible name. */
+.mode-switch__lead {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.tool-bar__end {
+  grid-area: tools;
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+}
+
+/* Padding only: a display value here would beat the [hidden] the shell toggles. */
+.tool-bar__group:not([hidden]) {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.tool-bar .tool-btn {
+  min-height: var(--bar-control);
+}
+
+/* A quiet line under the bar: the no-storage notice. */
+.tool-notice {
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding: var(--space-2) var(--gutter);
+  font-size: var(--text-base);
+  color: var(--color-ink-light);
+}
+
+.tool-notice[hidden] {
+  display: none;
+}
+
+/* The site footer as one line held at the window's bottom, from 1248, frosted like the bar with its frame hairline on top. Below 1248, the guide's end and the test intro carry its legal line. */
+.tool-foot {
+  display: none;
+  position: sticky;
+  bottom: 0;
+  z-index: 15;
+  border-top: 1px solid;
+  border-image: var(--frame-gradient) 1;
+  font-size: var(--text-sm);
+}
+
+.tool-foot__line {
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding: var(--space-2) var(--gutter);
+}
+
+.stage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Every mode sits on the warm field, so a white sheet reads as paper on a desk. */
+.stage {
+  background-color: var(--color-stage);
+}
+
+.panel--guide {
+  padding: var(--space-5) var(--gutter) var(--space-9);
+}
+
+/* The test fills the window between the chrome from the top down, each screen centered across it. */
+.panel--test {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-5);
+  padding: var(--space-4) var(--gutter) var(--space-4);
+}
+
+/* The deck fills the window between the chrome from the top down, its answer sheet docked at the foot. */
+.panel--cards {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-4) var(--gutter) 0;
+}
+
+.panel--cards > .skeleton {
+  margin-inline: auto;
+}
+
+/* A mode with a sidebar: one column through tablet; the sidebar joins from 1248, in the guide's grid. */
+.tool-split {
+  flex: 1;
+  align-self: stretch;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: 1fr;
+}
+
+.tool-side {
+  display: none;
+}
+
+/* A choice or link an open answer sheet covers scrolls clear of it when focused. */
+.qcard :is(a, button, input) {
+  scroll-margin-bottom: calc(var(--answer-h, 0px) + var(--space-4));
+}
+
+/* Two classes, so [hidden] outranks the display above. */
+.panel[hidden] {
+  display: none;
+}
+
+/* Before the shell runs: the mode in the URL shows its skeleton and the guide steps aside. */
+:root[data-learn-mode="cards"] #panel-cards[hidden], :root[data-learn-mode="test"] #panel-test[hidden] {
+  display: flex;
+}
+
+:root[data-learn-mode="cards"] #panel-guide, :root[data-learn-mode="test"] #panel-guide {
+  display: none;
+}
+
+/* The card's shape while a mode's script or the pool is still on its way. No shimmer. */
+.skeleton {
+  width: 100%;
+  max-width: var(--qcard-w);
+}
+
+.skeleton__card {
+  min-height: 24rem;
+  display: grid;
+  place-content: center;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  border: var(--line-w) solid transparent;
+  border-radius: var(--radius-lg);
+  background-image: linear-gradient(var(--white) 0 0), var(--frame-gradient);
+  background-origin: padding-box, border-box;
+  background-clip: padding-box, border-box;
+  box-shadow: var(--shadow-card);
+  text-align: center;
+}
+
+.skeleton__card--error {
+  font-size: var(--text-lg);
+}
+
+/* A visually hidden heading, a stem the script moves focus to, or a stage taking a click's focus takes no ring; none is a control. */
+.panel:focus, .tool-title:focus, .panel h1:focus, .qcard__stem:focus, .qcard__note-title:focus, .guide-topic__title:focus {
+  outline: none;
+}
+
+/* 3. Controls ------------------------------------------------------------- */
+
+/* The tool's quiet control: white, a visible edge, and the chip's splash on hover. */
+.tool-btn, .tool-btn:visited {
+  --splash-fill: var(--color-chip);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 2.75rem;
+  padding: 0 var(--space-4);
+  border: var(--standard-border);
+  border-radius: var(--radius-md);
+  background-color: var(--white);
+  background-image: linear-gradient(135deg, var(--splash-fill) calc(var(--splash) - 30%), transparent var(--splash));
+  background-origin: border-box;
+  box-shadow: var(--shadow-control);
+  color: var(--color-ink);
+  font: inherit;
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semi);
+  line-height: var(--leading-tight);
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+/* In the bar and at the small size it steps down to the chrome's body size. */
+.tool-bar .tool-btn, .tool-btn--sm {
+  font-size: var(--text-base);
+}
+
+.tool-btn:hover, .tool-btn:visited:hover, .tool-btn:focus-visible {
+  --splash: 130%;
+  color: var(--color-ink);
+  text-decoration: none;
+}
+
+.tool-btn:disabled {
+  --splash: 0%;
+  border-color: var(--color-ink-lightester);
+  color: var(--color-disabled-ink);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.tool-btn[hidden] {
+  display: none;
+}
+
+.tool-btn--sm {
+  min-height: 2.25rem;
+  padding-inline: var(--space-3);
+}
+
+.tool-btn__glyph, .timer__glyph, .flag-btn__glyph {
+  flex: none;
+  width: 1em;
+  height: 1em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* A control that reads as text: Skip, Dismiss, Select all. */
+.text-btn {
+  min-height: 2.25rem;
+  padding: 0 var(--space-2);
+  margin-inline: calc(-1 * var(--space-2));
+  border: 0;
+  background: none;
+  color: var(--color-ink-light);
+  font: inherit;
+  font-weight: var(--weight-semi);
+  cursor: pointer;
+}
+
+.text-btn:hover, .text-btn:focus-visible {
+  color: var(--color-ink);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.btn--block {
+  display: block;
+  width: 100%;
+}
+
+/* An internal link inside the tool: ink, a step up the ramp on hover. */
+.ink-link:is(:link, :visited), .answer__guide:is(:link, :visited) {
+  color: var(--color-ink);
+  font-weight: var(--weight-semi);
+  text-decoration: underline;
+  text-decoration-color: var(--color-orange);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.2em;
+}
+
+.ink-link:is(:link, :visited):is(:hover, :focus-visible), .answer__guide:is(:link, :visited):is(:hover, :focus-visible) {
+  color: var(--color-ink-hover);
+}
+
+/* Native radios and checkboxes, in the button's ink. */
+.learn-input, .option input, .check input, .side-check input {
+  flex: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin: 0;
+  accent-color: var(--color-accent);
+}
+
+/* A checkbox drawn as a switch: the knob is a gradient layer, so no pseudo-element is needed. */
+input[role="switch"] {
+  flex: none;
+  appearance: none;
+  width: 2.75rem;
+  height: 1.5rem;
+  margin: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background: radial-gradient(circle at 0.75rem 50%, var(--white) 0.5rem, transparent calc(0.5rem + 1px)), var(--color-ink-lightest);
+  cursor: pointer;
+}
+
+input[role="switch"]:checked {
+  border-color: var(--color-accent);
+  background: radial-gradient(circle at calc(100% - 0.75rem) 50%, var(--white) 0.5rem, transparent calc(0.5rem + 1px)), var(--color-accent);
+}
+
+input[role="switch"]:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* 4. Study Guide ---------------------------------------------------------- */
+
+/* One column through tablet, centered at the card width; the index joins it as a sidebar from 1248. */
+.guide {
+  max-width: var(--card-w);
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-6);
+}
+
+.guide__body {
+  display: grid;
+  gap: var(--space-6);
+}
+
+/* The h1 and the one page shown. */
+.guide__pages {
+  display: grid;
+  gap: var(--space-4);
+}
+
+/* Under a topic the h1 leaves the view and stays in the outline; the topic's own heading leads. */
+.guide__pages:has(> .guide-topic--overview[hidden]) > .guide__title {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* The overview: the verified line, a few sentences on the guide, and the way into the first topic. */
+.guide-topic--overview {
+  gap: var(--space-4);
+}
+
+.guide-topic--overview > .caption + * {
+  margin-top: var(--space-1);
+}
+
+/* The overview is a first stop: the end matter waits for the topics, and the page ends close under it. */
+.guide__body:has(> .guide__pages > .guide-topic--overview:not([hidden])) > :is(.guide-next, .guide-sources, .guide-legal) {
+  display: none;
+}
+
+.panel--guide:has(.guide-topic--overview:not([hidden])) {
+  padding-bottom: var(--space-5);
+}
+
+/* The bar's Topics button opens the index below 1248; from 1248 it is the sidebar. */
+.guide__index {
+  display: none;
+}
+
+/* Inset to the entries' padding, so it lines up with their first mark. Shared by the cards' sidebar. */
+.guide-index__title, .side-title {
+  margin-bottom: var(--space-3);
+  padding-left: var(--space-3);
+  font-size: var(--text-lg);
+  line-height: var(--leading-tight);
+}
+
+.guide-index__list {
+  display: grid;
+}
+
+/* Square on the left, so the current topic's accent edge runs the full height. */
+.guide-index__link {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  background-image: linear-gradient(180deg, var(--accent-line-stops));
+  background-size: 0 100%;
+  background-repeat: no-repeat;
+  line-height: var(--leading-tight);
+  text-decoration: none;
+}
+
+.guide-index__link:is(:link, :visited) {
+  color: var(--color-ink);
+}
+
+.guide-index__link:is(:link, :visited):hover {
+  background-color: var(--color-orange-offwhite);
+  color: var(--color-ink);
+  text-decoration: none;
+}
+
+.guide-index__link:hover .guide-index__name {
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+/* The topic shown: the accent edge and the chip fill, kept on hover. */
+.guide-index__link[aria-current="page"]:is(:link, :visited) {
+  background-color: var(--color-chip);
+  background-size: var(--line-w) 100%;
+}
+
+.guide-index__emoji {
+  flex: none;
+  width: 1.4em;
+  text-align: center;
+}
+
+.guide-index__name {
+  font-weight: var(--weight-semi);
+}
+
+/* One page per topic, set plainly on the stage. */
+.guide-topic {
+  display: grid;
+  gap: var(--space-6);
+}
+
+/* One page shows at a time. Class and attribute, so [hidden] outranks the display above. */
+.guide-topic[hidden] {
+  display: none;
+}
+
+.guide-topic__head {
+  display: grid;
+  gap: var(--space-3);
+}
+
+/* A mark beside a title is a flex sibling inside the heading. */
+.guide-topic__title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.guide-topic__opener {
+  font-size: var(--text-lg);
+  color: var(--color-ink-light);
+}
+
+.guide-topic__meta .sep {
+  margin-inline: var(--space-2);
+}
+
+/* Tight inside a fact, looser between facts, a hairline between groups. */
+.guide-group {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.guide-group + .guide-group {
+  padding-top: var(--space-5);
+  border-top: var(--standard-border);
+}
+
+.guide-group__head {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.guide-group__head > .facts__group {
+  margin-bottom: 0;
+}
+
+.guide-group__lead {
+  line-height: var(--leading-fact);
+  color: var(--color-ink-light);
+}
+
+.guide-group__head + * {
+  margin-top: var(--space-1);
+}
+
+.guide-group__credit {
+  font-size: var(--text-sm);
+  color: var(--color-ink-lightest);
+}
+
+.guide-group__credit .sep {
+  margin-inline: var(--space-2);
+}
+
+/* The bleed gives an arrival glow room around the text without moving it. Body size on a phone. */
+.guide-fact {
+  margin-inline: calc(-1 * var(--space-2));
+  padding-inline: var(--space-2);
+  border-radius: var(--radius-sm);
+  line-height: var(--leading-fact);
+}
+
+.guide-fact--hit {
+  animation: source-hit 2300ms ease-out;
+}
+
+/* A rule or a value: one line each, a warm dot for its marker. */
+ul.guide-rules, dl.guide-values {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.guide-rules > li, .guide-values__row {
+  position: relative;
+  padding-left: calc(var(--space-2) + 1.1em);
+}
+
+.guide-rules > li::before, .guide-values__row::before {
+  content: "";
+  position: absolute;
+  left: calc(var(--space-2) + 0.2em);
+  top: calc(var(--leading-fact) * 0.5em - 0.2em);
+  width: 0.4em;
+  height: 0.4em;
+  border-radius: 50%;
+  background-color: var(--color-orange);
+}
+
+/* A value leads with its label in bold, the value running on after it. */
+.guide-values dt, .guide-values dd {
+  display: inline;
+}
+
+.guide-values dt {
+  font-weight: var(--weight-semi);
+}
+
+.guide-values dt::after {
+  content: ":";
+}
+
+.guide-values dt + dd {
+  margin-left: 0.3em;
+}
+
+/* A procedure: numbered in the warm ink. */
+ol.guide-steps {
+  display: grid;
+  gap: var(--space-3);
+  counter-reset: step;
+}
+
+.guide-steps > li {
+  position: relative;
+  padding-left: calc(var(--space-2) + 1.6em);
+  counter-increment: step;
+}
+
+.guide-steps > li::before {
+  content: counter(step) ".";
+  position: absolute;
+  left: var(--space-2);
+  font-weight: var(--weight-bold);
+  color: var(--color-orange-dark);
+}
+
+/* A line carrying its own figure: the figure is its marker, above the text on a phone. */
+.guide-fact--pictured {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-2) var(--space-4);
+  align-items: start;
+}
+
+.guide-rules > .guide-fact--pictured, .guide-values > .guide-fact--pictured {
+  padding-left: var(--space-2);
+}
+
+.guide-rules > .guide-fact--pictured::before, .guide-values > .guide-fact--pictured::before {
+  content: none;
+}
+
+.guide-fact--pictured > .guide-fact__figure {
+  order: -1;
+  max-width: 8rem;
+}
+
+.guide-fact--pictured > .guide-fact__figure:has([data-shape="wide"]),
+.guide-fact--pictured > .guide-fact__figure[data-shape="wide"] {
+  max-width: 24rem;
+}
+
+/* Beside its figure a value stacks its label over its text. */
+.guide-values > .guide-fact--pictured > :is(dt, dd) {
+  display: block;
+  margin-left: 0;
+}
+
+.guide-values > .guide-fact--pictured > dt::after {
+  content: none;
+}
+
+/* Every fact in the group pictured: a sheet of tiles, the figure above the line. */
+ul.guide-tiles, dl.guide-tiles {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-5) var(--space-4);
+}
+
+.guide-tile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-inline: 0;
+  padding: var(--space-1);
+  font-size: var(--text-base);
+}
+
+.guide-tile__figure {
+  order: -1;
+  margin-bottom: var(--space-1);
+}
+
+.guide-tile__label {
+  font-weight: var(--weight-semi);
+  line-height: var(--leading-tight);
+}
+
+.guide-tile .q-figure__img {
+  max-height: 8rem;
+}
+
+/* Previous and next topic: chips with a chevron and the topic's emoji, stacked on a phone. */
+.guide-topic__foot {
+  padding-top: var(--space-4);
+  border-top: var(--standard-border);
+}
+
+.guide-pager {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-3);
+}
+
+/* A chip, at the pager's size: the chip's fill, shadow and splash, laid out as a row with its chevron. */
+.chip.guide-pager__link, .chip.guide-pager__link:visited {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--space-2);
+  min-height: 2.75rem;
+  padding: var(--space-2) var(--space-4);
+  line-height: var(--leading-tight);
+  text-align: left;
+  white-space: normal;
+}
+
+/* The next link's content sits at its far edge, the way it points. */
+.chip.guide-pager__link--next, .chip.guide-pager__link--next:visited {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+/* Two borders turned to point the way the link goes, as on the back link. */
+.guide-pager__chevron {
+  flex: none;
+  width: 0.5em;
+  height: 0.5em;
+  border-left: 2.5px solid var(--color-orange-dark);
+  border-bottom: 2.5px solid var(--color-orange-dark);
+  transform: rotate(45deg);
+}
+
+.guide-pager__link--next .guide-pager__chevron {
+  transform: rotate(-135deg);
+}
+
+/* Centered in the column, with air of its own between the topic and its sources. */
+.guide-next {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-4);
+  padding-block: var(--space-4);
+  text-align: center;
+}
+
+/* Two equal buttons: stacked full width on a phone, side by side from 768 at the wider one's width. */
+.guide-next__actions {
+  display: grid;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+.guide-sources {
+  margin-top: var(--space-4);
+}
+
+/* Only a shown source after another shown one draws the rule, so hidden ones leave none behind. */
+.guide-sources .source-list > li + li {
+  border-top: 0;
+}
+
+.guide-sources .source-list > li:not([hidden]) ~ li:not([hidden]) {
+  border-top: var(--standard-border);
+}
+
+/* 5. Question parts ------------------------------------------------------- */
+
+/* The figure frame: the warm field, so a white-bordered sign separates from a white card. */
+.q-figure {
+  display: grid;
+  border: var(--line-w) solid transparent;
+  border-radius: var(--radius-md);
+  background-image: linear-gradient(var(--color-stage) 0 0), var(--frame-gradient);
+  background-origin: padding-box, border-box;
+  background-clip: padding-box, border-box;
+  overflow: clip;
+}
+
+.q-figure__frame {
+  display: grid;
+  place-items: center;
+  padding: var(--space-2);
+}
+
+.q-figure__img {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: var(--figure-max);
+}
+
+/* A figure the question can be answered without yields height first. */
+.q-figure--aside .q-figure__img {
+  max-height: var(--figure-max-aside);
+}
+
+.q-figure__caption {
+  padding: var(--space-1) var(--space-3);
+  background-color: var(--white);
+  font-size: var(--text-sm);
+  line-height: var(--leading-tight);
+  color: var(--color-ink-lightest);
+}
+
+.q-figure__caption:empty {
+  display: none;
+}
+
+/* One choice. A button in Practice Cards, a labeled radio in the Mock Test, a list item in review. */
+.tiles {
+  display: grid;
+  gap: var(--space-2);
+}
+
+ol.tiles {
+  padding: 0;
+  list-style: none;
+}
+
+.tile {
+  --splash-fill: var(--color-chip);
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-1) var(--space-3);
+  width: 100%;
+  min-height: 3.5rem;
+  padding: var(--space-2) var(--space-3);
+  border: var(--standard-border);
+  border-radius: var(--radius-md);
+  background-color: var(--white);
+  background-image: linear-gradient(135deg, var(--splash-fill) calc(var(--splash) - 30%), transparent var(--splash));
+  background-origin: border-box;
+  box-shadow: var(--shadow-control), 0 0 var(--space-5) var(--glow);
+  color: var(--color-ink);
+  font: inherit;
+  font-size: var(--text-base);
+  line-height: 1.35;
+  text-align: left;
+  cursor: pointer;
+}
+
+.tile:not([aria-disabled="true"], .tile--static):hover, .tile:not([aria-disabled="true"]):focus-visible,
+.tile--radio:has(input:focus-visible) {
+  --splash: 130%;
+}
+
+.tile--radio:has(input:focus-visible) {
+  outline: var(--focus-ring);
+  outline-offset: var(--focus-offset);
+}
+
+/* The real radio stays in the accessibility tree and takes the keyboard; the label draws it. */
+.tile__input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.tile__key {
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 1px solid var(--color-ink-lightest);
+  border-radius: var(--radius-sm);
+  background-color: var(--white);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semi);
+  color: var(--color-ink-light);
+}
+
+/* Under the choice on a phone, so the label never squeezes the text; its own column from 768. */
+.tile__verdict {
+  grid-column: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semi);
+  white-space: nowrap;
+}
+
+.tile__verdict:empty {
+  display: none;
+}
+
+/* On a practice card and in review the glyph takes the keycap's place, and the label is for assistive tech only. */
+:is(.qcard--practice, .qcard--review) .tile {
+  grid-template-columns: auto minmax(0, 1fr);
+}
+
+:is(.qcard--practice, .qcard--review) .tile__verdict:not(:empty) {
+  grid-area: auto;
+  position: absolute;
+  left: var(--space-3);
+  top: 50%;
+  translate: 0 -50%;
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 1px solid currentColor;
+  border-radius: var(--radius-sm);
+  background-color: var(--white);
+}
+
+:is(.qcard--practice, .qcard--review) .tile__label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Picked in the Mock Test: the primary button's fill, the keycap inverted; it outranks the hover splash. */
+.tile.tile--radio:has(input:checked) {
+  --splash: 0%;
+  border-color: var(--color-selected);
+  background-color: var(--color-selected);
+  color: var(--color-selected-ink);
+}
+
+.tile--radio:has(input:checked) .tile__key {
+  border-color: var(--white);
+  background-color: var(--white);
+  color: var(--color-selected);
+}
+
+.tile[aria-disabled="true"], .tile--static {
+  cursor: default;
+}
+
+/* Answered: the two tiles that matter stay full ink; the rest step back. */
+.tile[aria-disabled="true"]:not(.tile--right, .tile--wrong), .tile--static:not(.tile--right, .tile--wrong) {
+  color: var(--color-ink-light);
+  box-shadow: none;
+}
+
+/* Right: the warm fill and the halo, with a check and a label in the warm ink. */
+.tile--right {
+  --glow: var(--glow-hover);
+  border-color: var(--color-correct-ink);
+  background-color: var(--color-correct-fill);
+}
+
+.tile--right .tile__verdict {
+  color: var(--color-correct-ink);
+}
+
+/* Wrong: quiet ink, a cross and a label; the fill stays white. */
+.tile--wrong {
+  border-color: var(--color-ink-light);
+}
+
+.tile--wrong .tile__verdict {
+  color: var(--color-ink-light);
+}
+
+.mark {
+  flex: none;
+  width: 1.15em;
+  height: 1.15em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.source-line {
+  display: grid;
+  gap: var(--space-1);
+  font-size: var(--text-base);
+}
+
+.source-line__meta {
+  font-size: var(--text-sm);
+  color: var(--color-ink-lightest);
+}
+
+.topic-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semi);
+  color: var(--color-ink-light);
+}
+
+/* 6. Practice Cards ------------------------------------------------------- */
+
+/* The stage and the answer sheet share one cell; the sheet docks at its foot over the card. A test's review does the same. */
+.cards__main, .review {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: 1fr;
+}
+
+.review {
+  flex: 1;
+  align-self: stretch;
+}
+
+.cards__main > *, .review > * {
+  grid-area: 1 / 1;
+}
+
+/* Room under the card for an open sheet, so a choice it covers scrolls clear when focused. */
+.cards__stage, .review__stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  min-width: 0;
+  padding-bottom: calc(var(--space-3) + var(--answer-h, 0px));
+}
+
+/* Below 1248, where no sidebar shows the filter: what's being practiced, just above the card. */
+.cards__practicing {
+  width: 100%;
+  max-width: var(--qcard-w);
+  margin-bottom: calc(var(--space-2) - var(--space-4));
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semi);
+  line-height: var(--leading-tight);
+  color: var(--color-ink-light);
+}
+
+.cards__practicing:empty {
+  display: none;
+}
+
+/* The answer: a bottom sheet on a phone, held at the window's foot even when the page scrolls. */
+.answer {
+  align-self: end;
+  position: sticky;
+  bottom: var(--foot-h);
+  z-index: 5;
+  display: grid;
+  gap: var(--space-3);
+  max-height: calc(100dvh - var(--bar-h) - var(--space-6));
+  margin-inline: calc(-1 * var(--gutter));
+  padding: var(--space-4) var(--gutter) calc(var(--space-4) + env(safe-area-inset-bottom));
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  background-color: var(--white);
+  box-shadow: 0 -8px 32px -12px color-mix(in srgb, var(--shadow-hue) 35%, transparent);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.answer[hidden] {
+  display: none;
+}
+
+.answer__body, .answer__aside {
+  display: grid;
+  align-content: start;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.answer__aside {
+  gap: var(--space-3);
+}
+
+/* The verdict: a glyph, then the words, naming the right answer. */
+.answer__verdict {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semi);
+  line-height: var(--leading-tight);
+}
+
+.answer__verdict .mark {
+  color: var(--color-ink-light);
+}
+
+.answer--right .answer__verdict .mark {
+  color: var(--color-correct-ink);
+}
+
+.answer__why {
+  font-size: var(--text-base);
+}
+
+.answer__credit {
+  font-size: var(--text-sm);
+  color: var(--color-ink-lightest);
+}
+
+.answer__credit[hidden] {
+  display: none;
+}
+
+.answer__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.answer__next {
+  margin-left: auto;
+}
+
+/* A review's way through: Previous and Next share a row. */
+.answer__nav {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.answer__nav > * {
+  flex: 1 1 0;
+}
+
+/* The sidebar: the guide index's rows, each a checkbox; a topic left out steps back. */
+.cards__bulk {
+  display: flex;
+  gap: var(--space-4);
+  margin-bottom: var(--space-1);
+  padding-inline: var(--space-3);
+}
+
+.side-checks {
+  display: grid;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.side-check {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  font-weight: var(--weight-semi);
+  line-height: var(--leading-tight);
+  cursor: pointer;
+}
+
+.side-check:hover {
+  background-color: var(--color-orange-offwhite);
+}
+
+.side-check:hover .side-check__name {
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.side-check:has(input:not(:checked)) .side-check__name {
+  color: var(--color-ink-light);
+}
+
+.side-check__emoji {
+  flex: none;
+  width: 1.4em;
+  text-align: center;
+}
+
+.cards__missed {
+  display: grid;
+  gap: var(--space-1);
+  margin-top: var(--space-3);
+  padding: var(--space-3) var(--space-3) 0;
+  border-top: var(--standard-border);
+}
+
+.cards__missed[hidden] {
+  display: none;
+}
+
+.cards__side .filter__error {
+  padding: var(--space-2) var(--space-3) 0;
+}
+
+/* The card sits on a stack of two sheets that never thins, so the deck reads as endless. */
+.deck {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  width: 100%;
+  max-width: var(--qcard-w);
+}
+
+.deck > * {
+  grid-area: 1 / 1;
+}
+
+.deck::before, .deck::after {
+  content: "";
+  grid-area: 1 / 1;
+  z-index: -1;
+  border: var(--line-w) solid transparent;
+  border-radius: var(--radius-lg);
+  background-image: linear-gradient(var(--white) 0 0), var(--frame-gradient);
+  background-origin: padding-box, border-box;
+  background-clip: padding-box, border-box;
+  box-shadow: var(--shadow-card);
+}
+
+.deck::before {
+  translate: 0 0.75rem;
+  scale: 0.94 1;
+  opacity: 0.7;
+}
+
+.deck::after {
+  translate: 0 0.375rem;
+  scale: 0.97 1;
+}
+
+.qcard {
+  width: 100%;
+  min-width: 0;
+}
+
+/* The card's sheet: the frame ring, the card shadow, and its own white fill. */
+.qcard__face {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: start;
+  gap: var(--space-4);
+  min-width: 0;
+  padding: var(--space-4);
+  border: var(--line-w) solid transparent;
+  border-radius: var(--radius-lg);
+  background-image: linear-gradient(var(--white) 0 0), var(--frame-gradient);
+  background-origin: padding-box, border-box;
+  background-clip: padding-box, border-box;
+  box-shadow: var(--shadow-card);
+}
+
+.qcard__top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
+  min-height: 2.25rem;
+}
+
+.qcard__stem {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-med);
+  line-height: var(--leading-tight);
+  letter-spacing: 0;
+  color: var(--color-ink);
+}
+
+.qcard__figure:empty {
+  display: none;
+}
+
+/* A practice or review card's top row holds no control, so it takes no control's height. */
+:is(.qcard--practice, .qcard--review) .qcard__top {
+  min-height: 0;
+}
+
+/* The end card and the empty missed deck. */
+.qcard--note .qcard__face {
+  justify-items: center;
+  gap: var(--space-5);
+  padding-block: var(--space-7);
+  text-align: center;
+}
+
+.qcard__note-title {
+  max-width: 28rem;
+  font-size: var(--text-xl);
+  line-height: var(--leading-tight);
+  text-wrap: balance;
+}
+
+.qcard__note-text[hidden] {
+  display: none;
+}
+
+/* One action per row, centered, each as wide as the widest. */
+.qcard__actions {
+  display: grid;
+  grid-template-columns: fit-content(100%);
+  justify-content: center;
+  gap: var(--space-3);
+}
+
+.qcard__actions > * {
+  width: 100%;
+}
+
+/* The keys, from 768, where a keyboard is likely. */
+.shortcuts {
+  display: none;
+  margin-top: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--color-ink-lightest);
+}
+
+/* Once a card is answered, or on the end card, the keys fade out with the spent choices. */
+.cards__stage--quiet .shortcuts {
+  opacity: 0;
+  visibility: hidden;
+}
+
+kbd {
+  display: inline-block;
+  min-width: 1.6em;
+  padding: 0 0.35em;
+  border: 1px solid var(--color-ink-lightest);
+  border-bottom-width: 2px;
+  border-radius: var(--radius-sm);
+  background-color: var(--white);
+  font: inherit;
+  font-weight: var(--weight-semi);
+  text-align: center;
+  color: var(--color-ink);
+}
+
+/* The filter's topic list: a native checkbox, the topic, its card count and its label. */
+.filter-topics {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+/* A legend set in a heading class takes the heading's face and weight too, which a legend lacks. */
+.filter-topics > legend, .option-group > legend {
+  font-family: var(--font-display);
+  font-weight: var(--weight-bold);
+  letter-spacing: -0.01em;
+}
+
+/* Ink, as every Topics heading is. */
+.filter-topics > legend {
+  float: left;
+  width: auto;
+  padding: 0;
+  color: var(--color-ink-med);
+}
+
+.filter-topics__bulk {
+  float: right;
+  display: flex;
+  gap: var(--space-4);
+}
+
+ul.check-list {
+  clear: both;
+  display: grid;
+  padding-top: var(--space-2);
+}
+
+.check-list > li + li {
+  border-top: var(--standard-border);
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 2.75rem;
+  padding-block: var(--space-2);
+  cursor: pointer;
+}
+
+.check__emoji {
+  flex: none;
+  width: 1.4em;
+  text-align: center;
+}
+
+.check__text {
+  display: grid;
+  line-height: var(--leading-tight);
+}
+
+.check__name {
+  font-weight: var(--weight-semi);
+}
+
+.check__meta {
+  font-size: var(--text-sm);
+  color: var(--color-ink-lightest);
+}
+
+.filter-missed {
+  display: grid;
+  gap: var(--space-1);
+  padding-top: var(--space-4);
+  border-top: var(--standard-border);
+}
+
+.filter-missed[hidden] {
+  display: none;
+}
+
+.switch {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 2.75rem;
+  font-weight: var(--weight-semi);
+  cursor: pointer;
+}
+
+.filter__error {
+  font-weight: var(--weight-semi);
+  color: var(--color-orange-dark);
+}
+
+.filter__error[hidden] {
+  display: none;
+}
+
+/* 7. Mock Test ------------------------------------------------------------ */
+
+/* A white sheet on the warm field: the intro, the resume prompt and each results block. */
+.test-sheet {
+  display: grid;
+  gap: var(--space-4);
+  width: 100%;
+  max-width: var(--qcard-w);
+  padding: var(--space-5) var(--space-4);
+  border: var(--line-w) solid transparent;
+  border-radius: var(--radius-lg);
+  background-image: linear-gradient(var(--white) 0 0), var(--frame-gradient);
+  background-origin: padding-box, border-box;
+  background-clip: padding-box, border-box;
+  box-shadow: var(--shadow-card);
+}
+
+.test-sheet__lede {
+  font-size: var(--text-lg);
+}
+
+/* Below 1248 the legal line sits at the stage's foot, under the intro's card. */
+.test-legal {
+  width: 100%;
+  max-width: var(--qcard-w);
+  margin-top: auto;
+  font-size: var(--text-sm);
+}
+
+/* A running test's answered share: a thin line on a faint track, the card's width, above it. */
+.testrun__progress {
+  width: 100%;
+  max-width: var(--qcard-w);
+  height: var(--line-w);
+  border-radius: var(--radius-pill);
+  background-color: color-mix(in srgb, var(--color-ink) 10%, transparent);
+}
+
+.testrun__progress > span {
+  display: block;
+  height: 100%;
+  inline-size: 0;
+  border-radius: inherit;
+  background-image: linear-gradient(90deg, var(--accent-line-stops));
+}
+
+.option-group {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+.option-group > legend {
+  padding: 0;
+  margin-bottom: var(--space-2);
+}
+
+.option-group__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.option {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 2.75rem;
+  padding: 0 var(--space-4) 0 var(--space-3);
+  border: var(--standard-border);
+  border-radius: var(--radius-md);
+  background-color: var(--white);
+  font-weight: var(--weight-semi);
+  cursor: pointer;
+}
+
+.option:has(input:checked) {
+  border-color: var(--color-accent);
+  box-shadow: inset 0 0 0 1px var(--color-accent);
+}
+
+/* The running test's card: no stack beneath it. */
+.qcard--test, .qcard--review {
+  max-width: var(--qcard-w);
+}
+
+.testrun__main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+/* The navigator as a sidebar: inset to the title, five numbers a row so 40 fit a laptop's window, with room on the right for the current one to float. */
+.testrun__side {
+  padding-right: var(--space-2);
+}
+
+.testrun__side > :not(.side-title) {
+  margin-left: var(--space-3);
+}
+
+.testrun__summary {
+  margin-bottom: var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--color-ink-light);
+}
+
+.testrun__side ol.nav-grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--space-1);
+}
+
+.testrun__side .nav-cell {
+  min-height: 2.5rem;
+}
+
+.testrun__side .nav-legend {
+  margin-block: var(--space-4);
+}
+
+.testrun__side .btn--block {
+  width: calc(100% - var(--space-3));
+}
+
+.qcard__count {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semi);
+  color: var(--color-ink-light);
+}
+
+/* A fieldset laid out as a grid; the floated legend leaves the border and becomes a grid item. */
+.qcard__fieldset {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-4);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.qcard__fieldset > legend {
+  float: left;
+  width: 100%;
+  padding: 0;
+}
+
+/* A running test's card sits a step tighter, so it fits a laptop's window. */
+.qcard--test .qcard__face {
+  gap: var(--space-3);
+}
+
+/* On a phone: Previous and Questions side by side, the primary full width beneath, in thumb reach. */
+.qcard__foot {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.qcard__foot > .btn {
+  grid-column: 1 / -1;
+  order: 1;
+}
+
+.qcard__foot > .tool-btn {
+  padding-inline: var(--space-2);
+}
+
+/* The bar's Questions button joins at 768; below, the card's own foot carries it. */
+.tool-bar__questions {
+  display: none;
+}
+
+.flag-btn[aria-pressed="true"] {
+  border-color: var(--color-orange-dark);
+  background-color: var(--color-orange-nearwhite);
+  color: var(--color-orange-dark);
+}
+
+.flag-btn[aria-pressed="true"] .flag-btn__glyph {
+  fill: currentColor;
+}
+
+/* The pill in the bar: mm:ss in tabular figures, warm from five minutes out. */
+.timer {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--bar-control);
+  padding: 0 var(--space-3);
+  border: var(--standard-border);
+  border-radius: var(--radius-pill);
+  background-color: var(--white);
+  font-weight: var(--weight-semi);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.timer[hidden] {
+  display: none;
+}
+
+.timer--warn {
+  border-color: var(--color-orange-dark);
+  background-color: var(--color-orange-nearwhite);
+  color: var(--color-orange-dark);
+}
+
+.tool-bar__questions[hidden] {
+  display: none;
+}
+
+/* Results: the pass line leads; the A sits beneath it. */
+.results {
+  display: grid;
+  gap: var(--space-5);
+  width: 100%;
+  max-width: var(--qcard-w);
+}
+
+.results__score {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-areas: "verdict verdict" "pct line";
+  align-items: center;
+  gap: var(--space-2) var(--space-5);
+}
+
+.results__verdict {
+  grid-area: verdict;
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-tight);
+  letter-spacing: -0.01em;
+  color: var(--color-ink-med);
+}
+
+.results--passed .results__verdict {
+  color: var(--color-orange-dark);
+}
+
+/* The score, with the lantern's bloom behind it at an A. */
+.results__pct {
+  grid-area: pct;
+  position: relative;
+  isolation: isolate;
+  font-size: var(--text-5xl);
+  font-weight: var(--weight-bold);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-ink-med);
+}
+
+.results--a .results__pct::before {
+  content: "";
+  position: absolute;
+  inset: -60% -45%;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--glow-hue) 55%, transparent), transparent);
+}
+
+.results__line {
+  grid-area: line;
+  display: grid;
+  gap: var(--space-1);
+}
+
+/* A row of actions on a results sheet: each stretches when the row wraps, so a phone gets even buttons. */
+.results .button-row > * {
+  flex: 1 1 auto;
+}
+
+.results__line .caption {
+  font-size: var(--text-sm);
+}
+
+.results__a {
+  padding-top: var(--space-4);
+  border-top: var(--standard-border);
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-semi);
+  line-height: var(--leading-tight);
+}
+
+/* Name and count, then pips and links, on a phone; one grid line from 768. */
+.topic-scores__row {
+  display: grid;
+  gap: var(--space-2);
+  font-size: var(--text-base);
+}
+
+.topic-scores__line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-3);
+}
+
+.topic-scores__name {
+  grid-area: name;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-weight: var(--weight-semi);
+}
+
+.topic-scores__links {
+  grid-area: links;
+  display: flex;
+  margin-left: auto;
+  gap: var(--space-2);
+}
+
+.topic-scores .pips {
+  grid-area: pips;
+}
+
+.topic-scores__row--weak .topic-scores__count {
+  color: var(--color-orange-dark);
+}
+
+.topic-scores__count {
+  grid-area: count;
+  font-weight: var(--weight-semi);
+  font-variant-numeric: tabular-nums;
+}
+
+/* One pip per drawn question, filled where it was right. Decoration beside the count. */
+.pips {
+  display: inline-flex;
+  gap: 3px;
+}
+
+.pip {
+  width: 0.875rem;
+  height: 0.5rem;
+  border-radius: var(--radius-sm);
+  background-color: var(--color-ink-lightester);
+  opacity: 0.35;
+}
+
+.pip--on {
+  background-image: linear-gradient(90deg, var(--accent-line-stops));
+  opacity: 1;
+}
+
+.tile--static {
+  box-shadow: none;
+}
+
+/* The navigator: one button per question, its state by fill, flag and ring, never color alone. */
+ol.nav-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(2.75rem, 1fr));
+  gap: var(--space-2);
+}
+
+.nav-cell {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-height: 2.75rem;
+  border: var(--standard-border);
+  border-radius: var(--radius-md);
+  background-color: var(--white);
+  color: var(--color-ink);
+  font: inherit;
+  font-weight: var(--weight-semi);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+
+.nav-cell--answered {
+  border-color: var(--color-selected);
+  background-color: var(--color-selected);
+  color: var(--color-selected-ink);
+}
+
+/* The flag: a corner tab in the lit orange; a white hairline parts it from an answered cell's fill. */
+.nav-cell--answered.nav-cell--flagged::before, .nav-cell--flagged::after {
+  content: "";
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  aspect-ratio: 1;
+  border-top-right-radius: var(--radius-md);
+  clip-path: polygon(0 0, 100% 0, 100% 100%);
+}
+
+.nav-cell--answered.nav-cell--flagged::before {
+  width: calc(45% + 1.5px);
+  background-color: var(--white);
+}
+
+.nav-cell--flagged::after {
+  width: 45%;
+  background-color: var(--color-orange-lit);
+}
+
+/* The question on screen floats: a step larger, on a soft shadow. */
+.nav-cell[aria-current="step"] {
+  z-index: 1;
+  scale: 1.1;
+  box-shadow: 0 6px 12px -4px color-mix(in srgb, var(--shadow-hue) 55%, transparent);
+}
+
+ul.nav-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-5);
+  font-size: var(--text-sm);
+  color: var(--color-ink-light);
+}
+
+.nav-legend > li {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.nav-legend .nav-cell {
+  width: 1.75rem;
+  min-height: 1.75rem;
+  font-size: var(--text-sm);
+  cursor: default;
+}
+
+/* On the legend's small sample the tab takes a larger share, so it reads as orange as the grid's. */
+.nav-legend .nav-cell--flagged::after {
+  width: 55%;
+}
+
+/* The /progress page, filled from the store. */
+.activity-list__row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  font-size: var(--text-base);
+}
+
+.activity-list__date {
+  flex: none;
+  min-width: 3.5rem;
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-ink-lightest);
+}
+
+.activity-list[hidden], .missed-list[hidden] {
+  display: none;
+}
+
+/* With the empty state hidden, the list starts at the panel's top. Three classes outrank .stack's step. */
+.activity-panel > [hidden] + .activity-list {
+  margin-top: 0;
+}
+
+.missed-list__row {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-2);
+}
+
+.missed-list__count {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semi);
+}
+
+.progress-status:empty {
+  display: none;
+}
+
+.progress-status {
+  font-weight: var(--weight-semi);
+}
+
+/* 8. Sheets --------------------------------------------------------------- */
+
+/* A native dialog: a bottom sheet on a phone, a centered panel from 768. */
+.sheet {
+  width: 100%;
+  max-width: none;
+  max-height: 85dvh;
+  margin: auto 0 0;
+  padding: var(--space-5) var(--gutter) calc(var(--space-5) + env(safe-area-inset-bottom));
+  border: 0;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  background-color: var(--white);
+  color: var(--color-text);
+  box-shadow: 0 -8px 32px -12px color-mix(in srgb, var(--shadow-hue) 35%, transparent);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.sheet[open] {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.sheet::backdrop {
+  background-color: var(--color-scrim);
+}
+
+.sheet__form {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.sheet__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.sheet__title {
+  font-size: var(--text-2xl);
+  line-height: var(--leading-tight);
+}
+
+.sheet__close {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  margin-right: calc(-1 * var(--space-2));
+  border: 0;
+  border-radius: var(--radius-md);
+  background: none;
+  color: var(--color-ink-light);
+  font-size: 1.75rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.sheet__close:hover {
+  background-color: var(--color-yellow-nearwhite);
+  color: var(--color-ink);
+}
+
+/* Stacked on a phone, the primary on top; side by side from 768. */
+.sheet__actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-top: var(--space-2);
+}
+
+
+.sheet--alert p {
+  font-size: var(--text-lg);
+}
+
+/* In the sheet the index needs no fill of its own. */
+.sheet--index .guide-index__link {
+  padding-block: var(--space-3);
+}
+
+/* 9. Breakpoints ---------------------------------------------------------- */
+
+/* A phone only: a card's figure sits beside the stem, and its credit moves to the answer sheet. */
+@media (max-width: 767px) {
+  .qcard--media:is(.qcard--practice, .qcard--review) .qcard__face, .qcard--media.qcard--test .qcard__fieldset {
+    grid-template-columns: 7rem minmax(0, 1fr);
+    column-gap: var(--space-3);
+  }
+
+  .qcard--media:is(.qcard--practice, .qcard--review) .qcard__face {
+    grid-template-areas: "top top" "figure stem" "tiles tiles";
+  }
+
+  .qcard--media.qcard--test .qcard__fieldset {
+    grid-template-areas: "figure stem" "tiles tiles";
+  }
+
+  .qcard--media:is(.qcard--practice, .qcard--review):has(.q-figure[data-shape="wide"]) .qcard__face,
+  .qcard--media.qcard--test:has(.q-figure[data-shape="wide"]) .qcard__fieldset {
+    grid-template-columns: 7.5rem minmax(0, 1fr);
+  }
+
+  .qcard--media:is(.qcard--practice, .qcard--review) .qcard__top { grid-area: top; }
+  .qcard--media .qcard__stem { grid-area: stem; font-size: var(--text-base); }
+  .qcard--media .qcard__figure { grid-area: figure; align-self: start; }
+  .qcard--media .tiles { grid-area: tiles; }
+
+  .qcard .q-figure__frame {
+    padding: var(--space-1);
+  }
+
+  .qcard .q-figure__caption {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) {
+  :root {
+    --bar-h: 3.25rem;
+    --bar-pad: 3px;
+    --bar-control: 2.75rem;
+  }
+
+  /* One row, the switch centered between two equal sides that wrap under enlarged text. */
+  .tool-bar__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-1) var(--space-4);
+  }
+
+  .tool-bar__start, .tool-bar__end {
+    flex: 1 1 0;
+    min-width: max-content;
+  }
+
+  .tool-bar__end {
+    justify-content: flex-end;
+  }
+
+  .mode-switch {
+    flex: none;
+  }
+
+  .mode-switch__link {
+    padding-inline: var(--space-4);
+  }
+
+  .panel--guide {
+    padding-top: var(--space-7);
+  }
+
+  .panel--test {
+    padding-block: var(--space-5) var(--space-2);
+  }
+
+  .panel--cards {
+    padding-top: var(--space-5);
+  }
+
+  /* A sheet the card's width, floating over the stage's foot: the answer on the left; its source and the way on at the right. */
+  .answer {
+    justify-self: center;
+    width: 100%;
+    max-width: var(--qcard-w);
+    max-height: calc(100dvh - var(--bar-h) - var(--foot-h) - var(--space-7));
+    margin: 0 0 var(--space-4);
+    bottom: calc(var(--foot-h) + var(--space-4));
+    grid-template-columns: minmax(0, 1fr) minmax(0, 15rem);
+    column-gap: var(--space-5);
+    padding: var(--space-4) var(--space-5);
+    border: var(--line-w) solid transparent;
+    border-radius: var(--radius-lg);
+    background-image: linear-gradient(var(--white) 0 0), var(--frame-gradient);
+    background-origin: padding-box, border-box;
+    background-clip: padding-box, border-box;
+    box-shadow: var(--shadow-card);
+  }
+
+  :is(.cards__main, .review):has(.qcard--media) .answer,
+  .testrun__main:has(.qcard--media) .testrun__progress,
+  .cards__stage:has(.qcard--media) .cards__practicing {
+    max-width: var(--qcard-w-media);
+  }
+
+  /* Two buttons share the 15rem column, a tier down. */
+  .answer__nav > * {
+    padding-inline: var(--space-3);
+    font-size: var(--text-base);
+  }
+
+  .answer__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .answer__next {
+    margin-left: 0;
+  }
+
+  /* The figure's own caption bar carries the credit from here. */
+  .answer__credit {
+    display: none;
+  }
+
+  /* A tier up from 768, so the wider column keeps its measure. */
+  .guide-fact:not(.guide-tile), .guide-overview__text {
+    font-size: var(--text-lg);
+  }
+
+  /* The figure takes the marker's column; the text runs beside it. */
+  .guide-fact--pictured {
+    grid-template-columns: 6rem minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+  }
+
+  .guide-fact--pictured:has([data-shape="wide"]) {
+    grid-template-columns: 12rem minmax(0, 1fr);
+  }
+
+  .guide-fact--pictured > .guide-fact__figure {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    max-width: none;
+  }
+
+  .guide-fact--pictured > :not(.guide-fact__figure) {
+    grid-column: 2;
+  }
+
+  ul.guide-tiles, dl.guide-tiles {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .qcard__face, .test-sheet {
+    padding: var(--space-5) var(--space-6);
+  }
+
+  .test-sheet {
+    gap: var(--space-5);
+  }
+
+  /* A question holds room for a three-line stem and four choices, one wrapped, so the card keeps its size between questions, figure or not. */
+  .qcard--test .qcard__fieldset {
+    align-content: start;
+    min-height: calc(3 * var(--text-xl) * var(--leading-tight) + var(--space-4) + 4 * 3.5rem + 3 * var(--space-2) + 1.125rem);
+  }
+
+  /* The test card's padding is a step tighter, so the card and its keys fit a laptop's window. */
+  .qcard--test .qcard__face {
+    padding-block: var(--space-4);
+  }
+
+  .testrun__main .shortcuts {
+    margin-top: 0;
+  }
+
+  .qcard__stem {
+    font-size: var(--text-xl);
+  }
+
+  .tile {
+    font-size: var(--text-lg);
+  }
+
+  .q-figure__frame {
+    padding: var(--space-3);
+  }
+
+  /* With a figure the card widens to two columns; a test card's live in its fieldset, so its face keeps one. */
+  .deck:has(.qcard--media), .qcard--media:is(.qcard--test, .qcard--review) {
+    max-width: var(--qcard-w-media);
+  }
+
+  .qcard--media:is(.qcard--practice, .qcard--review) .qcard__face, .qcard--media.qcard--test .qcard__fieldset {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    column-gap: var(--space-6);
+  }
+
+  .qcard--media:is(.qcard--practice, .qcard--review) .qcard__face {
+    grid-template-areas: "top top" "figure stem" "figure tiles";
+    grid-template-rows: auto auto 1fr;
+  }
+
+  .qcard--media.qcard--test .qcard__fieldset {
+    grid-template-areas: "figure stem" "figure tiles";
+    grid-template-rows: auto 1fr;
+  }
+
+  .qcard--media:is(.qcard--practice, .qcard--review) .qcard__top { grid-area: top; }
+  .qcard--media .qcard__stem { grid-area: stem; }
+  .qcard--media .qcard__figure { grid-area: figure; align-self: start; }
+  .qcard--media .tiles { grid-area: tiles; align-self: start; }
+
+  .shortcuts {
+    display: block;
+    width: 100%;
+    max-width: var(--qcard-w);
+    text-align: center;
+  }
+
+  .deck:has(.qcard--media) + .shortcuts {
+    max-width: var(--qcard-w-media);
+  }
+
+  .qcard__questions {
+    display: none;
+  }
+
+  /* The activity list scrolls inside its panel from 768. */
+  .activity-list {
+    max-height: 16rem;
+    overflow-y: auto;
+    padding-right: var(--space-2);
+  }
+
+  .tool-bar__questions:not([hidden]) {
+    display: inline-flex;
+  }
+
+  .qcard__foot {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .qcard__foot > .btn {
+    min-width: 7rem;
+  }
+
+  /* Two answers share the row evenly; one fills it. */
+  .sheet__actions {
+    flex-direction: row;
+  }
+
+  .sheet__actions > * {
+    flex: 1 1 0;
+  }
+
+  .results__verdict {
+    font-size: var(--text-4xl);
+  }
+
+  .results__pct {
+    font-size: var(--text-6xl);
+  }
+
+  .results__line {
+    font-size: var(--text-lg);
+  }
+
+  .topic-scores__row {
+    grid-template-columns: minmax(0, 1fr) auto auto auto;
+    grid-template-areas: "name pips count links";
+    align-items: center;
+    column-gap: var(--space-3);
+  }
+
+  .topic-scores__line {
+    display: contents;
+  }
+
+  .guide-pager {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .guide-pager__link, .guide-pager__link:visited {
+    justify-self: start;
+    max-width: 100%;
+  }
+
+  .guide-pager__link--next, .guide-pager__link--next:visited {
+    grid-column: 2;
+    justify-self: end;
+  }
+
+  .guide-next__actions {
+    width: auto;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+  }
+
+  .results .button-row > * {
+    flex: 0 1 auto;
+  }
+
+  .tile {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+
+  .tile__verdict {
+    grid-column: auto;
+  }
+
+  /* A centered panel, the index a popover under the bar. */
+  .sheet {
+    width: calc(100% - 2 * var(--gutter));
+    max-width: 32rem;
+    margin: auto;
+    padding: var(--space-6);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 24px 48px -16px color-mix(in srgb, var(--shadow-hue) 35%, transparent);
+  }
+
+  .sheet--index {
+    max-width: 24rem;
+    margin: calc(var(--bar-h) + var(--space-2)) var(--gutter) auto auto;
+    padding: var(--space-5);
+  }
+}
+
+@media (min-width: 1248px) {
+  :root {
+    --bar-h: 4rem;
+    --bar-pad: 0.375rem;
+    --foot-h: 2.5rem;
+  }
+
+  /* The wordmark over the back link. */
+  .tool-bar__start {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-1);
+  }
+
+  .tool-bar .site-header__brand {
+    display: inline-flex;
+  }
+
+  .tool-bar .site-header__logo {
+    height: 1.5rem;
+  }
+
+  .tool-bar__back {
+    min-height: 1.5rem;
+    font-size: var(--text-sm);
+  }
+
+  /* The back link names the term from here; the modes keep their short names. */
+  .tool-bar__term {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip-path: none;
+    white-space: normal;
+  }
+
+  /* The site link fills the bar's height, so its underline lands on the bar's bottom edge, as in the site header. */
+  .tool-bar__end {
+    align-self: stretch;
+  }
+
+  .tool-bar__site {
+    display: block;
+    align-self: stretch;
+    margin-block: calc(-1 * var(--bar-pad));
+  }
+
+  .tool-bar .site-nav__list {
+    --nav-underline-drop: 0px;
+    height: 100%;
+    align-items: stretch;
+  }
+
+  .tool-bar .site-nav__list > li {
+    display: flex;
+  }
+
+  .tool-bar .site-nav__list a {
+    display: flex;
+    align-items: center;
+  }
+
+  .tool-foot {
+    display: block;
+  }
+
+  /* The footer carries the legal line from here. */
+  .tool-legal {
+    display: none;
+  }
+
+  /* The index, the cards' topics and the test's navigator are sidebars now, so the bar needs no button for them. */
+  .tool-bar__group:is([data-tools="guide"], [data-tools="cards"]),
+  .tool-bar__group[data-tools="test"] .tool-bar__questions:not([hidden]) {
+    display: none;
+  }
+
+  .cards__practicing {
+    display: none;
+  }
+
+  /* The guide's grid, so a mode's sidebar sits where the guide's index does. */
+  .tool-split {
+    grid-template-columns: var(--guide-index-w) minmax(0, var(--card-w));
+    justify-content: center;
+    column-gap: var(--space-8);
+  }
+
+  /* In the guide's column the figure takes a third, and the stem beside it a tier down. */
+  .qcard--media.qcard--practice .qcard__face, .qcard--media.qcard--test .qcard__fieldset {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  }
+
+  .qcard--media:is(.qcard--practice, .qcard--test) .qcard__stem {
+    font-size: var(--text-lg);
+  }
+
+  .tool-side {
+    display: block;
+    position: sticky;
+    top: calc(var(--bar-h) + var(--space-5));
+    align-self: start;
+    max-height: calc(100vh - var(--bar-h) - var(--foot-h) - var(--space-5) - var(--space-4));
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+
+  .guide {
+    max-width: none;
+    grid-template-columns: var(--guide-index-w) minmax(0, var(--card-w));
+    grid-template-areas: "index body";
+    justify-content: center;
+    align-items: start;
+    column-gap: var(--space-8);
+  }
+
+  .guide__body { grid-area: body; }
+
+  /* Sticks exactly where it rests, the panel's top padding below the bar, so it never moves. */
+  .guide__index {
+    grid-area: index;
+    display: block;
+    position: sticky;
+    top: calc(var(--bar-h) + var(--space-7));
+    max-height: calc(100vh - var(--bar-h) - var(--foot-h) - var(--space-7) - var(--space-5));
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+
+  ul.guide-tiles, dl.guide-tiles {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* 10. Motion -------------------------------------------------------------- */
+
+/* A mode switch crossfades where View Transitions exist; the shell skips it under reduced motion. */
+::view-transition-old(root), ::view-transition-new(root) {
+  animation-duration: var(--dur-switch);
+}
+
+/* Color fades stay outside the motion query. */
+.tile {
+  transition: --glow var(--dur-verdict) ease-out, background-color var(--dur-verdict) ease-out,
+    border-color var(--dur-verdict) ease-out, color var(--dur-verdict) ease-out;
+}
+
+.answer:not([hidden]) {
+  animation: answer-fade var(--dur-fade) ease-out;
+}
+
+/* Hidden only once the fade ends; shown again at once. */
+.shortcuts {
+  transition: opacity var(--dur-fold-fade) ease-out, visibility 0s;
+}
+
+.cards__stage--quiet .shortcuts {
+  transition: opacity var(--dur-fold-fade) ease-out, visibility 0s linear var(--dur-fold-fade);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .tool-bar {
+    transition: box-shadow 200ms ease-out;
+  }
+
+  .tile {
+    transition: --splash 160ms ease-out, --glow var(--dur-verdict) ease-out,
+      background-color var(--dur-verdict) ease-out, border-color var(--dur-verdict) ease-out,
+      color var(--dur-verdict) ease-out, scale var(--dur-press) ease-out;
+  }
+
+  .tile:not([aria-disabled="true"], .tile--static):active {
+    scale: 0.98;
+  }
+
+  .tool-btn, .mode-switch__link {
+    transition: --splash 160ms ease-out, background-color 120ms ease-out, color 70ms ease-out;
+  }
+
+  .testrun__progress > span {
+    transition: inline-size 240ms ease-out;
+  }
+
+  /* The check draws its stroke as the verdict lands. */
+  .tile--right .mark--check path {
+    stroke-dasharray: 16;
+    animation: check-draw var(--dur-check) ease-out both;
+  }
+
+  /* The answer sheet rises once the choices have marked themselves. */
+  .answer:not([hidden]) {
+    animation: answer-up var(--dur-next) ease-out var(--dur-verdict) both;
+  }
+
+  .sheet[open] {
+    animation: sheet-up 220ms ease-out;
+  }
+
+  .results--a .results__pct::before {
+    animation: bloom var(--dur-bloom) ease-out both;
+  }
+}
+
+@keyframes check-draw {
+  from {
+    stroke-dashoffset: 16;
+  }
+}
+
+@keyframes answer-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes answer-up {
+  from {
+    translate: 0 100%;
+    opacity: 0;
+  }
+}
+
+@keyframes sheet-up {
+  from {
+    translate: 0 1.5rem;
+    opacity: 0;
+  }
+}
+
+@keyframes bloom {
+  from {
+    scale: 0.4;
+    opacity: 0;
+  }
+}
+
+
+/* ===========================================================================
+   GECKO PERFORMANCE FALLBACK - DELETE THIS BLOCK WITH global.css's TWIN
+
+   The tool's half of global.css's block: Firefox loses the chrome's blur for
+   scroll performance, and every rule here is a removal.
+   =========================================================================== */
+
+/* No blur means the chrome goes opaque, in the page's own color. */
+:root[data-engine="gecko"] :is(.tool-bar, .tool-foot) {
+  background-color: var(--color-stage);
+  background-image: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}

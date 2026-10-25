@@ -1,4 +1,6 @@
 ---
+import Brand from "./Brand.astro";
+
 const links = [
 	// Temporary: points at the parked homepage until it takes over "/".
 	{ href: "/homepage-to-come#certifications", label: "Certifications" },
@@ -17,16 +19,7 @@ const showCta = ctaPages.includes(here);
 
 <header class="site-header">
 	<div class="site-header__inner">
-		{/* Temporary: points at the parked homepage until it takes over "/". */}
-		<a class="site-header__brand" href="/homepage-to-come">
-			<img
-				class="site-header__logo"
-				src="/lanterncert-logo.png"
-				alt="LanternCert"
-				width="1221"
-				height="160"
-			/>
-		</a>
+		<Brand />
 		<button
 			class="site-header__toggle"
 			type="button"
@@ -47,8 +40,8 @@ const showCta = ctaPages.includes(here);
 				))}
 				{showCta && (
 					<li>
-						{/* A <button> until it has a destination; it becomes an <a class="btn site-nav__cta">. */}
-						<button class="btn site-nav__cta" type="button">Start learning</button>
+						{/* The certification picker, until the script finds a study tool this browser last opened. */}
+						<a class="btn site-nav__cta" href="/homepage-to-come#certifications">Start learning</a>
 					</li>
 				)}
 			</ul>
@@ -57,7 +50,14 @@ const showCta = ctaPages.includes(here);
 </header>
 
 <script>
+	import { lastToolHref } from "../scripts/learn/store.js";
+
 	const header = document.querySelector(".site-header");
+
+	// Start learning returns to the study tool last opened, where there is one.
+	const cta = /** @type {HTMLAnchorElement | null} */ (header?.querySelector("a.site-nav__cta") ?? null);
+	const lastTool = lastToolHref();
+	if (cta && lastTool) cta.href = lastTool;
 	const toggle = /** @type {HTMLButtonElement | null} */ (
 		header?.querySelector(".site-header__toggle") ?? null
 	);

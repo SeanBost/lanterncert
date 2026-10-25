@@ -1,16 +1,25 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Button from "../components/Button.astro";
+import LearnConfirm from "../components/learn/LearnConfirm.astro";
+import { certs } from "../lib/cert-data.js";
+import states from "../content/states.json";
+import "../styles/learn.css";
 
-// Zero-state placeholders - nothing on this page reads local storage yet.
+// The zero state: what renders before the script reads this browser's store.
 const stored = [
-	["Question answer history", "None stored yet"],
-	["Mock Test results", "None stored yet"],
-	["Preferred certification", "None stored yet"],
-	["Preferred state", "None stored yet"],
-	["Progress tracking", "Enabled"],
-	["Format version", "Version 1.1"],
+	["answers", "Question answer history", "None stored yet"],
+	["tests", "Mock Test results", "None stored yet"],
+	["cert", "Preferred certification", "None stored yet"],
+	["state", "Preferred state", "None stored yet"],
+	["tracking", "Progress tracking", "On"],
 ];
+
+// The names the script labels stored progress with: each cert and every state.
+const names = {
+	certs: Object.fromEntries(Object.values(certs).map((c) => [c.slug, { name: c.name, short: c.slugShort }])),
+	states: Object.fromEntries(Object.entries(states).map(([slug, s]) => [slug, s.name])),
+};
 ---
 
 {/* noindex is PERMANENT here - this page is per-device and must never be indexed, launch included. */}
@@ -19,6 +28,8 @@ const stored = [
 	description="See how far along you are, review past Mock Test scores, and manage the study data this browser keeps on your device."
 	noindex
 >
+	<script type="application/json" id="progress-data" is:inline set:html={JSON.stringify(names)} />
+
 	{/* Three full-bleed bands, alternating wash / warm / wash. */}
 	<div class="bands">
 		<div class="split band band--wash">
@@ -27,18 +38,18 @@ const stored = [
 					<h1 class="page-title">
 						Progress overview
 					</h1>
-					<p class="caption"><em>Nothing here yet - run through some Practice Cards or a Mock Test first.</em></p>
+					<p class="caption" data-slot="zero-caption"><em>Nothing here yet - run through some Practice Cards or a Mock Test first.</em></p>
 				</div>
 				<section class="stack" aria-labelledby="next-heading">
 					<h2 class="section-title" id="next-heading">Your <strong class="text-accent">next steps</strong></h2>
 					<div class="prose">
-						<p>
-							To get started, find the certification you want to prepare for. 
+						<p data-slot="next-text">
+							To get started, find the certification you want to prepare for.
 							Once you complete any Practice Cards or Mock Tests, your results and progress will get displayed on this page.
 						</p>
 					</div>
 					<div class="button-row">
-						<Button href="/#certifications">Find a certification</Button>
+						<Button href="/#certifications" data-slot="next-button">Find a certification</Button>
 					</div>
 				</section>
 			</div>
@@ -46,11 +57,13 @@ const stored = [
 			<section class="stack baseline-drop" aria-labelledby="activity-heading">
 				<h2 class="section-title" id="activity-heading">Recent activity</h2>
 				<div class="stack framed activity-panel">
-					<div class="prose">
+					<div class="prose" data-slot="activity-empty">
 						<p>
-							<em>Your Mock Test results and Practice Cards sessions will be displayed here.</em>
+							<em>No Practice Cards or Mock Tests yet. Your sessions will be listed here.</em>
 						</p>
 					</div>
+					{/* Scrolls from 768, so it takes focus and carries a name for keyboard and screen reader users. */}
+					<ul class="row-list activity-list" data-slot="activity" tabindex="0" aria-labelledby="activity-heading" hidden></ul>
 				</div>
 			</section>
 		</div>
@@ -58,24 +71,14 @@ const stored = [
 		<div class="band band--warm">
 			<ul class="card-grid">
 				<li>
-					<section class="stack framed" aria-labelledby="mastery-heading">
-						<h2 class="section-title" id="mastery-heading">Topic mastery</h2>
-						<div class="prose">
-							<p>
-								<em>Once you've completed a variety of practice questions, see which topics you demonstrate mastery of, and which you need to shore up.</em>
-							</p>
-						</div>
-					</section>
-				</li>
-
-				<li>
 					<section class="stack framed" aria-labelledby="missed-heading">
 						<h2 class="section-title" id="missed-heading">Missed questions</h2>
-						<div class="prose">
+						<div class="prose" data-slot="missed-empty">
 							<p>
-								<em>Once you miss some practice questions, you'll be able to review them here.</em>
+								<em>No missed questions. Any you get wrong will collect here for another try.</em>
 							</p>
 						</div>
+						<ul class="row-list missed-list" data-slot="missed" hidden></ul>
 					</section>
 				</li>
 			</ul>
@@ -88,11 +91,11 @@ const stored = [
 				<h2 class="section-title section-title--lg" id="data-heading">Your progress data</h2>
 				<div class="prose">
 					<p>
-						Progress data is exclusively stored locally by your browser and device. 
+						Progress data is exclusively stored locally by your browser and device.
 						See the <a href="/about#privacy">privacy and usage policy</a> for details.
 					</p>
 					<p>
-						You can download or erase your data below if any is stored. 
+						You can download or erase your data below if any is stored.
 						You can also opt-out of progress tracking, however this will disable the features on this page that need it.
 					</p>
 				</div>
@@ -102,27 +105,37 @@ const stored = [
 					<h3 class="facts__group">What's currently stored</h3>
 					<dl>
 						{
-							stored.map(([label, value]) => (
+							stored.map(([key, label, value]) => (
 								<div class="facts__row">
 									<dt>{label}</dt>
-									<dd class="facts__value">{value}</dd>
+									<dd class="facts__value" data-stored={key}>{value}</dd>
 								</div>
 							))
 						}
 					</dl>
 				</div>
 
+				{/* Enabled by the script once it can read this browser's store. */}
 				<div class="button-row">
-					<Button variant="secondary" disabled aria-describedby="data-note">Download data</Button>
-					<Button variant="secondary" disabled aria-describedby="data-note">Erase data</Button>
-					<Button variant="secondary" disabled aria-describedby="data-note">Disable tracking</Button>
+					<button class="tool-btn" type="button" data-action="download" disabled aria-describedby="data-note">Download data</button>
+					<button class="tool-btn" type="button" data-action="erase" disabled aria-describedby="data-note">Erase data</button>
+					<button class="tool-btn" type="button" data-action="tracking" disabled aria-describedby="data-note">Disable tracking</button>
 				</div>
+				<p class="progress-status" data-slot="status" role="status"></p>
 				<p class="caption" id="data-note">
-					<em>Warning: Erasing your data or disabling progress tracking will clear your existing progress permanently. 
+					<em>Warning: Erasing your data or disabling progress tracking will clear your existing progress permanently.
 						Lost data cannot be recovered.
 					</em>
 				</p>
 			</div>
 		</section>
 	</div>
+
+	<LearnConfirm />
 </Layout>
+
+<script>
+	import { initProgress } from "../scripts/progress.js";
+
+	initProgress();
+</script>
