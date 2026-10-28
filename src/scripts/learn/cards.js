@@ -1,4 +1,4 @@
-// Practice Cards mode: one card at a time from an endless deck, untimed, with no counter anywhere.
+// Practice Cards mode: one card at a time from a shuffled deck that ends on an end card, untimed, with no counter anywhere.
 // An answer opens in a sheet docked at the stage's foot. Answers write to the store as mode "c".
 import { openSheet } from "./dialog.js";
 import {
@@ -8,10 +8,13 @@ import {
   cloneOne,
   figure,
   fillAnswer,
+  fitSheet,
   knob,
   listPhrase,
   markTile,
   reducedMotion,
+  setKey,
+  setKeysRange,
   shuffledIds,
   slot,
   watchSheetHeight,
@@ -30,6 +33,8 @@ export function mount(ctx) {
   let deckEl = null;
   let live = null;
   let sheet = null;
+  /** The stage and the sheet's grid. */
+  let mainEl = null;
   let side = null;
   /** The filter in force: null topics means all of them. */
   let filter = { topics: null, missed: false };
@@ -37,6 +42,8 @@ export function mount(ctx) {
   /** Cards dealt so far, part of each card's ids. */
   let dealt = 0;
   let card = null;
+  /** This pass through the deck: cards answered, and how many right. */
+  let pass = { seen: 0, right: 0 };
 
   const tracking = () => store.status().tracking;
   const record = () => store.stateRecord(data.cert, data.state);
@@ -48,17 +55,17 @@ export function mount(ctx) {
   const filterFrom = (url) => {
     const asked = (url.searchParams.get("topics") ?? "").split(",").filter((slug) => pool.topicBySlug.has(slug));
     const topics = asked.length && asked.length < pool.topics.length ? [...new Set(asked)] : null;
-    return { topics, missed: url.searchParams.get("missed") === "1" && tracking() };
+    return { topics, missed: url.searchParams.has("missed") && tracking() };
   };
 
   const sameFilter = (a, b) => a.missed === b.missed && String(a.topics) === String(b.topics);
 
+  /** Written out by hand: the topic list's commas plain, the missed filter a bare flag. */
   const urlFor = (f) => {
-    const url = new URL(data.learn, location.href);
-    url.searchParams.set("mode", "cards");
-    if (f.topics) url.searchParams.set("topics", f.topics.join(","));
-    if (f.missed) url.searchParams.set("missed", "1");
-    return url.pathname + url.search;
+    const query = ["mode=cards"];
+    if (f.topics) query.push(`topics=${f.topics.join(",")}`);
+    if (f.missed) query.push("missed");
+    return `${new URL(data.learn, location.href).pathname}?${query.join("&")}`;
   };
 
   const summary = (f) => {
@@ -102,9 +109,28 @@ export function mount(ctx) {
 
   // ---- Rendering ----------------------------------------------------------------------------------
 
-  /** Swaps the card on the stack: the old one slides off, the new one rises from the deck. */
+  /** The pile's tilts in degrees, as learn.css starts them: the sheet under the card, and the one under that. */
+  let tilt = { near: 0.9, far: -1.7 };
+
+  /** Deals the pile fresh tilts: the near sheet always turned a little clockwise, the far one further the other way. */
+  const retilt = () => {
+    const near = 0.7 + Math.random() * 0.4;
+    const far = -(1.4 + Math.random() * 0.6);
+    tilt = { near, far };
+    deckEl.style.setProperty("--tilt-near", `${near.toFixed(2)}deg`);
+    deckEl.style.setProperty("--tilt-far", `${far.toFixed(2)}deg`);
+  };
+
+  /** Eases the pile from the tossed card's height to the new card's; once done, the pile follows the card again. */
+  const settlePile = (from, to) => {
+    if (reducedMotion() || from === to) return;
+    deckEl.animate([{ "--pile-h": `${from}px` }, { "--pile-h": `${to}px` }], { duration: knob("--dur-settle"), easing: "cubic-bezier(0.22, 1, 0.36, 1)" });
+  };
+
+  /** Swaps the card on the pile: the old one is tossed off, the new one comes up from the sheet beneath and straightens. */
   const place = async (node, { focus = true } = {}) => {
     const old = deckEl.querySelector(".qcard:not(.qcard--leaving)");
+    const oldHeight = old?.querySelector(".qcard__face").offsetHeight;
     deckEl.append(node);
     stageEl.classList.toggle("cards__stage--quiet", !card);
     if (window.scrollY > 0) window.scrollTo({ top: 0, behavior: "instant" });
@@ -114,14 +140,17 @@ export function mount(ctx) {
     if (!old) return;
     old.classList.add("qcard--leaving");
     old.setAttribute("inert", "");
+    const from = tilt.near * (parseFloat(getComputedStyle(deckEl).getPropertyValue("--pile-k")) || 1);
+    if (!reducedMotion()) retilt();
+    settlePile(oldHeight, node.querySelector(".qcard__face").offsetHeight);
     const ms = reducedMotion() ? knob("--dur-fade") : knob("--dur-next");
     const out = reducedMotion()
       ? [{ opacity: 1 }, { opacity: 0 }]
-      : [{ opacity: 1, transform: "none" }, { opacity: 0, transform: "translateX(-2rem)" }];
+      : [{ opacity: 1, transform: "none" }, { opacity: 0, transform: "translate(-4rem, 0.5rem) rotate(-6deg)" }];
     const into = reducedMotion()
       ? [{ opacity: 0 }, { opacity: 1 }]
-      : [{ opacity: 0, transform: "translateY(0.75rem) scale(0.97)" }, { opacity: 1, transform: "none" }];
-    node.animate(into, { duration: ms, easing: "ease-out" });
+      : [{ opacity: 0, transform: `translateY(0.5rem) rotate(${from}deg) scale(0.99)` }, { opacity: 1, transform: "none" }];
+    node.animate(into, { duration: ms * 1.4, easing: "cubic-bezier(0.22, 1, 0.36, 1)" });
     await old.animate(out, { duration: ms, easing: "ease-in" }).finished.catch(() => {});
     old.remove();
   };
@@ -157,27 +186,41 @@ export function mount(ctx) {
   const allTopics = () => ctx.replaceUrl(urlFor({ topics: null, missed: false }));
   const testHref = `${data.learn}?mode=test`;
 
+  /** The end of a pass: a lead by how it went, what it covered, and the way on; at the pass mark the Mock Test leads. */
   const endCard = () => {
     const missed = missedKeys(record().answers);
-    const empty = !pool.questions.some(matches(filter, missed));
-    if (filter.missed && empty) {
-      return note({
-        title: "Nothing missed yet. Questions you get wrong will collect here.",
-        actions: [{ label: "Practice all topics", onClick: () => (allTopics(), applyFilter({ topics: null, missed: false })) }],
-      });
+    const still = pool.questions.filter(matches({ topics: filter.topics, missed: true }, missed)).length;
+    const allTopicsAction = { label: "Practice all topics", onClick: () => (allTopics(), applyFilter({ topics: null, missed: false })) };
+    if (filter.missed && !still && !pass.seen) {
+      return note({ title: "Nothing missed yet. Questions you get wrong will collect here.", actions: [allTopicsAction] });
     }
     const names = (filter.topics ?? []).map((slug) => pool.topicBySlug.get(slug).name);
-    const title = filter.topics
-      ? `That's every card in ${names.length > 3 ? `these ${names.length} topics` : listPhrase(names)}.`
-      : "That's every card you had missed.";
+    const scope = names.length > 3 ? `these ${names.length} topics` : listPhrase(names);
+    const testAction = { label: "Take a Mock Test", href: testHref };
+    // A missed-only pass that leaves nothing missed has cleared them all.
+    if (filter.missed && !still) {
+      return note({
+        lead: "Nice work!",
+        title: filter.topics ? `You cleared every missed card in ${scope}.` : "You cleared every card you had missed.",
+        actions: [testAction, allTopicsAction],
+      });
+    }
+    const retry = { topics: filter.topics, missed: true };
+    const missedAction = still && {
+      label: still === 1 ? "Practice the one you missed" : `Practice the ${still} you missed`,
+      onClick: () => (ctx.replaceUrl(urlFor(retry)), applyFilter(retry)),
+    };
+    // A missed-only pass goes again by practicing the ones still missed.
+    const again = filter.missed ? [missedAction] : [missedAction, { label: "Shuffle and go again", onClick: () => deal(true) }];
+    const wider = filter.topics || filter.missed ? [allTopicsAction] : [];
+    const passed = pass.right * 100 >= data.format.pass * pass.seen;
+    const title = filter.missed
+      ? filter.topics ? `That's every missed card in ${scope}.` : "That's every card you had missed."
+      : filter.topics ? `That's every card in ${scope}.` : "That's every card.";
     return note({
-      lead: "Nice work!",
+      lead: passed ? "Nice work!" : "Keep at it!",
       title,
-      actions: [
-        { label: "Shuffle and go again", onClick: () => deal(true) },
-        { label: "Practice all topics", onClick: () => (allTopics(), applyFilter({ topics: null, missed: false })) },
-        { label: "Take a Mock Test", href: testHref },
-      ],
+      actions: (passed ? [testAction, ...again, ...wider] : [...again, ...wider, testAction]).filter(Boolean),
     });
   };
 
@@ -210,45 +253,56 @@ export function mount(ctx) {
     shuffledIds(q.choices).forEach((id, i) => {
       const tile = cloneOne("tpl-tile");
       tile.dataset.choice = id;
-      tile.querySelector(".tile__key").textContent = LETTERS[i];
+      setKey(tile.querySelector(".tile__key"), LETTERS[i]);
       slot(tile, "text").textContent = choiceText(q, id);
-      tile.addEventListener("click", () => answer(id));
+      tile.addEventListener("click", () => answer(id, "press"));
       tiles.append(tile);
     });
     return node;
+  };
+
+  /** Shows how many cards the deck has left under the one on top, at most two. */
+  const pileLeft = () => {
+    deckEl.dataset.left = String(Math.min(deck.length, 2));
   };
 
   /** The next card, or the end card. Focus follows a reader's own action, never a load. */
   function deal(reshuffle = false, focus = true) {
     if (reshuffle) {
       deck = shuffleDeck();
+      pass = { seen: 0, right: 0 };
       syncPracticing();
     }
-    if (!deck.length && !(filter.topics || filter.missed)) deck = shuffleDeck();
     if (!deck.length) {
+      pileLeft();
       place(endCard(), { focus });
       return;
     }
     const q = pool.byKey.get(draw());
+    pileLeft();
     dealt++;
     const node = cardFor(q);
+    setKeysRange(stageEl, q.choices.length);
     card = { q, node, done: false };
     place(node, { focus });
   }
 
   // ---- The answer sheet -----------------------------------------------------------------------------
 
-  /** Fills the sheet for an answered card and raises it. */
-  function openSheetFor(q, isRight) {
-    const verdict = fillAnswer(sheet, q, pool, data.learn, isRight ? "right" : "wrong");
+  /** Raises the filled sheet over the card's foot, clear of its question; with `takeFocus`, focus moves to Next card unless the reader has moved it elsewhere. */
+  function raiseSheet(takeFocus) {
     sheet.getAnimations().forEach((a) => a.cancel());
     sheet.hidden = false;
-    live.textContent = verdict;
+    fitSheet(mainEl, card.node, sheet, { reveal: true });
+    if (takeFocus && (panel.contains(document.activeElement) || document.activeElement === document.body)) {
+      sheet.querySelector('[data-action="next"]').focus({ preventScroll: true });
+    }
   }
 
-  /** Lowers the sheet as the next card deals. */
+  /** Lowers the sheet as the next card deals, the room it took given up at once. */
   function closeSheet() {
     if (!sheet || sheet.hidden) return;
+    mainEl.style.removeProperty("--answer-room");
     if (reducedMotion()) {
       sheet.hidden = true;
       return;
@@ -264,7 +318,7 @@ export function mount(ctx) {
 
   // ---- The answer moment ----------------------------------------------------------------------------
 
-  /** Fades out the choices neither picked nor right, then closes the card up around the rest. */
+  /** Fades out the choices neither picked nor right, then closes the card up around the rest; settles once it has. */
   async function fold(node, gone) {
     await Promise.all(
       gone.map((t) => t.animate([{ opacity: 1 }, { opacity: 0 }], { duration: knob("--dur-fold-fade"), easing: "ease-out", fill: "forwards" }).finished),
@@ -278,22 +332,31 @@ export function mount(ctx) {
     if (reducedMotion()) return;
     const timing = { duration: knob("--dur-fold"), easing: "ease-out" };
     const after = face.offsetHeight;
-    if (after !== before) face.animate([{ height: `${before}px` }, { height: `${after}px` }], timing);
+    const moves = [];
+    if (after !== before) moves.push(face.animate([{ height: `${before}px` }, { height: `${after}px` }], timing).finished);
     kept.forEach((t, i) => {
       const dy = tops[i] - t.offsetTop;
-      if (dy) t.animate([{ transform: `translateY(${dy}px)` }, { transform: "none" }], timing);
+      if (dy) moves.push(t.animate([{ transform: `translateY(${dy}px)` }, { transform: "none" }], timing).finished);
     });
+    await Promise.all(moves).catch(() => {});
   }
 
-  function answer(id) {
+  /** Answers the card on screen; `via` is "press" for a tap, click or a focused tile's Enter, "shortcut" for A-D or 1-4. */
+  function answer(id, via) {
     if (!card || card.done) return;
     const { q, node } = card;
     card.done = true;
     const isRight = id === q.answer;
     store.recordAnswer(data.cert, data.state, q.k, isRight, "c");
+    pass.seen++;
+    if (isRight) pass.right++;
 
+    // Spent choices leave the Tab order.
     const tiles = [...node.querySelectorAll(".tile")];
-    for (const tile of tiles) tile.setAttribute("aria-disabled", "true");
+    for (const tile of tiles) {
+      tile.setAttribute("aria-disabled", "true");
+      tile.tabIndex = -1;
+    }
     const chosen = tiles.find((t) => t.dataset.choice === id);
     const correct = tiles.find((t) => t.dataset.choice === q.answer);
     chosen.classList.add("tile--chosen");
@@ -305,12 +368,19 @@ export function mount(ctx) {
     }
     node.dataset.result = isRight ? "right" : "wrong";
     stageEl.classList.add("cards__stage--quiet");
-    fold(node, tiles.filter((t) => t !== chosen && t !== correct));
+    // The pile shrinks with the card as it folds, even if it was still settling from the last toss.
+    deckEl.getAnimations().forEach((a) => a.cancel());
 
-    openSheetFor(q, isRight);
-    if (panel.contains(document.activeElement) || document.activeElement === document.body) {
-      sheet.querySelector('[data-action="next"]').focus({ preventScroll: true });
-    }
+    // The verdict is spoken at once; the sheet opens once the card has folded.
+    live.textContent = fillAnswer(sheet, q, pool, data.learn, isRight ? "right" : "wrong", { praise: true });
+    const gone = tiles.filter((t) => t !== chosen && t !== correct);
+    // A shortcut leaves focus on the question; a press moves it to Next card once the sheet opens.
+    const shortcut = via === "shortcut";
+    if (shortcut && tiles.includes(document.activeElement)) node.querySelector(".qcard__stem").focus({ preventScroll: true });
+    else if (gone.includes(document.activeElement)) chosen.focus({ preventScroll: true });
+    fold(node, gone).then(() => {
+      if (card?.node === node) raiseSheet(!shortcut);
+    });
     syncFilters();
   }
 
@@ -326,7 +396,7 @@ export function mount(ctx) {
       const tile = index >= 0 ? card.node.querySelectorAll(".tile")[index] : null;
       if (tile) {
         event.preventDefault();
-        tile.click();
+        answer(tile.dataset.choice, "shortcut");
       }
       return;
     }
@@ -339,18 +409,15 @@ export function mount(ctx) {
 
   // ---- The filter: the sidebar from 1248, the bar's sheet below. Both apply changes as they're made ----
 
-  /** Shows the filter in force in a filter control, and the missed count as it stands. */
+  /** Shows the filter in force in a filter control; the missed switch shows once something is missed, or while it is on. */
   function syncFilterUI(root) {
     if (!root) return;
     for (const box of root.querySelectorAll('input[name="topic"]')) box.checked = !filter.topics || filter.topics.includes(box.value);
     const count = missedCount();
-    const switchBox = root.querySelector('input[name="missed"]');
-    slot(root, "missed-row").hidden = !tracking();
+    slot(root, "missed-row").hidden = !tracking() || (count === 0 && !filter.missed);
     slot(root, "missed-count").textContent = String(count);
-    switchBox.checked = filter.missed;
-    switchBox.disabled = count === 0 && !filter.missed;
-    slot(root, "missed-note").hidden = count > 0 || filter.missed;
-    slot(root, "error").hidden = true;
+    root.querySelector('input[name="missed"]').checked = filter.missed;
+    slot(root, "error").textContent = "";
   }
 
   const syncFilters = () => {
@@ -361,10 +428,10 @@ export function mount(ctx) {
   /** Reads a filter control into a filter; with no topic checked, the one in force stays. */
   function applyFrom(root) {
     const picked = [...root.querySelectorAll('input[name="topic"]:checked')].map((b) => b.value);
-    slot(root, "error").hidden = picked.length > 0;
+    slot(root, "error").textContent = picked.length ? "" : "Pick at least one topic";
     if (!picked.length) return;
-    const switchBox = root.querySelector('input[name="missed"]');
-    const next = { topics: picked.length === pool.topics.length ? null : picked, missed: switchBox.checked && !switchBox.disabled };
+    const missed = root.querySelector('input[name="missed"]').checked;
+    const next = { topics: picked.length === pool.topics.length ? null : picked, missed };
     if (sameFilter(next, filter)) return;
     ctx.replaceUrl(urlFor(next));
     applyFilter(next, { focus: false, keep: true });
@@ -399,7 +466,11 @@ export function mount(ctx) {
     const n = pool.questions.filter(matches(filter, missed)).length;
     if (keep && card && matches(filter, missed)(card.q)) {
       deck = shuffleDeck(card.q.k);
+      // An answered card that stays on screen counts toward the new pass.
+      pass = card.done ? { seen: 1, right: Number(card.node.dataset.result === "right") } : { seen: 0, right: 0 };
+      pileLeft();
     } else {
+      pass = { seen: 0, right: 0 };
       deck = shuffleDeck();
       deal(false, focus);
     }
@@ -415,9 +486,14 @@ export function mount(ctx) {
     deckEl = slot(panel, "deck");
     live = slot(panel, "live");
     sheet = slot(panel, "answer");
+    mainEl = panel.querySelector(".cards__main");
     side = panel.querySelector(".cards__side");
     sheet.querySelector('[data-action="next"]').addEventListener("click", () => deal());
     watchSheetHeight(panel).observe(sheet);
+    // A resized window or text size refits an open sheet around the question.
+    new ResizeObserver(() => {
+      if (card?.done && !sheet.hidden) fitSheet(mainEl, card.node, sheet);
+    }).observe(sheet);
     wireFilter(side);
     const url = new URL(location.href);
     filter = filterFrom(url);

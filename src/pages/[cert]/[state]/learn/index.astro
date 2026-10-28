@@ -6,6 +6,7 @@ import CardTemplates from "../../../../components/learn/CardTemplates.astro";
 import TestTemplates from "../../../../components/learn/TestTemplates.astro";
 import LearnConfirm from "../../../../components/learn/LearnConfirm.astro";
 import {
+	certConfig,
 	certNoindex,
 	certStatePaths,
 	examUnpublished,
@@ -34,9 +35,11 @@ const base = `/${cert}/${state}`;
 const learn = `${base}/learn`;
 const kicker = `${info.name} ${term}`;
 
-// The intro's sentence as { text, source?, key? } parts: the state and term keyed, published figures linked.
+// The intro's sentence as { text, source?, href? } parts: the state and term linked to their page, published figures to their sources.
 const token = tokenDisplay(cert, facts, { stateName: info.name, stateCode: info.abbreviation });
 const examLong = token("examType", facts.exam.examType, "long");
+// What the guide's overview calls the exam after naming the state and term; plainly "exam" where none is published.
+const examNoun = (!examUnpublished(facts) && token("examType", facts.exam.examType, "noun")) || "exam";
 const pct = (n) => `${n}%`;
 const minutesText = (n) => `${n} ${n === 1 ? "minute" : "minutes"}`;
 const [countFrom, passFrom, minutesFrom] = await Promise.all(
@@ -56,14 +59,15 @@ const shape = oneSource
 	: figures.flatMap((f, i) => (i ? [{ text: ", " }, f] : [f]));
 
 const ownFormat = examUnpublished(facts) || !examLong || figures.length === 0;
-const opener = [{ text: "To earn their " }, { text: kicker, key: true }];
+const { testTakers } = certConfig(cert);
+const opener = [{ text: "To earn their " }, { text: kicker, href: base }];
 let lede;
 if (ownFormat) {
 	// The state's test as its facts name it, then the format this Mock Test chose.
-	const takes = fixArticles(`riders take a ${examLong ?? "knowledge test"}`);
+	const takes = fixArticles(`${testTakers} take a ${examLong ?? "knowledge test"}`);
 	lede = [...opener, { text: `, ${takes}, and ${info.name} sets no statewide format for it. LanternCert's Mock Test follows a common format: ${format.count.value} questions, ${pct(format.pass.value)} to pass.` }];
 } else {
-	lede = [...opener, { text: `, riders take the ${examLong}: ` }, ...shape, { text: "." }];
+	lede = [...opener, { text: `, ${testTakers} take the ${examLong}: ` }, ...shape, { text: "." }];
 	if (format.count.ours) lede.push({ text: ` No question count is published, so this Mock Test sets one: ${format.count.value}.` });
 	if (format.pass.ours) lede.push({ text: ` No pass mark is published, so this Mock Test sets one: ${pct(format.pass.value)}.` });
 }
@@ -149,22 +153,22 @@ const modes = [
 				<div class="tool-bar__group" data-tools="guide" hidden>
 					<button class="tool-btn" type="button" data-action="topics" aria-haspopup="dialog" aria-controls="guide-index-sheet">
 						<svg class="tool-btn__glyph" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 4h12M2 8h12M2 12h8" /></svg>
-						Topics
+						<span>Topics</span>
 					</button>
 				</div>
 				<div class="tool-bar__group" data-tools="cards" hidden>
 					<button class="tool-btn" type="button" data-action="filter" aria-haspopup="dialog" aria-controls="cards-filter">
 						<svg class="tool-btn__glyph" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 4h12M2 8h12M2 12h8" /></svg>
-						Topics<span class="visually-hidden" data-slot="filter-summary">, All topics</span>
+						<span>Topics<span class="visually-hidden" data-slot="filter-summary">, All topics</span></span>
 					</button>
 				</div>
 				<div class="tool-bar__group" data-tools="test" hidden>
 					<p class="timer" role="timer" data-slot="timer" hidden>
 						<svg class="timer__glyph" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="9" r="5.5" /><path d="M8 6v3l2 1.5M6.5 2h3" /></svg>
-						<span data-slot="timer-text"></span>
+						<span><span class="timer__time" data-slot="timer-text"></span><span class="visually-hidden" data-slot="timer-left" hidden> left</span></span>
 					</p>
 					<button class="tool-btn tool-bar__questions" type="button" data-action="navigator" aria-haspopup="dialog" aria-controls="test-navigator" hidden>
-						Questions<span class="visually-hidden" data-slot="answered"></span>
+						<span>Questions<span class="visually-hidden" data-slot="answered"></span></span>
 					</button>
 					<button class="tool-btn" type="button" data-action="results" hidden>Back to results</button>
 				</div>
@@ -184,7 +188,7 @@ const modes = [
 
 	<div class="stage">
 		<div class="panel panel--guide" id="panel-guide" data-panel="guide">
-			<GuidePanel cert={cert} state={state} info={info} facts={facts} pool={pool} learn={learn} />
+			<GuidePanel cert={cert} state={state} info={info} facts={facts} pool={pool} learn={learn} examNoun={examNoun} />
 		</div>
 		{/* The skeletons stand in until a mode's script and the pool land. */}
 		{/* Cards and the test take focus anywhere in their stage, so their keys work after any click inside it. */}

@@ -117,6 +117,14 @@ img, svg {
   --color-yellow-dark: #bf8600;
   --color-orange-dark: #bf4000;
 
+  /* Right and wrong, and red for an error, nothing else: a stroke, an ink that clears AA on its fill, and the fill. */
+  --color-green: #2e9e5b;
+  --color-green-dark: #1d7044;
+  --color-green-offwhite: #eaf7ee;
+  --color-red: #d9475a;
+  --color-red-dark: #b3263a;
+  --color-red-offwhite: #fdeef0;
+
   /* GA DDS's own body ink - a quoted artifact only, never part of the palette.
      A second publisher gets a second token, never this one. */
   --color-quote-ink: #38424b;
@@ -1974,7 +1982,7 @@ ul.source-wall__row {
 }
 
 /* A key-accented link holds its orange through every link state, a:visited:hover included. */
-.prose a.text-key:is(:link, :visited) {
+a.text-key:is(:link, :visited) {
   color: var(--color-orange-dark);
 }
 
@@ -2314,6 +2322,11 @@ ul.source-wall__row {
   /* `backwards` holds the hidden frame through the delay; no `forwards`, so nothing stays latched. */
   .sweep-in {
     animation: sweep-in 400ms ease-out 200ms backwards;
+  }
+
+  /* A sweep that has played stays swept when its block is shown again. */
+  .sweep-in.sweep-in--played {
+    animation: none;
   }
 
   /* Runs when the reveal class lands, so the fade always covers the swap rather than racing it. */

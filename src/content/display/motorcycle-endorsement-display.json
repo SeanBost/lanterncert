@@ -114,20 +114,24 @@
     "_stateSpecific": {
       "named": {
         "short": "{agencyCode} {examName}",
-        "long": "{examName}"
+        "long": "{examName}",
+        "noun": "{examNoun}"
       },
       "unnamed": {
         "short": "{agencyCode} knowledge test",
-        "long": "motorcycle knowledge test"
+        "long": "motorcycle knowledge test",
+        "noun": "knowledge test"
       }
     },
     "MSFBRC": {
       "short": "MSF course test",
-      "long": "MSF Basic RiderCourse end-of-course knowledge test"
+      "long": "MSF Basic RiderCourse end-of-course knowledge test",
+      "noun": "knowledge test"
     },
     "MNS2011": {
       "short": "Provider test",
-      "long": "knowledge test set by a {stateName}-approved provider"
+      "long": "knowledge test set by a {stateName}-approved provider",
+      "noun": "knowledge test"
     }
   }
 }

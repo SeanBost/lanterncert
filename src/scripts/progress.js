@@ -63,7 +63,7 @@ export function initProgress() {
         const s = scoreTest(test.correct, test.count, test.pass);
         rows.push({
           at: test.endedAt,
-          text: `Mock Test · ${stateName(state)} · ${test.correct} of ${test.count} (${s.percent}%) · ${s.passed ? "Passed" : "Not a pass"}`,
+          text: `Mock Test • ${stateName(state)} • ${test.correct} of ${test.count} (${s.percent}%) • ${s.passed ? "Passed" : "Not a pass"}`,
         });
       }
       const cards = Object.values(record.answers ?? {})
@@ -76,7 +76,7 @@ export function initProgress() {
         const right = run.filter((a) => a[1] === 1).length;
         rows.push({
           at: run.at(-1)[0],
-          text: `Practice Cards · ${stateName(state)} · ${run.length} answered · ${Math.round((right * 100) / run.length)}% right`,
+          text: `Practice Cards • ${stateName(state)} • ${run.length} answered • ${Math.round((right * 100) / run.length)}% right`,
         });
         run = [];
       };
@@ -127,7 +127,7 @@ export function initProgress() {
       li.append(
         el("p", "missed-list__count", `${missed.length} missed in ${stateName(state)}`),
         el("p", "caption", `Most in ${most.join(", ")}`),
-        Object.assign(el("a", "tool-btn", "Practice the ones you missed"), { href: learnUrl(cert, state, "?mode=cards&missed=1") }),
+        Object.assign(el("a", "tool-btn", "Practice the ones you missed"), { href: learnUrl(cert, state, "?mode=cards&missed") }),
       );
       rows.push(li);
     }

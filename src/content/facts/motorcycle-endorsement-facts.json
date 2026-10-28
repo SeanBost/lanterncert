@@ -12,6 +12,7 @@
     "exam": {
       "examType":            { "value": "MSFBRC", "source": "fl-hsmv-endorsement-info" },
       "examName":            { "value": null, "source": "xx-msf-brc-handbook" },
+      "examNoun":            { "value": null, "source": "xx-msf-brc-handbook" },
       "examAdministration":  { "value": "course", "source": "xx-msf-brc-handbook" },
       "courseWaivesAgencyExam": { "value": null, "source": "fl-hsmv-endorsement-info" },
       "questionCount":       { "value": 25, "source": "xx-msf-brc-handbook" },
@@ -59,6 +60,7 @@
     "exam": {
       "examType":            { "value": "GA", "source": "ga-dds-test-exams" },
       "examName":            { "value": "Motorcycle Knowledge Exam", "source": "ga-dds-test-exams" },
+      "examNoun":            { "value": "knowledge exam", "source": "ga-dds-test-exams" },
       "examAdministration":  { "value": "agency", "source": "ga-dds-test-exams" },
       "courseWaivesAgencyExam": { "value": true, "source": "ga-dds-brc" },
       "questionCount":       { "value": 40, "source": "ga-dds-test-exams" },
@@ -102,6 +104,7 @@
     "exam": {
       "examType":            { "value": "MNS2011", "source": "tx-tdlr-curriculum" },
       "examName":            { "value": null, "source": "tx-tdlr-curriculum" },
+      "examNoun":            { "value": null, "source": "tx-tdlr-curriculum" },
       "examAdministration":  { "value": "course", "source": "tx-tdlr-curriculum" },
       "courseWaivesAgencyExam": { "value": null, "source": "tx-dps-motorcycle-license" },
       "questionCount":       { "value": null, "source": "tx-tdlr-curriculum" },
@@ -147,6 +150,7 @@
     "exam": {
       "examType":            { "value": "CA", "source": "ca-dmv-instruction-permits" },
       "examName":            { "value": null, "source": "ca-dmv-instruction-permits" },
+      "examNoun":            { "value": null, "source": "ca-dmv-instruction-permits" },
       "examAdministration":  { "value": "agency", "source": "ca-dmv-motorcycle-licenses" },
       "courseWaivesAgencyExam": { "value": false, "source": "ca-dmv-motorcycle-licenses" },
       "questionCount":       { "value": 25, "source": "ca-dmv-pra-motorcycle-test" },

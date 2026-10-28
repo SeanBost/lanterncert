@@ -2,7 +2,7 @@
 // The Study Guide as static HTML: topic index, an overview, one section per topic, then the end matter.
 // One page shows at a time, with only the sources it cites; scripts/learn/guide.js switches between them.
 import { getCollection } from "astro:content";
-import { certGuide, loadSourceEntries } from "../../lib/cert-data.js";
+import { certConfig, certGuide, loadSourceEntries } from "../../lib/cert-data.js";
 import { guideForState } from "../../lib/study-guide.js";
 import { formatDate } from "../../lib/format-fact.js";
 import { sourceMetaParts } from "../../lib/format-source.js";
@@ -12,8 +12,8 @@ import GuideCredits from "./GuideCredits.astro";
 import GuideIndex from "./GuideIndex.astro";
 import GuidePager from "./GuidePager.astro";
 
-/** @type {{ cert: string, state: string, info: any, facts: any, pool: any, learn: string }} */
-const { cert, state, info, facts, pool, learn } = Astro.props;
+/** @type {{ cert: string, state: string, info: any, facts: any, pool: any, learn: string, examNoun: string }} */
+const { cert, state, info, facts, pool, learn, examNoun } = Astro.props;
 const term = facts.meta.localTerm;
 
 const exams = Object.fromEntries((await getCollection(`${cert}-exams`)).map((e) => [e.id, e.data]));
@@ -126,6 +126,7 @@ if (cited.length !== citations.size) {
 }
 
 const cards = `${learn}?mode=cards`;
+const statePage = `/${cert}/${state}`;
 ---
 
 <div class="guide">
@@ -143,27 +144,23 @@ const cards = `${learn}?mode=cards`;
 
 			<section class="guide-topic guide-topic--overview" id={overview.slug}>
 				{verifiedFloor && (
-					<p class="caption"><em>Every line verified against its source on or after {formatDate(verifiedFloor)}.</em></p>
+					<p class="caption"><em>Every fact verified against its source on or after {formatDate(verifiedFloor)}.</em></p>
 				)}
 				<p class="guide-overview__text">
-					A crash course in what the <strong class="text-key">{info.name} {term}</strong> test covers, in {topicsShown.length}
-					topics. It doesn't replace the official manual or a riding course.
+					Get a crash course in what the <a class="text-key" href={statePage}>{info.name} {term}</a> {examNoun} covers,
+					broken down into {topicsShown.length} exam topics. Use it to prepare alongside {certConfig(cert).studyAlongside}.
 				</p>
 				<p class="guide-overview__text">
-					Topics follow the order the manuals teach them. Each shows its share of the Mock Test and ends with
-					Practice Cards for just that topic.
+					Topics follow the order they're traditionally taught, and each ends with Practice Cards for just that topic.
 					{heavy.length > 0 && (
 						<>
 							{" "}
 							{heavy.map((t, i) => (
-								<>{i > 0 && (i === heavy.length - 1 ? " and " : ", ")}<a class="ink-link" href={`#${t.slug}`}>{t.name}</a></>
+								<>{i > 0 && (i < heavy.length - 1 ? ", " : heavy.length > 2 ? ", and " : " and ")}<a class="text-key" href={`#${t.slug}`}>{t.name}</a></>
 							))}
 							{` ${heavy.length === 1 ? "makes" : "make"} up ${heavyCount} of the Mock Test's ${testCount} questions.`}
 						</>
 					)}
-				</p>
-				<p class="guide-overview__text">
-					Every line cites the document it comes from, and those documents hold the full material.
 				</p>
 				<GuidePager next={pages[1]} />
 			</section>
@@ -176,7 +173,7 @@ const cards = `${learn}?mode=cards`;
 						</h2>
 						<p class="guide-topic__opener">{topic.opener}</p>
 						<p class="caption guide-topic__meta">
-							{topic.count} {topic.count === 1 ? "fact" : "facts"}<span class="sep" aria-hidden="true">·</span><span class="visually-hidden">, </span>{topic.quotaText}
+							{topic.count} {topic.count === 1 ? "fact" : "facts"}<span class="sep" aria-hidden="true">•</span><span class="visually-hidden">, </span>{topic.quotaText}
 						</p>
 					</div>
 	

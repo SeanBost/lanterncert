@@ -18,41 +18,81 @@
 
 :root {
   /* The chrome's heights until scripts/learn/shell.js measures them: two bar rows on a phone, one from 768; the footer from 1248. */
-  --bar-h: 6.375rem;
+  --bar-h: 6.5625rem;
   --bar-pad: 0.375rem;
+  /* A touch more air above the bar's controls than below them, at every width. */
+  --bar-lift: 3px;
   --bar-control: 2.25rem;
   --foot-h: 0px;
 
-  /* Roles, each resolving to a decided color. */
+  /* Roles, each resolving to a decided color. Ink is where you are, orange is what you picked, green and red are the verdict, and red an error. */
   --color-stage: var(--band-warm-fill);
-  --color-correct-fill: var(--color-yellow-offwhite);
-  --color-correct-ink: var(--color-orange-dark);
-  --color-selected: var(--color-accent);
-  --color-selected-ink: var(--color-accent-ink);
+  --color-current: var(--color-accent);
+  --color-current-ink: var(--color-accent-ink);
+  --color-pick: var(--color-orange-dark);
+  --color-pick-fill: var(--hover-wash);
+  --color-pick-edge: color-mix(in srgb, var(--color-orange) 55%, var(--color-orange-offwhite));
+  --color-correct-fill: var(--color-green-offwhite);
+  --color-correct-edge: var(--color-green);
+  --color-correct-ink: var(--color-green-dark);
+  --color-wrong-fill: var(--color-red-offwhite);
+  --color-wrong-edge: var(--color-red);
+  --color-wrong-ink: var(--color-red-dark);
   --color-scrim: color-mix(in srgb, var(--color-ink) 33%, transparent);
 
-  /* Card and figure sizes. Viewport units size heights only, never type. */
-  --qcard-w: 42rem;
-  --qcard-w-media: 60rem;
+  /* Pressable things sit on a lip, colored by --lip-color, and sink into it when pressed. */
+  --edge: color-mix(in srgb, var(--color-ink-lightester) 45%, var(--white));
+  --edge-lip: color-mix(in srgb, var(--color-ink-lightester) 70%, var(--white));
+  /* An unchecked box or radio's outline, and the switch's track when off. */
+  --check-edge: color-mix(in srgb, var(--color-ink-lightester) 60%, var(--color-ink-lightest));
+  /* The one warm wash: every hover brings it in, and a pick sits on it. */
+  --hover-wash: color-mix(in srgb, var(--color-orange-offwhite) 60%, var(--white));
+  /* On hover the edge warms to a light orange and the lip beneath to a darker one, as the grays pair at rest. */
+  --hover-edge: var(--color-pick-edge);
+  --hover-lip: var(--color-orange-lit);
+  /* A figure's plate, a step off its surface: white on the warm stage, the stage's own warmth on a white card. */
+  --plate: var(--white);
+  --lip: 3px;
+  --radius-card: 1.25rem;
+  /* A sheet lifted off the stage: a contact edge and a wide, soft fall. */
+  --shadow-sheet:
+    0 1px 2px color-mix(in srgb, var(--shadow-hue) 8%, transparent),
+    0 18px 40px -22px color-mix(in srgb, var(--shadow-hue) 38%, transparent);
+
+  /* Card and figure sizes: every card takes the guide's column, figure or not. Viewport units size heights only, never type. */
+  --qcard-w: var(--card-w);
   --figure-max: clamp(8rem, 32svh, 16rem);
   --figure-max-aside: clamp(6rem, 24svh, 12rem);
   --guide-index-w: 16rem;
   --leading-fact: 1.45;
 
-  /* Motion knobs; scripts/learn/ reads the fade, next, fold and pulse. */
+  /* Motion knobs; scripts/learn/ reads the fade, next, fold, pulse and count. */
   --dur-switch: 150ms;
   --dur-press: 80ms;
   --dur-verdict: 300ms;
   --dur-check: 250ms;
+  --dur-toggle: 140ms;
+  --dur-pen: 240ms;
+  --dur-cross: 190ms;
+  --dur-settle: 420ms;
   --dur-fade: 150ms;
   --dur-next: 220ms;
   --dur-fold-fade: 120ms;
   --dur-fold: 160ms;
   --dur-pulse: 600ms;
   --dur-bloom: 1.2s;
+  --dur-slide: 260ms;
+  --dur-count: 700ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 /* 2. The shell ------------------------------------------------------------ */
+
+/* The tool's rules, a step lighter than the site's. */
+.page--tool {
+  --standard-border: 1px solid var(--edge-lip);
+}
 
 /* No fixed header to clear; anchors and focus land clear of the bar and the footer. The page is the stage's warm field. */
 :root:has(.page--tool) {
@@ -68,6 +108,8 @@
 body:has(.page--tool) {
   min-height: 100dvh;
   background-color: var(--color-stage);
+  /* Clips motion past the document's end, such as the answer sheet's slides; content always fits inside. */
+  overflow-y: clip;
 }
 
 /* The tool fills the window between the chrome; its panels set their own width. */
@@ -108,7 +150,7 @@ body:has(.page--tool) {
 .tool-bar__inner {
   max-width: var(--page-max);
   margin-inline: auto;
-  padding: var(--bar-pad) var(--gutter);
+  padding: calc(var(--bar-pad) + var(--bar-lift)) var(--gutter) var(--bar-pad);
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   grid-template-areas: "back tools" "switch switch";
@@ -153,8 +195,8 @@ body:has(.page--tool) {
   flex: none;
   width: 0.5em;
   height: 0.5em;
-  border-left: 2.5px solid var(--color-orange-dark);
-  border-bottom: 2.5px solid var(--color-orange-dark);
+  border-left: 2px solid var(--color-orange-dark);
+  border-bottom: 2px solid var(--color-orange-dark);
   transform: rotate(45deg);
   margin-left: 0.15em;
 }
@@ -173,33 +215,61 @@ body:has(.page--tool) {
   grid-area: switch;
 }
 
-/* A segmented control: three links on the chip's fill inside the frame ring, the current one filled. */
+/* A segmented control: three equal segments on a white track with its lip, a thumb in the ink of where you are under the current one. */
 ul.mode-switch__list {
-  display: flex;
-  border: var(--line-w) solid transparent;
+  --seg-pad: 2px;
+  --seg-gap: 0px;
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-auto-columns: 1fr;
+  grid-auto-flow: column;
+  column-gap: var(--seg-gap);
+  padding: var(--seg-pad);
+  border: 2px solid var(--edge);
   border-radius: var(--radius-lg);
-  background-color: var(--color-chip);
-  background-image: linear-gradient(var(--color-chip) 0 0), var(--frame-gradient);
-  background-origin: padding-box, border-box;
-  background-clip: padding-box, border-box;
-  box-shadow: var(--shadow-control);
+  background-color: var(--white);
+  box-shadow: 0 var(--lip) 0 var(--edge-lip);
+}
+
+/* The thumb: one segment wide, slid to the mode the page shows. */
+ul.mode-switch__list::before {
+  content: "";
+  position: absolute;
+  top: var(--seg-pad);
+  bottom: var(--seg-pad);
+  left: var(--seg-pad);
+  z-index: -1;
+  width: calc((100% - 2 * var(--seg-pad) - 2 * var(--seg-gap)) / 3);
+  border-radius: var(--radius-md);
+  background-color: var(--color-current);
+  box-shadow: 0 2px 0 color-mix(in srgb, var(--color-ink) 70%, var(--black));
+  translate: calc(var(--mode-i, 0) * (100% + var(--seg-gap))) 0;
+}
+
+:root[data-learn-mode="cards"] {
+  --mode-i: 1;
+}
+
+:root[data-learn-mode="test"] {
+  --mode-i: 2;
 }
 
 .mode-switch__list > li {
-  flex: 1 1 0;
   display: flex;
 }
 
-/* Its hover wedge is the root's orange, as a chip's is. */
+/* Its hover is the pale wash every quiet control takes. */
 .mode-switch__link {
+  --splash-fill: var(--hover-wash);
   flex: 1;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
   min-height: 2.75rem;
-  padding: 0 var(--space-2);
-  border-radius: calc(var(--radius-lg) - var(--line-w));
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-md);
   background-image: linear-gradient(135deg, var(--splash-fill) calc(var(--splash) - 30%), transparent var(--splash));
   font-weight: var(--weight-semi);
   line-height: var(--leading-tight);
@@ -223,8 +293,7 @@ ul.mode-switch__list {
 :root[data-learn-mode="cards"] .mode-switch__link[data-mode="cards"],
 :root[data-learn-mode="test"] .mode-switch__link[data-mode="test"] {
   --splash: 0%;
-  background-color: var(--color-selected);
-  color: var(--color-selected-ink);
+  color: var(--color-current-ink);
   cursor: default;
 }
 
@@ -362,18 +431,20 @@ ul.mode-switch__list {
   max-width: var(--qcard-w);
 }
 
+/* Every sheet on the stage: white, a hairline edge, lifted on a soft shadow. */
+.skeleton__card, .qcard__face, .test-sheet, .deck::before, .deck::after {
+  border: 1px solid var(--edge);
+  border-radius: var(--radius-card);
+  background-color: var(--white);
+  box-shadow: var(--shadow-sheet);
+}
+
 .skeleton__card {
   min-height: 24rem;
   display: grid;
   place-content: center;
   gap: var(--space-4);
   padding: var(--space-5);
-  border: var(--line-w) solid transparent;
-  border-radius: var(--radius-lg);
-  background-image: linear-gradient(var(--white) 0 0), var(--frame-gradient);
-  background-origin: padding-box, border-box;
-  background-clip: padding-box, border-box;
-  box-shadow: var(--shadow-card);
   text-align: center;
 }
 
@@ -388,21 +459,22 @@ ul.mode-switch__list {
 
 /* 3. Controls ------------------------------------------------------------- */
 
-/* The tool's quiet control: white, a visible edge, and the chip's splash on hover. */
+/* The tool's quiet control: white on a lip of its edge color, the pale wash and a warm edge on hover. */
 .tool-btn, .tool-btn:visited {
-  --splash-fill: var(--color-chip);
+  --splash-fill: var(--hover-wash);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
   min-height: 2.75rem;
   padding: 0 var(--space-4);
-  border: var(--standard-border);
-  border-radius: var(--radius-md);
+  border: 2px solid var(--edge);
+  border-radius: var(--radius-lg);
   background-color: var(--white);
   background-image: linear-gradient(135deg, var(--splash-fill) calc(var(--splash) - 30%), transparent var(--splash));
   background-origin: border-box;
-  box-shadow: var(--shadow-control);
+  --lip-color: var(--edge-lip);
+  box-shadow: 0 var(--lip) 0 var(--lip-color);
   color: var(--color-ink);
   font: inherit;
   font-size: var(--text-lg);
@@ -421,16 +493,39 @@ ul.mode-switch__list {
 
 .tool-btn:hover, .tool-btn:visited:hover, .tool-btn:focus-visible {
   --splash: 130%;
+  --lip-color: var(--hover-lip);
+  border-color: var(--hover-edge);
   color: var(--color-ink);
   text-decoration: none;
 }
 
 .tool-btn:disabled {
   --splash: 0%;
-  border-color: var(--color-ink-lightester);
+  --lip-color: var(--edge);
+  border-color: var(--edge);
   color: var(--color-disabled-ink);
-  box-shadow: none;
   cursor: not-allowed;
+}
+
+/* The tool's primary button: a half step up the ink ramp on a near-black lip, which turns warm as the orange sweeps in. */
+.page--tool .btn, .page--tool .btn:visited {
+  --color-accent: color-mix(in srgb, var(--color-ink-med) 50%, var(--color-ink-light));
+  --lip-color: color-mix(in srgb, var(--color-ink) 70%, var(--black));
+  box-shadow: 0 var(--lip) 0 var(--lip-color);
+}
+
+.page--tool .btn:hover, .page--tool .btn:visited:hover, .page--tool .btn:focus-visible {
+  --lip-color: var(--color-orange-dark);
+}
+
+.page--tool .btn:disabled {
+  --lip-color: var(--color-ink-lightest);
+}
+
+/* A press sinks a control into its lip. */
+.page--tool :is(.btn, .tool-btn):not(:disabled):active {
+  translate: 0 calc(var(--lip) - 1px);
+  box-shadow: 0 1px 0 var(--lip-color);
 }
 
 .tool-btn[hidden] {
@@ -477,50 +572,83 @@ ul.mode-switch__list {
   width: 100%;
 }
 
-/* An internal link inside the tool: ink, a step up the ramp on hover. */
-.ink-link:is(:link, :visited), .answer__guide:is(:link, :visited) {
-  color: var(--color-ink);
-  font-weight: var(--weight-semi);
-  text-decoration: underline;
-  text-decoration-color: var(--color-orange);
-  text-decoration-thickness: 2px;
-  text-underline-offset: 0.2em;
-}
-
-.ink-link:is(:link, :visited):is(:hover, :focus-visible), .answer__guide:is(:link, :visited):is(:hover, :focus-visible) {
-  color: var(--color-ink-hover);
-}
-
-/* Native radios and checkboxes, in the button's ink. */
-.learn-input, .option input, .check input, .side-check input {
+/* Radios and checkboxes, drawn in the outline gray and the pick's orange. */
+:is(.option, .check, .side-check) input {
   flex: none;
+  appearance: none;
   width: 1.25rem;
   height: 1.25rem;
   margin: 0;
-  accent-color: var(--color-accent);
+  border: 2px solid var(--check-edge);
+  border-radius: var(--radius-sm);
+  background: var(--white) no-repeat center / 100%;
+  cursor: pointer;
 }
 
-/* A checkbox drawn as a switch: the knob is a gradient layer, so no pseudo-element is needed. */
+:is(.option, .check, .side-check) input[type="radio"] {
+  border-radius: 50%;
+}
+
+:is(.option, .check, .side-check) input:checked {
+  border-color: var(--color-pick);
+}
+
+/* The dot and the check wait at no size, so a pick can grow them in. */
+:is(.option, .check, .side-check) input[type="radio"] {
+  background-image: radial-gradient(circle closest-side, var(--color-pick) 62.5%, transparent calc(62.5% + 1px));
+  background-size: 0%;
+}
+
+:is(.option, .check, .side-check) input:checked {
+  background-size: 100%;
+}
+
+/* The check is the answer tiles' glyph, knocked out in white. */
+:is(.option, .check, .side-check) input[type="checkbox"] {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 8.5l3.2 3.2L13 4.5' fill='none' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-size: 0%;
+}
+
+:is(.option, .check, .side-check) input[type="checkbox"]:checked {
+  background-color: var(--color-pick);
+  background-size: 100%;
+}
+
+/* The switch's knob position, registered so it can slide. */
+@property --knob {
+  syntax: "<length-percentage>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+/* A checkbox drawn as a switch, in the boxes' gray and orange: the knob is a gradient layer, so no pseudo-element is needed. */
 input[role="switch"] {
+  --knob: 0.75rem;
   flex: none;
   appearance: none;
   width: 2.75rem;
   height: 1.5rem;
   margin: 0;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--check-edge);
   border-radius: var(--radius-pill);
-  background: radial-gradient(circle at 0.75rem 50%, var(--white) 0.5rem, transparent calc(0.5rem + 1px)), var(--color-ink-lightest);
+  background-color: var(--check-edge);
+  background-image: radial-gradient(circle at var(--knob) 50%, var(--white) 0.5rem, transparent calc(0.5rem + 1px));
   cursor: pointer;
 }
 
 input[role="switch"]:checked {
-  border-color: var(--color-accent);
-  background: radial-gradient(circle at calc(100% - 0.75rem) 50%, var(--white) 0.5rem, transparent calc(0.5rem + 1px)), var(--color-accent);
+  --knob: calc(100% - 0.75rem);
+  border-color: var(--color-pick);
+  background-color: var(--color-pick);
 }
 
-input[role="switch"]:disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
+/* In high contrast the browser draws these controls itself. */
+@media (forced-colors: active) {
+  :is(.option, .check, .side-check) input, input[role="switch"] {
+    appearance: auto;
+    width: 1.25rem;
+    height: 1.25rem;
+  }
 }
 
 /* 4. Study Guide ---------------------------------------------------------- */
@@ -596,7 +724,7 @@ input[role="switch"]:disabled {
   align-items: baseline;
   gap: var(--space-2);
   padding: var(--space-2) var(--space-3);
-  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
   background-image: linear-gradient(180deg, var(--accent-line-stops));
   background-size: 0 100%;
   background-repeat: no-repeat;
@@ -609,14 +737,9 @@ input[role="switch"]:disabled {
 }
 
 .guide-index__link:is(:link, :visited):hover {
-  background-color: var(--color-orange-offwhite);
+  background-color: var(--hover-wash);
   color: var(--color-ink);
   text-decoration: none;
-}
-
-.guide-index__link:hover .guide-index__name {
-  text-decoration: underline;
-  text-underline-offset: 0.15em;
 }
 
 /* The topic shown: the accent edge and the chip fill, kept on hover. */
@@ -655,12 +778,18 @@ input[role="switch"]:disabled {
 .guide-topic__title {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: var(--space-3);
+}
+
+/* The topic's emoji a size up, held in a soft lantern glow: on a guide topic's heading and a card's topic chip alike. */
+.guide-topic__title > [aria-hidden="true"], .topic-chip > [aria-hidden="true"] {
+  flex: none;
+  font-size: 1.2em;
+  filter: drop-shadow(0 0 0.3em color-mix(in srgb, var(--glow-hue) 35%, transparent));
 }
 
 .guide-topic__opener {
   font-size: var(--text-lg);
-  color: var(--color-ink-light);
 }
 
 .guide-topic__meta .sep {
@@ -843,10 +972,9 @@ ul.guide-tiles, dl.guide-tiles {
   max-height: 8rem;
 }
 
-/* Previous and next topic: chips with a chevron and the topic's emoji, stacked on a phone. */
+/* Previous and next page: a card each, stacked on a phone, side by side from 768, set off by space alone. */
 .guide-topic__foot {
   padding-top: var(--space-4);
-  border-top: var(--standard-border);
 }
 
 .guide-pager {
@@ -855,23 +983,58 @@ ul.guide-tiles, dl.guide-tiles {
   gap: var(--space-3);
 }
 
-/* A chip, at the pager's size: the chip's fill, shadow and splash, laid out as a row with its chevron. */
-.chip.guide-pager__link, .chip.guide-pager__link:visited {
-  display: inline-flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: var(--space-2);
-  min-height: 2.75rem;
-  padding: var(--space-2) var(--space-4);
+/* A quiet control at card size: the direction in the caption tier over the topic, on a lip. */
+.guide-pager__link, .guide-pager__link:visited {
+  --splash-fill: var(--hover-wash);
+  display: grid;
+  gap: var(--space-1);
+  padding: var(--space-3) var(--space-4);
+  border: 2px solid var(--edge);
+  border-radius: var(--radius-lg);
+  background-color: var(--white);
+  background-image: linear-gradient(135deg, var(--splash-fill) calc(var(--splash) - 30%), transparent var(--splash));
+  background-origin: border-box;
+  --lip-color: var(--edge-lip);
+  box-shadow: 0 var(--lip) 0 var(--lip-color);
+  color: var(--color-ink);
   line-height: var(--leading-tight);
-  text-align: left;
-  white-space: normal;
+  text-decoration: none;
+}
+
+.guide-pager__link:hover, .guide-pager__link:visited:hover, .guide-pager__link:focus-visible {
+  --splash: 130%;
+  --lip-color: var(--hover-lip);
+  border-color: var(--hover-edge);
+  color: var(--color-ink);
+  text-decoration: none;
+}
+
+.guide-pager__link:active {
+  translate: 0 calc(var(--lip) - 1px);
+  box-shadow: 0 1px 0 var(--lip-color);
 }
 
 /* The next link's content sits at its far edge, the way it points. */
-.chip.guide-pager__link--next, .chip.guide-pager__link--next:visited {
-  justify-content: flex-end;
+.guide-pager__link--next {
+  justify-items: end;
   text-align: right;
+}
+
+.guide-pager__dir {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semi);
+  color: var(--color-ink-lightest);
+}
+
+.guide-pager__name {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semi);
 }
 
 /* Two borders turned to point the way the link goes, as on the back link. */
@@ -879,8 +1042,8 @@ ul.guide-tiles, dl.guide-tiles {
   flex: none;
   width: 0.5em;
   height: 0.5em;
-  border-left: 2.5px solid var(--color-orange-dark);
-  border-bottom: 2.5px solid var(--color-orange-dark);
+  border-left: 2px solid var(--color-orange-dark);
+  border-bottom: 2px solid var(--color-orange-dark);
   transform: rotate(45deg);
 }
 
@@ -919,21 +1082,18 @@ ul.guide-tiles, dl.guide-tiles {
 
 /* 5. Question parts ------------------------------------------------------- */
 
-/* The figure frame: the warm field, so a white-bordered sign separates from a white card. */
+/* The figure frame: the image on its plate, the credit beneath. */
 .q-figure {
   display: grid;
-  border: var(--line-w) solid transparent;
-  border-radius: var(--radius-md);
-  background-image: linear-gradient(var(--color-stage) 0 0), var(--frame-gradient);
-  background-origin: padding-box, border-box;
-  background-clip: padding-box, border-box;
-  overflow: clip;
+  gap: var(--space-1);
 }
 
 .q-figure__frame {
   display: grid;
   place-items: center;
   padding: var(--space-2);
+  border-radius: var(--radius-lg);
+  background-color: var(--plate);
 }
 
 .q-figure__img {
@@ -949,8 +1109,6 @@ ul.guide-tiles, dl.guide-tiles {
 }
 
 .q-figure__caption {
-  padding: var(--space-1) var(--space-3);
-  background-color: var(--white);
   font-size: var(--text-sm);
   line-height: var(--leading-tight);
   color: var(--color-ink-lightest);
@@ -971,8 +1129,11 @@ ol.tiles {
   list-style: none;
 }
 
+/* A choice rests on a lip of its edge color; each state recolors the edge and the lip together. */
 .tile {
-  --splash-fill: var(--color-chip);
+  --splash-fill: var(--hover-wash);
+  --tile-edge: var(--edge);
+  --lip-color: var(--edge-lip);
   position: relative;
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
@@ -981,12 +1142,12 @@ ol.tiles {
   width: 100%;
   min-height: 3.5rem;
   padding: var(--space-2) var(--space-3);
-  border: var(--standard-border);
-  border-radius: var(--radius-md);
+  border: 2px solid var(--tile-edge);
+  border-radius: var(--radius-lg);
   background-color: var(--white);
   background-image: linear-gradient(135deg, var(--splash-fill) calc(var(--splash) - 30%), transparent var(--splash));
   background-origin: border-box;
-  box-shadow: var(--shadow-control), 0 0 var(--space-5) var(--glow);
+  box-shadow: 0 var(--lip) 0 var(--lip-color);
   color: var(--color-ink);
   font: inherit;
   font-size: var(--text-base);
@@ -995,8 +1156,27 @@ ol.tiles {
   cursor: pointer;
 }
 
-.tile:not([aria-disabled="true"], .tile--static):hover, .tile:not([aria-disabled="true"]):focus-visible,
-.tile--radio:has(input:focus-visible) {
+/* A press sinks the tile into its lip. */
+.tile:not([aria-disabled="true"], .tile--static):active {
+  translate: 0 calc(var(--lip) - 1px);
+  box-shadow: 0 1px 0 var(--lip-color);
+}
+
+/* Hover lights a choice only where a pointer can rest on it. */
+@media (hover: hover) {
+  .tile:not([aria-disabled="true"], .tile--static):hover {
+    --splash: 130%;
+    --tile-edge: var(--hover-edge);
+    --lip-color: var(--hover-lip);
+  }
+
+  .option:hover, button.nav-cell:hover {
+    --lip-color: var(--hover-lip);
+    border-color: var(--hover-edge);
+  }
+}
+
+.tile:not([aria-disabled="true"]):focus-visible, .tile--radio:has(input:focus-visible) {
   --splash: 130%;
 }
 
@@ -1014,17 +1194,38 @@ ol.tiles {
   cursor: pointer;
 }
 
+/* The key: the choice's letter as a pen draws it (question.js ▸ setKey), in the light ink, in a slot the verdict's glyph can take. */
 .tile__key {
   display: grid;
   place-items: center;
   width: 1.75rem;
   height: 1.75rem;
-  border: 1px solid var(--color-ink-lightest);
-  border-radius: var(--radius-sm);
-  background-color: var(--white);
   font-size: var(--text-sm);
-  font-weight: var(--weight-semi);
+  font-weight: var(--weight-bold);
   color: var(--color-ink-light);
+}
+
+.pen-letter {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* The loop that circles a Mock Test pick, waiting undrawn; its dash and gap never leave a stray dot. */
+.pen-letter__loop {
+  display: none;
+  stroke-width: 1.7;
+  stroke-dasharray: 1 1.01;
+  stroke-dashoffset: 1.005;
+}
+
+.tile--radio .pen-letter__loop {
+  display: inline;
 }
 
 /* Under the choice on a phone, so the label never squeezes the text; its own column from 768. */
@@ -1047,6 +1248,7 @@ ol.tiles {
   grid-template-columns: auto minmax(0, 1fr);
 }
 
+/* Filled in the verdict's ink, the glyph knocked out in white. */
 :is(.qcard--practice, .qcard--review) .tile__verdict:not(:empty) {
   grid-area: auto;
   position: absolute;
@@ -1057,9 +1259,12 @@ ol.tiles {
   place-items: center;
   width: 1.75rem;
   height: 1.75rem;
-  border: 1px solid currentColor;
-  border-radius: var(--radius-sm);
-  background-color: var(--white);
+  border-radius: var(--radius-md);
+  background-color: currentColor;
+}
+
+:is(.qcard--practice, .qcard--review) .tile__verdict .mark {
+  color: var(--white);
 }
 
 :is(.qcard--practice, .qcard--review) .tile__label {
@@ -1071,48 +1276,58 @@ ol.tiles {
   white-space: nowrap;
 }
 
-/* Picked in the Mock Test: the primary button's fill, the keycap inverted; it outranks the hover splash. */
+/* Picked in the Mock Test: the orange of a pick on edge, text and keycap; it outranks the hover splash. */
 .tile.tile--radio:has(input:checked) {
   --splash: 0%;
-  border-color: var(--color-selected);
-  background-color: var(--color-selected);
-  color: var(--color-selected-ink);
+  --tile-edge: var(--color-pick-edge);
+  --lip-color: var(--color-pick);
+  background-color: var(--color-pick-fill);
+  color: var(--color-pick);
+  font-weight: var(--weight-med);
 }
 
+/* A pick circles its letter by hand, both in the pick's orange. */
 .tile--radio:has(input:checked) .tile__key {
-  border-color: var(--white);
-  background-color: var(--white);
-  color: var(--color-selected);
+  color: var(--color-pick);
+}
+
+.tile--radio:has(input:checked) .pen-letter__loop {
+  stroke-dashoffset: 0;
 }
 
 .tile[aria-disabled="true"], .tile--static {
   cursor: default;
 }
 
-/* Answered: the two tiles that matter stay full ink; the rest step back. */
+/* Answered: the two tiles that matter keep their color; the rest step back. */
 .tile[aria-disabled="true"]:not(.tile--right, .tile--wrong), .tile--static:not(.tile--right, .tile--wrong) {
   color: var(--color-ink-light);
-  box-shadow: none;
 }
 
-/* Right: the warm fill and the halo, with a check and a label in the warm ink. */
+/* Right: the green fill, edge and ink, and a check in a filled keycap. */
 .tile--right {
-  --glow: var(--glow-hover);
-  border-color: var(--color-correct-ink);
+  --tile-edge: var(--color-correct-edge);
+  --lip-color: var(--color-correct-edge);
   background-color: var(--color-correct-fill);
+  color: var(--color-correct-ink);
+  font-weight: var(--weight-med);
 }
 
 .tile--right .tile__verdict {
   color: var(--color-correct-ink);
 }
 
-/* Wrong: quiet ink, a cross and a label; the fill stays white. */
+/* Wrong: the same in red, with a cross. */
 .tile--wrong {
-  border-color: var(--color-ink-light);
+  --tile-edge: var(--color-wrong-edge);
+  --lip-color: var(--color-wrong-edge);
+  background-color: var(--color-wrong-fill);
+  color: var(--color-wrong-ink);
+  font-weight: var(--weight-med);
 }
 
 .tile--wrong .tile__verdict {
-  color: var(--color-ink-light);
+  color: var(--color-wrong-ink);
 }
 
 .mark {
@@ -1137,22 +1352,27 @@ ol.tiles {
   color: var(--color-ink-lightest);
 }
 
-.topic-chip {
+/* A card's topic, and review's count, as a small label set like the homepage folder's tab: tracked small caps on a tight line. */
+.topic-chip, .qcard--review .qcard__count {
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
-  font-size: var(--text-sm);
+  font-size: var(--text-base);
   font-weight: var(--weight-semi);
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.06em;
+  line-height: 1;
   color: var(--color-ink-light);
 }
 
 /* 6. Practice Cards ------------------------------------------------------- */
 
-/* The stage and the answer sheet share one cell; the sheet docks at its foot over the card. A test's review does the same. */
+/* The stage and the answer sheet share one cell, the sheet docked at its foot over the card's choices as needed; the cell grows only so far that it never covers the question (scripts/learn/question.js ▸ fitSheet). A test's review does the same. */
 .cards__main, .review {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   grid-template-rows: 1fr;
+  min-height: var(--answer-room, 0px);
 }
 
 .review {
@@ -1164,14 +1384,13 @@ ol.tiles {
   grid-area: 1 / 1;
 }
 
-/* Room under the card for an open sheet, so a choice it covers scrolls clear when focused. */
 .cards__stage, .review__stage {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--space-4);
   min-width: 0;
-  padding-bottom: calc(var(--space-3) + var(--answer-h, 0px));
+  padding-bottom: var(--space-3);
 }
 
 /* Below 1248, where no sidebar shows the filter: what's being practiced, just above the card. */
@@ -1200,11 +1419,28 @@ ol.tiles {
   max-height: calc(100dvh - var(--bar-h) - var(--space-6));
   margin-inline: calc(-1 * var(--gutter));
   padding: var(--space-4) var(--gutter) calc(var(--space-4) + env(safe-area-inset-bottom));
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-  background-color: var(--white);
+  border-top: 2px solid var(--answer-edge);
+  border-radius: var(--radius-card) var(--radius-card) 0 0;
+  background-color: var(--answer-fill);
   box-shadow: 0 -8px 32px -12px color-mix(in srgb, var(--shadow-hue) 35%, transparent);
   overflow-y: auto;
   overscroll-behavior: contain;
+  --answer-fill: var(--white);
+  --answer-edge: var(--edge);
+  --answer-ink: var(--color-ink-med);
+}
+
+/* The verdict tints the whole sheet, the way the tile it names is tinted. */
+.answer--right {
+  --answer-fill: var(--color-correct-fill);
+  --answer-edge: color-mix(in srgb, var(--color-correct-edge) 45%, var(--color-correct-fill));
+  --answer-ink: var(--color-correct-ink);
+}
+
+.answer--wrong {
+  --answer-fill: var(--color-wrong-fill);
+  --answer-edge: color-mix(in srgb, var(--color-wrong-edge) 45%, var(--color-wrong-fill));
+  --answer-ink: var(--color-wrong-ink);
 }
 
 .answer[hidden] {
@@ -1222,22 +1458,65 @@ ol.tiles {
   gap: var(--space-3);
 }
 
-/* The verdict: a glyph, then the words, naming the right answer. */
+/* The verdict: a badge, the word in the verdict's ink, then the right answer beneath it. */
 .answer__verdict {
   display: flex;
-  align-items: flex-start;
-  gap: var(--space-2);
-  font-size: var(--text-lg);
-  font-weight: var(--weight-semi);
+  align-items: center;
+  gap: var(--space-3);
   line-height: var(--leading-tight);
 }
 
-.answer__verdict .mark {
-  color: var(--color-ink-light);
+/* The verdict's mark, drawn straight onto the sheet in its ink. */
+.answer__badge {
+  flex: none;
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  color: var(--answer-ink);
 }
 
-.answer--right .answer__verdict .mark {
-  color: var(--color-correct-ink);
+/* Positioned, so it paints above the glow behind it. */
+.pen {
+  position: relative;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 3.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* The sparkles are light: the large one in the lantern's yellow, the small one in the saturated orange. Each turns about its own center. */
+.pen__spark {
+  fill: var(--color-yellow);
+  stroke: none;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.pen__spark--small {
+  fill: var(--color-orange);
+}
+
+.answer__words {
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.answer__head {
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
+  color: var(--answer-ink);
+}
+
+.answer__rest {
+  font-size: var(--text-base);
+  font-weight: var(--weight-semi);
 }
 
 .answer__why {
@@ -1295,19 +1574,14 @@ ol.tiles {
   align-items: center;
   gap: var(--space-2);
   padding: var(--space-2) var(--space-3);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   font-weight: var(--weight-semi);
   line-height: var(--leading-tight);
   cursor: pointer;
 }
 
 .side-check:hover {
-  background-color: var(--color-orange-offwhite);
-}
-
-.side-check:hover .side-check__name {
-  text-decoration: underline;
-  text-underline-offset: 0.15em;
+  background-color: var(--hover-wash);
 }
 
 .side-check:has(input:not(:checked)) .side-check__name {
@@ -1333,11 +1607,14 @@ ol.tiles {
 }
 
 .cards__side .filter__error {
-  padding: var(--space-2) var(--space-3) 0;
+  padding-inline: var(--space-3);
 }
 
-/* The card sits on a stack of two sheets that never thins, so the deck reads as endless. */
+/* The card lies straight on a loose pile of up to two sheets, each at its own slight tilt, which scripts/learn/cards.js deals afresh. */
 .deck {
+  --tilt-near: 0.9deg;
+  --tilt-far: -1.7deg;
+  --pile-k: 0.55;
   position: relative;
   isolation: isolate;
   display: grid;
@@ -1349,48 +1626,67 @@ ol.tiles {
   grid-area: 1 / 1;
 }
 
-.deck::before, .deck::after {
-  content: "";
-  grid-area: 1 / 1;
-  z-index: -1;
-  border: var(--line-w) solid transparent;
-  border-radius: var(--radius-lg);
-  background-image: linear-gradient(var(--white) 0 0), var(--frame-gradient);
-  background-origin: padding-box, border-box;
-  background-clip: padding-box, border-box;
-  box-shadow: var(--shadow-card);
+/* A tossed card leaves over the one coming up. */
+.qcard--leaving {
+  z-index: 1;
 }
 
+/* The pile's height: the card's, which scripts/learn/cards.js eases from one card to the next during a toss. Registered, so it can animate. */
+@property --pile-h {
+  syntax: "<length-percentage>";
+  inherits: true;
+  initial-value: 100%;
+}
+
+/* Each sheet sits out of the flow and turns about its own center; --pile-k gentles the turn on a phone, inside the gutter. */
+.deck::before, .deck::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: var(--pile-h);
+  z-index: -1;
+  box-shadow: 0 1px 3px color-mix(in srgb, var(--shadow-hue) 10%, transparent);
+}
+
+/* The far sheet, a step warmer. */
 .deck::before {
-  translate: 0 0.75rem;
-  scale: 0.94 1;
-  opacity: 0.7;
+  --sheet-fill: color-mix(in srgb, var(--color-stage) 50%, var(--white));
+  rotate: calc(var(--tilt-far) * var(--pile-k));
 }
 
 .deck::after {
-  translate: 0 0.375rem;
-  scale: 0.97 1;
+  rotate: calc(var(--tilt-near) * var(--pile-k));
+}
+
+/* The pile thins to the cards left: one sheet for one, none under the last card or the end card. */
+.deck[data-left="1"]::before, .deck[data-left="0"]::before, .deck[data-left="0"]::after {
+  opacity: 0;
 }
 
 .qcard {
+  --plate: var(--color-stage);
   width: 100%;
   min-width: 0;
 }
 
-/* The card's sheet: the frame ring, the card shadow, and its own white fill. */
 .qcard__face {
+  /* The face's side padding, which the dashed rule reaches back across. */
+  --face-x: var(--space-4);
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   align-content: start;
   gap: var(--space-4);
   min-width: 0;
-  padding: var(--space-4);
-  border: var(--line-w) solid transparent;
-  border-radius: var(--radius-lg);
-  background-image: linear-gradient(var(--white) 0 0), var(--frame-gradient);
+  padding: var(--space-4) var(--face-x);
+}
+
+/* Practice cards, the end card, review and the pile beneath draw their hairline in the site's frame gradient: the fill over the padding box, the gradient showing only in the border. */
+:is(.qcard--practice, .qcard--note, .qcard--review) .qcard__face, .deck::before, .deck::after {
+  border-color: transparent;
+  background-image: linear-gradient(var(--sheet-fill, var(--white)) 0 0), var(--frame-gradient);
   background-origin: padding-box, border-box;
   background-clip: padding-box, border-box;
-  box-shadow: var(--shadow-card);
+  background-repeat: no-repeat;
 }
 
 .qcard__top {
@@ -1414,9 +1710,35 @@ ol.tiles {
   display: none;
 }
 
-/* A practice or review card's top row holds no control, so it takes no control's height. */
+/* A practice or review card reads as an index card: a small label, the question as its title on a dashed rule, then the choices. A figure's place is set per width below. */
+:is(.qcard--practice, .qcard--review) .qcard__face {
+  grid-template-areas: "top" "stem" "rule" "tiles";
+}
+
+/* The label holds no control, so it takes no control's height; it rides high in the padding, level with the space under the last choice, a little apart from the title. */
 :is(.qcard--practice, .qcard--review) .qcard__top {
+  grid-area: top;
   min-height: 0;
+  margin: calc(-1 * (var(--space-2) + 2px)) 0 calc(var(--space-3) + 2px - var(--space-4));
+}
+
+:is(.qcard--practice, .qcard--review) .qcard__stem {
+  grid-area: stem;
+}
+
+:is(.qcard--practice, .qcard--review) .tiles {
+  grid-area: tiles;
+}
+
+/* The rule: edge to edge in the frame's warm gradient, dashed, a step closer to the title than to the choices. */
+:is(.qcard--practice, .qcard--review) .qcard__face::after {
+  content: "";
+  grid-area: rule;
+  height: 2px;
+  margin: calc(var(--space-3) - var(--space-4)) calc(-1 * var(--face-x)) 0;
+  background: linear-gradient(90deg, var(--frame-from), var(--frame-to));
+  -webkit-mask: repeating-linear-gradient(90deg, var(--black) 0 6px, transparent 6px 10px);
+  mask: repeating-linear-gradient(90deg, var(--black) 0 6px, transparent 6px 10px);
 }
 
 /* The end card and the empty missed deck. */
@@ -1458,10 +1780,10 @@ ol.tiles {
   color: var(--color-ink-lightest);
 }
 
-/* Once a card is answered, or on the end card, the keys fade out with the spent choices. */
+/* Once a card is answered, or on the end card, the keys fade out with the spent choices, then give up their room. */
 .cards__stage--quiet .shortcuts {
+  display: none;
   opacity: 0;
-  visibility: hidden;
 }
 
 kbd {
@@ -1566,13 +1888,28 @@ ul.check-list {
   cursor: pointer;
 }
 
+/* A status line, empty until no topic is left checked. */
 .filter__error {
+  clear: both;
   font-weight: var(--weight-semi);
-  color: var(--color-orange-dark);
+  color: var(--color-wrong-ink);
 }
 
-.filter__error[hidden] {
-  display: none;
+.filter__error:not(:empty) {
+  display: flex;
+  gap: var(--space-2);
+  padding-top: var(--space-2);
+}
+
+/* An error leads with a filled circle in its red, the "!" knocked out, centered on the first line. */
+.filter__error:not(:empty)::before {
+  content: "";
+  flex: none;
+  width: 1.125em;
+  height: 1.125em;
+  margin-top: calc((1lh - 1.125em) / 2);
+  background-color: currentColor;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M8 1a7 7 0 1 1 0 14A7 7 0 0 1 8 1zM7.1 4.9a.9.9 0 0 1 1.8 0v3.4a.9.9 0 0 1-1.8 0zM8 10.4a1 1 0 1 1 0 2a1 1 0 0 1 0-2z'/%3E%3C/svg%3E") center / contain no-repeat;
 }
 
 /* 7. Mock Test ------------------------------------------------------------ */
@@ -1584,12 +1921,6 @@ ul.check-list {
   width: 100%;
   max-width: var(--qcard-w);
   padding: var(--space-5) var(--space-4);
-  border: var(--line-w) solid transparent;
-  border-radius: var(--radius-lg);
-  background-image: linear-gradient(var(--white) 0 0), var(--frame-gradient);
-  background-origin: padding-box, border-box;
-  background-clip: padding-box, border-box;
-  box-shadow: var(--shadow-card);
 }
 
 .test-sheet__lede {
@@ -1604,13 +1935,13 @@ ul.check-list {
   font-size: var(--text-sm);
 }
 
-/* A running test's answered share: a thin line on a faint track, the card's width, above it. */
+/* A running test's answered share: a pill on a faint track, the card's width, above it, its fill catching a highlight. */
 .testrun__progress {
   width: 100%;
   max-width: var(--qcard-w);
-  height: var(--line-w);
+  height: 0.625rem;
   border-radius: var(--radius-pill);
-  background-color: color-mix(in srgb, var(--color-ink) 10%, transparent);
+  background-color: color-mix(in srgb, var(--color-ink) 9%, transparent);
 }
 
 .testrun__progress > span {
@@ -1618,7 +1949,11 @@ ul.check-list {
   height: 100%;
   inline-size: 0;
   border-radius: inherit;
-  background-image: linear-gradient(90deg, var(--accent-line-stops));
+  background-color: var(--color-orange-lit);
+  background-image: linear-gradient(color-mix(in srgb, var(--white) 35%, transparent) 0 0);
+  background-size: calc(100% - 0.5rem) 2px;
+  background-position: 0.25rem 2px;
+  background-repeat: no-repeat;
 }
 
 .option-group {
@@ -1641,22 +1976,32 @@ ul.check-list {
   gap: var(--space-3);
 }
 
+/* A choice of setting: a small tile on its lip, picked in orange like a test choice. */
 .option {
   display: inline-flex;
   align-items: center;
   gap: var(--space-3);
   min-height: 2.75rem;
   padding: 0 var(--space-4) 0 var(--space-3);
-  border: var(--standard-border);
-  border-radius: var(--radius-md);
+  border: 2px solid var(--edge);
+  border-radius: var(--radius-lg);
   background-color: var(--white);
+  --lip-color: var(--edge-lip);
+  box-shadow: 0 var(--lip) 0 var(--lip-color);
   font-weight: var(--weight-semi);
   cursor: pointer;
 }
 
 .option:has(input:checked) {
-  border-color: var(--color-accent);
-  box-shadow: inset 0 0 0 1px var(--color-accent);
+  --lip-color: var(--color-pick);
+  border-color: var(--color-pick-edge);
+  background-color: var(--color-pick-fill);
+  color: var(--color-pick);
+}
+
+.option:has(input:focus-visible) {
+  outline: var(--focus-ring);
+  outline-offset: var(--focus-offset);
 }
 
 /* The running test's card: no stack beneath it. */
@@ -1672,9 +2017,10 @@ ul.check-list {
   min-width: 0;
 }
 
-/* The navigator as a sidebar: inset to the title, five numbers a row so 40 fit a laptop's window, with room on the right for the current one to float. */
+/* The navigator as a sidebar: inset to the title, five numbers a row so 40 fit a laptop's window, with room on the right for the current one to float and below for Submit's lip. */
 .testrun__side {
   padding-right: var(--space-2);
+  padding-bottom: var(--lip);
 }
 
 .testrun__side > :not(.side-title) {
@@ -1682,7 +2028,7 @@ ul.check-list {
 }
 
 .testrun__summary {
-  margin-bottom: var(--space-3);
+  margin-bottom: var(--space-2);
   font-size: var(--text-sm);
   color: var(--color-ink-light);
 }
@@ -1697,7 +2043,7 @@ ul.check-list {
 }
 
 .testrun__side .nav-legend {
-  margin-block: var(--space-4);
+  margin-block: var(--space-3);
 }
 
 .testrun__side .btn--block {
@@ -1754,9 +2100,10 @@ ul.check-list {
 }
 
 .flag-btn[aria-pressed="true"] {
-  border-color: var(--color-orange-dark);
-  background-color: var(--color-orange-nearwhite);
-  color: var(--color-orange-dark);
+  --lip-color: var(--color-pick);
+  border-color: var(--color-pick-edge);
+  background-color: var(--color-pick-fill);
+  color: var(--color-pick);
 }
 
 .flag-btn[aria-pressed="true"] .flag-btn__glyph {
@@ -1770,7 +2117,7 @@ ul.check-list {
   gap: var(--space-2);
   min-height: var(--bar-control);
   padding: 0 var(--space-3);
-  border: var(--standard-border);
+  border: 2px solid var(--edge);
   border-radius: var(--radius-pill);
   background-color: var(--white);
   font-weight: var(--weight-semi);
@@ -1782,10 +2129,24 @@ ul.check-list {
   display: none;
 }
 
+/* The time holds the width of its widest reading, its seconds right-aligned. */
+.timer__time {
+  display: inline-block;
+  min-width: 5ch;
+  text-align: right;
+}
+
 .timer--warn {
-  border-color: var(--color-orange-dark);
-  background-color: var(--color-orange-nearwhite);
-  color: var(--color-orange-dark);
+  border-color: var(--color-pick-edge);
+  background-color: var(--color-pick-fill);
+  color: var(--color-pick);
+}
+
+/* The last minute: the red of a miss, still calm. */
+.timer--urgent {
+  border-color: color-mix(in srgb, var(--color-wrong-edge) 60%, var(--color-wrong-fill));
+  background-color: var(--color-wrong-fill);
+  color: var(--color-wrong-ink);
 }
 
 .tool-bar__questions[hidden] {
@@ -1800,17 +2161,18 @@ ul.check-list {
   max-width: var(--qcard-w);
 }
 
+/* The ring beside the verdict, its line beneath on a phone; from 768 the line joins the verdict beside the ring. */
 .results__score {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
-  grid-template-areas: "verdict verdict" "pct line";
+  grid-template-areas: "pct verdict" "line line";
   align-items: center;
-  gap: var(--space-2) var(--space-5);
+  gap: var(--space-3) var(--space-4);
 }
 
 .results__verdict {
   grid-area: verdict;
-  font-size: var(--text-3xl);
+  font-size: var(--text-2xl);
   font-weight: var(--weight-bold);
   line-height: var(--leading-tight);
   letter-spacing: -0.01em;
@@ -1818,15 +2180,28 @@ ul.check-list {
 }
 
 .results--passed .results__verdict {
-  color: var(--color-orange-dark);
+  color: var(--color-correct-ink);
 }
 
-/* The score, with the lantern's bloom behind it at an A. */
+/* Registered so the ring can fill as the score counts up. */
+@property --score {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+/* The score in the ring's middle, with the lantern's bloom behind it at an A. */
 .results__pct {
+  --ring-track: color-mix(in srgb, var(--color-ink) 9%, transparent);
+  --ring-needed: color-mix(in srgb, var(--color-ink) 20%, transparent);
   grid-area: pct;
   position: relative;
   isolation: isolate;
-  font-size: var(--text-5xl);
+  display: grid;
+  place-items: center;
+  width: 5.5rem;
+  aspect-ratio: 1;
+  font-size: var(--text-xl);
   font-weight: var(--weight-bold);
   line-height: 1;
   letter-spacing: -0.02em;
@@ -1834,10 +2209,29 @@ ul.check-list {
   color: var(--color-ink-med);
 }
 
+.results--passed .results__pct {
+  --ring-fill: var(--color-correct-edge);
+}
+
+.results__pct::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: 50%;
+  /* The pass mark is a notch in the sheet's white, and the track runs a step darker up to it. */
+  background:
+    conic-gradient(transparent 0 calc(var(--pass) * 1% - 0.6%), var(--white) 0 calc(var(--pass) * 1% + 0.6%), transparent 0),
+    conic-gradient(var(--ring-fill, var(--color-orange-lit)) 0 calc(var(--score) * 1%), transparent 0),
+    conic-gradient(var(--ring-needed) 0 calc(var(--pass) * 1%), var(--ring-track) 0);
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 0.625rem), var(--black) calc(100% - 0.625rem + 1px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 0.625rem), var(--black) calc(100% - 0.625rem + 1px));
+}
+
 .results--a .results__pct::before {
   content: "";
   position: absolute;
-  inset: -60% -45%;
+  inset: -45%;
   z-index: -1;
   border-radius: 50%;
   background: radial-gradient(closest-side, color-mix(in srgb, var(--glow-hue) 55%, transparent), transparent);
@@ -1866,7 +2260,7 @@ ul.check-list {
   line-height: var(--leading-tight);
 }
 
-/* Name and count, then pips and links, on a phone; one grid line from 768. */
+/* Name and count, then pips and links, on a phone; from 768 the pips sit under the name, the count and links beside both. */
 .topic-scores__row {
   display: grid;
   gap: var(--space-2);
@@ -1889,6 +2283,13 @@ ul.check-list {
   font-weight: var(--weight-semi);
 }
 
+/* The emoji at a fixed width, which the pips beneath indent by. */
+.topic-scores__name > [aria-hidden] {
+  flex: none;
+  width: 1.4em;
+  text-align: center;
+}
+
 .topic-scores__links {
   grid-area: links;
   display: flex;
@@ -1898,6 +2299,7 @@ ul.check-list {
 
 .topic-scores .pips {
   grid-area: pips;
+  margin-left: calc(1.4em + var(--space-2));
 }
 
 .topic-scores__row--weak .topic-scores__count {
@@ -1910,7 +2312,7 @@ ul.check-list {
   font-variant-numeric: tabular-nums;
 }
 
-/* One pip per drawn question, filled where it was right. Decoration beside the count. */
+/* One pip per drawn question, filled where it was right. Decoration under the name; the count says it in words. */
 .pips {
   display: inline-flex;
   gap: 3px;
@@ -1919,14 +2321,12 @@ ul.check-list {
 .pip {
   width: 0.875rem;
   height: 0.5rem;
-  border-radius: var(--radius-sm);
-  background-color: var(--color-ink-lightester);
-  opacity: 0.35;
+  border-radius: var(--radius-pill);
+  background-color: color-mix(in srgb, var(--color-ink) 12%, transparent);
 }
 
 .pip--on {
-  background-image: linear-gradient(90deg, var(--accent-line-stops));
-  opacity: 1;
+  background-color: var(--color-correct-edge);
 }
 
 .tile--static {
@@ -1946,9 +2346,11 @@ ol.nav-grid {
   place-items: center;
   width: 100%;
   min-height: 2.75rem;
-  border: var(--standard-border);
+  border: 2px solid var(--edge);
   border-radius: var(--radius-md);
   background-color: var(--white);
+  --lip-color: var(--edge-lip);
+  box-shadow: 0 2px 0 var(--lip-color);
   color: var(--color-ink);
   font: inherit;
   font-weight: var(--weight-semi);
@@ -1956,25 +2358,26 @@ ol.nav-grid {
   cursor: pointer;
 }
 
-.nav-cell--answered {
-  border-color: var(--color-selected);
-  background-color: var(--color-selected);
-  color: var(--color-selected-ink);
+.nav-cell--answered, button.nav-cell--answered:hover {
+  --lip-color: var(--color-ink);
+  border-color: var(--color-current);
+  background-color: var(--color-current);
+  color: var(--color-current-ink);
 }
 
 /* The flag: a corner tab in the lit orange; a white hairline parts it from an answered cell's fill. */
 .nav-cell--answered.nav-cell--flagged::before, .nav-cell--flagged::after {
   content: "";
   position: absolute;
-  top: -1px;
-  right: -1px;
+  top: -2px;
+  right: -2px;
   aspect-ratio: 1;
   border-top-right-radius: var(--radius-md);
   clip-path: polygon(0 0, 100% 0, 100% 100%);
 }
 
 .nav-cell--answered.nav-cell--flagged::before {
-  width: calc(45% + 1.5px);
+  width: calc(45% + 2.5px);
   background-color: var(--white);
 }
 
@@ -1993,7 +2396,7 @@ ol.nav-grid {
 ul.nav-legend {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-2) var(--space-5);
+  gap: var(--space-1) var(--space-5);
   font-size: var(--text-sm);
   color: var(--color-ink-light);
 }
@@ -2005,8 +2408,8 @@ ul.nav-legend {
 }
 
 .nav-legend .nav-cell {
-  width: 1.75rem;
-  min-height: 1.75rem;
+  width: 1.5rem;
+  min-height: 1.5rem;
   font-size: var(--text-sm);
   cursor: default;
 }
@@ -2070,7 +2473,7 @@ ul.nav-legend {
   margin: auto 0 0;
   padding: var(--space-5) var(--gutter) calc(var(--space-5) + env(safe-area-inset-bottom));
   border: 0;
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  border-radius: var(--radius-card) var(--radius-card) 0 0;
   background-color: var(--white);
   color: var(--color-text);
   box-shadow: 0 -8px 32px -12px color-mix(in srgb, var(--shadow-hue) 35%, transparent);
@@ -2121,7 +2524,7 @@ ul.nav-legend {
 }
 
 .sheet__close:hover {
-  background-color: var(--color-yellow-nearwhite);
+  background-color: var(--hover-wash);
   color: var(--color-ink);
 }
 
@@ -2153,7 +2556,7 @@ ul.nav-legend {
   }
 
   .qcard--media:is(.qcard--practice, .qcard--review) .qcard__face {
-    grid-template-areas: "top top" "figure stem" "tiles tiles";
+    grid-template-areas: "top top" "figure stem" "rule rule" "tiles tiles";
   }
 
   .qcard--media.qcard--test .qcard__fieldset {
@@ -2171,7 +2574,7 @@ ul.nav-legend {
   .qcard--media .tiles { grid-area: tiles; }
 
   .qcard .q-figure__frame {
-    padding: var(--space-1);
+    padding: var(--space-2);
   }
 
   .qcard .q-figure__caption {
@@ -2181,9 +2584,14 @@ ul.nav-legend {
 
 @media (min-width: 768px) {
   :root {
-    --bar-h: 3.25rem;
+    --bar-h: 3.4375rem;
     --bar-pad: 3px;
     --bar-control: 2.75rem;
+  }
+
+  /* The pile at its full spread, with room either side of the card. */
+  .deck {
+    --pile-k: 1;
   }
 
   /* One row, the switch centered between two equal sides that wrap under enlarged text. */
@@ -2211,12 +2619,18 @@ ul.nav-legend {
     padding-inline: var(--space-4);
   }
 
+  /* Air between the segments, and a step more around the thumb. */
+  ul.mode-switch__list {
+    --seg-pad: 3px;
+    --seg-gap: var(--space-1);
+  }
+
   .panel--guide {
     padding-top: var(--space-7);
   }
 
   .panel--test {
-    padding-block: var(--space-5) var(--space-2);
+    padding-block: var(--space-4) var(--space-2);
   }
 
   .panel--cards {
@@ -2234,18 +2648,19 @@ ul.nav-legend {
     grid-template-columns: minmax(0, 1fr) minmax(0, 15rem);
     column-gap: var(--space-5);
     padding: var(--space-4) var(--space-5);
-    border: var(--line-w) solid transparent;
-    border-radius: var(--radius-lg);
-    background-image: linear-gradient(var(--white) 0 0), var(--frame-gradient);
-    background-origin: padding-box, border-box;
-    background-clip: padding-box, border-box;
-    box-shadow: var(--shadow-card);
+    border: 2px solid var(--answer-edge);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-sheet);
   }
 
-  :is(.cards__main, .review):has(.qcard--media) .answer,
-  .testrun__main:has(.qcard--media) .testrun__progress,
-  .cards__stage:has(.qcard--media) .cards__practicing {
-    max-width: var(--qcard-w-media);
+  /* The sheet keeps the right answer for assistive tech alone while the card's green tile shows it, and spells it out when it covers that tile. */
+  .answer:not(.answer--covering) .answer__rest {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
 
   /* Two buttons share the 15rem column, a tier down. */
@@ -2298,7 +2713,8 @@ ul.nav-legend {
   }
 
   .qcard__face, .test-sheet {
-    padding: var(--space-5) var(--space-6);
+    --face-x: var(--space-6);
+    padding: var(--space-5) var(--face-x);
   }
 
   .test-sheet {
@@ -2332,19 +2748,16 @@ ul.nav-legend {
     padding: var(--space-3);
   }
 
-  /* With a figure the card widens to two columns; a test card's live in its fieldset, so its face keeps one. */
-  .deck:has(.qcard--media), .qcard--media:is(.qcard--test, .qcard--review) {
-    max-width: var(--qcard-w-media);
-  }
-
+  /* With a figure the card takes two columns; a test card's live in its fieldset, so its face keeps one. */
   .qcard--media:is(.qcard--practice, .qcard--review) .qcard__face, .qcard--media.qcard--test .qcard__fieldset {
     grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
     column-gap: var(--space-6);
   }
 
+  /* The question titles the whole card over its rule; the figure sits beside the choices beneath. */
   .qcard--media:is(.qcard--practice, .qcard--review) .qcard__face {
-    grid-template-areas: "top top" "figure stem" "figure tiles";
-    grid-template-rows: auto auto 1fr;
+    grid-template-areas: "top top" "stem stem" "rule rule" "figure tiles";
+    grid-template-rows: auto auto auto 1fr;
   }
 
   .qcard--media.qcard--test .qcard__fieldset {
@@ -2362,10 +2775,6 @@ ul.nav-legend {
     width: 100%;
     max-width: var(--qcard-w);
     text-align: center;
-  }
-
-  .deck:has(.qcard--media) + .shortcuts {
-    max-width: var(--qcard-w-media);
   }
 
   .qcard__questions {
@@ -2401,23 +2810,31 @@ ul.nav-legend {
     flex: 1 1 0;
   }
 
+  .results__score {
+    grid-template-areas: "pct verdict" "pct line";
+    column-gap: var(--space-5);
+  }
+
   .results__verdict {
+    align-self: end;
     font-size: var(--text-4xl);
   }
 
   .results__pct {
-    font-size: var(--text-6xl);
+    width: 8rem;
+    font-size: var(--text-3xl);
   }
 
   .results__line {
+    align-self: start;
     font-size: var(--text-lg);
   }
 
   .topic-scores__row {
-    grid-template-columns: minmax(0, 1fr) auto auto auto;
-    grid-template-areas: "name pips count links";
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    grid-template-areas: "name count links" "pips count links";
     align-items: center;
-    column-gap: var(--space-3);
+    gap: var(--space-1) var(--space-4);
   }
 
   .topic-scores__line {
@@ -2428,14 +2845,8 @@ ul.nav-legend {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .guide-pager__link, .guide-pager__link:visited {
-    justify-self: start;
-    max-width: 100%;
-  }
-
   .guide-pager__link--next, .guide-pager__link--next:visited {
     grid-column: 2;
-    justify-self: end;
   }
 
   .guide-next__actions {
@@ -2462,7 +2873,7 @@ ul.nav-legend {
     max-width: 32rem;
     margin: auto;
     padding: var(--space-6);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-card);
     box-shadow: 0 24px 48px -16px color-mix(in srgb, var(--shadow-hue) 35%, transparent);
   }
 
@@ -2475,7 +2886,7 @@ ul.nav-legend {
 
 @media (min-width: 1248px) {
   :root {
-    --bar-h: 4rem;
+    --bar-h: 4.1875rem;
     --bar-pad: 0.375rem;
     --foot-h: 2.5rem;
   }
@@ -2518,7 +2929,7 @@ ul.nav-legend {
   .tool-bar__site {
     display: block;
     align-self: stretch;
-    margin-block: calc(-1 * var(--bar-pad));
+    margin-block: calc(-1 * (var(--bar-pad) + var(--bar-lift))) calc(-1 * var(--bar-pad));
   }
 
   .tool-bar .site-nav__list {
@@ -2562,12 +2973,12 @@ ul.nav-legend {
     column-gap: var(--space-8);
   }
 
-  /* In the guide's column the figure takes a third, and the stem beside it a tier down. */
+  /* In the guide's column the figure takes a third, and a test's stem beside it a tier down. */
   .qcard--media.qcard--practice .qcard__face, .qcard--media.qcard--test .qcard__fieldset {
     grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
   }
 
-  .qcard--media:is(.qcard--practice, .qcard--test) .qcard__stem {
+  .qcard--media.qcard--test .qcard__stem {
     font-size: var(--text-lg);
   }
 
@@ -2611,27 +3022,44 @@ ul.nav-legend {
 /* 10. Motion -------------------------------------------------------------- */
 
 /* A mode switch crossfades where View Transitions exist; the shell skips it under reduced motion. */
-::view-transition-old(root), ::view-transition-new(root) {
+::view-transition-group(*), ::view-transition-old(root), ::view-transition-new(root) {
   animation-duration: var(--dur-switch);
+}
+
+/* The switch sits out the crossfade; its live thumb slides. */
+.mode-switch {
+  view-transition-name: mode-switch;
+}
+
+::view-transition-old(mode-switch) {
+  display: none;
+}
+
+::view-transition-new(mode-switch) {
+  animation: none;
 }
 
 /* Color fades stay outside the motion query. */
 .tile {
-  transition: --glow var(--dur-verdict) ease-out, background-color var(--dur-verdict) ease-out,
-    border-color var(--dur-verdict) ease-out, color var(--dur-verdict) ease-out;
+  transition: background-color var(--dur-verdict) ease-out, border-color var(--dur-verdict) ease-out,
+    color var(--dur-verdict) ease-out, box-shadow var(--dur-verdict) ease-out;
 }
 
 .answer:not([hidden]) {
   animation: answer-fade var(--dur-fade) ease-out;
 }
 
-/* Hidden only once the fade ends; shown again at once. */
-.shortcuts {
-  transition: opacity var(--dur-fold-fade) ease-out, visibility 0s;
+:is(.option, .check, .side-check) input, input[role="switch"], .side-check__name {
+  transition: background-color var(--dur-toggle) ease-out, border-color var(--dur-toggle) ease-out, color var(--dur-toggle) ease-out;
 }
 
+.deck::before, .deck::after {
+  transition: opacity var(--dur-next) ease-out;
+}
+
+/* Gone only once the fade ends; shown again at once. */
 .cards__stage--quiet .shortcuts {
-  transition: opacity var(--dur-fold-fade) ease-out, visibility 0s linear var(--dur-fold-fade);
+  transition: opacity var(--dur-fold-fade) ease-out, display var(--dur-fold-fade) allow-discrete;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -2639,22 +3067,85 @@ ul.nav-legend {
     transition: box-shadow 200ms ease-out;
   }
 
+  ul.mode-switch__list::before {
+    transition: translate var(--dur-slide) var(--ease-out);
+  }
+
+  .mode-switch__link {
+    transition: --splash 160ms ease-out, color 160ms ease-out;
+  }
+
   .tile {
-    transition: --splash 160ms ease-out, --glow var(--dur-verdict) ease-out,
-      background-color var(--dur-verdict) ease-out, border-color var(--dur-verdict) ease-out,
-      color var(--dur-verdict) ease-out, scale var(--dur-press) ease-out;
+    transition: --splash 160ms ease-out, background-color var(--dur-verdict) ease-out,
+      border-color 160ms ease-out, color var(--dur-verdict) ease-out,
+      box-shadow 160ms ease-out, translate var(--dur-press) ease-out;
   }
 
-  .tile:not([aria-disabled="true"], .tile--static):active {
-    scale: 0.98;
+  .tool-btn, .guide-pager__link {
+    transition: --splash 160ms ease-out, background-color 120ms ease-out, border-color 160ms ease-out, color 70ms ease-out,
+      translate var(--dur-press) ease-out, box-shadow var(--dur-press) ease-out;
   }
 
-  .tool-btn, .mode-switch__link {
-    transition: --splash 160ms ease-out, background-color 120ms ease-out, color 70ms ease-out;
+  /* The base .btn transition, plus the press and the lip warming with the sweep. */
+  .page--tool .btn {
+    transition: --splash 160ms ease-out, background-color 120ms ease-out, color 70ms ease-out,
+      --glow 160ms ease-out, translate var(--dur-press) ease-out, box-shadow 160ms ease-out;
+  }
+
+  .option, .nav-cell {
+    transition: border-color 120ms ease-out, background-color 120ms ease-out, box-shadow 120ms ease-out;
+  }
+
+  /* A box or radio squeezes under a press; its check or dot springs in on a pick and drops away quickly. */
+  :is(.option, .check, .side-check) input {
+    transition: background-color var(--dur-toggle) ease-out, border-color var(--dur-toggle) ease-out,
+      background-size 100ms ease-in, scale var(--dur-press) ease-out;
+  }
+
+  :is(.option, .check, .side-check) input:checked {
+    transition: background-color var(--dur-toggle) ease-out, border-color var(--dur-toggle) ease-out,
+      background-size var(--dur-check) var(--ease-spring), scale var(--dur-check) var(--ease-spring);
+  }
+
+  :is(.option, .check, .side-check):active input {
+    scale: 0.85;
+  }
+
+  /* The knob slides across as the track fills. */
+  input[role="switch"] {
+    transition: --knob var(--dur-check) var(--ease-out), background-color var(--dur-toggle) ease-out,
+      border-color var(--dur-toggle) ease-out;
   }
 
   .testrun__progress > span {
-    transition: inline-size 240ms ease-out;
+    transition: inline-size 400ms var(--ease-out);
+  }
+
+  /* The pile settles into its new tilts as a card comes off it, and a sheet it runs out of fades. */
+  .deck::before, .deck::after {
+    transition: rotate var(--dur-settle) var(--ease-out), opacity var(--dur-next) ease-out;
+  }
+
+  /* The answer moment on a practice card: the right tile pops, a wrong pick shakes once, the keycap's glyph springs in. */
+  .qcard--practice .tile--right {
+    animation: tile-pop 360ms var(--ease-spring);
+  }
+
+  .qcard--practice .tile--wrong {
+    animation: tile-shake 360ms ease-out;
+  }
+
+  .qcard--practice .tile__verdict:not(:empty) {
+    animation: key-pop 320ms var(--ease-spring);
+  }
+
+  /* A pick's loop draws around its letter; a changed mind lifts it away quicker. */
+  .pen-letter__loop {
+    transition: stroke-dashoffset 120ms ease-in;
+  }
+
+  .tile--radio:has(input:checked) .pen-letter__loop {
+    transition: stroke-dashoffset var(--dur-pen) cubic-bezier(0.3, 0.65, 0.35, 1);
   }
 
   /* The check draws its stroke as the verdict lands. */
@@ -2663,17 +3154,79 @@ ul.nav-legend {
     animation: check-draw var(--dur-check) ease-out both;
   }
 
-  /* The answer sheet rises once the choices have marked themselves. */
+  /* The answer sheet rises as it opens, which scripts/learn/cards.js holds until the card has folded. */
   .answer:not([hidden]) {
-    animation: answer-up var(--dur-next) ease-out var(--dur-verdict) both;
+    animation: answer-up var(--dur-next) var(--ease-out) both;
+  }
+
+  /* The pen draws the mark as the sheet settles, a cross's second stroke after its first; a review's sheet is already up. */
+  .answer {
+    --pen-at: 120ms;
+  }
+
+  .review .answer {
+    --pen-at: 60ms;
+  }
+
+  .answer:not([hidden]) .pen__stroke {
+    stroke-dasharray: 1;
+    animation: pen-draw var(--dur-pen) cubic-bezier(0.45, 0, 0.25, 1) var(--pen-at) both;
+  }
+
+  .answer:not([hidden]) .pen__stroke + .pen__stroke {
+    animation-delay: calc(var(--pen-at) + var(--dur-pen));
+  }
+
+  /* The cross is one quick gesture: each stroke starts at speed, the second following without a pause. */
+  .answer:not([hidden]) .pen--cross .pen__stroke {
+    animation-duration: var(--dur-cross);
+    animation-timing-function: cubic-bezier(0.3, 0.65, 0.35, 1);
+  }
+
+  .answer:not([hidden]) .pen--cross .pen__stroke + .pen__stroke {
+    animation-delay: calc(var(--pen-at) + var(--dur-cross) - 40ms);
+  }
+
+  /* The sparkles twist in at the tick's tip, the large one first, as the glow flashes. */
+  .answer:not([hidden]) .pen__spark {
+    animation: spark-in 420ms var(--ease-spring) calc(var(--pen-at) + var(--dur-pen) - 40ms) both;
+  }
+
+  .answer:not([hidden]) .pen__spark + .pen__spark {
+    animation-delay: calc(var(--pen-at) + var(--dur-pen) + 70ms);
+  }
+
+  /* A right answer's tick flashes the lantern's glow as it lands. */
+  .answer--right:not([hidden]) .answer__badge::before {
+    content: "";
+    position: absolute;
+    inset: -0.75rem;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, color-mix(in srgb, var(--glow-hue) 55%, transparent), transparent);
+    opacity: 0;
+    animation: glow-flash var(--dur-bloom) var(--ease-out) calc(var(--pen-at) + var(--dur-pen)) both;
   }
 
   .sheet[open] {
-    animation: sheet-up 220ms ease-out;
+    animation: sheet-up 240ms var(--ease-out);
+  }
+
+  .guide-topic--enter {
+    animation: page-in 260ms var(--ease-out);
+  }
+
+  /* Each topic's right answers fill in turn. */
+  .pip--on {
+    animation: key-pop 320ms var(--ease-spring) calc(200ms + var(--i, 0) * 40ms) both;
   }
 
   .results--a .results__pct::before {
     animation: bloom var(--dur-bloom) ease-out both;
+  }
+
+  /* The ring fills as the score counts up. */
+  .results__pct {
+    animation: score-fill var(--dur-count) cubic-bezier(0.33, 1, 0.68, 1) both;
   }
 }
 
@@ -2700,6 +3253,87 @@ ul.nav-legend {
   from {
     translate: 0 1.5rem;
     opacity: 0;
+  }
+}
+
+@keyframes page-in {
+  from {
+    translate: 0 0.5rem;
+    opacity: 0;
+  }
+}
+
+@keyframes tile-pop {
+  40% {
+    scale: 1.03;
+  }
+}
+
+@keyframes tile-shake {
+  20% {
+    translate: -5px 0;
+  }
+
+  45% {
+    translate: 5px 0;
+  }
+
+  70% {
+    translate: -3px 0;
+  }
+
+  90% {
+    translate: 2px 0;
+  }
+}
+
+@keyframes key-pop {
+  from {
+    scale: 0.4;
+    opacity: 0;
+  }
+}
+
+/* Hidden until the pen starts. */
+@keyframes pen-draw {
+  from {
+    stroke-dashoffset: 1;
+    opacity: 0;
+  }
+
+  1% {
+    opacity: 1;
+  }
+}
+
+@keyframes spark-in {
+  from {
+    scale: 0;
+    rotate: -90deg;
+  }
+}
+
+/* The glow flares out and fades away. */
+@keyframes glow-flash {
+  from {
+    scale: 0.3;
+    opacity: 0;
+  }
+
+  30% {
+    scale: 1.2;
+    opacity: 1;
+  }
+
+  to {
+    scale: 1.5;
+    opacity: 0;
+  }
+}
+
+@keyframes score-fill {
+  from {
+    --score: 0;
   }
 }
 

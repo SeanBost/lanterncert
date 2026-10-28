@@ -16,6 +16,8 @@
         "passingScorePercent": 80,
         "minutesPerQuestion": 1
       },
+      "testTakers": "riders",
+      "studyAlongside": "your official manual or riding course",
       "hasExam": true,
       "stateDependent": true,
       "displayOnSite": true

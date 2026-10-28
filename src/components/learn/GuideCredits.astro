@@ -9,13 +9,13 @@ const shown = credits.documents.length > 0 || credits.original;
 	<p class="guide-group__credit">
 		{credits.documents.map((doc, i) => (
 			<Fragment>
-				{i > 0 && <span class="sep" aria-hidden="true">·</span>}
+				{i > 0 && <span class="sep" aria-hidden="true">•</span>}
 				Reproduced from the <a href={doc.url} target="_blank" rel="noopener noreferrer">{doc.title}</a>
 			</Fragment>
 		))}
 		{credits.original && (
 			<Fragment>
-				{credits.documents.length > 0 && <span class="sep" aria-hidden="true">·</span>}
+				{credits.documents.length > 0 && <span class="sep" aria-hidden="true">•</span>}
 				Diagrams: LanternCert
 			</Fragment>
 		)}

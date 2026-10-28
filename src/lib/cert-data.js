@@ -45,6 +45,10 @@ for (const [key, config] of Object.entries(certs)) {
     if (!(typeof minutesPerQuestion === "number" && minutesPerQuestion > 0)) {
       fail("a positive testDefaults.minutesPerQuestion");
     }
+    // The study tool's cert-specific words: who takes the test, and what the guide is studied beside.
+    for (const field of ["testTakers", "studyAlongside"]) {
+      if (typeof config[field] !== "string" || config[field].trim() === "") fail(`a non-empty "${field}"`);
+    }
   }
 }
 
@@ -146,7 +150,7 @@ export function escapeHtml(text) {
  * Resolves a token to its display string. data-handling.md ▸ Cert facts ▸ Display strings.
  * `asHtml` escapes the filled values only - pass it only from a caller that renders HTML.
  * @param {{ asHtml?: boolean, stateName?: string | null, stateCode?: string | null }} [opts]
- * @returns {(field: string, fact: any, form?: "short" | "long") => string | null}
+ * @returns {(field: string, fact: any, form?: "short" | "long" | "noun") => string | null}
  */
 export function tokenDisplay(cert, facts, opts = {}) {
   const { asHtml = false, stateName = null, stateCode = null } = opts;
@@ -156,6 +160,7 @@ export function tokenDisplay(cert, facts, opts = {}) {
     agencyCode: safe(facts.meta.agencyCode),
     agencyName: safe(facts.meta.agencyName),
     examName: facts.exam.examName?.value == null ? null : safe(facts.exam.examName.value),
+    examNoun: facts.exam.examNoun?.value == null ? null : safe(facts.exam.examNoun.value),
     stateName: stateName === null ? null : safe(stateName),
     stateCode: stateCode === null ? null : safe(stateCode),
   };
@@ -172,11 +177,12 @@ export function tokenDisplay(cert, facts, opts = {}) {
   return (field, fact, form = "short") => {
     if (fact.value === null) return null;
     const entry = map[field]?.[fact.value];
-    if (entry) return fill(entry[form]);
+    if (entry) return entry[form] == null ? null : fill(entry[form]);
 
     const pattern = stateCodes.has(fact.value) ? map[field]?._stateSpecific : null;
     if (!pattern) return null;
-    return fill((vars.examName ? pattern.named : pattern.unnamed)[form]);
+    const text = (vars.examName ? pattern.named : pattern.unnamed)[form];
+    return text == null ? null : fill(text);
   };
 }
 

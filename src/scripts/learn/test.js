@@ -9,8 +9,11 @@ import {
   cloneOne,
   figure,
   fillAnswer,
+  fitSheet,
   markTile,
   reducedMotion,
+  setKey,
+  setKeysRange,
   shuffledIds,
   slot,
   knob,
@@ -32,6 +35,7 @@ export function mount(ctx) {
   const fmt = data.format;
   const timer = slot(ctx.tools, "timer");
   const timerText = slot(ctx.tools, "timer-text");
+  const timerLeft = slot(ctx.tools, "timer-left");
   const barQuestions = ctx.tools.querySelector('[data-action="navigator"]');
   const barResults = ctx.tools.querySelector('[data-action="results"]');
   /** The running test's answered-progress line, above its card. */
@@ -51,6 +55,11 @@ export function mount(ctx) {
   /** The running test's navigator sidebar, shown from 1248. */
   let side = null;
   const sheetHeight = watchSheetHeight(panel);
+  /** Refits review's sheet around the question when the window or text size changes. */
+  const reviewFit = new ResizeObserver(([entry]) => {
+    const card = panel.querySelector(".qcard--review");
+    if (screen === "review" && card) fitSheet(panel.querySelector(".review"), card, /** @type {HTMLElement} */ (entry.target));
+  });
   /** Relabels the last question's button when the sidebar comes or goes. */
   const sideWatch = new ResizeObserver(() => {
     if (screen === "run" && attempt) labelNext();
@@ -77,6 +86,7 @@ export function mount(ctx) {
     if (ctx.isActive()) dropSeedParam();
     sheetHeight.disconnect();
     sideWatch.disconnect();
+    reviewFit.disconnect();
     panel.style.setProperty("--answer-h", "0px");
     side = null;
     panel.replaceChildren(node);
@@ -196,7 +206,7 @@ export function mount(ctx) {
         const tile = cloneOne("tpl-radio");
         const input = /** @type {HTMLInputElement} */ (tile.querySelector("input"));
         Object.assign(input, { name: `q-${item.k}`, value: id, checked: item.chose === id });
-        tile.querySelector(".tile__key").textContent = LETTERS[index];
+        setKey(tile.querySelector(".tile__key"), LETTERS[index]);
         slot(tile, "text").textContent = choiceText(q, id);
         input.addEventListener("change", () => choose(id));
         return tile;
@@ -204,6 +214,7 @@ export function mount(ctx) {
     );
 
     syncFlag();
+    setKeysRange(panel, item.order.length);
     card.querySelector('[data-action="prev"]').toggleAttribute("disabled", i === 0);
     labelNext();
     save();
@@ -250,7 +261,8 @@ export function mount(ctx) {
     if (!attempt) return;
     if (!attempt.timed) {
       timerText.textContent = "Untimed";
-      timer.classList.remove("timer--warn");
+      timerLeft.hidden = true;
+      timer.classList.remove("timer--warn", "timer--urgent");
       return;
     }
     const left = attempt.deadline - Date.now();
@@ -260,8 +272,11 @@ export function mount(ctx) {
     }
     const seconds = Math.ceil(left / 1000);
     const warn = seconds <= WARN_AT[0] * 60;
-    timer.classList.toggle("timer--warn", warn);
-    timerText.textContent = `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}${warn ? " left" : ""}`;
+    const urgent = seconds <= WARN_AT.at(-1) * 60;
+    timer.classList.toggle("timer--warn", warn && !urgent);
+    timer.classList.toggle("timer--urgent", urgent);
+    timerText.textContent = `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
+    timerLeft.hidden = !warn;
     for (const minutes of WARN_AT) {
       if (seconds > minutes * 60 || warned.has(minutes)) continue;
       warned.add(minutes);
@@ -426,7 +441,10 @@ export function mount(ctx) {
     head.classList.toggle("results--passed", score.passed);
     head.classList.toggle("results--a", score.a);
     slot(node, "verdict").textContent = score.passed ? "You passed" : "Not a pass yet";
-    slot(node, "pct").textContent = `${score.percent}%`;
+    const pct = slot(node, "pct");
+    pct.textContent = `${score.percent}%`;
+    pct.style.setProperty("--score", String(score.percent));
+    pct.style.setProperty("--pass", String(pass));
     slot(node, "line").textContent = score.passed
       ? `${score.correct} of ${count} correct (${score.percent}%). The pass mark is ${pass}%.`
       : `${score.correct} of ${count} correct (${score.percent}%). You needed ${needed} correct (${pass}%).`;
@@ -457,6 +475,7 @@ export function mount(ctx) {
       for (let i = 0; i < row.n; i++) {
         const pip = document.createElement("span");
         pip.className = i < row.right ? "pip pip--on" : "pip";
+        if (i < row.right) pip.style.setProperty("--i", String(i));
         pips.append(pip);
       }
       const read = slot(li, "read");
@@ -485,6 +504,20 @@ export function mount(ctx) {
       showIntro(pickSeed([...recentSeeds(), result.seed])),
     );
     setScreen("results", node, focus);
+    countUp(slot(panel, "pct"), score.percent);
+  }
+
+  /** Counts the score up from zero, easing out; under reduced motion it simply shows. */
+  function countUp(element, to) {
+    if (reducedMotion() || !to) return;
+    const ms = knob("--dur-count");
+    const start = performance.now();
+    const frame = (now) => {
+      const t = Math.min(1, (now - start) / ms);
+      element.textContent = `${Math.round(to * (1 - (1 - t) ** 3))}%`;
+      if (t < 1 && element.isConnected) requestAnimationFrame(frame);
+    };
+    requestAnimationFrame(frame);
   }
 
   // ---- Review ------------------------------------------------------------------------------------
@@ -497,6 +530,7 @@ export function mount(ctx) {
     sheet.querySelector('[data-action="prev"]').addEventListener("click", () => showReviewItem(review.at - 1));
     sheet.querySelector('[data-action="next"]').addEventListener("click", () => showReviewItem(review.at + 1));
     sheetHeight.observe(sheet);
+    reviewFit.observe(sheet);
     showReviewItem(0);
   }
 
@@ -529,7 +563,7 @@ export function mount(ctx) {
           const tile = document.createElement("li");
           tile.className = "tile tile--static";
           tile.innerHTML = '<span class="tile__key" aria-hidden="true"></span><span class="tile__text" data-slot="text"></span><span class="tile__verdict" data-slot="verdict"></span>';
-          tile.querySelector(".tile__key").textContent = letter;
+          setKey(tile.querySelector(".tile__key"), letter);
           slot(tile, "text").textContent = choiceText(q, id);
           if (id === q.answer) markTile(tile, "right", item.chose === id ? "Correct" : "Correct answer");
           else markTile(tile, "wrong", "Your answer");
@@ -542,6 +576,7 @@ export function mount(ctx) {
     sheet.querySelector('[data-action="prev"]').toggleAttribute("disabled", at === 0);
     sheet.querySelector('[data-action="next"]').toggleAttribute("disabled", at === review.list.length - 1);
     window.scrollTo({ top: 0, behavior: "instant" });
+    fitSheet(panel.querySelector(".review"), card, sheet, { reveal: true });
     stem.focus({ preventScroll: true });
   }
 
@@ -564,7 +599,9 @@ export function mount(ctx) {
       event.preventDefault();
       const radio = /** @type {HTMLInputElement} */ (radios[index]);
       radio.checked = true;
-      radio.focus();
+      // Focus follows the pick only from within the choices; from the question it stays put.
+      if (radios.includes(target)) radio.focus();
+      else announce(`${LETTERS[index]} selected`);
       choose(radio.value);
     } else if (key === "f") {
       event.preventDefault();

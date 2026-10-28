@@ -16,9 +16,13 @@ export function mount(ctx) {
   const practice = panel.querySelector("[data-practice-topic]");
   let current = sections.find((s) => !s.hidden) ?? sections[0];
 
+  // The h1's swept word plays once a visit; showing the guide again leaves it swept.
+  panel.querySelector(".guide__title .sweep-in")?.addEventListener("animationend", (e) => e.target.classList.add("sweep-in--played"), { once: true });
+
   /** Shows one page and the sources it cites, marks it in both indexes, and aims the practice button at a topic. */
-  const show = (section) => {
+  const show = (section, { enter = false } = {}) => {
     current = section;
+    for (const s of sections) s.classList.toggle("guide-topic--enter", enter && s === section);
     if (!section.classList.contains("guide-topic--overview")) {
       practice?.setAttribute("href", `${data.learn}?mode=cards&topics=${section.id}`);
       const emoji = practice?.querySelector('[data-slot="emoji"]');
@@ -49,7 +53,7 @@ export function mount(ctx) {
     if (!target || !panel.contains(target)) return;
     const topic = topicOf(target);
     const changed = topic && topic !== current;
-    if (changed) show(topic);
+    if (changed) show(topic, { enter: true });
     if (target === topic) {
       // Arriving at a page lands at its top.
       window.scrollTo({ top: 0, behavior: "instant" });

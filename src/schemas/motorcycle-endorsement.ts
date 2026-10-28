@@ -174,7 +174,7 @@ export function collections(kit: any) {
 
   // A token with no display string renders raw to a reader, so it fails the build instead.
   // data-handling.md ▸ Cert facts ▸ Display.
-  const form = z.strictObject({ short: z.string().min(1), long: z.string().min(1) });
+  const form = z.strictObject({ short: z.string().min(1), long: z.string().min(1), noun: z.string().min(1).optional() });
   const displayMap = z
     .record(
       z.string(),
@@ -282,6 +282,8 @@ export function collections(kit: any) {
           examType: fact(z.enum(examTypes)),
           // What the agency calls its exam. Null where the documents only describe it generically.
           examName: fact(z.string().min(1)),
+          // The common short name for the exam, built from examName and cited to its source; null where examName is.
+          examNoun: fact(z.string().min(1)),
           // Who runs the exam; a SOURCED null means the state has none. data-handling.md ▸ Cert facts.
           examAdministration: fact(z.enum(vocab.examAdministration)),
           // Whether the course waives the agency exam; asked only where examAdministration is

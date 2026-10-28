@@ -2,7 +2,7 @@
 // The Mock Test's screens as templates, cloned and filled by scripts/learn/test.js. The format is
 // settled at build, so the intro's sentence and its source links render here.
 
-/** @type {{ kicker: string, heading: string, format: any, intro: { lede: { text: string, source?: any, key?: boolean }[], note: string | null } }} */
+/** @type {{ kicker: string, heading: string, format: any, intro: { lede: { text: string, source?: any, href?: string }[], note: string | null } }} */
 const { kicker, heading, format, intro } = Astro.props;
 const minutes = format.minutes.value;
 ---
@@ -17,8 +17,8 @@ const minutes = format.minutes.value;
 				{intro.lede.map((part) =>
 					part.source ? (
 						<a href={part.source.url} target="_blank" rel="noopener noreferrer">{part.text}</a>
-					) : part.key ? (
-						<strong class="text-key">{part.text}</strong>
+					) : part.href ? (
+						<a class="text-key" href={part.href}>{part.text}</a>
 					) : (
 						part.text
 					),
@@ -89,7 +89,7 @@ const minutes = format.minutes.value;
 					</div>
 				</div>
 			</article>
-			<p class="shortcuts">Keys: <kbd>A</kbd> to <kbd>D</kbd> or <kbd>1</kbd> to <kbd>4</kbd> to choose, <kbd>F</kbd> to flag, <kbd>←</kbd> <kbd>→</kbd> to move, <kbd>Enter</kbd> for the next question</p>
+			<p class="shortcuts">Keys: <kbd>A</kbd> to <kbd data-slot="keys-last">D</kbd> or <kbd>1</kbd> to <kbd data-slot="keys-count">4</kbd> to choose, <kbd>F</kbd> to flag, <kbd>←</kbd> <kbd>→</kbd> to move, <kbd>Enter</kbd> for the next question</p>
 		</div>
 		<p class="visually-hidden" aria-live="polite" data-slot="live"></p>
 	</div>
@@ -150,8 +150,8 @@ const minutes = format.minutes.value;
 		<span class="topic-scores__line">
 			<span class="pips" data-slot="pips" aria-hidden="true"></span>
 			<span class="topic-scores__links">
-				<a class="chip" data-slot="read" data-learn></a>
-				<a class="chip" data-slot="practice" data-learn></a>
+				<a class="tool-btn tool-btn--sm" data-slot="read" data-learn></a>
+				<a class="tool-btn tool-btn--sm" data-slot="practice" data-learn></a>
 			</span>
 		</span>
 	</li>
@@ -183,7 +183,7 @@ const minutes = format.minutes.value;
 				<div class="answer__source" data-slot="source"></div>
 				<p class="answer__credit" data-slot="credit" hidden></p>
 				<div class="answer__actions">
-					<a class="answer__guide" href="#" data-slot="guide-link" data-learn>Read it in the Study Guide</a>
+					<a class="text-key" href="#" data-slot="guide-link" data-learn>Read it in the Study Guide</a>
 				</div>
 				<div class="answer__nav">
 					<button class="tool-btn" type="button" data-action="prev">Previous</button>
